@@ -1,0 +1,38 @@
+{
+  "pages": [
+    "pages/login/index",
+    "pages/today/index",
+    "pages/community/index",
+    "pages/service/index",
+    "pages/personal/index",
+    "pages/brace/index",
+    "pages/brace-archive/index",
+    "pages/brace-form/index",
+    "pages/wear-form/index",
+    "pages/comfort-form/index",
+    "pages/brace-history/index",
+    "pages/brace-trends/index",
+    "pages/follow-ups/index"
+  ],
+  "window": {
+    "navigationBarTitleText": "SPINE",
+    "navigationBarBackgroundColor": "#f5f7f5",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f5f7f5",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#68736d",
+    "selectedColor": "#246b57",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      { "pagePath": "pages/today/index", "text": "今日" },
+      { "pagePath": "pages/community/index", "text": "社区" },
+      { "pagePath": "pages/service/index", "text": "专业服务" },
+      { "pagePath": "pages/personal/index", "text": "个人" }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

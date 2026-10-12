@@ -1,0 +1,18 @@
+services:
+  postgres:
+    image: postgres:17.10
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-spine}
+      POSTGRES_USER: ${POSTGRES_USER:-spine}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Run python backend/bootstrap_env.py first}
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - spine_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  spine_postgres_data:

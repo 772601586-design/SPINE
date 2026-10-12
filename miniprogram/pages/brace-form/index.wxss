@@ -1,0 +1,2 @@
+.field-label { display: block; margin: 12rpx 0 0; color: #55645b; font-size: 24rpx; }
+.switch-row { display: flex; justify-content: space-between; align-items: center; padding: 14rpx 4rpx; }

@@ -1,0 +1,1 @@
+{ "desc": "SPINE personal records are not indexed.", "rules": [{ "action": "disallow", "page": "*" }] }

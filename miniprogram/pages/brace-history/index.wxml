@@ -1,0 +1,19 @@
+<view class="page">
+  <view class="heading"><text class="title">完整历史</text><text class="subtitle">佩戴区间与感受记录分别展示。</text></view>
+  <view wx:if="{{error}}" class="error" bindtap="reload">{{error}} 点击重试</view>
+  <view wx:if="{{loading}}" class="empty">正在读取…</view>
+  <view class="card"><text class="card-title">佩戴记录</text>
+    <view wx:if="{{!wears.length && !loading}}" class="empty">暂无佩戴记录。</view>
+    <view wx:for="{{wears}}" wx:key="id" class="list-item">
+      <text class="list-title">{{item.braceName}}</text><text class="small">{{item.startText}} → {{item.endText}} · {{item.notes || '无备注'}} · 第 {{item.version}} 版</text>
+      <view class="actions"><text class="action" data-id="{{item.id}}" bindtap="correctWear">修正</text><text class="action" data-id="{{item.id}}" bindtap="showRevisions">修改历史</text></view>
+    </view>
+  </view>
+  <view class="card"><text class="card-title">感受记录</text>
+    <view wx:if="{{!feelings.length && !loading}}" class="empty">暂无感受记录。</view>
+    <view wx:for="{{feelings}}" wx:key="id" class="list-item">
+      <text class="list-title">{{item.braceName}} · {{item.time}}</text><text class="small">{{item.comfort}} · 痛感：{{item.pain}} · {{item.positions}} {{item.tags}} {{item.notes}}</text>
+      <view class="actions"><text class="action" data-id="{{item.id}}" bindtap="editFeeling">编辑</text><text class="action" data-id="{{item.id}}" bindtap="openFollowups">后续感受</text></view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,14 @@
+<view class="page">
+  <view class="heading"><text class="title">支具档案</text><text class="subtitle">更换支具请新增档案，旧记录会保留。</text></view>
+  <view wx:if="{{error}}" class="error" bindtap="reload">{{error}} 点击重试</view>
+  <view wx:if="{{loading}}" class="empty">正在读取…</view>
+  <view wx:if="{{!loading && !braces.length}}" class="card"><view class="empty">暂无支具档案</view></view>
+  <view wx:for="{{braces}}" wx:key="id" class="card">
+    <view class="row"><text class="card-title">{{item.name}}</text><text class="pill">{{item.is_active ? '在用' : '停用'}}</text></view>
+    <text class="small">{{item.brace_type || '类型未填写'}} · {{item.started_on || '使用日期未填写'}}</text>
+    <text wx:if="{{item.institution}}" class="small">配置机构：{{item.institution}}</text>
+    <text wx:if="{{item.notes}}" class="small">{{item.notes}}</text>
+    <button class="button button-plain" data-id="{{item.id}}" bindtap="edit">编辑档案</button>
+  </view>
+  <button class="button" bindtap="add">添加新支具</button>
+</view>

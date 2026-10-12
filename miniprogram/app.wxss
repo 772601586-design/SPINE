@@ -1,0 +1,24 @@
+page { min-height: 100%; background: #f5f7f5; color: #26352e; font-size: 28rpx; }
+view, text, button, input, textarea, picker { box-sizing: border-box; }
+.page { padding: 28rpx; padding-bottom: 56rpx; }
+.heading { margin: 8rpx 0 26rpx; }
+.eyebrow { color: #648074; font-size: 22rpx; letter-spacing: 2rpx; }
+.title { display: block; font-size: 42rpx; font-weight: 650; line-height: 1.35; }
+.subtitle { display: block; margin-top: 10rpx; color: #718078; font-size: 26rpx; }
+.card { margin: 20rpx 0; padding: 28rpx; border-radius: 24rpx; background: #fff; box-shadow: 0 6rpx 22rpx rgba(28, 70, 52, .04); }
+.card-green { background: #eaf3ed; }
+.card-title { display: block; margin-bottom: 16rpx; color: #244f40; font-size: 32rpx; font-weight: 600; }
+.muted { color: #78847e; font-size: 24rpx; line-height: 1.55; }
+.row { display: flex; align-items: center; justify-content: space-between; gap: 16rpx; }
+.button { margin: 18rpx 0 0; border-radius: 16rpx; background: #246b57; color: #fff; font-size: 28rpx; }
+.button-plain { background: #edf4ef; color: #246b57; }
+.button-danger { background: #fff0ed; color: #9d3423; }
+.field { margin: 20rpx 0; padding: 22rpx; border: 1rpx solid #dbe4de; border-radius: 14rpx; background: #fff; }
+.pill { display: inline-block; margin: 6rpx 8rpx 6rpx 0; padding: 10rpx 18rpx; border-radius: 999rpx; background: #edf4ef; color: #246b57; font-size: 23rpx; }
+.pill-active { background: #246b57; color: #fff; }
+.divider { height: 1rpx; margin: 18rpx 0; background: #e8eeea; }
+.error { margin: 14rpx 0; padding: 18rpx; border-radius: 12rpx; background: #fff0ed; color: #9d3423; }
+.empty { padding: 30rpx 14rpx; color: #78847e; text-align: center; }
+.list-item { padding: 18rpx 0; border-bottom: 1rpx solid #edf0ee; }
+.list-title { display: block; font-size: 28rpx; font-weight: 550; }
+.small { color: #718078; font-size: 22rpx; line-height: 1.5; }

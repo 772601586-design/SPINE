@@ -1,0 +1,20 @@
+{
+  "description": "SPINE personal WeChat Mini Program",
+  "packOptions": { "ignore": [
+    { "type": "folder", "value": "node_modules" },
+    { "type": "folder", "value": "scripts" }
+  ] },
+  "compileType": "miniprogram",
+  "appid": "",
+  "projectname": "SPINE",
+  "miniprogramRoot": "./",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "compileTypeScript": true,
+    "compileHotReLoad": true,
+    "minified": false
+  }
+}

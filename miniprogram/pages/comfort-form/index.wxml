@@ -1,0 +1,23 @@
+<view class="page">
+  <view class="heading"><text class="title">{{editing ? '编辑感受' : '记录感受'}}</text><text class="subtitle">私人记录仅本人可见；痛感留空与 0 分不同。</text></view>
+  <view class="card">
+    <text class="field-label">整体舒适度（可选）</text>
+    <view class="chip-list"><text wx:for="{{comfortOptions}}" wx:key="value" class="pill {{comfortLevel === item.value ? 'pill-active' : ''}}" data-value="{{item.value}}" bindtap="chooseComfort">{{item.label}}</text></view>
+    <text class="field-label">痛感 0—10（可空）</text><input class="field" type="number" value="{{pain}}" bindinput="inputPain" placeholder="留空表示未填写" />
+    <text class="field-label">痛感说明（可选）</text><textarea class="field" value="{{painNote}}" data-key="painNote" bindinput="input" placeholder="可选" auto-height />
+    <text class="field-label">不适位置（多选）</text>
+    <view class="chip-list"><text wx:for="{{positionOptions}}" wx:key="name" class="pill {{item.selected ? 'pill-active' : ''}}" data-value="{{item.name}}" data-kind="position" bindtap="toggleChoice">{{item.name}}</text></view>
+    <input class="field" value="{{otherPosition}}" data-key="otherPosition" bindinput="input" placeholder="其他位置（可选）" />
+    <text class="field-label">感受标签（多选）</text>
+    <view class="chip-list"><text wx:for="{{tagOptions}}" wx:key="name" class="pill {{item.selected ? 'pill-active' : ''}}" data-value="{{item.name}}" data-kind="tag" bindtap="toggleChoice">{{item.name}}</text></view>
+    <input class="field" value="{{otherTag}}" data-key="otherTag" bindinput="input" placeholder="其他标签（可选）" />
+    <text class="field-label">发生时间（上海时间）</text><input class="field" value="{{occurredAt}}" data-key="occurredAt" bindinput="input" placeholder="YYYY-MM-DD HH:mm" />
+    <text class="field-label">关联佩戴记录（可选）</text>
+    <picker range="{{wearOptions}}" range-key="label" value="{{wearIndex}}" bindchange="chooseWear"><view class="selector">{{wearOptions[wearIndex].label}}　⌄</view></picker>
+    <text class="field-label">备注</text><textarea class="field" value="{{notes}}" data-key="notes" bindinput="input" placeholder="可选" auto-height />
+    <view wx:if="{{editing}}"><button class="button button-plain" bindtap="openFollowUps">追加后续感受</button></view>
+    <view class="small">照片附件尚未接入，不会显示未保存的上传状态。</view>
+    <view wx:if="{{error}}" class="error">{{error}}</view>
+    <button class="button" loading="{{busy}}" disabled="{{busy}}" bindtap="save">保存</button>
+  </view>
+</view>

@@ -1,0 +1,1 @@
+.actions { display: flex; gap: 34rpx; padding-top: 14rpx; color: #246b57; font-size: 24rpx; }

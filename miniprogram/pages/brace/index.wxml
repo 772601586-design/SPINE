@@ -1,0 +1,38 @@
+<view class="page">
+  <view class="heading"><text class="title">支具管理</text><text class="subtitle">佩戴状态与记录由服务端保存。</text></view>
+  <view wx:if="{{error}}" class="error" bindtap="reload">{{error}} 点击重试</view>
+  <view wx:if="{{loading}}" class="card"><view class="empty">正在读取…</view></view>
+  <view wx:if="{{braceOptions.length}}" class="card">
+    <view class="row"><text class="card-title">当前选择</text><text class="muted" bindtap="openArchive">档案管理 ›</text></view>
+    <picker range="{{braceOptions}}" range-key="name" value="{{selectedIndex}}" bindchange="chooseBrace"><view class="selector">{{selectedName || '选择支具'}}　⌄</view></picker>
+  </view>
+  <view wx:else class="card"><view class="empty">还没有支具档案</view><button class="button" bindtap="addBrace">添加支具档案</button></view>
+  <view wx:if="{{active}}" class="card card-green">
+    <text class="card-title">当前佩戴中 · {{activeBraceName}}</text>
+    <text class="status">本次 {{elapsedText}} <text class="small">（仍在记录）</text></text>
+    <text class="small">开始于 {{activeStarted}}</text>
+    <button class="button" loading="{{busy}}" disabled="{{busy}}" bindtap="endWear">已取下</button>
+    <view wx:if="{{activeIsDifferent}}" class="notice">你切换查看了其他支具。本次记录仍属于“{{activeBraceName}}”，不会被隐藏或转移。</view>
+  </view>
+  <view wx:elif="{{selectedName}}" class="card">
+    <text class="card-title">当前未佩戴</text>
+    <text wx:if="{{hasToday}}" class="body">今日已记录 {{todayText}}</text>
+    <text wx:else class="muted">今日暂无记录，不代表确认未佩戴。</text>
+    <button class="button" loading="{{busy}}" disabled="{{busy || !canStart}}" bindtap="startWear">已戴上</button>
+    <text wx:if="{{!canStart}}" class="small">停用的支具不能开始新记录。</text>
+  </view>
+  <view class="card">
+    <text class="card-title">记录</text>
+    <button class="button button-plain" bindtap="openFeeling">记录感受</button>
+    <button class="button button-plain" bindtap="openBackfill" disabled="{{!selectedId}}">补录佩戴</button>
+    <button class="button button-plain" bindtap="openHistory">完整历史</button>
+    <button class="button button-plain" bindtap="openTrends">趋势统计</button>
+    <button class="button button-plain" bindtap="openRequirements">佩戴要求</button>
+  </view>
+  <view class="card"><text class="card-title">今日时间（上海时间）</text><text wx:if="{{hasToday}}">{{todayText}}</text><text wx:else class="muted">暂无记录</text><text class="small">统计仅包含当前选择的支具；不设置默认目标。</text></view>
+  <view class="card"><text class="card-title">近期感受</text>
+    <view wx:if="{{!recentFeelings.length}}" class="empty">暂无感受记录</view>
+    <view wx:for="{{recentFeelings}}" wx:key="id" class="list-item" data-id="{{item.id}}" bindtap="editFeeling"><text class="list-title">{{item.time}} · {{item.comfort}}</text><text class="small">痛感：{{item.pain}} · {{item.tags}} {{item.notes}}</text></view>
+  </view>
+  <button class="button button-plain" loading="{{loading}}" bindtap="reload">刷新</button>
+</view>

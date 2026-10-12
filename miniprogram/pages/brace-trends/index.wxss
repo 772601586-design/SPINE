@@ -1,0 +1,2 @@
+.bar-bg { height: 12rpx; margin-top: 12rpx; border-radius: 8rpx; background: #edf1ee; overflow: hidden; }
+.bar { height: 100%; border-radius: 8rpx; background: #72a78e; }

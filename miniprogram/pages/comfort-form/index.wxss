@@ -1,0 +1,3 @@
+.field-label { display: block; margin: 14rpx 0 6rpx; font-size: 24rpx; }
+.chip-list { display: flex; flex-wrap: wrap; }
+.selector { padding: 20rpx; border: 1rpx solid #dbe4de; border-radius: 12rpx; }

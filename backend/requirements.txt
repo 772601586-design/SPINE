@@ -1,0 +1,2 @@
+# Exact direct versions. Full transitive requirements.lock is generated after a successful installation.
+-r requirements.in

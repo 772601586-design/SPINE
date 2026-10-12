@@ -1,0 +1,12 @@
+<view class="page">
+  <view class="heading"><text class="title">{{editing ? '修正佩戴记录' : '补录佩戴'}}</text><text class="subtitle">{{braceName}} · 时间按上海时区填写。</text></view>
+  <view class="card">
+    <text class="field-label">开始时间</text><input class="field" value="{{startedAt}}" data-key="startedAt" bindinput="input" placeholder="YYYY-MM-DD HH:mm" />
+    <text class="field-label">结束时间</text><input class="field" value="{{endedAt}}" data-key="endedAt" bindinput="input" placeholder="YYYY-MM-DD HH:mm" />
+    <text class="small">补录必须填写结束时间；修正时留空表示仍在记录。保存时按实际时间点计算。</text>
+    <text class="field-label">备注</text><textarea class="field" value="{{notes}}" data-key="notes" bindinput="input" placeholder="可选" auto-height />
+    <view wx:if="{{editing}}"><text class="field-label">修正原因（必填）</text><textarea class="field" value="{{reason}}" data-key="reason" bindinput="input" placeholder="说明为什么需要修正" auto-height /></view>
+    <view wx:if="{{error}}" class="error">{{error}}</view>
+    <button class="button" loading="{{busy}}" disabled="{{busy}}" bindtap="save">保存</button>
+  </view>
+</view>

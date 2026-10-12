@@ -1,0 +1,5 @@
+<view class="page">
+  <view class="heading"><text class="title">专业服务</text><text class="subtitle">专业支持与机构信息入口。</text></view>
+  <view class="card"><text class="card-title">专业人员对话</text><view class="empty">服务关系和消息尚未接入</view></view>
+  <view class="card"><text class="card-title">附近服务机构</text><text class="muted">医院、康复机构和支具机构的真实目录尚未接入。</text><view class="empty">暂无机构数据</view></view>
+</view>

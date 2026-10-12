@@ -1,0 +1,9 @@
+<view class="page">
+  <view class="heading"><text class="title">后续感受</text><text class="subtitle">追加内容会保留之前的记录。</text></view>
+  <view class="card"><view class="chip-list"><text wx:for="{{options}}" wx:key="value" class="pill {{status === item.value ? 'pill-active' : ''}}" data-value="{{item.value}}" bindtap="choose">{{item.label}}</text></view>
+    <input class="field" value="{{occurredAt}}" bindinput="inputTime" placeholder="发生时间（上海时间 YYYY-MM-DD HH:mm）" />
+    <textarea class="field" value="{{notes}}" bindinput="inputNotes" placeholder="补充说明" auto-height />
+    <view wx:if="{{error}}" class="error">{{error}}</view><button class="button" loading="{{busy}}" disabled="{{busy}}" bindtap="save">保存后续感受</button>
+  </view>
+  <view class="card"><text class="card-title">历史后续</text><view wx:if="{{!items.length}}" class="empty">暂无后续记录</view><view wx:for="{{items}}" wx:key="id" class="list-item"><text class="list-title">{{item.label}}</text><text class="small">{{item.time}} · {{item.notes}}</text></view></view>
+</view>

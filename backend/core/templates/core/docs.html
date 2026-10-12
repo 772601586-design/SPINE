@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>SPINE · OpenAPI</title>
+  <style>
+    body{margin:40px auto;max-width:900px;padding:0 24px;font:16px/1.7 system-ui;color:#17332e;background:#f4f8f6}
+    h1{font-size:32px}article{background:white;padding:22px;margin:20px 0;border:1px solid #dbe7e2;border-radius:14px}
+    button{background:#206b58;color:white;border:0;border-radius:8px;padding:10px 16px;cursor:pointer}
+    pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf3f0;padding:16px;border-radius:8px}a{color:#206b58}
+  </style>
+</head>
+<body>
+  <h1>SPINE OpenAPI</h1>
+  <p>个人移动端与专业工作台共用的后端接口。</p>
+  <p><a href="/api/schema/">查看 / 下载 OpenAPI JSON</a> · 健康检查无需登录；其他业务接口尚未实现。</p>
+  <main id="endpoints" aria-live="polite">正在读取 OpenAPI 文档…</main>
+  <script>
+    async function load() {
+      const main = document.getElementById('endpoints');
+      try {
+        const response = await fetch('/api/schema/');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const schema = await response.json();
+        main.replaceChildren();
+        for (const [path, operations] of Object.entries(schema.paths)) {
+          if (!operations.get) continue;
+          const article = document.createElement('article');
+          const title = document.createElement('h2'); title.textContent = `GET ${path}`;
+          const description = document.createElement('p'); description.textContent = operations.get.summary || '';
+          const button = document.createElement('button'); button.textContent = '发送真实 GET 请求';
+          const output = document.createElement('pre'); output.textContent = '尚未调用';
+          button.onclick = async () => {
+            button.disabled = true;
+            try {
+              const result = await fetch(path);
+              output.textContent = `HTTP ${result.status}\n${JSON.stringify(await result.json(), null, 2)}`;
+            } catch (error) { output.textContent = `请求失败：${error.message}`; }
+            finally { button.disabled = false; }
+          };
+          article.append(title, description, button, output); main.append(article);
+        }
+      } catch (error) { main.textContent = `文档加载失败：${error.message}`; }
+    }
+    load();
+  </script>
+</body>
+</html>
