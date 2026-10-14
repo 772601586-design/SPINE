@@ -13,6 +13,8 @@ build/
 .tmp/
 .tools/
 .verification/
+# 私有附件对象存储（医疗原件、私人记录、社区媒体）。绝不能提交。
+.private-storage/
 android/local.properties
 android/.gradle/
 ios/Pods/

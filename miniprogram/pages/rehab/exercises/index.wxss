@@ -1,0 +1,18 @@
+.filter-card { margin-bottom: 20rpx; }
+.filter-head, .card-row { display:flex; align-items:center; justify-content:space-between; gap:12rpx; }
+.clear { color:#2f624b; font-size:24rpx; padding:10rpx; }
+.filter-label { display:block; margin:22rpx 0 8rpx; color:#53635a; font-size:25rpx; font-weight:600; }
+.chips { display:flex; flex-wrap:wrap; gap:12rpx; }
+.chip { padding:12rpx 18rpx; border:1rpx solid #dce5dd; border-radius:999rpx; color:#53635a; font-size:23rpx; background:#fff; }
+.chip-active { color:#244f39; border-color:#5d8367; background:#e8f1e8; }
+.empty-state { gap:14rpx; }
+.exercise-card { margin-bottom:18rpx; }
+.tag-row { display:flex; flex-wrap:wrap; gap:10rpx; margin-top:12rpx; }
+.muscle-tag { padding:6rpx 14rpx; border-radius:10rpx; color:#3d6350; background:#e8f1e8; font-size:22rpx; }
+.muscle-tag.secondary { color:#53635a; background:#f0f2ef; }
+.details { margin-top:22rpx; padding-top:16rpx; border-top:1rpx solid #edf0ed; }
+.detail-label { display:block; margin-top:14rpx; color:#53635a; font-size:24rpx; font-weight:600; }
+.detail-text, .step, .notice, .source { display:block; margin-top:8rpx; color:#24382e; font-size:25rpx; line-height:1.6; }
+.notice { padding:12rpx; border-radius:10rpx; color:#735318; background:#fbf4e4; }
+.source, .media-empty { margin-top:16rpx; font-size:22rpx; }
+.add-button { margin:18rpx 0 0; }

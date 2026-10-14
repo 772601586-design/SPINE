@@ -1,0 +1,48 @@
+<view class="page">
+  <view class="heading">
+    <text class="title">康复</text>
+    <text class="subtitle">动作与运动、支具佩戴，都从这里开始。</text>
+  </view>
+
+  <view wx:if="{{error}}" class="error" bindtap="reload">{{error}} 点击重试</view>
+  <view wx:if="{{loading}}" class="card"><view class="empty">正在读取你的康复概览…</view></view>
+
+  <block wx:else>
+    <!-- 动作与运动 -->
+    <view class="card card-green">
+      <view class="row"><text class="card-title">动作与运动</text><text class="tag">板块</text></view>
+      <block wx:if="{{hasPlan}}">
+        <text class="line">当前周期：{{planLabel}}</text>
+        <text class="line">所属阶段：{{phaseLabel}}</text>
+        <text class="line">本周课次：{{weekText}}</text>
+        <text class="line" wx:if="{{recentSwim}}">最近游泳：{{recentSwim}}</text>
+      </block>
+      <block wx:else>
+        <text class="muted">还没有周期计划。可以先记录游泳，或者创建一个周期来安排课次。</text>
+        <view class="row gap">
+          <button class="button button-plain compact" bindtap="createPlan">创建周期计划</button>
+          <button class="button button-plain compact" bindtap="openSwimming">记录游泳</button>
+        </view>
+      </block>
+      <button class="button" bindtap="openActivity">进入动作与运动</button>
+    </view>
+
+    <!-- 支具佩戴 -->
+    <view class="card">
+      <view class="row"><text class="card-title">支具佩戴</text><text class="tag">模块</text></view>
+      <block wx:if="{{hasBrace}}">
+        <text class="line strong">{{braceName}}</text>
+        <text class="line">
+          <text class="dot {{wearing ? 'dot-on' : ''}}"></text>{{wearing ? '佩戴中' : '当前未佩戴'}}
+        </text>
+        <text wx:if="{{wearing}}" class="line">本次暂估：{{elapsedText}}（服务端记录为准）</text>
+        <text class="line">{{dayLabel}}确认累计：{{dayConfirmed ? dayText : '暂无确认记录'}}</text>
+      </block>
+      <view wx:else class="empty">还没有支具档案，进入后可添加。</view>
+      <button class="button" bindtap="openBrace">{{hasBrace ? '进入支具佩戴' : '添加支具'}}</button>
+    </view>
+  </block>
+
+  <button class="button button-plain" bindtap="reload" loading="{{loading}}">刷新</button>
+  <text class="small center">固定计划会显示下次安排；灵活计划只显示本周可完成的课次。</text>
+</view>

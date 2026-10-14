@@ -90,10 +90,34 @@ class WearViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.Gen
             ended_at = serializer.validated_data.get("ended_at")
             if session.ended_at:
                 if ended_at and ended_at != session.ended_at:
-                    raise Conflict("已经结束；改变结束时间请使用修正功能。")
-                return Response(WearSerializer(session).data)
-            revise(session, request.user, {"ended_at": ended_at or timezone.now()}, "结束佩戴")
-        return Response(WearSerializer(session).data)
+                    raise Conflict("This interval has ended; use correction to change it.")
+                from training.models import BraceTrainingPrompt
+                if BraceTrainingPrompt.objects.filter(interval=session).exists():
+                    from training.services import brace_training_prompt
+                    prompt = brace_training_prompt(session)
+                else:
+                    prompt = {"eligible": False, "reason": "already_ended", "session_id": None}
+                return Response({**WearSerializer(session).data, "training_prompt": prompt})
+            revise(session, request.user, {"ended_at": ended_at or timezone.now()}, "Wear ended")
+            from training.services import brace_training_prompt
+            prompt = brace_training_prompt(session)
+        return Response({**WearSerializer(session).data, "training_prompt": prompt})
+
+    @action(detail=True, methods=["post"], url_path="training-prompt-choice")
+    def training_prompt_choice(self, request, pk=None):
+        choice = request.data.get("choice")
+        if choice not in ("continue", "skip"):
+            raise ValidationError({"choice": "Choose continue or skip."})
+        from training.models import BraceTrainingPrompt
+        with transaction.atomic():
+            lock_owner(request.user)
+            session = self.get_object()
+            prompt = get_object_or_404(BraceTrainingPrompt.objects.select_for_update(), interval=session, owner=request.user)
+            if prompt.user_choice and prompt.user_choice != choice:
+                raise Conflict("This prompt choice is already recorded.")
+            prompt.user_choice = choice
+            prompt.save(update_fields=["user_choice"])
+        return Response({"prompt_id": prompt.pk, "choice": prompt.user_choice})
 
     @extend_schema(request=WearCorrectionSerializer, responses=WearSerializer)
     def partial_update(self, request, pk=None):

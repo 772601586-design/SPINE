@@ -1,0 +1,8 @@
+.tag { padding: 4rpx 16rpx; border-radius: 999rpx; background: #dfeadf; color: #3d6350; font-size: 21rpx; }
+.line { display: block; margin: 8rpx 0; font-size: 27rpx; line-height: 1.5; }
+.strong { font-weight: 600; font-size: 30rpx; }
+.dot { display: inline-block; width: 14rpx; height: 14rpx; margin-right: 10rpx; border-radius: 50%; background: #b9c3bd; }
+.dot-on { background: #246b57; }
+.row.gap { gap: 20rpx; }
+.compact { flex: 1; margin-top: 20rpx; font-size: 25rpx; }
+.center { display: block; margin-top: 18rpx; text-align: center; }

@@ -4,9 +4,6 @@
 .login-title, .login-subtitle { display: block; text-align: center; }
 .login-title { font-size: 40rpx; font-weight: 650; }
 .login-subtitle { margin: 14rpx 0 30rpx; color: #718078; }
-.password-row { position: relative; }
-.password { padding-right: 105rpx; }
-.toggle { position: absolute; top: 42rpx; right: 22rpx; color: #246b57; font-size: 24rpx; }
 .login-button { margin-top: 28rpx; }
 .login-footnote { display: block; margin-top: 20rpx; color: #87928c; font-size: 22rpx; text-align: center; }
 .checking { display: flex; justify-content: center; align-items: center; gap: 16rpx; min-height: 180rpx; color: #718078; }

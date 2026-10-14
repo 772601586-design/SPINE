@@ -1,19 +1,46 @@
 import { API_BASE_URL, RUNTIME_TARGET } from '../config/environment';
 
+/** 后端统一错误包（规格 v2.0 §14）：{error:{code,message,field_errors?,request_id}} */
 export class ApiError extends Error {
-  constructor(public readonly status: number, message: string) { super(message); }
+  constructor(
+    public readonly status: number,
+    message: string,
+    public readonly code?: string,
+    public readonly fieldErrors?: Record<string, string[]>,
+    public readonly requestId?: string,
+  ) {
+    super(message);
+  }
 }
 
 let unauthorized: (() => void) | null = null;
 export function configureUnauthorizedHandler(handler: () => void): void { unauthorized = handler; }
 
-function messageFrom(data: unknown): string {
-  if (data && typeof data === 'object') {
-    const record = data as Record<string, unknown>;
-    if (typeof record.detail === 'string') return record.detail;
-    for (const value of Object.values(record)) if (Array.isArray(value) && typeof value[0] === 'string') return value[0];
+interface ErrorEnvelope {
+  error?: { code?: string; message?: string; field_errors?: Record<string, string[]>; request_id?: string };
+}
+
+function parseError(statusCode: number, payload: unknown): ApiError {
+  const envelope = (payload ?? {}) as ErrorEnvelope;
+  const error = envelope.error;
+  if (error && typeof error.message === 'string') {
+    return new ApiError(statusCode, error.message, error.code, error.field_errors, error.request_id);
   }
-  return '服务暂时无法完成请求。';
+  // 兼容尚未迁移到信封契约的响应（如部分基础设施端点）。
+  if (payload && typeof payload === 'object') {
+    const record = payload as Record<string, unknown>;
+    if (typeof record.detail === 'string') return new ApiError(statusCode, record.detail);
+  }
+  return new ApiError(statusCode, '服务暂时无法完成请求。');
+}
+
+/** 成功响应解包 {data, meta?}；meta 暂不参与业务，保留在返回值外侧以免丢失分页信息。 */
+function unwrap<T>(payload: unknown): T {
+  if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
+    const record = payload as Record<string, unknown>;
+    if ('data' in record && !('error' in record)) return record.data as T;
+  }
+  return payload as T;
 }
 
 export function request<T>(method: WxRequestOptions['method'], path: string, data?: Record<string, unknown>): Promise<T> {
@@ -34,9 +61,9 @@ export function request<T>(method: WxRequestOptions['method'], path: string, dat
       header,
       timeout: 12000,
       success(response) {
-        if (response.statusCode >= 200 && response.statusCode < 300) { resolve(response.data as T); return; }
+        if (response.statusCode >= 200 && response.statusCode < 300) { resolve(unwrap<T>(response.data)); return; }
         if (response.statusCode === 401) unauthorized?.();
-        reject(new ApiError(response.statusCode, messageFrom(response.data)));
+        reject(parseError(response.statusCode, response.data));
       },
       fail(error) { reject(new Error(error.errMsg || '网络连接失败，请检查 API 地址和网络后重试。')); },
     });

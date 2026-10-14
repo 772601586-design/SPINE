@@ -1,0 +1,24 @@
+{
+  "description": "SPINE repository root. Mini program source lives in the miniprogram/ subfolder.",
+  "miniprogramRoot": "miniprogram/",
+  "compileType": "miniprogram",
+  "appid": "wxec55146112612082",
+  "projectname": "SPINE",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": false,
+    "useCompilerPlugins": ["typescript"]
+  },
+  "simulatorPluginLibVersion": {},
+  "packOptions": {
+    "ignore": [
+      { "type": "folder", "value": "node_modules" },
+      { "type": "folder", "value": "scripts" }
+    ],
+    "include": []
+  },
+  "editorSetting": {}
+}

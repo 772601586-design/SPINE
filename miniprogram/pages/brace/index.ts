@@ -60,7 +60,23 @@ Page({
   async endWear() {
     const active = this.data.active; if (!active || this.data.busy) return;
     this.setData({ busy: true, error: '' });
-    try { await api.endWear(active.id); await this.reload(); }
+    try {
+      const result = await api.endWear(active.id);
+      await this.reload();
+      if (result.training_prompt?.eligible) {
+        wx.showModal({
+          title: '佩戴记录已保存，现在要练一下吗？', content: '你有可开始的个人动作卡，可以查看训练计划；也可以暂时不用。',
+          confirmText: '查看我的训练计划', cancelText: '暂时不用',
+          success: async choice => {
+            try { await api.braceTrainingPromptChoice(active.id, choice.confirm ? 'continue' : 'skip'); }
+            catch (_) { wx.showToast({ title: '选择暂未同步，请稍后重试', icon: 'none' }); }
+            if (choice.confirm) wx.navigateTo({ url: '/pages/rehab/activity/index' });
+          },
+        });
+      } else {
+        wx.showToast({ title: '佩戴记录已保存', icon: 'success' });
+      }
+    }
     catch (error) { this.setData({ error: error instanceof Error ? error.message : '结束记录失败，请重试。' }); }
     finally { this.setData({ busy: false }); }
   },

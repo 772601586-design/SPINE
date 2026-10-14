@@ -1,0 +1,26 @@
+<view class="page">
+  <view class="heading"><text class="title">我的训练计划</text><text class="subtitle">你好，我是小树。按自己的计划记录训练，休息日不算漏练。</text></view>
+  <view wx:if="{{error}}" class="error" bindtap="reload">{{error}}，点击重试</view>
+  <view wx:if="{{loading}}" class="card"><view class="empty">正在读取你的训练计划…</view></view>
+  <block wx:elif="{{plan}}">
+    <view class="card card-green">
+      <view class="row"><text class="card-title">{{plan.title}}</text><text class="tag">{{plan.status === 'paused' ? '已暂停' : '当前计划'}}</text></view>
+      <text class="muted">周期：{{plan.start_date || '未设置'}} 至 {{plan.end_date || '未设置'}}</text>
+      <text class="muted">计划版本 v{{plan.current_version_no}} · 已保存 {{plan.completed_sets}} 组实际执行记录</text>
+    </view>
+    <view wx:if="{{!plan.cards.length}}" class="card empty-state"><text class="card-title">先添加一个动作，建立自己的训练计划。</text><button class="button" bindtap="addAction">添加动作</button></view>
+    <block wx:else>
+      <view wx:for="{{plan.cards}}" wx:key="id" class="card action-card" data-id="{{item.id}}" bindtap="openCard">
+        <view class="row"><text class="card-title">{{item.name}}</text><text class="tag">{{item.verification_status === 'ready' ? '可开始' : item.verification_status === 'needs_check' ? '待核对' : '待设置'}}</text></view>
+        <text class="muted">来源：{{item.source_type === 'library' ? '动作库' : item.source_type === 'prescription' ? '处方整理' : '本人自建'}} · 计划 {{item.sets || '待设置'}} 组</text>
+        <text class="muted">每组：{{item.reps_per_set ? item.reps_per_set + ' 次' : ''}}{{item.breaths_per_set ? item.breaths_per_set + ' 次呼吸' : ''}}{{item.hold_seconds ? item.hold_seconds + ' 秒保持' : ''}} · 方向：{{item.side || '待设置'}}</text>
+        <text class="small">本次已确认 {{item.completed_sets}} 组</text>
+        <view class="row order-actions"><button class="button button-plain compact" data-id="{{item.id}}" data-delta="-1" catchtap="moveCard">上移</button><button class="button button-plain compact" data-id="{{item.id}}" data-delta="1" catchtap="moveCard">下移</button></view>
+        <button class="button button-plain" data-id="{{item.id}}" data-name="{{item.name}}" catchtap="removeCard">移除后续安排</button>
+      </view>
+      <button class="button" bindtap="addAction">添加动作</button>
+    </block>
+    <view class="card secondary-card"><text class="card-title">其他记录</text><view class="row"><button class="button button-plain compact" bindtap="openSwimming">运动记录 · 游泳</button><button class="button button-plain compact" bindtap="openHistory">历史与周期回顾</button></view></view>
+  </block>
+  <view wx:elif="{{!loading}}" class="card empty-state"><text class="card-title">先添加一个动作，建立自己的训练计划。</text><text class="muted">动作会先保存为个人卡片；设置并核对必要参数后才能开始。</text><button class="button" bindtap="addAction">添加动作</button></view>
+</view>

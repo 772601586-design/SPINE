@@ -1,0 +1,8 @@
+.entry:active { opacity: .8; }
+.date { font-size: 30rpx; font-weight: 650; }
+.date-unknown { color: #8a948e; }
+.tag { padding: 4rpx 16rpx; border-radius: 999rpx; background: #dfeadf; color: #3d6350; font-size: 21rpx; }
+.tag-muted { background: #eef1ef; color: #8a948e; }
+.meta { margin-top: 12rpx; }
+.arrow { color: #87928c; font-size: 26rpx; }
+.center { display: block; margin-top: 18rpx; text-align: center; }

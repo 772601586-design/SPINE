@@ -1,0 +1,11 @@
+.who { display: flex; flex-direction: column; gap: 6rpx; }
+.name { font-size: 34rpx; font-weight: 650; }
+.arrow { color: #87928c; font-size: 28rpx; }
+.group { margin-top: 26rpx; }
+.group-title { display: block; margin: 0 0 8rpx 6rpx; color: #648074; font-size: 23rpx; letter-spacing: 1rpx; }
+.entry { padding: 20rpx 0; border-bottom: 1rpx solid #edf0ee; }
+.entry:last-child { border-bottom: none; }
+.entry-main { display: flex; flex-direction: column; gap: 6rpx; flex: 1; }
+.tag { padding: 4rpx 16rpx; border-radius: 999rpx; background: #edf4ef; color: #246b57; font-size: 21rpx; }
+.tag-muted { background: #eef1ef; color: #8a948e; }
+.center { display: block; margin-top: 18rpx; text-align: center; }

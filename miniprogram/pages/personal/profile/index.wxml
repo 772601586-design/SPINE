@@ -1,0 +1,97 @@
+<view class="page">
+  <view class="heading">
+    <text class="title">我的档案</text>
+    <text class="subtitle">这些内容仅本人可见，不会用于公开推荐。</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="card"><view class="empty">正在读取档案…</view></view>
+
+  <block wx:elif="{{blocking}}">
+    <view class="error">{{blocking}}</view>
+    <button class="button button-plain" bindtap="reload">重试</button>
+  </block>
+
+  <block wx:else>
+    <view wx:if="{{error}}" class="error" bindtap="reload">{{error}}</view>
+    <view wx:if="{{needsXray}}" class="card card-green">
+      <text class="card-title">{{profileStatusText}}</text>
+      <text class="muted">只有本人确认可查看的既有 X 光影像可完成建档；这不代表医学判读。</text>
+      <button class="button button-plain" bindtap="continueOnboarding">继续建档</button>
+    </view>
+
+    <view class="card">
+      <text class="card-title">基础资料</text>
+
+      <text class="label">昵称</text>
+      <view class="field"><input class="input" value="{{nickname}}" maxlength="50" bindinput="onNickname" /></view>
+
+      <text class="label">出生年月</text>
+      <picker mode="date" fields="month" value="{{birthMonth}}" start="1900-01" end="{{todayMonth}}" bindchange="onBirthMonth">
+        <view class="field picker-field">
+          <text class="{{birthMonth ? '' : 'placeholder'}}">{{birthMonth ? birthMonth : '未填写'}}</text>
+          <text class="arrow">›</text>
+        </view>
+      </picker>
+
+      <text class="label">诊断状态</text>
+      <picker mode="selector" range="{{diagnosisLabels}}" value="{{diagnosisIndex}}" bindchange="onDiagnosis">
+        <view class="field picker-field"><text>{{diagnosisLabels[diagnosisIndex]}}</text><text class="arrow">›</text></view>
+      </picker>
+
+      <text class="label">管理方式（可多选）</text>
+      <view>
+        <view wx:for="{{methods}}" wx:key="value" class="pill {{item.checked ? 'pill-active' : ''}}"
+          data-index="{{index}}" bindtap="toggleMethod">{{item.label}}</view>
+      </view>
+
+      <text class="label">备注</text>
+      <view class="field"><textarea class="textarea" value="{{notes}}" maxlength="500" bindinput="onNotes" /></view>
+
+      <button class="button" loading="{{saving}}" disabled="{{saving}}" bindtap="save">保存基础资料</button>
+      <button wx:if="{{conflict}}" class="button button-plain" bindtap="reload">重新加载最新档案</button>
+      <text class="small">平台不替你做诊断，这里填的是你自己的记录。</text>
+    </view>
+
+    <view class="card">
+      <view class="row" bindtap="toggleMeasureForm">
+        <text class="card-title tight">身体测量</text>
+        <text class="arrow">{{measureOpen ? '收起' : '新增'}}</text>
+      </view>
+      <text class="muted">{{latestText}}</text>
+
+      <block wx:if="{{measureOpen}}">
+        <view class="divider"></view>
+        <view wx:if="{{measureError}}" class="error">{{measureError}}</view>
+        <text class="label">测量日期</text>
+        <picker mode="date" value="{{measureDate}}" end="{{today}}" bindchange="onMeasureDate">
+          <view class="field picker-field"><text>{{measureDate}}</text><text class="arrow">›</text></view>
+        </picker>
+        <text class="label">身高（cm）</text>
+        <view class="field"><input class="input" type="digit" value="{{measureHeight}}" bindinput="onMeasureHeight" /></view>
+        <text class="label">体重（kg）</text>
+        <view class="field"><input class="input" type="digit" value="{{measureWeight}}" bindinput="onMeasureWeight" /></view>
+        <text class="label">备注</text>
+        <view class="field"><input class="input" value="{{measureNotes}}" bindinput="onMeasureNotes" /></view>
+        <button class="button" loading="{{savingMeasure}}" disabled="{{savingMeasure}}" bindtap="addMeasurement">保存这次测量</button>
+      </block>
+
+      <view class="divider"></view>
+      <block wx:if="{{measurements.length === 0}}">
+        <view class="empty">还没有测量记录。</view>
+      </block>
+      <block wx:else>
+        <view wx:for="{{measurements}}" wx:key="id" class="list-item">
+          <view class="row"><text class="list-title">{{item.date}}</text><text class="small">{{item.height}} cm / {{item.weight}} kg</text></view>
+          <text wx:if="{{item.notes}}" class="small">{{item.notes}}</text>
+        </view>
+        <text class="small">历史测量不会被覆盖，最新值由记录派生。</text>
+      </block>
+    </view>
+
+    <view class="card">
+      <text class="card-title">医疗资料</text>
+      <text class="muted">按就诊时间线整理影像、报告与诊断记录；文件为私有存储，只有本人可读。</text>
+      <button class="button button-plain" bindtap="openVisits">进入就诊时间线</button>
+    </view>
+  </block>
+</view>

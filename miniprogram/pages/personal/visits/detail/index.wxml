@@ -1,0 +1,145 @@
+<view class="page">
+  <view class="heading">
+    <text class="title">{{mode === 'create' ? '新增就诊' : '就诊详情'}}</text>
+    <text class="subtitle">记录医生写的内容和你自己的备注；平台不做识别或诊断。</text>
+  </view>
+
+  <view wx:if="{{loading}}" class="card"><view class="empty">正在读取…</view></view>
+
+  <block wx:elif="{{blocking}}">
+    <view class="error">{{blocking}}</view>
+    <button class="button button-plain" bindtap="retryLoad">重试</button>
+  </block>
+
+  <block wx:else>
+    <view wx:if="{{error}}" class="error" bindtap="save">{{error}}</view>
+
+    <view class="card">
+      <text class="card-title">就诊时间</text>
+      <view>
+        <view wx:for="{{precisions}}" wx:key="value" class="pill {{precision === item.value ? 'pill-active' : ''}}"
+          data-value="{{item.value}}" bindtap="choosePrecision">{{item.label}}</view>
+      </view>
+
+      <block wx:if="{{precision === 'day'}}">
+        <text class="label">具体日期</text>
+        <picker mode="date" value="{{visitDate}}" end="{{todayDate}}" bindchange="onVisitDate">
+          <view class="field picker-field"><text>{{visitDate}}</text><text class="arrow">›</text></view>
+        </picker>
+      </block>
+
+      <block wx:elif="{{precision === 'month'}}">
+        <text class="label">就诊年月</text>
+        <picker mode="date" fields="month" value="{{visitMonth}}" start="1900-01" end="{{todayMonth}}" bindchange="onVisitMonth">
+          <view class="field picker-field"><text>{{visitMonth}}</text><text class="arrow">›</text></view>
+        </picker>
+      </block>
+
+      <text wx:if="{{precisionHint}}" class="small">{{precisionHint}}</text>
+    </view>
+
+    <view class="card">
+      <text class="card-title">就诊信息</text>
+      <text class="label">机构</text>
+      <view class="field"><input class="input" value="{{institution}}" bindinput="onInstitution" placeholder="例如：某某医院" placeholder-class="placeholder" /></view>
+      <text class="label">科室</text>
+      <view class="field"><input class="input" value="{{department}}" bindinput="onDepartment" placeholder="可留空" placeholder-class="placeholder" /></view>
+      <text class="label">标题</text>
+      <view class="field"><input class="input" value="{{title}}" bindinput="onTitle" placeholder="例如：半年复查" placeholder-class="placeholder" /></view>
+      <text class="label">诊断记录（医生原话摘录）</text>
+      <view class="field"><textarea class="textarea" value="{{diagnosisExcerpt}}" maxlength="2000" bindinput="onDiagnosis" /></view>
+      <text class="label">医生建议</text>
+      <view class="field"><textarea class="textarea" value="{{adviceExcerpt}}" maxlength="2000" bindinput="onAdvice" /></view>
+      <text class="label">个人备注</text>
+      <view class="field"><textarea class="textarea short" value="{{notes}}" maxlength="1000" bindinput="onNotes" /></view>
+    </view>
+
+    <view class="card">
+      <view class="row">
+        <text class="card-title tight">复查提醒</text>
+        <text class="small">{{nextReview ? '已设置' : '未设置'}}</text>
+      </view>
+      <picker mode="date" value="{{nextReview}}" start="{{todayDate}}" bindchange="onNextReview">
+        <view class="field picker-field">
+          <text class="{{nextReview ? '' : 'placeholder'}}">{{nextReview ? nextReview : '选择日期（可留空）'}}</text>
+          <text class="arrow">›</text>
+        </view>
+      </picker>
+      <text class="small">只是个人备忘，不代表已在医院预约。</text>
+      <button wx:if="{{nextReview}}" class="button button-plain" bindtap="clearNextReview">清除复查日期</button>
+    </view>
+
+    <button class="button" loading="{{saving}}" disabled="{{saving}}" bindtap="save">{{mode === 'create' ? '保存这次就诊' : '保存修改'}}</button>
+
+    <block wx:if="{{mode === 'edit'}}">
+      <view class="card">
+        <text class="card-title">资料</text>
+        <text class="muted">支持 JPG / PNG 图片与 PDF 报告，单份不超过 20 MB，存放于私有存储。</text>
+
+        <text class="label">先选择资料分类</text>
+        <picker mode="selector" range="{{categoryLabels}}" value="{{categoryIndex}}" bindchange="onCategory">
+          <view class="field picker-field"><text>{{categoryLabels[categoryIndex]}}</text><text class="arrow">›</text></view>
+        </picker>
+        <view class="row gap">
+          <button class="button button-plain compact" loading="{{uploading}}" disabled="{{uploading}}" bindtap="pickImage">选择图片</button>
+          <button class="button button-plain compact" loading="{{uploading}}" disabled="{{uploading}}" bindtap="pickDocument">选择 PDF</button>
+        </view>
+
+        <view class="divider"></view>
+        <block wx:if="{{attachments.length === 0}}"><view class="empty">还没有上传资料。</view></block>
+        <view wx:for="{{attachments}}" wx:key="id" class="list-item">
+          <view class="row">
+            <text class="list-title">{{item.categoryLabel}}</text>
+            <text class="tag">{{item.isImage ? '图片' : 'PDF'}}</text>
+          </view>
+          <text class="small">{{item.filename}} · {{item.sizeText}}</text>
+          <view class="row gap">
+            <button class="button button-plain compact small-btn" data-id="{{item.id}}" data-image="{{item.isImage}}" data-name="{{item.filename}}" bindtap="openAttachment">打开</button>
+            <button class="button button-danger compact small-btn" data-id="{{item.id}}" bindtap="unbind">解除关联</button>
+          </view>
+        </view>
+      </view>
+
+      <view class="card">
+        <view class="row" bindtap="toggleCurveForm">
+          <text class="card-title tight">弯曲记录</text>
+          <text class="arrow">{{curveOpen ? '收起' : '追加'}}</text>
+        </view>
+        <text class="muted">一次检查有多个弯就分别记录，不合并成一个角度。全部字段都可以留空。</text>
+
+        <block wx:if="{{curveOpen}}">
+          <view class="divider"></view>
+          <view wx:if="{{curveError}}" class="error">{{curveError}}</view>
+          <text class="label">部位</text>
+          <picker mode="selector" range="{{regionLabels}}" value="{{curveRegionIndex}}" bindchange="onCurveRegion">
+            <view class="field picker-field"><text>{{regionLabels[curveRegionIndex]}}</text><text class="arrow">›</text></view>
+          </picker>
+          <text class="label">方向</text>
+          <picker mode="selector" range="{{directionLabels}}" value="{{curveDirectionIndex}}" bindchange="onCurveDirection">
+            <view class="field picker-field"><text>{{directionLabels[curveDirectionIndex]}}</text><text class="arrow">›</text></view>
+          </picker>
+          <text class="label">角度（度）</text>
+          <view class="field"><input class="input" type="digit" value="{{curveAngle}}" bindinput="onCurveAngle" placeholder="可留空" placeholder-class="placeholder" /></view>
+          <text class="label">端椎</text>
+          <view class="field"><input class="input" value="{{curveEnd}}" bindinput="onCurveEnd" placeholder="例如：T5–T12" placeholder-class="placeholder" /></view>
+          <button class="button" loading="{{savingCurve}}" disabled="{{savingCurve}}" bindtap="addCurve">追加记录</button>
+        </block>
+
+        <view class="divider"></view>
+        <block wx:if="{{curves.length === 0}}"><view class="empty">还没有弯曲记录。</view></block>
+        <view wx:for="{{curves}}" wx:key="id" class="list-item">
+          <view class="row">
+            <text class="list-title">{{item.regionLabel}} · {{item.directionLabel}}</text>
+            <text class="small">{{item.angle}}°</text>
+          </view>
+          <text wx:if="{{item.end}}" class="small">端椎：{{item.end}}</text>
+          <view class="row"><text class="small">用户录入</text>
+            <text class="link" data-id="{{item.id}}" bindtap="removeCurve">删除</text></view>
+        </view>
+      </view>
+
+      <button class="button button-danger" loading="{{deleting}}" disabled="{{deleting}}" bindtap="remove">删除这次就诊</button>
+      <text class="small center">删除后资料不再可读；计划里的执行快照会显示「原记录已删除」。</text>
+    </block>
+  </block>
+</view>

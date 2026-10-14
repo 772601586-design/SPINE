@@ -1,0 +1,38 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="card"><view class="empty">正在读取动作卡…</view></view>
+  <view wx:if="{{error}}" class="error">{{error}} <text bindtap="load">重试</text></view>
+  <block wx:if="{{card}}">
+    <view class="heading"><text class="title">{{card.name}}</text><text class="subtitle">来源：{{card.source_type === 'library' ? '动作库' : card.source_type === 'prescription' ? '处方整理' : '本人自建'}} · {{card.source_category || ''}}</text></view>
+    <view class="card">
+      <text class="card-title">动作指导</text>
+      <text class="line">{{card.source_summary || '暂无摘要'}}</text>
+      <block wx:for="{{card.source_media}}" wx:key="index">
+        <image wx:if="{{item.type === 'image' && item.url}}" class="demo-image" src="{{item.url}}" mode="aspectFill" />
+        <video wx:if="{{item.type === 'video' && item.url}}" class="demo-video" src="{{item.url}}" controls="{{true}}" show-center-play-btn="{{true}}" />
+        <audio wx:if="{{item.type === 'audio' && item.url}}" src="{{item.url}}" controls="{{true}}" />
+      </block>
+      <view wx:for="{{card.source_steps}}" wx:key="index" class="line">{{index + 1}}. {{item}}</view>
+      <text wx:if="{{card.source_precautions}}" class="notice">注意事项：{{card.source_precautions}}</text>
+      <text wx:if="{{card.source_url}}" class="small">资料来源：{{card.source_url}}</text>
+      <text wx:if="{{!card.source_media || !card.source_media.length}}" class="muted">当前无已审核示范素材；可按下方文字要点自主记录。</text>
+    </view>
+    <view class="card">
+      <text class="card-title">本人的训练参数</text>
+      <text class="muted">请按本人已有指导填写。留空的必要参数会阻止开始。</text>
+      <view class="field"><text>组数</text><input type="number" data-field="sets" value="{{form.sets}}" bindinput="input" placeholder="填写组数" /></view>
+      <view class="field"><text>每组次数</text><input type="number" data-field="reps_per_set" value="{{form.reps_per_set}}" bindinput="input" placeholder="可留空" /></view>
+      <view class="field"><text>每组呼吸次数</text><input type="number" data-field="breaths_per_set" value="{{form.breaths_per_set}}" bindinput="input" placeholder="可留空" /></view>
+      <view class="field"><text>单次保持秒数</text><input type="number" data-field="hold_seconds" value="{{form.hold_seconds}}" bindinput="input" placeholder="可留空" /></view>
+      <view class="field"><text>组间休息秒数</text><input type="number" data-field="rest_seconds" value="{{form.rest_seconds}}" bindinput="input" placeholder="未指定可留空" /></view>
+      <text class="field-label">方向（按患者自身左右）</text>
+      <view class="choices"><text wx:for="{{sides}}" wx:key="code" class="choice {{form.side === item.code ? 'choice-active' : ''}}" data-value="{{item.code}}" bindtap="chooseSide">{{item.label}}</text></view>
+      <textarea class="notes" data-field="personal_notes" value="{{form.personal_notes}}" bindinput="input" maxlength="3000" placeholder="个体设置或个人练习重点；专项动作按线下指导填写" />
+      <text class="small">核对仅表示本人确认录入内容，不代表专业审核。</text>
+      <view wx:if="{{error}}" class="error">{{error}}</view>
+      <button class="button button-plain" loading="{{saving}}" bindtap="saveDraft">保存草稿</button>
+      <button class="button button-plain" loading="{{saving}}" bindtap="confirmParameters">保存并核对参数</button>
+    </view>
+    <button class="button" disabled="{{card.verification_status !== 'ready'}}" bindtap="start">开始</button>
+    <text class="small center">状态：{{card.verification_status === 'ready' ? '可开始' : card.verification_status === 'needs_check' ? '待核对' : '待设置'}}</text>
+  </block>
+</view>

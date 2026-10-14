@@ -1,0 +1,5 @@
+.success-card { padding:36rpx; text-align:center; }
+.success-title { display:block; margin-bottom:18rpx; color:#2f624b; font-size:38rpx; font-weight:700; }
+.voice-note { display:block; margin-top:20rpx; padding:16rpx; border-radius:12rpx; color:#53635a; background:#f1f4ef; font-size:24rpx; line-height:1.5; }
+.pending-card { border:1rpx solid #d7bd84; }
+.actual-input { box-sizing:border-box; margin:14rpx 0; padding:16rpx; border-radius:10rpx; background:#f6f8f2; }

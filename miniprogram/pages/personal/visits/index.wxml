@@ -1,0 +1,32 @@
+<view class="page">
+  <view class="heading">
+    <text class="title">就诊时间线</text>
+    <text class="subtitle">按就诊整理影像、报告与诊断记录。日期不详的记录排在最后。</text>
+  </view>
+
+  <view wx:if="{{error}}" class="error" bindtap="reload">{{error}} 点击重试</view>
+  <view wx:if="{{loading}}" class="card"><view class="empty">正在读取就诊记录…</view></view>
+
+  <block wx:else>
+    <block wx:if="{{visits.length === 0}}">
+      <view class="card"><view class="empty">还没有就诊记录。可以先把已知的检查资料记下来。</view></view>
+    </block>
+
+    <view wx:for="{{visits}}" wx:key="id" class="card entry" data-id="{{item.id}}" bindtap="open">
+      <view class="row">
+        <text class="date {{item.unknown ? 'date-unknown' : ''}}">{{item.primary}}</text>
+        <text class="tag {{item.unknown ? 'tag-muted' : ''}}">{{item.precision}}</text>
+      </view>
+      <text class="list-title">{{item.title}}</text>
+      <text wx:if="{{item.secondary}}" class="small">{{item.secondary}}</text>
+      <view class="row meta">
+        <text class="small">资料 {{item.attachmentCount}} 份 · 弯曲 {{item.curveCount}} 条</text>
+        <text class="arrow">›</text>
+      </view>
+      <text wx:if="{{item.nextReview}}" class="small">计划复查日期：{{item.nextReview}}（个人备忘，不代表已预约）</text>
+    </view>
+
+    <button class="button" bindtap="create">新增一次就诊</button>
+    <text class="small center">资料以「用户录入」为准，平台不做识别或诊断。</text>
+  </block>
+</view>

@@ -1,0 +1,3 @@
+.tight { margin-bottom: 0; }
+.tag { padding: 4rpx 16rpx; border-radius: 999rpx; background: #edf4ef; color: #246b57; font-size: 21rpx; }
+.tag-muted { background: #eef1ef; color: #8a948e; }

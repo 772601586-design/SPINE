@@ -1,0 +1,54 @@
+﻿<view class="page">
+  <view class="heading">
+    <text class="title">动作库</text>
+    <text class="subtitle">按身体区域、相关肌群和动作目标浏览。分类用于查找资料，不代表个人训练建议。</text>
+  </view>
+  <view wx:if="{{error}}" class="error" bindtap="retry">{{error}}，点击重试</view>
+  <view wx:if="{{loading}}" class="card"><view class="empty">正在加载分类与动作…</view></view>
+  <block wx:else>
+    <view class="card filter-card">
+      <view class="filter-head"><text class="card-title">身体区域</text><text class="clear" bindtap="clearFilters">清除筛选</text></view>
+      <view class="chips"><view wx:for="{{taxonomy.regions}}" wx:key="code" class="chip {{selectedRegion === item.code ? 'chip-active' : ''}}" data-group="regions" data-code="{{item.code}}" bindtap="selectFilter">{{item.name}}</view></view>
+      <text class="filter-label">肌群</text>
+      <view class="chips"><view wx:for="{{taxonomy.muscles}}" wx:key="code" class="chip {{selectedMuscle === item.code ? 'chip-active' : ''}}" data-group="muscles" data-code="{{item.code}}" bindtap="selectFilter">{{item.name}}</view></view>
+      <text class="filter-label">动作目标</text>
+      <view class="chips"><view wx:for="{{taxonomy.goals}}" wx:key="code" class="chip {{selectedGoal === item.code ? 'chip-active' : ''}}" data-group="goals" data-code="{{item.code}}" bindtap="selectFilter">{{item.name}}</view></view>
+      <text class="filter-label">体位</text>
+      <view class="chips"><view wx:for="{{taxonomy.postures}}" wx:key="code" class="chip {{selectedPosture === item.code ? 'chip-active' : ''}}" data-group="postures" data-code="{{item.code}}" bindtap="selectFilter">{{item.name}}</view></view>
+      <text class="filter-label">器材</text>
+      <view wx:if="{{taxonomy.equipment.length}}" class="chips"><view wx:for="{{taxonomy.equipment}}" wx:key="*this" class="chip {{selectedEquipment === item ? 'chip-active' : ''}}" data-group="equipment" data-code="{{item}}" bindtap="selectFilter">{{item}}</view></view>
+      <text wx:else class="muted">已发布动作尚未登记器材</text>
+      <text class="filter-label">内容类型</text>
+      <view class="chips"><view wx:for="{{categories}}" wx:key="code" class="chip {{selectedCategory === item.code ? 'chip-active' : ''}}" data-group="categories" data-code="{{item.code}}" bindtap="selectFilter">{{item.name}}</view></view>
+    </view>
+    <view wx:if="{{!exercises.length}}" class="card empty-state">
+      <text class="card-title">暂时没有已审核发布的动作</text>
+      <text class="muted">分类已就绪。内容管理员完成资料审核与授权登记后，动作会按相关肌群显示在这里。</text>
+    </view>
+    <block wx:else>
+      <view wx:for="{{exercises}}" wx:key="id" class="card exercise-card" data-id="{{item.id}}" bindtap="toggleExercise">
+        <view class="card-row"><text class="card-title">{{item.name}}</text><text class="tag">{{item.category_label}}</text></view>
+        <text class="muted">{{item.summary}}</text>
+        <view class="tag-row"><text wx:for="{{item.primary_muscles}}" wx:key="code" class="muscle-tag">{{item.name}}</text></view>
+        <view class="tag-row"><text wx:for="{{item.secondary_muscles}}" wx:key="code" class="muscle-tag secondary">{{item.name}}</text></view>
+        <button class="button button-plain add-button" disabled="{{added[item.id] || item.already_added || adding === item.id}}" data-id="{{item.id}}" catchtap="addToPlan">{{added[item.id] || item.already_added ? '已添加' : adding === item.id ? '正在添加…' : '＋ 添加到计划'}}</button>
+        <view wx:if="{{selectedExercise === item.id}}" class="details">
+          <text class="detail-label">相关区域</text><text class="detail-text">{{item.region_names}}</text>
+          <text class="detail-label">相关肌群</text><text class="detail-text">{{item.primary_muscle_names}}</text>
+          <text wx:if="{{item.secondary_muscles.length}}" class="detail-text">其他关联：{{item.secondary_muscle_names}}</text>
+          <text class="detail-label">目标</text><text class="detail-text">{{item.goal_names}}</text>
+          <text wx:if="{{item.starting_position}}" class="detail-label">起始体位</text><text class="detail-text">{{item.starting_position}}</text>
+          <text wx:if="{{item.preparation}}" class="detail-label">准备</text><text class="detail-text">{{item.preparation}}</text>
+          <view wx:for="{{item.steps}}" wx:for-item="step" wx:key="index" class="step">{{index + 1}}. {{step}}</view>
+          <text wx:if="{{item.breathing}}" class="detail-text">呼吸：{{item.breathing}}</text>
+          <text wx:if="{{item.side_notes}}" class="notice">方向与个体设置：{{item.side_notes}}</text>
+          <text wx:if="{{item.requires_individual_setup}}" class="notice">此资料需要依据已有线下指导填写个体设置。</text>
+          <text wx:if="{{item.cautions}}" class="notice">注意：{{item.cautions}}</text>
+          <text wx:if="{{!item.media.length}}" class="muted media-empty">指导图片或视频待补充</text>
+          <text class="source">内容审核：{{item.reviewer}} · v{{item.version}}</text>
+        </view>
+      </view>
+    </block>
+  </block>
+</view>
+

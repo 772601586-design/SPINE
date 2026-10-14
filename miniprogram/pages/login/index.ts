@@ -1,38 +1,45 @@
-import { api } from '../../services/api';
 import { ApiError } from '../../services/request';
-import { initSession, isInvalidCredential, signIn } from '../../services/session';
+import { getCurrentIdentity, initSession, signInWithWechat } from '../../services/session';
+
+let inFlight = false;
+
+function messageFor(error: unknown): string {
+  if (error instanceof ApiError) {
+    return error.status === 503
+      ? '服务端尚未完成微信登录配置，请联系维护者。'
+      : `暂时无法登录（${error.status}），请稍后重试。`;
+  }
+  if (error instanceof Error && error.message) return error.message;
+  return '网络暂时不可用，请检查连接后重试。';
+}
+
+/** 登录后的去向由服务端建档状态决定（规格 §2）：未建档先进建档页。 */
+function enterApp(): void {
+    const identity = getCurrentIdentity();
+    const dismissed = identity ? wx.getStorageSync(`spine.onboarding.dismissed:${identity.id}`) === true : false;
+    if (identity?.has_profile && (identity.onboarding_status === 'complete' || dismissed)) {
+      wx.switchTab({ url: '/pages/rehab/index' });
+    } else wx.reLaunch({ url: '/pages/onboarding/profile/index' });
+}
 
 Page({
-  data: { checking: true, unavailable: false, busy: false, showPassword: false, username: '', password: '', error: '' },
-  async onLoad() {
-    const result = await initSession();
-    if (result === 'signedIn') { wx.switchTab({ url: '/pages/today/index' }); return; }
-    this.setData({ checking: false, unavailable: result === 'unavailable', error: result === 'unavailable' ? '暂时无法验证登录状态，请检查网络后重试。' : '' });
-  },
-  onUsername(event: { detail: { value: string } }) { this.setData({ username: event.detail.value }); },
-  onPassword(event: { detail: { value: string } }) { this.setData({ password: event.detail.value }); },
-  togglePassword() { this.setData({ showPassword: !this.data.showPassword }); },
-  async retry() {
-    this.setData({ checking: true, unavailable: false, error: '' });
-    const result = await initSession(true);
-    if (result === 'signedIn') { wx.switchTab({ url: '/pages/today/index' }); return; }
-    this.setData({ checking: false, unavailable: result === 'unavailable', error: result === 'unavailable' ? '网络仍不可用，登录状态未清除。' : '' });
-  },
-  async submit() {
-    if (this.data.busy) return;
-    const username = this.data.username.trim();
-    const password = this.data.password;
-    if (!username || !password) { this.setData({ error: '请输入账号和密码。' }); return; }
+  data: { busy: true, error: '' },
+  onLoad() { void this.begin(); },
+  async begin() {
+    if (inFlight) return;
+    inFlight = true;
     this.setData({ busy: true, error: '' });
     try {
-      await signIn(username, password);
-      this.setData({ password: '' });
-      wx.switchTab({ url: '/pages/today/index' });
+      if ((await initSession()) === 'signedIn') { enterApp(); return; }
+      const { isNew } = await signInWithWechat();
+      if (isNew) wx.showToast({ title: '已创建你的账号', icon: 'none' });
+      enterApp();
     } catch (error) {
-      const message = isInvalidCredential(error) ? '账号或密码不正确，请重试。'
-        : error instanceof ApiError ? `暂时无法登录（${error.status}），请稍后重试。`
-        : '网络暂时不可用，请检查连接后重试。';
-      this.setData({ error: message });
-    } finally { this.setData({ busy: false }); }
+      this.setData({ error: messageFor(error) });
+    } finally {
+      inFlight = false;
+      this.setData({ busy: false });
+    }
   },
+  retry() { void this.begin(); },
 });

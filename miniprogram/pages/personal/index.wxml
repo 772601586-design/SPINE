@@ -1,9 +1,33 @@
 <view class="page">
-  <view class="heading"><text class="title">个人</text><text class="subtitle">个人资料与私人记录。</text></view>
-  <view class="card"><text class="card-title">我的账号</text><text>{{username}}</text></view>
-  <view class="card"><text class="card-title">健康档案与历史</text><button class="button button-plain" bindtap="openHistory">支具佩戴与感受历史</button></view>
-  <view class="card"><text class="card-title">上传资料</text><view class="empty">受保护的文件上传尚未开放</view></view>
-  <view class="card"><text class="card-title">偏好设置</text><view class="empty">偏好设置尚未开放</view></view>
+  <view class="heading">
+    <text class="title">个人</text>
+    <text class="subtitle">{{subtitle}}</text>
+  </view>
+
+  <view class="card card-green" bindtap="openProfile">
+    <view class="row">
+      <view class="who">
+        <text class="name">{{nickname}}</text>
+        <text class="small">仅本人可见 · 点击进入我的档案</text>
+      </view>
+      <text class="arrow">›</text>
+    </view>
+  </view>
+
+  <view wx:for="{{sections}}" wx:key="title" wx:for-item="section" class="group">
+    <text class="group-title">{{section.title}}</text>
+    <view class="card">
+      <view wx:for="{{section.entries}}" wx:key="key" class="row entry" data-key="{{item.key}}" bindtap="openEntry">
+        <view class="entry-main">
+          <text class="list-title">{{item.label}}</text>
+          <text class="small">{{item.desc}}</text>
+        </view>
+        <text class="tag {{item.available ? '' : 'tag-muted'}}">{{item.available ? '可用' : '尚未开放'}}</text>
+      </view>
+    </view>
+  </view>
+
   <button class="button button-danger" loading="{{busy}}" disabled="{{busy}}" bindtap="logout">退出登录</button>
   <view wx:if="{{error}}" class="error">{{error}}</view>
+  <text class="small center">退出只清除本机会话，服务端会同时撤销该令牌。</text>
 </view>

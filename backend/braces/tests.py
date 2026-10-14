@@ -207,7 +207,7 @@ class PersonalFlowTests(APITestCase):
 
 class ConcurrentWearTests(TransactionTestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user("concurrent", password=PASSWORD)
+        self.user = get_user_model().objects.create_user(f"concurrent-{uuid4().hex}", password=PASSWORD)
         self.token = Token.objects.create(user=self.user).key
         self.brace = Brace.objects.create(owner=self.user, name="并发支具")
 

@@ -1,0 +1,8 @@
+.field { display:flex; align-items:center; justify-content:space-between; gap:16rpx; padding:18rpx 0; border-bottom:1rpx solid #edf0ed; color:#24382e; }
+.field input { width:42%; text-align:right; }
+.field-label { display:block; margin:20rpx 0 10rpx; color:#53635a; }
+.choices { display:flex; flex-wrap:wrap; gap:10rpx; }
+.choice { padding:12rpx 16rpx; border-radius:12rpx; background:#f0f2ef; color:#53635a; }
+.choice-active { background:#e8f1e8; color:#2f624b; font-weight:600; }
+.notes { box-sizing:border-box; width:100%; min-height:140rpx; margin:18rpx 0; padding:16rpx; border-radius:12rpx; background:#f6f8f2; }
+.demo-image, .demo-video { display:block; width:100%; height:360rpx; margin:16rpx 0; border-radius:14rpx; }

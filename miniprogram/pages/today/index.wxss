@@ -1,7 +1,0 @@
-.brace-card { padding: 30rpx; }
-.brace-title { margin: 0; }
-.arrow { color: #246b57; font-size: 48rpx; }
-.brace-name { display: block; margin: 10rpx 0; font-size: 32rpx; font-weight: 600; }
-.status, .daily { display: block; margin-top: 10rpx; }
-.daily { font-weight: 600; }
-.brace-action { margin-top: 20rpx; color: #246b57; text-align: right; }

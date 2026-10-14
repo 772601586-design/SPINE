@@ -1,16 +1,13 @@
 <view class="login-wrap">
   <view class="login-card">
     <view class="brand-mark">S</view>
-    <text class="login-title">欢迎回到 SPINE</text>
-    <text class="login-subtitle">登录后查看你的私人记录</text>
-    <view wx:if="{{checking}}" class="checking"><view class="spinner"></view><text>正在检查登录状态…</text></view>
+    <text class="login-title">欢迎来到 SPINE</text>
+    <text class="login-subtitle">使用微信一键登录，查看你的私人记录</text>
+    <view wx:if="{{busy}}" class="checking"><view class="spinner"></view><text>正在登录…</text></view>
     <block wx:else>
-      <input class="field" placeholder="账号" value="{{username}}" bindinput="onUsername" confirm-type="next" />
-      <view class="password-row"><input class="field password" placeholder="密码" password="{{!showPassword}}" value="{{password}}" bindinput="onPassword" confirm-type="done" bindconfirm="submit" /><text class="toggle" bindtap="togglePassword">{{showPassword ? '隐藏' : '显示'}}</text></view>
       <view wx:if="{{error}}" class="error">{{error}}</view>
-      <button class="button login-button" loading="{{busy}}" disabled="{{busy}}" bindtap="submit">{{busy ? '正在登录…' : '登录'}}</button>
-      <button wx:if="{{unavailable}}" class="button button-plain" disabled="{{busy}}" bindtap="retry">重新检查登录状态</button>
-      <text class="login-footnote">本轮使用账号密码联调；微信登录尚未接入。</text>
+      <button class="button login-button" bindtap="retry">重新登录</button>
+      <text class="login-footnote">首次登录会为你自动创建账号；记录仅本人可见。</text>
     </block>
   </view>
 </view>

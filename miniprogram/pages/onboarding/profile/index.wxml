@@ -1,0 +1,113 @@
+<view class="page">
+  <view class="heading">
+    <text class="eyebrow">{{stage === 'profile' ? '你好，我是小树' : '保存已有资料'}}</text>
+    <text class="title">{{stage === 'profile' ? '认识你' : '保存 X 光片'}}</text>
+    <text class="subtitle">基础信息 → X 光片 → 确认档案</text>
+  </view>
+
+  <block wx:if="{{loading}}"><view class="card"><view class="empty">正在准备你的档案…</view></view></block>
+
+  <block wx:elif="{{blocking}}">
+    <view class="error" bindtap="retryLoad">{{blocking}} 点击重试</view>
+    <button class="button button-plain" bindtap="retryLoad">重试</button>
+  </block>
+
+  <block wx:elif="{{ready}}">
+    <view class="error" wx:if="{{error}}">{{error}}</view>
+
+    <block wx:if="{{stage === 'profile'}}">
+
+    <view class="card">
+      <text class="card-title">昵称</text>
+      <view class="field {{fieldErrors.nickname ? 'field-invalid' : ''}}">
+        <input class="input" value="{{nickname}}" maxlength="50" placeholder="给自己起个名字"
+          placeholder-class="placeholder" bindinput="onNickname" />
+      </view>
+      <text class="small">昵称会显示在社区等内容里，手机号、微信标识不会对外展示。</text>
+    </view>
+
+    <view class="card">
+      <view class="row" bindtap="toggleExtra">
+        <text class="card-title tight">补充信息（可跳过）</text>
+        <text class="arrow">{{hasExtra ? '收起' : '展开'}}</text>
+      </view>
+      <text class="muted">不填不影响使用，随时可以在「个人 → 我的档案」里补上。</text>
+
+      <block wx:if="{{hasExtra}}">
+        <view class="divider"></view>
+
+        <text class="label">出生年月</text>
+        <view class="row">
+          <picker mode="date" fields="month" value="{{birthMonth}}" start="1900-01" end="{{todayMonth}}" bindchange="onBirthMonth">
+            <view class="field picker-field">
+              <text class="{{birthMonth ? '' : 'placeholder'}}">{{birthMonth ? birthMonth : '未填写'}}</text>
+              <text class="arrow">›</text>
+            </view>
+          </picker>
+        </view>
+        <text wx:if="{{birthMonth}}" class="link" bindtap="clearBirthMonth">清除出生年月</text>
+
+        <text class="label">诊断状态</text>
+        <picker mode="selector" range="{{diagnosisLabels}}" value="{{diagnosisIndex}}" bindchange="onDiagnosis">
+          <view class="field picker-field">
+            <text>{{diagnosisLabels[diagnosisIndex]}}</text>
+            <text class="arrow">›</text>
+          </view>
+        </picker>
+
+        <text class="label">管理方式（可多选）</text>
+        <view>
+          <view wx:for="{{methods}}" wx:key="value" class="pill {{item.checked ? 'pill-active' : ''}}"
+            data-index="{{index}}" bindtap="toggleMethod">{{item.label}}</view>
+        </view>
+
+        <text class="label">备注</text>
+        <view class="field">
+          <textarea class="textarea" value="{{notes}}" maxlength="500" placeholder="想记下的背景信息（可留空）"
+            placeholder-class="placeholder" bindinput="onNotes" />
+        </view>
+      </block>
+    </view>
+
+      <button class="button" loading="{{saving}}" disabled="{{saving}}" bindtap="submit">保存并继续</button>
+      <text class="small center">这些内容仅本人可见，不会用于任何公开推荐。</text>
+    </block>
+
+    <block wx:else>
+      <view class="card card-green">
+        <text class="card-title">请上传已有的 X 光影像</text>
+        <text class="muted">影像照片或包含影像的 PDF 均可。报告请在就诊资料中另行保存。只上传你已有的资料，不需要为了完成注册新做检查。</text>
+        <text class="small">原件默认仅本人可见。系统只检查文件格式、是否可读取和安全状态，不判断影像质量或医学内容。</text>
+      </view>
+      <view class="card">
+        <view class="row gap">
+          <button class="button button-plain compact" bindtap="chooseXrayImage">从相册选择影像</button>
+          <button class="button button-plain compact" bindtap="chooseXrayPdf">选择 PDF</button>
+        </view>
+        <view wx:if="{{xrayFile}}" class="list-item">
+          <text class="list-title">{{xrayFile.name}}</text>
+          <text class="small">已选择，上传前请确认内容</text>
+          <image wx:if="{{xrayIsImage}}" class="xray-preview" src="{{xrayFile.path}}" mode="widthFix" bindtap="previewXray" />
+        </view>
+        <text class="label">影像日期</text>
+        <view class="row gap">
+          <view class="pill {{xrayDatePrecision === 'unknown' ? 'pill-active' : ''}}" data-value="unknown" bindtap="chooseXrayDatePrecision">不详</view>
+          <view class="pill {{xrayDatePrecision === 'day' ? 'pill-active' : ''}}" data-value="day" bindtap="chooseXrayDatePrecision">精确到日</view>
+          <view class="pill {{xrayDatePrecision === 'month' ? 'pill-active' : ''}}" data-value="month" bindtap="chooseXrayDatePrecision">精确到月</view>
+        </view>
+        <picker wx:if="{{xrayDatePrecision === 'day'}}" mode="date" value="{{xrayDate}}" end="{{todayDate}}" bindchange="onXrayDate">
+          <view class="field picker-field"><text>{{xrayDate}}</text><text class="arrow">›</text></view>
+        </picker>
+        <picker wx:if="{{xrayDatePrecision === 'month'}}" mode="date" fields="month" value="{{xrayDate}}" end="{{todayMonth}}" bindchange="onXrayDate">
+          <view class="field picker-field"><text>{{xrayDate}}</text><text class="arrow">›</text></view>
+        </picker>
+        <checkbox-group bindchange="onXrayConfirmed">
+          <label class="confirm-row"><checkbox value="confirmed" checked="{{xrayConfirmed}}" />这是本人已有的 X 光影像，我已检查文件可以查看</label>
+        </checkbox-group>
+      </view>
+      <button class="button" loading="{{uploadingXray}}" disabled="{{uploadingXray || !xrayFile}}" bindtap="uploadXray">确认并安全上传，完成建档</button>
+      <button class="button button-plain" bindtap="saveForLater">先保存，稍后补充</button>
+      <text class="small center">缺少影像时档案保持草稿；你仍可浏览和记录。完成建档不代表诊断或专业审核。</text>
+    </block>
+  </block>
+</view>
