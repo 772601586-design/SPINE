@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>欢迎</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F6F66}a:hover{color:#154F49}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F3F5F2; color: #1F2A27; font-family: 'Noto Sans SC', sans-serif; padding: 28px 20px 28px; display: flex; flex-direction: column; gap: 18px">
+
+  <div style="display: flex; justify-content: space-between; align-items: center">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <div style="width: 36px; height: 36px; border-radius: 10px; background: #1F6F66; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c-3 3 3 5 0 8s3 5 0 8 0 4 0 4"></path><path d="M9 6h6M9.5 12h5M9 18h6"></path></svg>
+      </div>
+      <span style="font-size: 18px; font-weight: 700; letter-spacing: 0.5px">Spine</span>
+    </div>
+    <span style="font-size: 13px; color: #5B6663">1 / 4</span>
+  </div>
+
+  <div style="height: 170px; border-radius: 24px; background: #DDEDE9; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center">
+    <div style="position: absolute; left: -40px; top: -40px; width: 180px; height: 180px; border-radius: 999px; background: #C9E3DC"></div>
+    <div style="position: absolute; right: -30px; bottom: -50px; width: 160px; height: 160px; border-radius: 999px; background: #F6DCC8"></div>
+    <svg width="100" height="140" viewBox="0 0 120 160" fill="none" aria-hidden="true" style="position: relative">
+      <path d="M60 10 C 40 40, 82 60, 60 85 S 38 130, 60 150" stroke="#1F6F66" stroke-width="5" stroke-linecap="round"></path>
+      <circle cx="60" cy="10" r="7" fill="#1F6F66"></circle>
+      <rect x="47" y="38" width="26" height="9" rx="4" fill="#1F6F66" opacity="0.35"></rect>
+      <rect x="47" y="78" width="26" height="9" rx="4" fill="#1F6F66" opacity="0.35"></rect>
+      <rect x="47" y="118" width="26" height="9" rx="4" fill="#1F6F66" opacity="0.35"></rect>
+    </svg>
+  </div>
+
+  <div>
+    <h1 style="margin: 0; font-size: 26px; font-weight: 700; line-height: 1.35">陪你把矫正<br>变成每天的小事</h1>
+    <p style="margin: 8px 0 0; font-size: 14px; color: #5B6663; line-height: 1.6">先简单认识一下你。</p>
+  </div>
+
+  <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <label for="birth" style="font-size: 14px; font-weight: 700">年龄 · 出生年月</label>
+      <span style="font-size: 12px; color: #5B6663">用来判断生长阶段</span>
+    </div>
+    <input id="birth" type="text" value="2013 年 12 月" style="min-height: 44px; border-radius: 10px; border: 1px solid #C9D4D0; padding: 0 12px; font-family: inherit; font-size: 15px; color: #1F2A27; background: #F8FAF9">
+  </div>
+
+  <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px">
+    <span id="gender-label" style="font-size: 14px; font-weight: 700">性别</span>
+    <div role="radiogroup" aria-labelledby="gender-label" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+      <sc-for list="{{ genders }}" as="g" hint-placeholder-count="3">
+        <sc-if value="{{ g.on }}" hint-placeholder-val="{{ false }}">
+          <button type="button" role="radio" aria-checked="true" onClick="{{ g.pick }}" style="min-height: 44px; border-radius: 10px; border: 2px solid #1F6F66; background: #DDEDE9; color: #1F4F49; font-family: inherit; font-size: 14px; font-weight: 700">{{ g.label }}</button>
+        </sc-if>
+        <sc-if value="{{ g.off }}" hint-placeholder-val="{{ true }}">
+          <button type="button" role="radio" aria-checked="false" onClick="{{ g.pick }}" style="min-height: 44px; border-radius: 10px; border: 1px solid #C9D4D0; background: transparent; color: #3E4B47; font-family: inherit; font-size: 14px">{{ g.label }}</button>
+        </sc-if>
+      </sc-for>
+    </div>
+    <sc-if value="{{ isCustom }}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="gender-custom" style="font-size: 12px; color: #5B6663">你希望怎么称呼自己的性别？可以留空</label>
+        <input id="gender-custom" type="text" placeholder="自由填写" style="min-height: 44px; border-radius: 10px; border: 1px solid #C9D4D0; padding: 0 12px; font-family: inherit; font-size: 15px; color: #1F2A27; background: #F8FAF9">
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="margin-top: auto; display: flex; flex-direction: column; gap: 10px">
+    <a href="Stage.dc.html" style="display: flex; align-items: center; justify-content: center; min-height: 52px; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-size: 16px; font-weight: 700; text-decoration: none">下一步</a>
+    <button type="button" style="min-height: 44px; border: 0; background: transparent; color: #3E4B47; font-family: inherit; font-size: 14px">已有账号，直接登录</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { gender: 'f' };
+  }
+  renderVals() {
+    const cur = this.state.gender;
+    const genders = [
+      { id: 'f', label: '女' },
+      { id: 'm', label: '男' },
+      { id: 'c', label: '自定义' }
+    ].map((g) => ({ label: g.label, on: g.id === cur, off: g.id !== cur, pick: () => this.setState({ gender: g.id }) }));
+    return { genders, isCustom: cur === 'c' };
+  }
+}
+</script>
+</body>
+</html>

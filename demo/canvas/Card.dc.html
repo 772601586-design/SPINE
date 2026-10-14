@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>动作卡片详情</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F6F66}a:hover{color:#154F49}
+</style>
+</helmet>
+<div style="width: 390px; height: 1080px; box-sizing: border-box; background: #F3F5F2; color: #1F2A27; font-family: 'Noto Sans SC', sans-serif; padding: 16px 20px 28px; display: flex; flex-direction: column; gap: 16px">
+
+  <div style="display: flex; align-items: center; gap: 8px">
+    <a href="Main.dc.html" aria-label="返回今日训练" style="width: 44px; height: 44px; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <span style="font-size: 15px; color: #5B6663">动作卡片</span>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <h1 style="margin: 0; font-size: 26px; font-weight: 700">强化运动 · 肋木</h1>
+    <div style="font-size: 13px; color: #5B6663">标准动作：未关联（康复师自定名称）· Rigo B1</div>
+    <div style="display: flex; gap: 8px; flex-wrap: wrap">
+      <span style="display: flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 999px; background: #1F6F66; color: #FFFFFF; font-size: 12px; font-weight: 500">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="M16 10l5-3v10l-5-3"></path></svg>
+        复诊时自录
+      </span>
+      <span style="padding: 4px 10px; border-radius: 999px; background: #DCE5E1; color: #3E4B47; font-size: 12px; font-weight: 500">3D 矫正练习 · 2025 处方</span>
+    </div>
+  </div>
+
+  <div role="tablist" aria-label="卡片视图" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 14px; background: #DCE5E1">
+    <sc-for list="{{ tabs }}" as="tab" hint-placeholder-count="3">
+      <sc-if value="{{ tab.selected }}" hint-placeholder-val="{{ false }}">
+        <button type="button" role="tab" aria-selected="true" onClick="{{ tab.pick }}" style="min-height: 44px; border: 0; border-radius: 10px; background: #FFFFFF; color: #1F2A27; font-family: inherit; font-size: 15px; font-weight: 700">{{ tab.label }}</button>
+      </sc-if>
+      <sc-if value="{{ tab.idle }}" hint-placeholder-val="{{ true }}">
+        <button type="button" role="tab" aria-selected="false" onClick="{{ tab.pick }}" style="min-height: 44px; border: 0; border-radius: 10px; background: transparent; color: #3E4B47; font-family: inherit; font-size: 15px">{{ tab.label }}</button>
+      </sc-if>
+    </sc-for>
+  </div>
+
+  <sc-if value="{{ isLearn }}" hint-placeholder-val="{{ true }}">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <div style="height: 190px; border-radius: 16px; background: #1F2A27; color: #C9D4D0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px">
+        <div style="width: 52px; height: 52px; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l11 7-11 7z"></path></svg>
+        </div>
+        <span style="font-size: 13px">示范视频 · 0:24 · 复诊时自录</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+        <div style="aspect-ratio: 1; border-radius: 12px; background: #DCE5E1; color: #5B6663; font-size: 12px; display: flex; align-items: center; justify-content: center">关键姿势 1</div>
+        <div style="aspect-ratio: 1; border-radius: 12px; background: #DCE5E1; color: #5B6663; font-size: 12px; display: flex; align-items: center; justify-content: center">关键姿势 2</div>
+        <button type="button" style="aspect-ratio: 1; border-radius: 12px; border: 1.5px dashed #8A9A95; background: transparent; color: #3E4B47; font-family: inherit; font-size: 12px">+ 从视频选帧</button>
+      </div>
+      <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">动作要点</h2>
+          <button type="button" style="display: flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: #DDEDE9; color: #1F6F66; font-family: inherit; font-size: 13px; font-weight: 500">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l11 7-11 7z"></path></svg>
+            康复师原声 0:18
+          </button>
+        </div>
+        <div style="font-size: 14px; line-height: 1.6">1. 左臀下垫沙包，降低右髋（右腿下压）</div>
+        <div style="font-size: 14px; line-height: 1.6">2. 左手握肋木横杆平腰，右手握肋木平头顶</div>
+        <div style="font-size: 14px; line-height: 1.6">3. 收紧左前肋及右后背，使劲吹气</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isPractice }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">播报的声音</h2>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; padding: 6px 0"><span>康复师原声</span><span style="color: #1F6F66; font-weight: 700">使用中</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; padding: 6px 0; color: #5B6663"><span>我自己的声音</span><span>未录制</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; padding: 6px 0; color: #5B6663"><span>系统朗读要点文字</span><span>备用</span></div>
+      </div>
+      <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; justify-content: space-between; align-items: center">
+        <span style="font-size: 14px">呼吸节拍</span>
+        <span style="font-size: 14px; font-weight: 700">自然吸气 · 使劲吹气</span>
+      </div>
+      <a href="Session.dc.html" style="display: flex; align-items: center; justify-content: center; min-height: 50px; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-size: 15px; font-weight: 700; text-decoration: none">只练这一个动作</a>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isCheck }}" hint-placeholder-val="{{ false }}">
+    <div style="display: flex; flex-direction: column; gap: 12px">
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <div style="height: 200px; border-radius: 14px; background: #1F2A27; color: #C9D4D0; font-size: 12px; display: flex; align-items: center; justify-content: center">示范</div>
+          <span style="font-size: 12px; color: #5B6663">康复师示范</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <div style="height: 200px; border-radius: 14px; background: #2E3B37; color: #C9D4D0; font-size: 12px; display: flex; align-items: center; justify-content: center">我的练习</div>
+          <span style="font-size: 12px; color: #5B6663">10月6日 自录</span>
+        </div>
+      </div>
+      <button type="button" style="min-height: 50px; border-radius: 14px; border: 1.5px solid #1F6F66; background: transparent; color: #1F6F66; font-family: inherit; font-size: 15px; font-weight: 700">录制本周练习</button>
+      <div style="font-size: 13px; color: #5B6663; line-height: 1.6">每周一次即可。复诊时可以打开给康复师看，视频只保存在本机。</div>
+    </div>
+  </sc-if>
+
+  <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px">
+      <h2 style="margin: 0; font-size: 16px; font-weight: 700">训练参数</h2>
+      <span style="font-size: 12px; color: #5B6663">来自 2025 运动处方</span>
+    </div>
+    <sc-for list="{{ params }}" as="p" hint-placeholder-count="4">
+      <div style="display: flex; align-items: center; justify-content: space-between; min-height: 40px; border-top: 1px solid #E6EBE8; font-size: 14px">
+        <span style="color: #3E4B47">{{ p.label }}</span>
+        <span style="display: flex; align-items: center; gap: 6px; font-weight: 700">{{ p.value }}
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5B6663" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+        </span>
+      </div>
+    </sc-for>
+    <div style="font-size: 12px; color: #5B6663; margin-top: 4px">需要调整请在复诊时和康复师沟通</div>
+  </div>
+
+  <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+    <h2 style="margin: 0; font-size: 16px; font-weight: 700">我的补充</h2>
+    <label for="note" style="font-size: 13px; color: #5B6663">备注（只有自己看得到）</label>
+    <input id="note" type="text" placeholder="比如：第三次呼吸容易憋气" style="min-height: 44px; border-radius: 10px; border: 1px solid #C9D4D0; padding: 0 12px; font-family: inherit; font-size: 14px; color: #1F2A27; background: #F8FAF9">
+  </div>
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 14px; background: #F6DCC8; color: #6B3416; font-size: 13px">
+    <span>处方版本 2025 · 定期复查时更新</span>
+    <button type="button" style="min-height: 36px; border: 0; background: transparent; color: #6B3416; font-family: inherit; font-size: 13px; font-weight: 700">历史版本 ›</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1080}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { tab: 'learn' };
+  }
+  renderVals() {
+    const cur = this.state.tab;
+    const defs = [
+      { id: 'learn', label: '学' },
+      { id: 'practice', label: '练' },
+      { id: 'check', label: '查' }
+    ];
+    const tabs = defs.map((t) => ({
+      label: t.label,
+      selected: t.id === cur,
+      idle: t.id !== cur,
+      pick: () => this.setState({ tab: t.id })
+    }));
+    const params = [
+      { label: '时长', value: '5 分钟' },
+      { label: '呼吸', value: '使劲吹气' },
+      { label: '矫正侧重', value: '降低右髋' },
+      { label: '器材', value: '肋木 · 沙包 · 凳子' }
+    ];
+    return {
+      tabs,
+      params,
+      isLearn: cur === 'learn',
+      isPractice: cur === 'practice',
+      isCheck: cur === 'check'
+    };
+  }
+}
+</script>
+</body>
+</html>

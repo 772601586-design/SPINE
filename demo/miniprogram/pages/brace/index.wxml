@@ -1,0 +1,85 @@
+<!-- 我的支具 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 30.77rpx 38.46rpx 46.15rpx; display: flex; flex-direction: column; gap: 26.92rpx">
+  <view style="display: flex; align-items: center; gap: 15.38rpx">
+    <text style="font-size: 28.85rpx; color: #5B6663">我的支具</text>
+  </view>
+  <view style="display: flex; justify-content: space-between; align-items: flex-end">
+    <view>
+      <view style="margin: 0; font-size: 50rpx; font-weight: 700">第 24 天</view>
+      <view style="font-size: 25rpx; color: #5B6663">色努式支具 · 每天目标 20 小时</view>
+    </view>
+    <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 76.92rpx; padding: 0 26.92rpx; border: 2.88rpx solid #1F6F66; border-radius: 1921.15rpx; background: transparent; color: #1F6F66; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ toggleBrace }}" hover-class="tap">{{ braceBtn }}</view>
+  </view>
+  <view style="display: flex; align-items: center; gap: 23.08rpx; padding: 23.08rpx 26.92rpx; border-radius: 30.77rpx; background: #DDEDE9">
+    <view style="flex: 1">
+      <view style="font-size: 26.92rpx; font-weight: 700; color: #1F4F49">{{ braceStatus }}</view>
+      <view style="font-size: 23.08rpx; color: #2E3B37">传感器自动记录 · 电量 82% · 没有传感器也可以手动点</view>
+    </view>
+  </view>
+  <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
+    <view style="display: flex; justify-content: space-between; align-items: baseline">
+      <text style="font-size: 28.85rpx; font-weight: 700">今天</text>
+      <view style="font-size: 38.46rpx; font-weight: 700">14h40m<text style="font-size: 25rpx; color: #5B6663; font-weight: 400">/ 20h</text></view>
+    </view>
+    <view style="position: relative; width: 619.23rpx; height: 53.85rpx; border-radius: 15.38rpx; background: #EDF0EE; overflow: hidden">
+      <view style="position: absolute; left: 0; top: 0; width: 180.77rpx; height: 53.85rpx; background: #1F6F66">
+      </view>
+      <view style="position: absolute; left: 180.77rpx; top: 0; width: 13.46rpx; height: 53.85rpx; background: #F6DCC8">
+      </view>
+      <view style="position: absolute; left: 194.23rpx; top: 0; width: 180.77rpx; height: 53.85rpx; background: #1F6F66">
+      </view>
+      <view style="position: absolute; left: 375rpx; top: 0; width: 38.46rpx; height: 53.85rpx; background: #F6DCC8">
+      </view>
+      <view style="position: absolute; left: 413.46rpx; top: 0; width: 17.31rpx; height: 53.85rpx; background: #1F6F66">
+      </view>
+    </view>
+    <view style="display: flex; justify-content: space-between; width: 619.23rpx; font-size: 21.15rpx; color: #5B6663">
+      <text>0 点</text>
+      <text>6</text>
+      <text>12</text>
+      <text>18</text>
+      <text>24</text>
+    </view>
+    <view style="display: flex; gap: 26.92rpx; font-size: 23.08rpx; color: #3E4B47">
+      <view style="display: flex; align-items: center; gap: 7.69rpx"><text style="width: 19.23rpx; height: 19.23rpx; border-radius: 5.77rpx; background: #1F6F66"></text>戴着</view>
+      <view style="display: flex; align-items: center; gap: 7.69rpx"><text style="width: 19.23rpx; height: 19.23rpx; border-radius: 5.77rpx; background: #F6DCC8"></text>脱下 · 洗漱 / 体育课</view>
+    </view>
+  </view>
+  <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
+    <view style="display: flex; justify-content: space-between; align-items: baseline">
+      <text style="font-size: 28.85rpx; font-weight: 700">最近 7 天</text>
+      <text style="font-size: 25rpx; color: #5B6663">平均 19.2 小时 · 达标 4 天</text>
+    </view>
+    <view style="position: relative; height: 184.62rpx; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 19.23rpx; align-items: end">
+      <view style="position: absolute; left: 0; right: 0; bottom: 128.85rpx; border-top: 2.88rpx dashed #C4602A">
+      </view>
+      <view style="height: 134.62rpx; border-radius: 11.54rpx 11.54rpx 3.85rpx 3.85rpx; background: #1F6F66">
+      </view>
+      <view style="height: 130.77rpx; border-radius: 11.54rpx 11.54rpx 3.85rpx 3.85rpx; background: #1F6F66">
+      </view>
+      <view style="height: 115.38rpx; border-radius: 11.54rpx 11.54rpx 3.85rpx 3.85rpx; background: #8CC2B8">
+      </view>
+      <view style="height: 121.15rpx; border-radius: 11.54rpx 11.54rpx 3.85rpx 3.85rpx; background: #8CC2B8">
+      </view>
+      <view style="height: 128.85rpx; border-radius: 11.54rpx 11.54rpx 3.85rpx 3.85rpx; background: #1F6F66">
+      </view>
+      <view style="height: 132.69rpx; border-radius: 11.54rpx 11.54rpx 3.85rpx 3.85rpx; background: #1F6F66">
+      </view>
+      <view style="height: 94.23rpx; border-radius: 11.54rpx 11.54rpx 3.85rpx 3.85rpx; background: #DCE5E1; border: 2.88rpx dashed #8A9A95; box-sizing: border-box">
+      </view>
+    </view>
+    <view style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 19.23rpx; text-align: center; font-size: 21.15rpx; color: #5B6663">
+      <text>四</text>
+      <text>五</text>
+      <text>六</text>
+      <text>日</text>
+      <text>一</text>
+      <text>二</text>
+      <text>今天</text>
+    </view>
+  </view>
+  <view style="display: flex; align-items: center; justify-content: space-between; min-height: 92.31rpx; padding: 0 26.92rpx; border: 0; border-radius: 30.77rpx; background: #FFFFFF; color: #1F2A27; font-size: 26.92rpx" bindtap="act" data-fn="{{ nav.talk }}" hover-class="tap">
+    <text>戴支具的小经验，去社群看看大家怎么做</text>
+    <text style="color: #8A9A95">›</text>
+  </view>
+</view>

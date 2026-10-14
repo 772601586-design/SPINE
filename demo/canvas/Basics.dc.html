@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>基本信息</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F6F66}a:hover{color:#154F49}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F3F5F2; color: #1F2A27; font-family: 'Noto Sans SC', sans-serif; padding: 20px 20px 24px; display: flex; flex-direction: column; gap: 14px">
+
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="Stage.dc.html" aria-label="上一步" style="width: 44px; height: 44px; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; width: 140px">
+      <div style="height: 4px; border-radius: 999px; background: #1F6F66"></div>
+      <div style="height: 4px; border-radius: 999px; background: #1F6F66"></div>
+      <div style="height: 4px; border-radius: 999px; background: #1F6F66"></div>
+      <div style="height: 4px; border-radius: 999px; background: #C9D4D0"></div>
+    </div>
+    <a href="Ready.dc.html" style="width: 44px; font-size: 13px; color: #3E4B47; text-align: right; text-decoration: none">跳过</a>
+  </div>
+
+  <div>
+    <h1 style="margin: 0; font-size: 24px; font-weight: 700">再填 2 项就够了</h1>
+    <p style="margin: 6px 0 0; font-size: 14px; color: #5B6663; line-height: 1.6">其余信息可以在复查后慢慢补充，到时候我们会提醒你。</p>
+  </div>
+
+  <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <span style="font-size: 14px; font-weight: 700">1 · 月经初潮</span>
+      <span style="font-size: 12px; color: #5B6663">选“女”或“自定义”时出现</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+      <button type="button" style="min-height: 44px; border-radius: 10px; border: 1px solid #C9D4D0; background: transparent; color: #3E4B47; font-family: inherit; font-size: 14px">还没有</button>
+      <button type="button" aria-pressed="true" style="min-height: 44px; border-radius: 10px; border: 2px solid #1F6F66; background: #DDEDE9; color: #1F4F49; font-family: inherit; font-size: 14px; font-weight: 700">已经来了</button>
+      <button type="button" style="min-height: 44px; border-radius: 10px; border: 1px solid #C9D4D0; background: transparent; color: #3E4B47; font-family: inherit; font-size: 14px">不适用</button>
+    </div>
+    <div style="font-size: 13px; color: #3E4B47">大约在 <span style="font-weight: 700; color: #1F2A27">2026 年 5 月</span> · 记不清可以留空</div>
+  </div>
+
+  <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <span style="font-size: 14px; font-weight: 700">2 · 手上有医院的资料吗？</span>
+      <span style="font-size: 12px; color: #5B6663">可多选</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; border: 2px solid #1F6F66; background: #F5FAF8">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F6F66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M9 12h7M9 16h5"></path></svg>
+      <div style="flex: 1">
+        <div style="font-size: 14px; font-weight: 700">诊断 / 影像报告</div>
+        <div style="font-size: 12px; color: #5B6663">打印的报告拍照就行</div>
+      </div>
+      <span style="font-size: 12px; font-weight: 700; color: #1F6F66">已选</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; border: 2px solid #1F6F66; background: #F5FAF8">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F6F66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M9 8h6M9 12h6M9 16h3"></path></svg>
+      <div style="flex: 1">
+        <div style="font-size: 14px; font-weight: 700">运动处方单</div>
+        <div style="font-size: 12px; color: #5B6663">自动整理成你的训练卡片</div>
+      </div>
+      <span style="font-size: 12px; font-weight: 700; color: #1F6F66">已选</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 12px; border: 1px solid #C9D4D0">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B6663" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>
+      <div style="flex: 1">
+        <div style="font-size: 14px; font-weight: 700">还没有，先用起来</div>
+        <div style="font-size: 12px; color: #5B6663">我们会告诉你检查时该带什么、问什么</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #5B6663; line-height: 1.6">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-top: 3px; flex-shrink: 0"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+    <span>资料只用来整理你的档案，不会出现在社群里，也不会给任何人看，除非你自己分享。</span>
+  </div>
+
+  <a href="Ready.dc.html" style="margin-top: auto; display: flex; align-items: center; justify-content: center; min-height: 52px; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-size: 16px; font-weight: 700; text-decoration: none">去拍照上传</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

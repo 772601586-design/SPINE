@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>个人档案</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F6F66}a:hover{color:#154F49}
+</style>
+</helmet>
+<div style="width: 390px; height: 1420px; box-sizing: border-box; background: #F3F5F2; color: #1F2A27; font-family: 'Noto Sans SC', sans-serif; padding: 16px 20px 28px; display: flex; flex-direction: column; gap: 14px">
+
+  <div style="display: flex; align-items: center; gap: 8px">
+    <a href="Main.dc.html" aria-label="返回今日训练" style="width: 44px; height: 44px; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <span style="font-size: 15px; color: #5B6663">个人档案</span>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 18px; background: #FFFFFF">
+    <div style="width: 56px; height: 56px; border-radius: 999px; background: #1F6F66; color: #FFFFFF; font-size: 22px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0">禾</div>
+    <div style="flex: 1">
+      <div style="font-size: 22px; font-weight: 700">{{ displayName }}</div>
+      <div style="font-size: 13px; color: #5B6663">运动康复期 · 2025 运动处方</div>
+    </div>
+    <button type="button" style="min-height: 36px; padding: 0 12px; border: 1px solid #C9D4D0; border-radius: 999px; background: transparent; color: #3E4B47; font-family: inherit; font-size: 13px">编辑</button>
+  </div>
+
+  <div style="padding: 16px; border-radius: 18px; background: #1F6F66; color: #FFFFFF; display: flex; flex-direction: column; gap: 6px">
+    <div style="font-size: 13px; color: #CFE8E2">诊断分型</div>
+    <div style="display: flex; align-items: baseline; gap: 10px">
+      <span style="font-size: 30px; font-weight: 700">Rigo B1 型</span>
+      <span style="font-size: 14px; color: #CFE8E2">四弯型（4 Curve）</span>
+    </div>
+    <div style="font-size: 12px; color: #CFE8E2; line-height: 1.6">来源：某脊柱侧弯康复中心 · 运动处方（2025）</div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 8px">
+    <h2 style="margin: 0; font-size: 16px; font-weight: 700">阶段目标</h2>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px">
+      <span style="padding: 6px 12px; border-radius: 999px; background: #DDEDE9; color: #1F4F49; font-size: 13px; font-weight: 500">认识能力提升</span>
+      <span style="padding: 6px 12px; border-radius: 999px; background: #DDEDE9; color: #1F4F49; font-size: 13px; font-weight: 500">改善身体左倾</span>
+      <span style="padding: 6px 12px; border-radius: 999px; background: #DDEDE9; color: #1F4F49; font-size: 13px; font-weight: 500">改善腰骶节段柔韧性</span>
+    </div>
+  </div>
+
+  <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+    <h2 style="margin: 0 0 4px; font-size: 16px; font-weight: 700">身体数据</h2>
+    <sc-for list="{{ vitals }}" as="v" hint-placeholder-count="4">
+      <div style="display: flex; align-items: center; justify-content: space-between; min-height: 42px; border-top: 1px solid #E6EBE8; font-size: 14px">
+        <span style="color: #3E4B47">{{ v.label }}</span>
+        <span style="color: #8A5A2B; font-size: 13px">{{ v.value }}</span>
+      </div>
+    </sc-for>
+    <button type="button" style="margin-top: 8px; min-height: 46px; border-radius: 12px; border: 1.5px solid #1F6F66; background: transparent; color: #1F6F66; font-family: inherit; font-size: 14px; font-weight: 700">从复查报告导入</button>
+    <div style="font-size: 12px; color: #5B6663; margin-top: 4px">度数以医院影像报告为准，App 不做测量</div>
+  </div>
+
+  <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 2px">
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px">
+      <h2 style="margin: 0; font-size: 16px; font-weight: 700">训练处方 · 7 个模块</h2>
+      <span style="font-size: 12px; color: #5B6663">16 个动作</span>
+    </div>
+    <sc-for list="{{ modules }}" as="m" hint-placeholder-count="7">
+      <div style="display: flex; align-items: center; gap: 10px; min-height: 52px; border-top: 1px solid #E6EBE8">
+        <div style="flex: 1; min-width: 0">
+          <div style="font-size: 14px; font-weight: 700">{{ m.name }}</div>
+          <div style="font-size: 12px; color: #5B6663">{{ m.detail }}</div>
+        </div>
+        <sc-if value="{{ m.hasTag }}" hint-placeholder-val="{{ false }}">
+          <span style="padding: 3px 10px; border-radius: 999px; background: #F6DCC8; color: #6B3416; font-size: 12px; font-weight: 500; flex-shrink: 0">{{ m.tag }}</span>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 6px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <h2 style="margin: 0; font-size: 16px; font-weight: 700">辅助运动 · 蛙泳</h2>
+      <span style="padding: 3px 10px; border-radius: 999px; background: #DDEDE9; color: #1F4F49; font-size: 12px; font-weight: 500">康复师建议</span>
+    </div>
+    <div style="font-size: 14px; color: #3E4B47; line-height: 1.6">每次 30 分钟 · 每周 3 次 · 运动中心率 130–150 次/分</div>
+  </div>
+
+  <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 6px">
+    <h2 style="margin: 0 0 2px; font-size: 16px; font-weight: 700">注意事项</h2>
+    <div style="font-size: 14px; line-height: 1.6">1. 避免脊柱负重，体育课做对称锻炼</div>
+    <div style="font-size: 14px; line-height: 1.6">2. 对照镜子，日常注意自我姿势矫正</div>
+    <div style="font-size: 14px; line-height: 1.6">3. 练习时观察骨盆位置，脊柱保持一条直线</div>
+    <div style="font-size: 14px; line-height: 1.6">4. 定期复查调整</div>
+  </div>
+
+  <div style="display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 18px; background: #DDEDE9">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F4F49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c1-3.5 3.5-5 6.5-5s5.5 1.5 6.5 5"></path><path d="M16 5.5a3 3 0 0 1 0 5.5M18.5 15c1.6.7 2.6 2.3 3 5"></path></svg>
+    <div style="flex: 1">
+      <div style="font-size: 14px; font-weight: 700; color: #1F4F49">家长可查看</div>
+      <div style="font-size: 12px; color: #3E4B47">训练完成度、复查提醒；不含视频和个人备注</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1420}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      displayName: '小禾',
+      vitals: [
+        { label: 'Cobb 角', value: '待上传影像报告' },
+        { label: '身高', value: '待填写' },
+        { label: '年龄 / 初潮', value: '待填写' },
+        { label: '支具', value: '本处方未涉及' }
+      ],
+      modules: [
+        { name: '认知学习', detail: '每天画脊柱曲线图 10 张，理解自己的体态', hasTag: true, tag: '每天' },
+        { name: '姿势矫正', detail: '坐姿撑桌、右臀承重 · 撑杆站立 3 分钟', hasTag: true, tag: '日常' },
+        { name: '柔韧性练习', detail: '猫—骆驼 · 右弓箭步拉伸左髂腰肌', hasTag: false, tag: '' },
+        { name: '3D 矫正练习', detail: '强化运动（肋木）· 肌肉圆柱', hasTag: false, tag: '' },
+        { name: '核心 / 肩胛带稳定', detail: '仰卧自行车 · 平板支撑 · 右侧桥 · 臀桥 · Y-W-T', hasTag: true, tag: '隔天' },
+        { name: '颈椎矫正', detail: '7 个动作一套，约 5 分钟', hasTag: false, tag: '' },
+        { name: '拉伸放松', detail: '跪位 / 坐位前伸 · 悬吊配合呼吸', hasTag: false, tag: '' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

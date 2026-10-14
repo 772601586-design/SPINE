@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>我的</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F6F66}a:hover{color:#154F49}
+</style>
+</helmet>
+<div style="width: 390px; height: 1420px; box-sizing: border-box; background: #F3F5F2; color: #1F2A27; font-family: 'Noto Sans SC', sans-serif; display: flex; flex-direction: column">
+  <div style="flex: 1; padding: 24px 20px 20px; display: flex; flex-direction: column; gap: 14px">
+
+    <div style="display: flex; align-items: center; gap: 14px">
+      <div style="width: 60px; height: 60px; border-radius: 999px; background: #1F6F66; color: #FFFFFF; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center">禾</div>
+      <div style="flex: 1">
+        <div style="font-size: 22px; font-weight: 700">小禾</div>
+        <div style="font-size: 13px; color: #5B6663">12 岁 · 支具 + 运动期</div>
+      </div>
+      <a href="Stage.dc.html" style="min-height: 36px; padding: 0 12px; border: 1px solid #C9D4D0; border-radius: 999px; color: #3E4B47; font-size: 13px; text-decoration: none; display: flex; align-items: center">切换阶段</a>
+    </div>
+
+    <a href="Growth.dc.html" style="padding: 14px; border-radius: 18px; background: #1F6F66; color: #FFFFFF; text-decoration: none; display: flex; flex-direction: column; gap: 6px">
+      <div style="display: flex; justify-content: space-between; align-items: center">
+        <span style="font-size: 13px; color: #CFE8E2">我的档案</span>
+        <span style="font-size: 13px; color: #CFE8E2">成长记录 ›</span>
+      </div>
+      <div style="font-size: 22px; font-weight: 700">Rigo B1 · 胸 27° · 腰 20°</div>
+      <div style="font-size: 13px; color: #CFE8E2">2026.09 复查 · Risser 1 · 初潮后 5 个月</div>
+    </a>
+
+    <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <span style="font-size: 15px; font-weight: 700">档案完整度</span>
+        <span style="font-size: 13px; color: #5B6663">70%</span>
+      </div>
+      <div style="height: 8px; border-radius: 999px; background: #DCE5E1; overflow: hidden"><div style="width: 70%; height: 100%; background: #1F6F66"></div></div>
+      <div style="font-size: 13px; color: #3E4B47; line-height: 1.6">下次复查后补上医院名称和影像报告，就能生成一份完整的复查前摘要。不急，到时候会提醒你。</div>
+    </div>
+
+    <div style="padding: 4px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column">
+      <div style="font-size: 15px; font-weight: 700; padding: 10px 0 6px">我的康复团队</div>
+      <div style="display: flex; align-items: center; gap: 10px; min-height: 52px; border-top: 1px solid #EEF2F0">
+        <div style="flex: 1"><div style="font-size: 14px; font-weight: 700">康复治疗师</div><div style="font-size: 12px; color: #5B6663">邀请后可直接推送和调整动作</div></div>
+        <span style="font-size: 12px; padding: 3px 8px; border-radius: 999px; background: #EDF0EE; color: #3E4B47">即将开放</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 10px; min-height: 52px; border-top: 1px solid #EEF2F0">
+        <div style="flex: 1"><div style="font-size: 14px; font-weight: 700">矫形师 · 支具</div><div style="font-size: 12px; color: #5B6663">支具不合适时一键联系</div></div>
+        <span style="font-size: 13px; color: #1F6F66; font-weight: 700">填写</span>
+      </div>
+    </div>
+
+    
+
+    <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px" role="radiogroup" aria-label="复查提醒方式">
+      <span style="font-size: 15px; font-weight: 700">复查提醒方式</span>
+      <sc-for list="{{ remind }}" as="r" hint-placeholder-count="3">
+        <sc-if value="{{ r.on }}" hint-placeholder-val="{{ false }}">
+          <button type="button" role="radio" aria-checked="true" onClick="{{ r.pick }}" style="display: flex; flex-direction: column; gap: 2px; text-align: left; padding: 10px 12px; border-radius: 12px; border: 2px solid #1F6F66; background: #F5FAF8; font-family: inherit; color: #1F2A27">
+            <span style="font-size: 14px; font-weight: 700">{{ r.title }}</span>
+            <span style="font-size: 12px; color: #5B6663">{{ r.sub }}</span>
+          </button>
+        </sc-if>
+        <sc-if value="{{ r.off }}" hint-placeholder-val="{{ true }}">
+          <button type="button" role="radio" aria-checked="false" onClick="{{ r.pick }}" style="display: flex; flex-direction: column; gap: 2px; text-align: left; padding: 10px 12px; border-radius: 12px; border: 1px solid #C9D4D0; background: transparent; font-family: inherit; color: #1F2A27">
+            <span style="font-size: 14px; font-weight: 700">{{ r.title }}</span>
+            <span style="font-size: 12px; color: #5B6663">{{ r.sub }}</span>
+          </button>
+        </sc-if>
+      </sc-for>
+    </div>
+
+    <div style="padding: 4px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column">
+      <a href="Brace.dc.html" style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; font-size: 14px; color: #1F2A27; text-decoration: none"><span>我的支具与传感器</span><span style="color: #8A9A95">›</span></a>
+      <a href="Rewards.dc.html" style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; border-top: 1px solid #EEF2F0; font-size: 14px; color: #1F2A27; text-decoration: none"><span>松果与勋章</span><span style="color: #8A9A95">36 颗 ›</span></a>
+      <div style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; border-top: 1px solid #EEF2F0; font-size: 14px"><span>提醒设置</span><span style="color: #5B6663; font-size: 12px">支具 · 训练 · 坐姿</span></div>
+      <div style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; border-top: 1px solid #EEF2F0; font-size: 14px"><span>隐私与数据</span><span style="color: #5B6663; font-size: 12px">视频只存本机 · 可导出</span></div>
+    </div>
+  </div>
+
+  <nav style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid #DCE5E1; background: #FFFFFF; padding: 6px 0 14px">
+    <a href="Home.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #5B6663; font-size: 11px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"></path></svg>今日</a>
+    <a href="Plan.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #5B6663; font-size: 11px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>训练</a>
+    <a href="Growth.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #5B6663; font-size: 11px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19l5-6 4 3 7-9"></path></svg>成长</a>
+    <a href="Community.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #5B6663; font-size: 11px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c1-3.5 3.5-5 6.5-5s5.5 1.5 6.5 5"></path><path d="M16 5.5a3 3 0 0 1 0 5.5M18.5 15c1.6.7 2.6 2.3 3 5"></path></svg>社群</a>
+    <a href="Me.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #1F6F66; font-size: 11px; font-weight: 700; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg>我的</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1420}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { s: [true, true, true, false, false, false], remind: 'week' };
+  }
+  renderVals() {
+    const flags = this.state.s;
+    const rm = this.state.remind;
+    const remind = [
+      { id: 'week', title: '复查前一周再提醒', sub: '只在前一周出现准备清单，平时首页不显示（默认）' },
+      { id: 'count', title: '一直显示倒计时', sub: '适合喜欢心里有数的人' },
+      { id: 'off', title: '不在 App 里提醒', sub: '只在成长记录里看日期' }
+    ].map((o) => ({ title: o.title, sub: o.sub, on: o.id === rm, off: o.id !== rm, pick: () => this.setState({ remind: o.id }) }));
+    const labels = ['每周支具平均时长', '每周训练完成天数', '复查记录和度数', '每天的佩戴时间轴', '练习视频和备注', '社群里的发言'];
+    const shares = labels.map((text, i) => ({
+      text,
+      on: flags[i],
+      off: !flags[i],
+      toggle: () => {
+        const next = flags.slice();
+        next[i] = !next[i];
+        this.setState({ s: next });
+      }
+    }));
+    return { shares, remind };
+  }
+}
+</script>
+</body>
+</html>

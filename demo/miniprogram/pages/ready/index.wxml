@@ -1,0 +1,61 @@
+<!-- 准备好了 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 46.15rpx 38.46rpx 46.15rpx; min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; gap: 26.92rpx">
+  <view style="display: flex; align-items: center; gap: 23.08rpx">
+    <view style="width: 92.31rpx; height: 92.31rpx; border-radius: 1921.15rpx; background: #1F6F66; color: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+      <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyNCcgaGVpZ2h0PScyNCcgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyNGRkZGRkYnIHN0cm9rZS13aWR0aD0nMi40JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnPjxwYXRoIGQ9J001IDEybDUgNSA5LTEwJz48L3BhdGg+PC9zdmc+" style="width: 46.15rpx; height: 46.15rpx; flex-shrink: 0" />
+    </view>
+    <view>
+      <view style="margin: 0; font-size: 42.31rpx; font-weight: 700">准备好了，小禾</view>
+      <view style="font-size: 25rpx; color: #5B6663">4 / 4 · 已经帮你整理好这些</view>
+    </view>
+  </view>
+  <view style="padding: 7.69rpx 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column">
+    <view style="display: flex; justify-content: space-between; align-items: center; min-height: 88.46rpx; font-size: 26.92rpx; border-bottom: 1.92rpx solid #E6EBE8">
+      <text style="color: #3E4B47">当前阶段</text>
+      <text style="font-weight: 700">{{ stageLabel }}</text>
+    </view>
+    <view style="display: flex; justify-content: space-between; align-items: center; min-height: 88.46rpx; font-size: 26.92rpx; border-bottom: 1.92rpx solid #E6EBE8">
+      <text style="color: #3E4B47">诊断报告</text>
+      <text style="font-weight: 700">{{ readyReport }}</text>
+    </view>
+    <view style="display: flex; justify-content: space-between; align-items: center; min-height: 88.46rpx; font-size: 26.92rpx">
+      <text style="color: #3E4B47">运动处方</text>
+      <text style="font-weight: 700">{{ readyRx }}</text>
+    </view>
+  </view>
+  <block wx:if="{{ st.isNew }}">
+    <view style="padding: 30.77rpx; border-radius: 34.62rpx; background: #DDEDE9; display: flex; flex-direction: column; gap: 19.23rpx">
+      <view style="font-size: 30.77rpx; font-weight: 700; color: #1F4F49">适应期 · 前两周</view>
+      <view style="font-size: 25rpx; color: #2E3B37; line-height: 1.7">刚开始戴支具会闷、会硌、会不想戴，这些都很正常。很多人在两三周后会慢慢习惯，我们陪你一天一天来。</view>
+      <view style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15.38rpx; align-items: end; height: 176.92rpx; padding-top: 11.54rpx">
+        <view style="display: flex; flex-direction: column; align-items: center; gap: 7.69rpx">
+          <view style="width: 100%; height: 34.62rpx; border-radius: 11.54rpx; background: #1F6F66">
+          </view>
+          <text style="font-size: 21.15rpx; color: #2E3B37">第 1–3 天</text>
+        </view>
+        <view style="display: flex; flex-direction: column; align-items: center; gap: 7.69rpx">
+          <view style="width: 100%; height: 65.38rpx; border-radius: 11.54rpx; background: #3F8F84">
+          </view>
+          <text style="font-size: 21.15rpx; color: #2E3B37">第 4–7 天</text>
+        </view>
+        <view style="display: flex; flex-direction: column; align-items: center; gap: 7.69rpx">
+          <view style="width: 100%; height: 100rpx; border-radius: 11.54rpx; background: #6FB3A7">
+          </view>
+          <text style="font-size: 21.15rpx; color: #2E3B37">第 2 周</text>
+        </view>
+        <view style="display: flex; flex-direction: column; align-items: center; gap: 7.69rpx">
+          <view style="width: 100%; height: 126.92rpx; border-radius: 11.54rpx; background: #9FD0C6">
+          </view>
+          <text style="font-size: 21.15rpx; color: #2E3B37">之后</text>
+        </view>
+      </view>
+    </view>
+  </block>
+  <block wx:if="{{ st.notNew }}">
+    <view style="padding: 30.77rpx; border-radius: 34.62rpx; background: #DDEDE9; display: flex; flex-direction: column; gap: 11.54rpx">
+      <view style="font-size: 30.77rpx; font-weight: 700; color: #1F4F49">{{ readyTitle }}</view>
+      <view style="font-size: 25rpx; color: #2E3B37; line-height: 1.7">{{ readyText }}</view>
+    </view>
+  </block>
+  <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: auto; min-height: 100rpx; border: 0; border-radius: 26.92rpx; background: #1F6F66; color: #FFFFFF; font-size: 30.77rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.today }}" hover-class="tap">开始使用</view>
+</view>

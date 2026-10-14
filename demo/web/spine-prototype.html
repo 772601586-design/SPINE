@@ -1,0 +1,2185 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
+<title>Spine 交互原型</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<!--
+=====================================================================
+  Spine · 脊柱侧弯保守治疗陪伴应用 —— 单文件交互原型（v3）
+=====================================================================
+
+这一个文件包含 Spine 目前讨论过的全部界面、页面跳转、业务规则和数据结构，
+不依赖任何框架，用浏览器直接打开即可运行。
+
+---------------------------------------------------------------------
+一、产品定位
+---------------------------------------------------------------------
+- 用户：保守治疗（非手术）期的脊柱侧弯患者。
+  · 青少年：支具 + 高强度运动，重点是长期坚持佩戴和训练。
+  · 成年人：自我管理，改善体态和疼痛；心理机制和青少年不同。
+- 一套界面，不区分青少年 / 家长 / 成年患者身份，也没有家长视图。
+  （青少年的手机常被家长管控、使用时间少，要尽量少让他们费心。）
+
+---------------------------------------------------------------------
+二、文件结构（架构）
+---------------------------------------------------------------------
+  1. 外层页面        展示用的说明面板 + 手机外框（不属于 App 本身）
+  2. <template id="spine-ui">
+                     App 的全部界面，一份模板，按 state.screen 显示其中一屏。
+                     模板语法：
+                       {{ a.b }}            取值（只支持点号路径）
+                       <sc-if value>        条件渲染
+                       <sc-for list as>     列表渲染
+                       onClick / onChange   事件（onChange 绑定 input 事件）
+  3. Scheduler       排卡规则：模块顺序 + 隔天规则（纯函数，可单独测试）
+  4. SpineApp        业务逻辑：状态、动作卡片数据、页面跳转、打卡、奖励
+                     renderVals() 把 state 换算成模板要用的所有值
+  5. 渲染器          约 120 行：解析模板 → 生成 DOM；setState 后整屏重绘，
+                     重绘时保留输入框焦点、未保存的输入内容和滚动位置
+
+---------------------------------------------------------------------
+三、页面清单与跳转（state.screen）
+---------------------------------------------------------------------
+  A 首次使用  welcome（年龄 + 性别，性别可自定义）
+              → stage（五个阶段）→ basics（初潮、手头资料）→ ready
+  B 每天      today（今日卡组 / 打卡）→ follow（跟练播报）→ done（完成 +3 松果）
+              card（动作卡片：学 / 练 / 查）
+  C 处方      train（训练：本周安排、处方模块、待整理录像）
+              record（复诊现场录动作）→ import（拍处方单识别）→ match（录像配到处方动作）
+  D 支具成长  brace（我的支具）、growth（成长记录）→ upload（添加复查记录）
+  E 激励社群  rewards（松果与勋章）、community（交流 / 学习）、me（我的）
+  底部导航：今日 / 训练 / 成长 / 社群 / 我的（只在这五屏显示）
+
+  五个治疗阶段（state.stage）决定首页内容：
+    check  刚发现还在检查   没有卡组，显示检查准备
+    new    刚戴支具前两周   适应期，卡组 3 项，佩戴目标 8h
+    brace  支具 + 运动       完整卡组 12 项 + 撑杆站立 + 蛙泳
+    off    脱支具维持期     完整卡组，维持提示
+    adult  成年自我管理     卡组 4 项 + 0–10 疼痛自评 + 久坐提醒
+
+---------------------------------------------------------------------
+四、业务规则
+---------------------------------------------------------------------
+  1. 卡组：一天一列，不分两段。顺序 柔韧 → 3D 矫正 → 核心 → 颈椎 → 拉伸放松。
+     ⚠ 分类与顺序待医生确认。
+  2. 隔天规则（只在后台运行，App 页面上不显示规则文字）：
+     今天做了的隔天动作，明天不出现、后天回来；没做就顺延到明天。
+     按实际练习日滚动，不固定星期几；目前按单个动作计算（是否整组计算待定）。
+  3. 跟练播报节奏由处方的组结构决定：计时 / 计数 / 呼吸。
+     手机平放在地上听声音练。不做镜子模式。
+  4. 先录后配：复诊现场先录动作存为草稿 → 收到处方单后拍照导入
+     → 按名字或录制顺序推荐对应的处方动作，可“换一个” → 没配上的草稿保留。
+  5. 识别结果（处方、复查记录）都可手动修改：右上角 ⋯ 进入编辑。
+     复查记录只识别打印的报告，不做手写识别。
+  6. 动作命名三层：显示名（康复师叫法）/ 标准动作 / 别名。
+     施罗斯按弯型个性化，不做通用视频库；示范来自本人复诊时的录像。
+  7. 复查提醒：可选，默认关闭；打开后日期可不填；打开才在首页出现准备卡片。
+  8. 成长记录顶部只有：治疗历程第 N 天（自确诊起）、戴支具天数、训练次数。
+     治疗历程不配里程碑勋章。Cobb 角差 5° 以内属于测量误差，要在界面上说明。
+  9. 松果（只用来补卡，不兑换实物）：训练完成 +3、支具达标 +2、
+     认知学习小测 +2、复查后上传 +5；补卡 −10，每周 1 次。
+     支具和训练分开计，一项没做到不影响另一项；未达成显示“待完成”。
+ 10. 勋章 6 枚，只看坚持不看度数：熬过第一周、学会 5 个动作、
+     第一次复查记录、坚持 4 周、支具达标 30 天、训练满 30 次。
+ 11. 认知学习不进每日卡组，放在 社群 › 学习（分型小测、每周画弯型挑战）。
+     科普只出现在这一处，不和别处重复。
+ 12. 支具生活指南（适应期、皮肤、吃饭、经期、学校、游泳）放在社群。
+ 13. 隐私：视频只存本机；示例人物“小禾”，不用真实姓名和照片；不编造数据。
+
+---------------------------------------------------------------------
+五、还没定
+---------------------------------------------------------------------
+  - 训练模块的分类与顺序（问医生）
+  - 一段录像能否对应多个处方动作（目前一对一）
+  - 成年人阶段是否保留松果
+  - 家长想了解进度的需求怎样满足，又不变成监控工具
+  - 支具传感器方案；没有传感器的人怎么手动记录
+  - 隔天规则按单个动作还是整组计算
+=====================================================================
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* 布局：左边是一台可点的手机，右边是演示面板（窄屏时面板排到手机下面）。
+   手机里的 App 界面固定用产品自己的浅色配色；外层页面跟随系统深浅色。 */
+:root {
+  --bg: #E4EAE6;
+  --surface: #F6F8F6;
+  --line: #CCD7D2;
+  --fg: #17221E;
+  --muted: #56635F;
+  --accent: #1F6F66;
+  --accent-soft: #D3E7E1;
+  --on-accent: #FFFFFF;
+  --warm: #A9501E;
+  --warm-soft: #F6DCC8;
+  --bezel: #1B2522;
+  --shadow: rgba(23, 34, 30, 0.18);
+  --font-body: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-display: 'Noto Serif SC', 'Songti SC', 'SimSun', serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1614; --surface: #16211E; --line: #2A3935; --fg: #E2EBE7; --muted: #95A6A0;
+    --accent: #6FC4B4; --accent-soft: #1D3833; --on-accent: #0E1614; --warm: #EDA170; --warm-soft: #3A2618;
+    --bezel: #050807; --shadow: rgba(0, 0, 0, 0.5); color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1614; --surface: #16211E; --line: #2A3935; --fg: #E2EBE7; --muted: #95A6A0;
+  --accent: #6FC4B4; --accent-soft: #1D3833; --on-accent: #0E1614; --warm: #EDA170; --warm-soft: #3A2618;
+  --bezel: #050807; --shadow: rgba(0, 0, 0, 0.5); color-scheme: dark;
+}
+html, body { background: var(--bg); color: var(--fg); }
+body {
+  font-family: var(--font-body); font-size: 15px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 24px 40px;
+}
+.page { max-width: 1160px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 410px) minmax(0, 1fr); gap: 40px; align-items: start; }
+.phone-col { width: 100%; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.device { position: relative; border-radius: 40px; overflow: hidden; background: #F3F5F2; box-shadow: 0 0 0 9px var(--bezel), 0 28px 60px var(--shadow); }
+.device-screen { position: absolute; left: 0; top: 0; width: 390px; height: 844px; transform-origin: 0 0; }
+.device-caption { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; text-align: center; }
+.device-caption code { font-family: var(--font-mono); color: var(--accent); }
+
+.panel { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.eyebrow { font-size: 12px; letter-spacing: 0.12em; color: var(--muted); }
+h1 { font-family: var(--font-display); font-size: 34px; line-height: 1.25; margin: 4px 0 8px; text-wrap: balance; }
+.lede { margin: 0; color: var(--muted); max-width: 60ch; }
+.block { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; display: flex; flex-direction: column; gap: 12px; }
+.block h2 { margin: 0; font-size: 16px; font-weight: 700; display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.block h2 small { font-weight: 400; font-size: 12px; color: var(--muted); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn, .chip { font: inherit; cursor: pointer; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--fg); min-height: 38px; padding: 0 14px; font-size: 14px; }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); font-weight: 700; }
+.chip[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); color: var(--fg); font-weight: 700; }
+.btn:focus-visible, .chip:focus-visible, .nav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(124px, 1fr)); gap: 14px 12px; }
+.group h3 { margin: 0 0 6px; font-size: 13px; color: var(--muted); font-weight: 500; }
+.nav-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.nav-btn { width: 100%; font: inherit; font-size: 14px; text-align: left; cursor: pointer; border: 0; border-radius: 8px; background: transparent; color: var(--fg); padding: 6px 8px; display: flex; justify-content: space-between; gap: 8px; }
+.nav-btn code { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
+.nav-btn:hover { background: var(--accent-soft); }
+.nav-btn[aria-current="true"] { background: var(--accent); color: var(--on-accent); font-weight: 700; }
+.nav-btn[aria-current="true"] code { color: var(--on-accent); }
+.order { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; font-size: 14px; }
+.order span.m { padding: 3px 10px; border-radius: 999px; background: var(--accent-soft); }
+.order span.alt { background: var(--warm-soft); color: var(--warm); }
+.flag { font-size: 12px; color: var(--warm); border: 1px dashed var(--warm); border-radius: 999px; padding: 2px 8px; white-space: nowrap; }
+.tomorrow { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 14px; }
+.tomorrow li { display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid var(--line); padding-top: 6px; }
+.tomorrow .state { color: var(--muted); white-space: nowrap; }
+.tomorrow .state.off { color: var(--warm); }
+.rules { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; font-size: 14px; max-width: 70ch; }
+.rules b { font-weight: 700; }
+.mono { font-family: var(--font-mono); font-size: 13px; }
+.arch { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 14px; font-size: 14px; margin: 0; }
+.arch dt { font-family: var(--font-mono); font-size: 13px; color: var(--accent); }
+.arch dd { margin: 0; color: var(--muted); }
+.note { font-size: 13px; color: var(--muted); margin: 0; }
+
+@media (max-width: 860px) {
+  .page { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .phone-col { position: static; }
+  h1 { font-size: 28px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="page">
+  <div class="phone-col">
+    <div class="device" id="device" aria-label="Spine App 交互原型">
+      <div class="device-screen" id="screen"></div>
+    </div>
+    <div class="device-caption" id="caption">当前页面 <code>today</code></div>
+  </div>
+
+  <main class="panel">
+    <header>
+      <div class="eyebrow">脊柱侧弯 · 保守治疗陪伴</div>
+      <h1>Spine 交互原型</h1>
+      <p class="lede">左边的手机可以直接点：建档、每天打卡与跟练、现场录动作再配处方、复查记录、社群学习、松果与勋章。右边用来换起点、换治疗阶段、跳到任意页面，并查看 App 里不显示的后台规则。</p>
+    </header>
+
+    <section class="block" aria-labelledby="h-start">
+      <h2 id="h-start">从哪里开始 <small>重新开始会清空刚才的操作</small></h2>
+      <div class="row">
+        <button class="btn primary" type="button" id="start-onboarding">从首次使用开始</button>
+        <button class="btn" type="button" id="start-home">直接进入首页</button>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="h-stage">
+      <h2 id="h-stage">治疗阶段 <small>首页内容随阶段变化；App 里在「我的 › 切换阶段」</small></h2>
+      <div class="row" id="stage-chips"></div>
+    </section>
+
+    <section class="block" aria-labelledby="h-nav">
+      <h2 id="h-nav">跳到页面</h2>
+      <div class="groups" id="nav-groups"></div>
+    </section>
+
+    <section class="block" aria-labelledby="h-deck">
+      <h2 id="h-deck">后台排卡 <small>只在后台运行，App 页面上不显示</small></h2>
+      <div class="order" aria-label="卡组顺序">
+        <span class="m">柔韧</span>→<span class="m">3D 矫正</span>→<span class="m alt">核心 · 隔天</span>→<span class="m">颈椎</span>→<span class="m">拉伸放松</span>
+        <span class="flag">分类与顺序待医生确认</span>
+      </div>
+      <p class="note" id="tomorrow-summary"></p>
+      <ul class="tomorrow" id="tomorrow-list"></ul>
+      <p class="note">在今日页给核心动作打卡，这里会实时变化：今天练过的隔天动作明天休息、后天回来；没练的顺延到明天。</p>
+    </section>
+
+    <section class="block" aria-labelledby="h-rules">
+      <h2 id="h-rules">已定的规则</h2>
+      <ol class="rules">
+        <li><b>不分身份。</b>只问年龄和性别（可自定义），没有家长视图。</li>
+        <li><b>先录后配。</b>复诊现场先录动作存草稿，处方单到了再拍照导入、把录像配到动作上。</li>
+        <li><b>识别可改。</b>处方和复查记录右上角 ⋯ 进入编辑；不做手写识别。</li>
+        <li><b>跟练靠声音。</b>计时、计数、呼吸三种节奏由处方组结构决定；不做镜子模式。</li>
+        <li><b>复查提醒可选，默认关闭。</b>打开后日期也可以不填，首页不放倒计时。</li>
+        <li><b>松果只用来补卡。</b>训练 +3、支具达标 +2、认知小测 +2、复查上传 +5，补卡 −10；未达成显示「待完成」。</li>
+        <li><b>勋章只看坚持，不看度数。</b>成长记录只保留治疗历程、戴支具天数和训练次数。</li>
+        <li><b>认知学习和支具生活放进社群。</b>不进每日卡组，科普只出现在「社群 › 学习」。</li>
+      </ol>
+    </section>
+
+    <section class="block" aria-labelledby="h-arch">
+      <h2 id="h-arch">文件结构 <small>完整需求写在源代码开头的注释里</small></h2>
+      <dl class="arch">
+        <dt>spine-ui</dt><dd>App 全部界面的一份模板，按当前页面显示其中一屏</dd>
+        <dt>Scheduler</dt><dd>排卡规则：模块顺序和隔天规则，纯函数</dd>
+        <dt>SpineApp</dt><dd>状态、动作卡片数据、页面跳转、打卡与奖励</dd>
+        <dt>mount()</dt><dd>把模板渲染成页面，状态变化后重绘并保留焦点和滚动位置</dd>
+      </dl>
+    </section>
+  </main>
+</div>
+
+<!-- ================= App 界面模板 ================= -->
+<template id="spine-ui">
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: #F3F5F2; color: #1F2A27; font-family: 'Noto Sans SC', sans-serif; display: flex; flex-direction: column">
+
+  <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+    <div role="status" style="position: absolute; left: 20px; right: 20px; top: 14px; z-index: 5; padding: 12px 14px; border-radius: 14px; background: #1F2A27; color: #FFFFFF; font-size: 14px; line-height: 1.5; text-align: center">{{ toast }}</div>
+  </sc-if>
+
+  <div style="flex: 1; min-height: 0; overflow-y: auto">
+
+    <!-- ========== 欢迎：年龄与性别 ========== -->
+    <sc-if value="{{ s.welcome }}" hint-placeholder-val="{{ true }}">
+      <div style="padding: 28px 20px 24px; min-height: 844px; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <div style="display: flex; align-items: center; gap: 8px">
+            <div style="width: 36px; height: 36px; border-radius: 10px; background: #1F6F66; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2c-3 3 3 5 0 8s3 5 0 8 0 4 0 4"></path><path d="M9 6h6M9.5 12h5M9 18h6"></path></svg>
+            </div>
+            <span style="font-size: 18px; font-weight: 700; letter-spacing: 0.5px">Spine</span>
+          </div>
+          <span style="font-size: 13px; color: #5B6663">1 / 4</span>
+        </div>
+        <div style="height: 160px; border-radius: 24px; background: #DDEDE9; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center">
+          <div style="position: absolute; left: -40px; top: -40px; width: 180px; height: 180px; border-radius: 999px; background: #C9E3DC"></div>
+          <div style="position: absolute; right: -30px; bottom: -50px; width: 160px; height: 160px; border-radius: 999px; background: #F6DCC8"></div>
+          <svg width="96" height="130" viewBox="0 0 120 160" fill="none" aria-hidden="true" style="position: relative">
+            <path d="M60 10 C 40 40, 82 60, 60 85 S 38 130, 60 150" stroke="#1F6F66" stroke-width="5" stroke-linecap="round"></path>
+            <circle cx="60" cy="10" r="7" fill="#1F6F66"></circle>
+            <rect x="47" y="38" width="26" height="9" rx="4" fill="#1F6F66" opacity="0.35"></rect>
+            <rect x="47" y="78" width="26" height="9" rx="4" fill="#1F6F66" opacity="0.35"></rect>
+            <rect x="47" y="118" width="26" height="9" rx="4" fill="#1F6F66" opacity="0.35"></rect>
+          </svg>
+        </div>
+        <div>
+          <h1 style="margin: 0; font-size: 26px; font-weight: 700; line-height: 1.35">陪你把矫正<br>变成每天的小事</h1>
+          <p style="margin: 8px 0 0; font-size: 14px; color: #5B6663; line-height: 1.6">先简单认识一下你。</p>
+        </div>
+        <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <label for="birth" style="font-size: 14px; font-weight: 700">年龄 · 出生年月</label>
+            <span style="font-size: 12px; color: #5B6663">用来判断生长阶段</span>
+          </div>
+          <input id="birth" type="text" value="2013 年 12 月" style="min-height: 44px; border-radius: 10px; border: 1px solid #C9D4D0; padding: 0 12px; font-family: inherit; font-size: 15px; color: #1F2A27; background: #F8FAF9">
+        </div>
+        <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px">
+          <span id="gender-label" style="font-size: 14px; font-weight: 700">性别</span>
+          <div role="radiogroup" aria-labelledby="gender-label" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+            <sc-for list="{{ genders }}" as="g" hint-placeholder-count="3">
+              <button type="button" role="radio" aria-checked="{{ g.aria }}" onClick="{{ g.pick }}" style="min-height: 44px; border-radius: 10px; border: {{ g.border }}; background: {{ g.bg }}; color: {{ g.fg }}; font-family: inherit; font-size: 14px; font-weight: {{ g.fw }}">{{ g.label }}</button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ isCustomGender }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; gap: 6px">
+              <label for="gender-custom" style="font-size: 12px; color: #5B6663">你希望怎么称呼自己的性别？可以留空</label>
+              <input id="gender-custom" type="text" placeholder="自由填写" style="min-height: 44px; border-radius: 10px; border: 1px solid #C9D4D0; padding: 0 12px; font-family: inherit; font-size: 15px; color: #1F2A27; background: #F8FAF9">
+            </div>
+          </sc-if>
+        </div>
+        <div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px">
+          <button type="button" onClick="{{ nav.stageFromStart }}" style="min-height: 52px; border: 0; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 700">下一步</button>
+          <button type="button" onClick="{{ nav.today }}" style="min-height: 44px; border: 0; background: transparent; color: #3E4B47; font-family: inherit; font-size: 14px">已有账号，直接登录</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ========== 选择治疗阶段 ========== -->
+    <sc-if value="{{ s.stage }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 20px 20px 24px; min-height: 844px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <button type="button" aria-label="返回" onClick="{{ stageBack }}" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center; padding: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <span style="font-size: 13px; color: #5B6663">{{ stageStep }}</span>
+        </div>
+        <div>
+          <h1 style="margin: 0; font-size: 24px; font-weight: 700">你现在处在哪个阶段？</h1>
+          <p style="margin: 6px 0 0; font-size: 14px; color: #5B6663; line-height: 1.6">不同阶段，首页会为你准备不同的内容。以后复查时也可以在“我的”里切换。</p>
+        </div>
+        <div role="radiogroup" aria-label="治疗阶段" style="display: flex; flex-direction: column; gap: 8px">
+          <sc-for list="{{ stages }}" as="t" hint-placeholder-count="5">
+            <button type="button" role="radio" aria-checked="{{ t.aria }}" onClick="{{ t.pick }}" style="display: flex; align-items: center; gap: 12px; text-align: left; padding: 12px 14px; border-radius: 14px; border: {{ t.border }}; background: #FFFFFF; font-family: inherit; color: #1F2A27">
+              <span style="width: 20px; height: 20px; border-radius: 999px; border: {{ t.dot }}; box-sizing: border-box; flex-shrink: 0"></span>
+              <span style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 15px; font-weight: 700">{{ t.title }}</span>
+                <span style="font-size: 12px; color: #5B6663; line-height: 1.5">{{ t.sub }}</span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+        <button type="button" onClick="{{ stageNext }}" style="margin-top: auto; min-height: 52px; border: 0; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 700">{{ stageBtn }}</button>
+      </div>
+    </sc-if>
+
+    <!-- ========== 最少必要信息 ========== -->
+    <sc-if value="{{ s.basics }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 20px 20px 24px; min-height: 844px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <button type="button" aria-label="返回" onClick="{{ nav.stageFromStart }}" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center; padding: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <span style="font-size: 13px; color: #5B6663">3 / 4</span>
+          <button type="button" onClick="{{ nav.ready }}" style="min-height: 44px; border: 0; background: transparent; color: #3E4B47; font-family: inherit; font-size: 14px">跳过</button>
+        </div>
+        <div>
+          <h1 style="margin: 0; font-size: 24px; font-weight: 700">{{ basicsTitle }}</h1>
+          <p style="margin: 6px 0 0; font-size: 14px; color: #5B6663; line-height: 1.6">其余信息可以在复查后慢慢补充。</p>
+        </div>
+        <sc-if value="{{ showMenarche }}" hint-placeholder-val="{{ true }}">
+          <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px">
+            <div style="display: flex; justify-content: space-between; align-items: baseline">
+              <span id="men-label" style="font-size: 14px; font-weight: 700">月经初潮</span>
+              <span style="font-size: 12px; color: #5B6663">用来判断还在不在生长期</span>
+            </div>
+            <div role="radiogroup" aria-labelledby="men-label" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+              <sc-for list="{{ menOpts }}" as="o" hint-placeholder-count="3">
+                <button type="button" role="radio" aria-checked="{{ o.aria }}" onClick="{{ o.pick }}" style="min-height: 44px; border-radius: 10px; border: {{ o.border }}; background: {{ o.bg }}; color: {{ o.fg }}; font-family: inherit; font-size: 14px; font-weight: {{ o.fw }}">{{ o.label }}</button>
+              </sc-for>
+            </div>
+            <div style="font-size: 13px; color: #3E4B47">大约在 <span style="font-weight: 700; color: #1F2A27">2026 年 5 月</span> · 记不清可以留空</div>
+          </div>
+        </sc-if>
+        <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <span style="font-size: 14px; font-weight: 700">手上有医院的资料吗？</span>
+            <span style="font-size: 12px; color: #5B6663">可多选</span>
+          </div>
+          <sc-for list="{{ mats }}" as="m" hint-placeholder-count="3">
+            <button type="button" aria-pressed="{{ m.aria }}" onClick="{{ m.toggle }}" style="display: flex; align-items: center; gap: 12px; text-align: left; padding: 10px 12px; border-radius: 12px; border: {{ m.border }}; background: {{ m.bg }}; font-family: inherit; color: #1F2A27">
+              <span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 14px; font-weight: 700">{{ m.title }}</span>
+                <span style="font-size: 12px; color: #5B6663">{{ m.sub }}</span>
+              </span>
+              <span style="font-size: 12px; font-weight: 700; color: #1F6F66">{{ m.mark }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #5B6663; line-height: 1.6">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-top: 3px; flex-shrink: 0"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+          <span>资料只用来整理你的档案，不会出现在社群里。</span>
+        </div>
+        <button type="button" onClick="{{ nav.ready }}" style="margin-top: auto; min-height: 52px; border: 0; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 700">下一步</button>
+      </div>
+    </sc-if>
+
+    <!-- ========== 准备好了 ========== -->
+    <sc-if value="{{ s.ready }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 24px 20px 24px; min-height: 844px; box-sizing: border-box; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: center; gap: 12px">
+          <div style="width: 48px; height: 48px; border-radius: 999px; background: #1F6F66; color: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
+          </div>
+          <div>
+            <h1 style="margin: 0; font-size: 22px; font-weight: 700">准备好了，小禾</h1>
+            <div style="font-size: 13px; color: #5B6663">4 / 4 · 已经帮你整理好这些</div>
+          </div>
+        </div>
+        <div style="padding: 4px 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column">
+          <div style="display: flex; justify-content: space-between; align-items: center; min-height: 46px; font-size: 14px; border-bottom: 1px solid #E6EBE8"><span style="color: #3E4B47">当前阶段</span><span style="font-weight: 700">{{ stageLabel }}</span></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; min-height: 46px; font-size: 14px; border-bottom: 1px solid #E6EBE8"><span style="color: #3E4B47">诊断报告</span><span style="font-weight: 700">{{ readyReport }}</span></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; min-height: 46px; font-size: 14px"><span style="color: #3E4B47">运动处方</span><span style="font-weight: 700">{{ readyRx }}</span></div>
+        </div>
+        <sc-if value="{{ st.isNew }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 16px; border-radius: 18px; background: #DDEDE9; display: flex; flex-direction: column; gap: 10px">
+            <div style="font-size: 16px; font-weight: 700; color: #1F4F49">适应期 · 前两周</div>
+            <div style="font-size: 13px; color: #2E3B37; line-height: 1.7">刚开始戴支具会闷、会硌、会不想戴，这些都很正常。很多人在两三周后会慢慢习惯，我们陪你一天一天来。</div>
+            <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; align-items: end; height: 92px; padding-top: 6px">
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="width: 100%; height: 18px; border-radius: 6px; background: #1F6F66"></div><span style="font-size: 11px; color: #2E3B37">第 1–3 天</span></div>
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="width: 100%; height: 34px; border-radius: 6px; background: #3F8F84"></div><span style="font-size: 11px; color: #2E3B37">第 4–7 天</span></div>
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="width: 100%; height: 52px; border-radius: 6px; background: #6FB3A7"></div><span style="font-size: 11px; color: #2E3B37">第 2 周</span></div>
+              <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><div style="width: 100%; height: 66px; border-radius: 6px; background: #9FD0C6"></div><span style="font-size: 11px; color: #2E3B37">之后</span></div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ st.notNew }}" hint-placeholder-val="{{ true }}">
+          <div style="padding: 16px; border-radius: 18px; background: #DDEDE9; display: flex; flex-direction: column; gap: 6px">
+            <div style="font-size: 16px; font-weight: 700; color: #1F4F49">{{ readyTitle }}</div>
+            <div style="font-size: 13px; color: #2E3B37; line-height: 1.7">{{ readyText }}</div>
+          </div>
+        </sc-if>
+        <button type="button" onClick="{{ nav.today }}" style="margin-top: auto; min-height: 52px; border: 0; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 700">开始使用</button>
+      </div>
+    </sc-if>
+
+    <!-- ========== 今日 ========== -->
+    <sc-if value="{{ s.today }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 24px 20px 20px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; justify-content: space-between; align-items: flex-end">
+          <div>
+            <div style="font-size: 13px; color: #5B6663">{{ dateLine }}</div>
+            <h1 style="margin: 4px 0 0; font-size: 26px; font-weight: 700">下午好，小禾</h1>
+          </div>
+          <button type="button" aria-label="松果与勋章" onClick="{{ nav.rewards }}" style="display: flex; align-items: center; gap: 6px; min-height: 40px; border: 0; background: #F6DCC8; color: #6B3416; padding: 0 12px; border-radius: 999px; font-family: inherit; font-size: 14px; font-weight: 700">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c4 3 6 6 6 10a6 6 0 0 1-12 0c0-4 2-7 6-10z"></path><path d="M9 12h6M9.5 15.5h5"></path></svg>
+            {{ pine }}
+          </button>
+        </div>
+
+        <sc-if value="{{ st.check }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 16px; border-radius: 18px; background: #DDEDE9; display: flex; flex-direction: column; gap: 10px">
+            <div style="font-size: 16px; font-weight: 700; color: #1F4F49">还在检查，也可以先用起来</div>
+            <div style="font-size: 13px; color: #2E3B37; line-height: 1.7">确诊和分型以医院检查为准。拿到报告前，先做好这几件事：</div>
+            <div style="font-size: 14px; color: #1F2A27; line-height: 2">· 带上之前拍过的片子<br>· 记下想问医生的问题<br>· 花 1 分钟了解什么是 Cobb 角</div>
+            <button type="button" onClick="{{ nav.upload }}" style="min-height: 48px; border: 0; border-radius: 12px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700">拿到报告了，拍照上传</button>
+            <button type="button" onClick="{{ nav.learn }}" style="min-height: 44px; border: 1.5px solid #1F6F66; border-radius: 12px; background: transparent; color: #1F6F66; font-family: inherit; font-size: 14px; font-weight: 700">先了解一下侧弯</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ st.braceRings }}" hint-placeholder-val="{{ true }}">
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+            <button type="button" onClick="{{ nav.brace }}" style="display: flex; align-items: center; gap: 10px; padding: 12px; border: 0; border-radius: 18px; background: #FFFFFF; color: #1F2A27; font-family: inherit; text-align: left">
+              <svg width="60" height="60" viewBox="0 0 64 64" aria-hidden="true" style="flex-shrink: 0"><circle cx="32" cy="32" r="26" fill="none" stroke="#DCE5E1" stroke-width="8"></circle><circle cx="32" cy="32" r="26" fill="none" stroke="#1F6F66" stroke-width="8" stroke-linecap="round" stroke-dasharray="{{ braceDash }}" transform="rotate(-90 32 32)"></circle></svg>
+              <span style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 12px; color: #5B6663">支具</span>
+                <span style="font-size: 17px; font-weight: 700">{{ braceHours }}</span>
+                <span style="font-size: 11px; color: #5B6663">{{ braceGoal }}</span>
+              </span>
+            </button>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 18px; background: #FFFFFF">
+              <svg width="60" height="60" viewBox="0 0 64 64" aria-hidden="true" style="flex-shrink: 0"><circle cx="32" cy="32" r="26" fill="none" stroke="#F3E3D6" stroke-width="8"></circle><circle cx="32" cy="32" r="26" fill="none" stroke="#C4602A" stroke-width="8" stroke-linecap="round" stroke-dasharray="{{ ringDash }}" transform="rotate(-90 32 32)"></circle></svg>
+              <span style="display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 12px; color: #5B6663">训练</span>
+                <span style="font-size: 17px; font-weight: 700">{{ doneCount }} / {{ deckLen }} 个</span>
+                <span style="font-size: 11px; color: #5B6663">{{ coreDayText }}</span>
+              </span>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ st.isNew }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 14px; border-radius: 18px; background: #DDEDE9; display: flex; flex-direction: column; gap: 8px">
+            <div style="font-size: 15px; font-weight: 700; color: #1F4F49">适应期 · 第 5 天</div>
+            <div style="font-size: 13px; color: #2E3B37; line-height: 1.7">今天的目标是戴满 8 小时，训练先学会处方里的几个动作就好。闷、硌、不想戴都很正常。</div>
+            <button type="button" onClick="{{ nav.talk }}" style="align-self: flex-start; min-height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: #FFFFFF; color: #1F6F66; font-family: inherit; font-size: 13px; font-weight: 700">看看大家怎么熬过前两周 ›</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ st.off }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <div style="display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 18px; background: #FFFFFF">
+              <svg width="60" height="60" viewBox="0 0 64 64" aria-hidden="true" style="flex-shrink: 0"><circle cx="32" cy="32" r="26" fill="none" stroke="#F3E3D6" stroke-width="8"></circle><circle cx="32" cy="32" r="26" fill="none" stroke="#C4602A" stroke-width="8" stroke-linecap="round" stroke-dasharray="{{ ringDash }}" transform="rotate(-90 32 32)"></circle></svg>
+              <div>
+                <div style="font-size: 12px; color: #5B6663">今天的训练</div>
+                <div style="font-size: 20px; font-weight: 700">{{ doneCount }} / {{ deckLen }} 个</div>
+                <div style="font-size: 12px; color: #5B6663">维持期每周至少练 5 天</div>
+              </div>
+            </div>
+            <div style="padding: 14px; border-radius: 18px; background: #DDEDE9; display: flex; flex-direction: column; gap: 6px">
+              <div style="font-size: 15px; font-weight: 700; color: #1F4F49">脱下支具，不是结束</div>
+              <div style="font-size: 13px; color: #2E3B37; line-height: 1.7">这个阶段度数可能会有少量回退，这是预期内的。坚持训练，是守住这几年成果最重要的事。</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ st.adult }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+              <div style="font-size: 15px; font-weight: 700">今天腰背感觉怎么样？</div>
+              <div style="display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 3px">
+                <sc-for list="{{ pains }}" as="p" hint-placeholder-count="11">
+                  <button type="button" aria-pressed="{{ p.aria }}" onClick="{{ p.pick }}" style="min-height: 40px; padding: 0; border: 0; border-radius: 8px; background: {{ p.bg }}; color: {{ p.fg }}; font-family: inherit; font-size: 13px; font-weight: {{ p.fw }}">{{ p.n }}</button>
+                </sc-for>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 11px; color: #5B6663"><span>0 不痛</span><span>10 很痛</span></div>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 18px; background: #F6DCC8">
+              <div style="flex: 1">
+                <div style="font-size: 14px; font-weight: 700; color: #6B3416">已经连续坐了 52 分钟</div>
+                <div style="font-size: 12px; color: #6B3416">起来做一组侧弯专属的办公间隙练习</div>
+              </div>
+              <button type="button" onClick="{{ startFollow }}" style="min-height: 38px; padding: 0 14px; border: 0; border-radius: 999px; background: #6B3416; color: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 700">开始</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ hasDeck }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <div style="display: flex; justify-content: space-between; align-items: baseline">
+              <h2 style="margin: 0; font-size: 17px; font-weight: 700">今日卡组 · 按顺序练</h2>
+              <span style="font-size: 12px; color: #5B6663">{{ deckLen }} 个动作</span>
+            </div>
+            <div style="padding: 4px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column">
+              <sc-for list="{{ deck }}" as="c" hint-placeholder-count="12">
+                <div style="display: flex; align-items: center; gap: 10px; min-height: 54px; border-bottom: 1px solid #E6EBE8">
+                  <span style="width: 20px; font-size: 12px; color: #8A9A95; flex-shrink: 0">{{ c.n }}</span>
+                  <button type="button" onClick="{{ c.open }}" style="flex: 1; min-width: 0; text-align: left; border: 0; background: transparent; padding: 6px 0; font-family: inherit; color: #1F2A27; display: flex; flex-direction: column; gap: 2px">
+                    <span style="font-size: 14px; font-weight: 700">{{ c.name }}</span>
+                    <span style="font-size: 12px; color: #5B6663">{{ c.mod }} · {{ c.param }}</span>
+                  </button>
+                  <sc-if value="{{ c.done }}" hint-placeholder-val="{{ false }}">
+                    <span style="display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; color: #1F6F66">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
+                      已完成
+                    </span>
+                  </sc-if>
+                  <sc-if value="{{ c.todo }}" hint-placeholder-val="{{ true }}">
+                    <button type="button" onClick="{{ c.check }}" style="min-height: 36px; padding: 0 12px; border: 1px solid #1F6F66; border-radius: 999px; background: transparent; color: #1F6F66; font-family: inherit; font-size: 13px; font-weight: 700">打卡</button>
+                  </sc-if>
+                </div>
+              </sc-for>
+              <sc-if value="{{ hasLeft }}" hint-placeholder-val="{{ true }}">
+                <button type="button" onClick="{{ startFollow }}" style="margin: 12px 0 10px; min-height: 48px; border: 0; border-radius: 12px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700">跟练剩下的 {{ leftCount }} 个动作</button>
+              </sc-if>
+              <sc-if value="{{ allDone }}" hint-placeholder-val="{{ false }}">
+                <div style="margin: 12px 0 10px; min-height: 48px; border-radius: 12px; background: #DDEDE9; color: #1F4F49; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center">今天的训练都完成了</div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ st.braceRings }}" hint-placeholder-val="{{ true }}">
+          <div style="padding: 4px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column">
+            <div style="display: flex; align-items: center; gap: 10px; min-height: 54px; border-bottom: 1px solid #E6EBE8">
+              <div style="flex: 1">
+                <div style="font-size: 14px; font-weight: 700">撑杆站立 3 分钟</div>
+                <div style="font-size: 12px; color: #5B6663">姿势矫正 · 日常</div>
+              </div>
+              <sc-if value="{{ standDone }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size: 13px; font-weight: 700; color: #1F6F66">已完成</span>
+              </sc-if>
+              <sc-if value="{{ standTodo }}" hint-placeholder-val="{{ true }}">
+                <button type="button" onClick="{{ doStand }}" style="min-height: 36px; padding: 0 12px; border: 1px solid #1F6F66; border-radius: 999px; background: transparent; color: #1F6F66; font-family: inherit; font-size: 13px; font-weight: 700">打卡</button>
+              </sc-if>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; min-height: 54px">
+              <div style="flex: 1">
+                <div style="font-size: 14px; font-weight: 700">蛙泳 · 本周 {{ swim }} / 3 次</div>
+                <div style="font-size: 12px; color: #5B6663">康复师建议 · 30 分钟 · 心率 130–150</div>
+              </div>
+              <button type="button" onClick="{{ addSwim }}" style="min-height: 36px; padding: 0 12px; border: 1px solid #1F6F66; border-radius: 999px; background: transparent; color: #1F6F66; font-family: inherit; font-size: 13px; font-weight: 700">记一次</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showPrep }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px">
+            <div style="display: flex; justify-content: space-between; align-items: center">
+              <span style="font-size: 15px; font-weight: 700">复查准备 · 10 月 20 日 周二</span>
+              <button type="button" onClick="{{ nav.me }}" style="min-height: 36px; border: 0; background: transparent; color: #1F6F66; font-family: inherit; font-size: 12px">提醒设置 ›</button>
+            </div>
+            <div style="font-size: 13px; color: #2E3B37; line-height: 1.8">□ 带上支具<br>□ 最近一次的练习视频<br>□ 想问医生的问题（已记下 1 条）</div>
+            <button type="button" onClick="{{ makeSummary }}" style="min-height: 44px; border: 1.5px solid #1F6F66; border-radius: 12px; background: transparent; color: #1F6F66; font-family: inherit; font-size: 14px; font-weight: 700">生成复查前摘要</button>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <!-- ========== 跟练（语音为主） ========== -->
+    <sc-if value="{{ s.follow }}" hint-placeholder-val="{{ false }}">
+      <div style="min-height: 844px; box-sizing: border-box; background: #143F3A; color: #EAF2EF; padding: 20px 20px 24px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <button type="button" aria-label="结束跟练" onClick="{{ exitFollow }}" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: #1E534D; color: #EAF2EF; display: flex; align-items: center; justify-content: center; padding: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+          </button>
+          <div style="font-size: 15px; font-weight: 700">{{ followTitle }}</div>
+          <div style="width: 44px"></div>
+        </div>
+        <div style="display: flex; gap: 4px">
+          <sc-for list="{{ segs }}" as="g" hint-placeholder-count="12">
+            <div style="flex: 1; height: 4px; border-radius: 999px; background: {{ g.bg }}"></div>
+          </sc-for>
+        </div>
+        <div style="height: 130px; border-radius: 16px; background: #1E534D; display: flex; align-items: center; justify-content: center; gap: 10px; color: #A9C3BD; font-size: 13px">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.5" r="2"></circle><path d="M12 7v7M8 10l4-2 4 2M9 21l3-7 3 7"></path></svg>
+          {{ fPoseText }}
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <h1 style="margin: 0; font-size: 24px; font-weight: 700">{{ fCard.name }}</h1>
+          <div style="font-size: 13px; color: #A9C3BD">{{ fCard.mod }} · {{ fCard.param }} · {{ fCard.modeShort }}播报</div>
+        </div>
+        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px">
+          <div style="width: 196px; height: 196px; border-radius: 999px; border: 10px solid #7FD1C2; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: #18493F">
+            <div style="font-size: 14px; color: #CFE3DE">{{ fPhase }}</div>
+            <div style="font-size: 40px; font-weight: 700">{{ fBig }}</div>
+            <div style="font-size: 12px; color: #CFE3DE">{{ fSmall }}</div>
+          </div>
+          <div style="font-size: 14px; color: #CFE3DE; text-align: center; line-height: 1.6">{{ fCard.tip }}</div>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 28px">
+          <button type="button" aria-label="看示范" onClick="{{ fOpenCard }}" style="width: 52px; height: 52px; border: 0; border-radius: 999px; background: #1E534D; color: #EAF2EF; display: flex; align-items: center; justify-content: center; padding: 0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="M16 10l5-3v10l-5-3"></path></svg>
+          </button>
+          <button type="button" aria-label="{{ playLabel }}" onClick="{{ togglePlay }}" style="width: 76px; height: 76px; border: 0; border-radius: 999px; background: #7FD1C2; color: #0F302C; display: flex; align-items: center; justify-content: center; padding: 0">
+            <sc-if value="{{ playing }}" hint-placeholder-val="{{ true }}">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+            </sc-if>
+            <sc-if value="{{ paused }}" hint-placeholder-val="{{ false }}">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l11 7-11 7z"></path></svg>
+            </sc-if>
+          </button>
+          <button type="button" aria-label="完成，下一个" onClick="{{ followNext }}" style="width: 52px; height: 52px; border: 0; border-radius: 999px; background: #1E534D; color: #EAF2EF; display: flex; align-items: center; justify-content: center; padding: 0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l8 6-8 6zM18 6v12"></path></svg>
+          </button>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border-radius: 14px; background: #1E534D">
+          <span style="font-size: 13px; color: #CFE3DE">{{ fNext }}</span>
+          <span style="font-size: 12px; color: #A9C3BD; flex-shrink: 0">手机放地上，听声音练</span>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ========== 完成打卡 ========== -->
+    <sc-if value="{{ s.done }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 28px 20px 24px; min-height: 844px; box-sizing: border-box; display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding-top: 8px">
+          <div style="width: 84px; height: 84px; border-radius: 999px; background: #1F6F66; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg>
+          </div>
+          <h1 style="margin: 0; font-size: 24px; font-weight: 700">今天的训练都完成了</h1>
+          <sc-if value="{{ justRewarded }}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background: #F6DCC8; color: #6B3416; font-size: 14px; font-weight: 700">训练 +3 松果 · 现在共 {{ pine }} 颗</div>
+          </sc-if>
+        </div>
+        <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <span style="font-size: 14px; font-weight: 700">本周完成度</span>
+            <span style="font-size: 13px; color: #5B6663">3 / 7 天</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; text-align: center; font-size: 12px; color: #5B6663">
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><span style="width: 30px; height: 30px; border-radius: 999px; background: #1F6F66"></span>一</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><span style="width: 30px; height: 30px; border-radius: 999px; background: #1F6F66"></span>二</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><span style="width: 30px; height: 30px; border-radius: 999px; background: #1F6F66; box-shadow: 0 0 0 3px #F6DCC8"></span>三</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><span style="width: 30px; height: 30px; border-radius: 999px; border: 2px dashed #C9D4D0; box-sizing: border-box"></span>四</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><span style="width: 30px; height: 30px; border-radius: 999px; border: 2px dashed #C9D4D0; box-sizing: border-box"></span>五</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><span style="width: 30px; height: 30px; border-radius: 999px; border: 2px dashed #C9D4D0; box-sizing: border-box"></span>六</div>
+            <div style="display: flex; flex-direction: column; align-items: center; gap: 4px"><span style="width: 30px; height: 30px; border-radius: 999px; border: 2px dashed #C9D4D0; box-sizing: border-box"></span>日</div>
+          </div>
+          <div style="font-size: 12px; color: #5B6663">按周看完成度，偶尔一天没练不会清零</div>
+        </div>
+        <button type="button" onClick="{{ nav.rewards }}" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 0; border-radius: 16px; background: #FFFFFF; color: #1F2A27; font-family: inherit; text-align: left">
+          <span style="width: 40px; height: 40px; border-radius: 12px; background: #DDEDE9; color: #1F6F66; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="6"></circle><path d="M9 14l-2 7 5-3 5 3-2-7"></path></svg>
+          </span>
+          <span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 14px; font-weight: 700">勋章“训练满 30 次”：{{ trainCount }} / 30</span>
+            <span style="font-size: 12px; color: #5B6663">查看所有勋章和补卡</span>
+          </span>
+          <span style="font-size: 18px; color: #8A9A95">›</span>
+        </button>
+        <button type="button" onClick="{{ nav.today }}" style="margin-top: auto; min-height: 52px; border: 0; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 700">回到今日</button>
+      </div>
+    </sc-if>
+
+    <!-- ========== 训练 ========== -->
+    <sc-if value="{{ s.train }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 24px 20px 20px; display: flex; flex-direction: column; gap: 14px">
+        <div>
+          <h1 style="margin: 0; font-size: 26px; font-weight: 700">我的训练</h1>
+          <div style="font-size: 13px; color: #5B6663; margin-top: 4px">{{ rxLine }}</div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <button type="button" onClick="{{ nav.record }}" style="display: flex; align-items: center; gap: 8px; padding: 12px; min-height: 52px; border: 0; border-radius: 14px; background: #FFFFFF; color: #1F2A27; font-family: inherit; font-size: 14px; font-weight: 700">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F6F66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="M16 10l5-3v10l-5-3"></path></svg>
+            现场录动作
+          </button>
+          <button type="button" onClick="{{ nav.import }}" style="display: flex; align-items: center; gap: 8px; padding: 12px; min-height: 52px; border: 0; border-radius: 14px; background: #FFFFFF; color: #1F2A27; font-family: inherit; font-size: 14px; font-weight: 700">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F6F66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+            拍处方单
+          </button>
+        </div>
+
+        <sc-if value="{{ hasDrafts }}" hint-placeholder-val="{{ true }}">
+          <div style="padding: 14px; border-radius: 18px; background: #F8F1EA; border: 1.5px dashed #E8A87C; display: flex; flex-direction: column; gap: 10px">
+            <div style="font-size: 15px; font-weight: 700">现场录的 {{ draftCount }} 段视频还没整理</div>
+            <div style="font-size: 13px; color: #3E4B47; line-height: 1.6">处方单到了就拍下来，App 会把视频配到对应的动作上。没有处方单，也可以先配到现有卡片。</div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+              <button type="button" onClick="{{ nav.import }}" style="min-height: 44px; border: 0; border-radius: 12px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 700">处方单到了</button>
+              <button type="button" onClick="{{ nav.match }}" style="min-height: 44px; border: 1.5px solid #1F6F66; border-radius: 12px; background: transparent; color: #1F6F66; font-family: inherit; font-size: 13px; font-weight: 700">先配到现有卡片</button>
+            </div>
+          </div>
+        </sc-if>
+
+        <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 700">本周安排</h2>
+            <span style="font-size: 12px; color: #5B6663">核心的空心圈会随实际练习日挪动</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 64px repeat(7, minmax(0, 1fr)); gap: 4px; align-items: center; font-size: 12px; color: #5B6663; text-align: center">
+            <span></span><span>一</span><span>二</span>
+            <span style="padding: 2px 0; border-radius: 6px; background: #1F6F66; color: #FFFFFF; font-weight: 700">三</span>
+            <span>四</span><span>五</span><span>六</span><span>日</span>
+          </div>
+          <sc-for list="{{ weekRows }}" as="r" hint-placeholder-count="6">
+            <div style="display: grid; grid-template-columns: 64px repeat(7, minmax(0, 1fr)); gap: 4px; align-items: center; min-height: 30px">
+              <span style="font-size: 12px; color: #2E3B37">{{ r.name }}</span>
+              <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="7">
+                <div style="display: flex; justify-content: center">
+                  <span style="width: {{ c.w }}; height: {{ c.h }}; border-radius: 999px; background: {{ c.bg }}; border: {{ c.border }}; box-sizing: border-box"></span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="padding: 12px 14px; border-radius: 18px; background: #DDEDE9; display: flex; align-items: center; gap: 4px; flex-wrap: wrap; font-size: 12px">
+          <span style="font-weight: 700; color: #1F4F49; margin-right: 4px">练习顺序</span>
+          <span style="padding: 4px 8px; border-radius: 999px; background: #FFFFFF; color: #1F4F49">柔韧</span><span style="color: #3F7F76">→</span>
+          <span style="padding: 4px 8px; border-radius: 999px; background: #FFFFFF; color: #1F4F49">3D 矫正</span><span style="color: #3F7F76">→</span>
+          <span style="padding: 4px 8px; border-radius: 999px; background: #FFFFFF; color: #1F4F49">核心</span><span style="color: #3F7F76">→</span>
+          <span style="padding: 4px 8px; border-radius: 999px; background: #FFFFFF; color: #1F4F49">颈椎</span><span style="color: #3F7F76">→</span>
+          <span style="padding: 4px 8px; border-radius: 999px; background: #FFFFFF; color: #1F4F49">拉伸放松</span>
+        </div>
+
+        <sc-for list="{{ modules }}" as="m" hint-placeholder-count="5">
+          <div style="padding: 12px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 2px">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px">
+              <span style="font-size: 15px; font-weight: 700">{{ m.name }}</span>
+              <span style="padding: 3px 10px; border-radius: 999px; background: {{ m.tagBg }}; color: {{ m.tagFg }}; font-size: 12px; font-weight: 500">{{ m.freq }}</span>
+            </div>
+            <sc-for list="{{ m.actions }}" as="a" hint-placeholder-count="2">
+              <button type="button" onClick="{{ a.open }}" style="display: flex; align-items: center; gap: 8px; min-height: 44px; border: 0; border-top: 1px solid #EEF2F0; background: transparent; padding: 0; font-family: inherit; color: #1F2A27; text-align: left">
+                <span style="flex: 1; font-size: 14px">{{ a.name }}</span>
+                <span style="font-size: 12px; color: #5B6663">{{ a.param }}</span>
+                <span style="font-size: 11px; color: {{ a.vColor }}; min-width: 40px; text-align: right">{{ a.vText }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-for>
+
+        <div style="padding: 12px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 2px">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px">
+            <span style="font-size: 15px; font-weight: 700">日常任务 · 不进卡组</span>
+            <span style="font-size: 12px; color: #5B6663">在今日页单独打卡</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; min-height: 40px; border-top: 1px solid #EEF2F0; font-size: 14px"><span>姿势矫正 · 上课坐姿</span><span style="font-size: 12px; color: #5B6663">右臀承重，躯干挺直</span></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; min-height: 40px; border-top: 1px solid #EEF2F0; font-size: 14px"><span>姿势矫正 · 撑杆站立</span><span style="font-size: 12px; color: #5B6663">3 分钟</span></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; min-height: 40px; border-top: 1px solid #EEF2F0; font-size: 14px"><span>康复师建议 · 蛙泳</span><span style="font-size: 12px; color: #5B6663">每周 3 次 · 30 分钟</span></div>
+        </div>
+
+        <button type="button" onClick="{{ nav.learn }}" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 0; border-radius: 18px; background: #FFFFFF; color: #1F2A27; font-family: inherit; text-align: left">
+          <span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 14px; font-weight: 700">认知学习 · 画脊柱曲线图</span>
+            <span style="font-size: 12px; color: #5B6663">处方里的认知练习，挪到了社群 › 学习，不占每天的卡组</span>
+          </span>
+          <span style="font-size: 18px; color: #8A9A95">›</span>
+        </button>
+
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 18px; border: 1.5px dashed #C9D4D0">
+          <div style="flex: 1">
+            <div style="font-size: 14px; font-weight: 700">邀请康复师一起管理处方</div>
+            <div style="font-size: 12px; color: #5B6663">即将开放 · 康复师可以直接推送和调整动作</div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ========== 现场录动作 ========== -->
+    <sc-if value="{{ s.record }}" hint-placeholder-val="{{ false }}">
+      <div style="min-height: 844px; box-sizing: border-box; background: #0E1513; color: #EAF2EF; padding: 16px 16px 20px; display: flex; flex-direction: column; gap: 12px">
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <button type="button" aria-label="退出录制" onClick="{{ nav.train }}" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: #22332F; color: #EAF2EF; display: flex; align-items: center; justify-content: center; padding: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+          </button>
+          <div style="text-align: center">
+            <div style="font-size: 15px; font-weight: 700">现场录动作</div>
+            <div style="font-size: 12px; color: #A9C3BD">这次已录 {{ recCount }} 段</div>
+          </div>
+          <div style="width: 44px"></div>
+        </div>
+        <div style="position: relative; flex: 1; min-height: 470px; border-radius: 20px; background: #16201D; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px">
+          <sc-if value="{{ recRec }}" hint-placeholder-val="{{ false }}">
+            <div style="position: absolute; left: 14px; top: 14px; display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: #8E2A1E; font-size: 12px; font-weight: 700">
+              <span style="width: 8px; height: 8px; border-radius: 999px; background: #FFFFFF"></span>
+              0:12
+            </div>
+          </sc-if>
+          <svg width="150" height="290" viewBox="0 0 200 380" fill="none" aria-hidden="true">
+            <circle cx="100" cy="40" r="28" stroke="#7FD1C2" stroke-width="2" stroke-dasharray="6 6"></circle>
+            <path d="M60 80 Q100 70 140 80 L150 200 Q100 215 50 200 Z" stroke="#7FD1C2" stroke-width="2" stroke-dasharray="6 6"></path>
+            <path d="M60 85 L30 190 M140 85 L170 190" stroke="#7FD1C2" stroke-width="2" stroke-dasharray="6 6"></path>
+            <path d="M70 205 L65 370 M130 205 L135 370" stroke="#7FD1C2" stroke-width="2" stroke-dasharray="6 6"></path>
+          </svg>
+          <div style="font-size: 13px; color: #CFE3DE">背面全身入镜 · 康复师在旁边讲的话也会一起录下</div>
+        </div>
+        <sc-if value="{{ recReady }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+            <button type="button" aria-label="开始录制" onClick="{{ recStart }}" style="width: 76px; height: 76px; border-radius: 999px; border: 4px solid #FFFFFF; background: transparent; display: flex; align-items: center; justify-content: center; padding: 0">
+              <span style="width: 56px; height: 56px; border-radius: 999px; background: #E0533F"></span>
+            </button>
+            <span style="font-size: 12px; color: #A9C3BD">先录下来，不用马上起名，处方单到了再一起整理</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ recRec }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 8px">
+            <button type="button" aria-label="停止录制" onClick="{{ recStop }}" style="width: 76px; height: 76px; border-radius: 999px; border: 4px solid #FFFFFF; background: transparent; display: flex; align-items: center; justify-content: center; padding: 0">
+              <span style="width: 30px; height: 30px; border-radius: 8px; background: #E0533F"></span>
+            </button>
+            <span style="font-size: 12px; color: #A9C3BD">录完一个动作就停</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ recName }}" hint-placeholder-val="{{ false }}">
+          <div style="padding: 14px; border-radius: 18px; background: #14211E; display: flex; flex-direction: column; gap: 10px">
+            <label for="rec-name" style="font-size: 14px; font-weight: 700">这段动作叫什么？</label>
+            <input id="rec-name" type="text" value="{{ recNameVal }}" onChange="{{ setRecName }}" placeholder="可以先不填，比如：侧桥、肋木吹气" style="min-height: 44px; border-radius: 10px; border: 1px solid #4E7E76; padding: 0 12px; font-family: inherit; font-size: 15px; color: #EAF2EF; background: #0E1513">
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+              <button type="button" onClick="{{ recMore }}" style="min-height: 46px; border: 1.5px solid #7FD1C2; border-radius: 12px; background: transparent; color: #7FD1C2; font-family: inherit; font-size: 14px; font-weight: 700">再录一个</button>
+              <button type="button" onClick="{{ recFinish }}" style="min-height: 46px; border: 0; border-radius: 12px; background: #7FD1C2; color: #0F302C; font-family: inherit; font-size: 14px; font-weight: 700">录完了</button>
+            </div>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <!-- ========== 拍处方单 · 识别 ========== -->
+    <sc-if value="{{ s.import }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 16px 20px 24px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: center; gap: 8px">
+          <button type="button" aria-label="返回" onClick="{{ nav.train }}" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center; padding: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <span style="font-size: 15px; color: #5B6663">导入运动处方</span>
+        </div>
+        <div style="display: flex; gap: 10px; align-items: center">
+          <div style="display: flex; gap: 6px">
+            <div style="width: 52px; height: 70px; border-radius: 8px; background: #FFFFFF; border: 1px solid #C9D4D0; font-size: 10px; color: #5B6663; display: flex; align-items: center; justify-content: center">第 1 页</div>
+            <div style="width: 52px; height: 70px; border-radius: 8px; background: #FFFFFF; border: 1px solid #C9D4D0; font-size: 10px; color: #5B6663; display: flex; align-items: center; justify-content: center">第 2 页</div>
+            <div style="width: 52px; height: 70px; border-radius: 8px; background: #FFFFFF; border: 1px solid #C9D4D0; font-size: 10px; color: #5B6663; display: flex; align-items: center; justify-content: center">第 3 页</div>
+          </div>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 4px">
+            <span style="font-size: 14px; font-weight: 700">已拍 3 页</span>
+            <button type="button" style="align-self: flex-start; min-height: 36px; padding: 0 12px; border: 1px solid #1F6F66; border-radius: 999px; background: transparent; color: #1F6F66; font-family: inherit; font-size: 13px">补拍</button>
+          </div>
+        </div>
+        <div style="padding: 14px; border-radius: 16px; background: #1F6F66; color: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+          <div style="font-size: 18px; font-weight: 700">识别出 12 个动作</div>
+          <div style="font-size: 13px; color: #CFE8E2">已按功能分类，并识别出每个动作怎么做组、怎么播报</div>
+        </div>
+        <div style="padding: 12px 14px; border-radius: 14px; background: #F6DCC8; color: #6B3416; font-size: 13px; line-height: 1.6">和上一版处方相比有 1 处变化：臀桥 100 个 → 120 个</div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">识别结果</h2>
+          <button type="button" aria-label="{{ rxEditLabel }}" onClick="{{ toggleRxEdit }}" style="min-width: 44px; height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: {{ rxEditBg }}; color: {{ rxEditFg }}; font-family: inherit; font-size: 13px; font-weight: 700">{{ rxEditText }}</button>
+        </div>
+        <div style="padding: 4px 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column">
+          <sc-for list="{{ rxRows }}" as="r" hint-placeholder-count="12">
+            <div style="display: flex; align-items: center; gap: 10px; min-height: 52px; border-bottom: 1px solid #EEF2F0">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 14px; font-weight: 700">{{ r.name }}</span>
+                <sc-if value="{{ rxView }}" hint-placeholder-val="{{ true }}">
+                  <span style="font-size: 12px; color: #5B6663">{{ r.mod }} · {{ r.param }}</span>
+                </sc-if>
+                <sc-if value="{{ rxEditing }}" hint-placeholder-val="{{ false }}">
+                  <input type="text" value="{{ r.param }}" aria-label="{{ r.name }} 的参数" style="min-height: 36px; border-radius: 8px; border: 1px solid #1F6F66; padding: 0 8px; font-family: inherit; font-size: 13px; color: #1F2A27; background: #F8FAF9">
+                </sc-if>
+              </div>
+              <span style="font-size: 12px; padding: 3px 8px; border-radius: 999px; background: #DDEDE9; color: #1F4F49; flex-shrink: 0">{{ r.modeShort }}播报</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; border: 2px solid #E8A87C; display: flex; flex-direction: column; gap: 10px">
+          <div style="font-size: 14px; line-height: 1.6"><span style="font-weight: 700">“强化运动”</span>没有找到对应的标准动作，可能是康复师的自定名称。</div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px">
+            <sc-for list="{{ rxNameOpts }}" as="o" hint-placeholder-count="2">
+              <button type="button" aria-pressed="{{ o.aria }}" onClick="{{ o.pick }}" style="min-height: 44px; border-radius: 10px; border: {{ o.border }}; background: {{ o.bg }}; color: {{ o.fg }}; font-family: inherit; font-size: 13px; font-weight: {{ o.fw }}">{{ o.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="font-size: 12px; color: #5B6663; line-height: 1.6">识别只做整理，不改变处方内容。认错了点右上角直接改，原图会一起保存。</div>
+        <button type="button" onClick="{{ importNext }}" style="min-height: 52px; border: 0; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 700">{{ importBtn }}</button>
+      </div>
+    </sc-if>
+
+    <!-- ========== 视频配对 ========== -->
+    <sc-if value="{{ s.match }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 16px 20px 24px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: center; gap: 8px">
+          <button type="button" aria-label="返回" onClick="{{ nav.train }}" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center; padding: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <span style="font-size: 15px; color: #5B6663">配上现场录的视频</span>
+        </div>
+        <div>
+          <h1 style="margin: 0; font-size: 22px; font-weight: 700">这 {{ draftCount }} 段视频，配到哪个动作？</h1>
+          <p style="margin: 6px 0 0; font-size: 13px; color: #5B6663; line-height: 1.6">已经按名字和录制顺序帮你猜好了，不对就点“换一个”。</p>
+        </div>
+        <sc-for list="{{ draftRows }}" as="d" hint-placeholder-count="3">
+          <div style="padding: 12px; border-radius: 16px; background: #FFFFFF; display: flex; gap: 12px; align-items: center">
+            <div style="width: 64px; height: 84px; border-radius: 10px; background: #1F2A27; color: #C9D4D0; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l11 7-11 7z"></path></svg>
+            </div>
+            <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+              <span style="font-size: 12px; color: #5B6663">{{ d.label }} · {{ d.time }}</span>
+              <span style="font-size: 15px; font-weight: 700">配到：{{ d.target }}</span>
+              <span style="align-self: flex-start; font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #DDEDE9; color: #1F4F49">{{ d.reason }}</span>
+            </div>
+            <button type="button" onClick="{{ d.cycle }}" style="min-height: 36px; padding: 0 10px; border: 1px solid #1F6F66; border-radius: 999px; background: transparent; color: #1F6F66; font-family: inherit; font-size: 12px; font-weight: 700; flex-shrink: 0">换一个</button>
+          </div>
+        </sc-for>
+        <div style="font-size: 12px; color: #5B6663; line-height: 1.6">视频只保存在本机。没配上的会留在“待整理”里，下次再配。</div>
+        <button type="button" onClick="{{ finishMatch }}" style="min-height: 52px; border: 0; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 700">完成，更新卡片</button>
+      </div>
+    </sc-if>
+
+    <!-- ========== 动作卡片 ========== -->
+    <sc-if value="{{ s.card }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 16px 20px 28px; display: flex; flex-direction: column; gap: 16px">
+        <div style="display: flex; align-items: center; gap: 8px">
+          <button type="button" aria-label="返回" onClick="{{ goBack }}" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center; padding: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <span style="font-size: 15px; color: #5B6663">动作卡片</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <h1 style="margin: 0; font-size: 26px; font-weight: 700">{{ card.name }}</h1>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap">
+            <span style="padding: 4px 10px; border-radius: 999px; background: {{ card.vBg }}; color: {{ card.vFg }}; font-size: 12px; font-weight: 500">{{ card.vLabel }}</span>
+            <span style="padding: 4px 10px; border-radius: 999px; background: #DDEDE9; color: #1F4F49; font-size: 12px; font-weight: 500">{{ card.mod }} · {{ card.freq }}</span>
+          </div>
+        </div>
+        <div role="tablist" aria-label="卡片视图" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 14px; background: #DCE5E1">
+          <sc-for list="{{ cardTabs }}" as="t" hint-placeholder-count="3">
+            <button type="button" role="tab" aria-selected="{{ t.aria }}" onClick="{{ t.pick }}" style="min-height: 44px; border: 0; border-radius: 10px; background: {{ t.bg }}; color: {{ t.fg }}; font-family: inherit; font-size: 15px; font-weight: {{ t.fw }}">{{ t.label }}</button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ ct.learn }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <sc-if value="{{ card.hasVideo }}" hint-placeholder-val="{{ true }}">
+              <div style="height: 190px; border-radius: 16px; background: #1F2A27; color: #C9D4D0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px">
+                <div style="width: 52px; height: 52px; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l11 7-11 7z"></path></svg>
+                </div>
+                <span style="font-size: 13px">示范视频 · 现场录制</span>
+              </div>
+              <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+                <div style="aspect-ratio: 1; border-radius: 12px; background: #DCE5E1; color: #5B6663; font-size: 12px; display: flex; align-items: center; justify-content: center">关键姿势 1</div>
+                <div style="aspect-ratio: 1; border-radius: 12px; background: #DCE5E1; color: #5B6663; font-size: 12px; display: flex; align-items: center; justify-content: center">关键姿势 2</div>
+                <button type="button" style="aspect-ratio: 1; border-radius: 12px; border: 1.5px dashed #8A9A95; background: transparent; color: #3E4B47; font-family: inherit; font-size: 12px">+ 从视频选帧</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ card.noVideo }}" hint-placeholder-val="{{ false }}">
+              <div style="padding: 18px; border-radius: 16px; background: #FFFFFF; border: 1.5px dashed #C9D4D0; display: flex; flex-direction: column; gap: 10px; align-items: flex-start">
+                <span style="font-size: 15px; font-weight: 700">还没有示范视频</span>
+                <span style="font-size: 13px; color: #5B6663; line-height: 1.6">下次在康复中心练的时候录一段，或者把已经录好的视频配过来。</span>
+                <button type="button" onClick="{{ nav.record }}" style="min-height: 40px; padding: 0 14px; border: 0; border-radius: 999px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 700">现场录一段</button>
+              </div>
+            </sc-if>
+            <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px">
+              <h2 style="margin: 0; font-size: 16px; font-weight: 700">动作要点</h2>
+              <sc-for list="{{ card.tips }}" as="tip" hint-placeholder-count="3">
+                <div style="font-size: 14px; line-height: 1.6">{{ tip.text }}</div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ ct.practice }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 6px">
+              <h2 style="margin: 0 0 4px; font-size: 16px; font-weight: 700">播报方式 · 自动识别</h2>
+              <div style="font-size: 14px; font-weight: 700">{{ card.modeLabel }}</div>
+              <div style="font-size: 12px; color: #5B6663; line-height: 1.6">根据处方里的“{{ card.param }}”自动判断，可以在下方参数里改。</div>
+            </div>
+            <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+              <h2 style="margin: 0 0 4px; font-size: 16px; font-weight: 700">播报的声音</h2>
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; min-height: 36px"><span>现场录下的康复师原声</span><span style="color: #1F6F66; font-weight: 700">{{ card.voice }}</span></div>
+              <div style="display: flex; justify-content: space-between; align-items: center; font-size: 14px; min-height: 36px; color: #5B6663"><span>系统朗读要点文字</span><span>备用</span></div>
+            </div>
+            <button type="button" onClick="{{ followThis }}" style="min-height: 50px; border: 0; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 15px; font-weight: 700">只练这一个动作</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ ct.check }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 12px">
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <div style="height: 200px; border-radius: 14px; background: #1F2A27; color: #C9D4D0; font-size: 12px; display: flex; align-items: center; justify-content: center">示范</div>
+                <span style="font-size: 12px; color: #5B6663">现场录的示范</span>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <div style="height: 200px; border-radius: 14px; background: #2E3B37; color: #C9D4D0; font-size: 12px; display: flex; align-items: center; justify-content: center">我的练习</div>
+                <span style="font-size: 12px; color: #5B6663">10 月 6 日 自录</span>
+              </div>
+            </div>
+            <button type="button" style="min-height: 50px; border-radius: 14px; border: 1.5px solid #1F6F66; background: transparent; color: #1F6F66; font-family: inherit; font-size: 15px; font-weight: 700">录制本周练习</button>
+            <div style="font-size: 13px; color: #5B6663; line-height: 1.6">每周一次就够。复查时可以打开给康复师看，视频只保存在本机。</div>
+          </div>
+        </sc-if>
+
+        <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 700">训练参数</h2>
+            <button type="button" aria-label="{{ cardEditLabel }}" onClick="{{ toggleCardEdit }}" style="min-width: 44px; height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: {{ cardEditBg }}; color: {{ cardEditFg }}; font-family: inherit; font-size: 13px; font-weight: 700">{{ cardEditText }}</button>
+          </div>
+          <sc-for list="{{ card.params }}" as="p" hint-placeholder-count="4">
+            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 44px; border-top: 1px solid #E6EBE8; font-size: 14px">
+              <span style="color: #3E4B47; flex-shrink: 0">{{ p.label }}</span>
+              <sc-if value="{{ cardView }}" hint-placeholder-val="{{ true }}">
+                <span style="font-weight: 700; text-align: right">{{ p.value }}</span>
+              </sc-if>
+              <sc-if value="{{ cardEditing }}" hint-placeholder-val="{{ false }}">
+                <input type="text" value="{{ p.value }}" aria-label="{{ p.label }}" style="width: 170px; min-height: 36px; border-radius: 8px; border: 1px solid #1F6F66; padding: 0 8px; font-family: inherit; font-size: 14px; font-weight: 700; color: #1F2A27; background: #F8FAF9">
+              </sc-if>
+            </div>
+          </sc-for>
+          <div style="font-size: 12px; color: #5B6663; margin-top: 4px">来自处方单 · 识别有误可以直接改，复查时和康复师核对</div>
+        </div>
+
+        <div style="padding: 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">我的补充</h2>
+          <label for="nick" style="font-size: 13px; color: #5B6663">给它起个好记的名字</label>
+          <input id="nick" type="text" placeholder="比如：肋木吹气" style="min-height: 44px; border-radius: 10px; border: 1px solid #C9D4D0; padding: 0 12px; font-family: inherit; font-size: 14px; color: #1F2A27; background: #F8FAF9">
+          <label for="note" style="font-size: 13px; color: #5B6663">备注（只有自己看得到）</label>
+          <input id="note" type="text" placeholder="比如：吹气时容易耸肩" style="min-height: 44px; border-radius: 10px; border: 1px solid #C9D4D0; padding: 0 12px; font-family: inherit; font-size: 14px; color: #1F2A27; background: #F8FAF9">
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ========== 成长 ========== -->
+    <sc-if value="{{ s.growth }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 24px 20px 20px; display: flex; flex-direction: column; gap: 14px">
+        <div>
+          <h1 style="margin: 0; font-size: 26px; font-weight: 700">成长记录</h1>
+          <div style="font-size: 13px; color: #5B6663; margin-top: 4px">每一次复查，都会在这里留下痕迹</div>
+        </div>
+        <div style="padding: 16px 14px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 14px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <div>
+              <div style="font-size: 13px; color: #5B6663">我的治疗历程</div>
+              <div style="font-size: 24px; font-weight: 700">第 156 天</div>
+            </div>
+            <span style="font-size: 12px; color: #5B6663">自 2026.05.12 确诊</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; text-align: center">
+            <div style="padding: 8px 0; border-radius: 12px; background: #F3F5F2"><div style="font-size: 18px; font-weight: 700">24</div><div style="font-size: 12px; color: #5B6663">天戴支具</div></div>
+            <div style="padding: 8px 0; border-radius: 12px; background: #F3F5F2"><div style="font-size: 18px; font-weight: 700">{{ trainCount }}</div><div style="font-size: 12px; color: #5B6663">次训练</div></div>
+          </div>
+        </div>
+        <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <span style="font-size: 15px; font-weight: 700">Cobb 角变化</span>
+            <span style="font-size: 11px; color: #5B6663; padding: 2px 8px; border-radius: 999px; background: #EDF0EE">示例数据</span>
+          </div>
+          <svg width="322" height="170" viewBox="0 0 322 170" role="img" aria-label="胸弯从 28 度到 27 度，腰弯从 21 度到 20 度，变化在测量误差范围内">
+            <line x1="30" y1="20" x2="310" y2="20" stroke="#EEF2F0"></line>
+            <line x1="30" y1="60" x2="310" y2="60" stroke="#EEF2F0"></line>
+            <line x1="30" y1="100" x2="310" y2="100" stroke="#EEF2F0"></line>
+            <line x1="30" y1="140" x2="310" y2="140" stroke="#DCE5E1"></line>
+            <text x="4" y="24" font-size="10" fill="#5B6663">40°</text>
+            <text x="4" y="64" font-size="10" fill="#5B6663">30°</text>
+            <text x="4" y="104" font-size="10" fill="#5B6663">20°</text>
+            <text x="4" y="144" font-size="10" fill="#5B6663">10°</text>
+            <polygon points="60,48 190,52 190,92 60,88" fill="#1F6F66" opacity="0.12"></polygon>
+            <line x1="60" y1="68" x2="190" y2="72" stroke="#1F6F66" stroke-width="3"></line>
+            <circle cx="60" cy="68" r="5" fill="#1F6F66"></circle>
+            <circle cx="190" cy="72" r="5" fill="#1F6F66"></circle>
+            <text x="66" y="62" font-size="11" fill="#1F4F49" font-weight="700">胸 28°</text>
+            <text x="196" y="66" font-size="11" fill="#1F4F49" font-weight="700">27°</text>
+            <line x1="60" y1="96" x2="190" y2="100" stroke="#C4602A" stroke-width="3"></line>
+            <circle cx="60" cy="96" r="5" fill="#C4602A"></circle>
+            <circle cx="190" cy="100" r="5" fill="#C4602A"></circle>
+            <text x="66" y="114" font-size="11" fill="#6B3416" font-weight="700">腰 21°</text>
+            <text x="196" y="118" font-size="11" fill="#6B3416" font-weight="700">20°</text>
+            <text x="60" y="162" font-size="10" fill="#5B6663" text-anchor="middle">5月</text>
+            <text x="190" y="162" font-size="10" fill="#5B6663" text-anchor="middle">9月</text>
+          </svg>
+          <div style="padding: 10px 12px; border-radius: 10px; background: #DDEDE9; font-size: 13px; color: #1F4F49; line-height: 1.6">两次的差别在测量误差（约 ±5°）以内。浅色带是误差范围，具体请以医生的解读为准。</div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <div style="padding: 12px; border-radius: 16px; background: #FFFFFF">
+            <div style="font-size: 12px; color: #5B6663">身高</div>
+            <div style="font-size: 18px; font-weight: 700">155 cm</div>
+            <div style="font-size: 12px; color: #1F6F66">4 个月 +3 cm</div>
+          </div>
+          <div style="padding: 12px; border-radius: 16px; background: #FFFFFF">
+            <div style="font-size: 12px; color: #5B6663">骨骼成熟度</div>
+            <div style="font-size: 18px; font-weight: 700">Risser 1</div>
+          </div>
+        </div>
+        <button type="button" onClick="{{ nav.me }}" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 0; border-radius: 16px; background: #FFFFFF; color: #1F2A27; font-family: inherit; text-align: left">
+          <span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 14px; font-weight: 700">下次复查</span>
+            <span style="font-size: 12px; color: #5B6663">{{ nextVisitText }}</span>
+          </span>
+          <span style="font-size: 18px; color: #8A9A95">›</span>
+        </button>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <button type="button" onClick="{{ nav.upload }}" style="min-height: 48px; border: 0; border-radius: 12px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700">添加复查记录</button>
+          <button type="button" onClick="{{ makeSummary }}" style="min-height: 48px; border-radius: 12px; border: 1.5px solid #1F6F66; background: transparent; color: #1F6F66; font-family: inherit; font-size: 14px; font-weight: 700">生成复查前摘要</button>
+        </div>
+        <h2 style="margin: 4px 0 0; font-size: 17px; font-weight: 700">复查时间线</h2>
+        <sc-for list="{{ visits }}" as="v" hint-placeholder-count="2">
+          <div style="display: flex; gap: 12px">
+            <div style="display: flex; flex-direction: column; align-items: center; width: 14px">
+              <span style="width: 14px; height: 14px; border-radius: 999px; background: #1F6F66; margin-top: 4px"></span>
+              <span style="flex: 1; width: 2px; background: #C9D4D0"></span>
+            </div>
+            <div style="flex: 1; margin-bottom: 10px; padding: 12px 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+              <div style="display: flex; justify-content: space-between; align-items: baseline">
+                <span style="font-size: 15px; font-weight: 700">{{ v.title }}</span>
+                <span style="font-size: 12px; color: #5B6663">{{ v.date }}</span>
+              </div>
+              <div style="font-size: 13px; color: #2E3B37">{{ v.data }}</div>
+              <span style="align-self: flex-start; font-size: 11px; padding: 2px 8px; border-radius: 999px; background: #EDF0EE; color: #3E4B47">{{ v.src }}</span>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- ========== 添加复查记录 ========== -->
+    <sc-if value="{{ s.upload }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 16px 20px 24px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: center; gap: 8px">
+          <button type="button" aria-label="返回" onClick="{{ goBack }}" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center; padding: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <span style="font-size: 15px; color: #5B6663">添加复查记录</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <h2 style="margin: 0; font-size: 16px; font-weight: 700">1 · 拍下医院给你的资料</h2>
+          <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+            <div style="aspect-ratio: 3 / 4; border-radius: 10px; background: #FFFFFF; border: 1px solid #C9D4D0; font-size: 11px; color: #5B6663; display: flex; align-items: center; justify-content: center; text-align: center">影像报告</div>
+            <div style="aspect-ratio: 3 / 4; border-radius: 10px; background: #FFFFFF; border: 1px solid #C9D4D0; font-size: 11px; color: #5B6663; display: flex; align-items: center; justify-content: center; text-align: center">X 光片</div>
+            <div style="aspect-ratio: 3 / 4; border-radius: 10px; background: #FFFFFF; border: 1px solid #C9D4D0; font-size: 11px; color: #5B6663; display: flex; align-items: center; justify-content: center; text-align: center">检查报告</div>
+            <button type="button" aria-label="再拍一张" style="aspect-ratio: 3 / 4; border-radius: 10px; border: 1.5px dashed #8A9A95; background: transparent; color: #3E4B47; font-family: inherit; font-size: 22px">+</button>
+          </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <h2 style="margin: 0; font-size: 16px; font-weight: 700">2 · 核对识别出的信息</h2>
+            <button type="button" aria-label="{{ upEditLabel }}" onClick="{{ toggleUpEdit }}" style="min-width: 44px; height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: {{ upEditBg }}; color: {{ upEditFg }}; font-family: inherit; font-size: 13px; font-weight: 700">{{ upEditText }}</button>
+          </div>
+          <sc-for list="{{ upFields }}" as="f" hint-placeholder-count="7">
+            <div style="padding: 10px 12px; border-radius: 12px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+              <div style="display: flex; justify-content: space-between; align-items: center">
+                <span style="font-size: 12px; color: #5B6663">{{ f.label }}</span>
+                <span style="font-size: 11px; padding: 2px 8px; border-radius: 999px; background: {{ f.tagBg }}; color: {{ f.tagFg }}">{{ f.src }}</span>
+              </div>
+              <sc-if value="{{ upView }}" hint-placeholder-val="{{ true }}">
+                <div style="font-size: 15px; font-weight: 700; line-height: 1.5">{{ f.value }}</div>
+              </sc-if>
+              <sc-if value="{{ upEditing }}" hint-placeholder-val="{{ false }}">
+                <input type="text" value="{{ f.value }}" aria-label="{{ f.label }}" style="min-height: 40px; border-radius: 8px; border: 1px solid #1F6F66; padding: 0 10px; font-family: inherit; font-size: 15px; font-weight: 700; color: #1F2A27; background: #F8FAF9">
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: flex-start; padding: 12px; border-radius: 12px; background: #EDF0EE; font-size: 12px; color: #3E4B47; line-height: 1.6">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-top: 2px; flex-shrink: 0"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>
+          <span>App 只帮你整理和对比，不做诊断。原图会一起保存，度数以原报告为准。</span>
+        </div>
+        <button type="button" onClick="{{ saveUpload }}" style="min-height: 52px; border: 0; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 700">保存到成长记录</button>
+      </div>
+    </sc-if>
+
+    <!-- ========== 社群 ========== -->
+    <sc-if value="{{ s.community }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 24px 20px 20px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <h1 style="margin: 0; font-size: 26px; font-weight: 700">社群</h1>
+          <span style="font-size: 12px; padding: 4px 10px; border-radius: 999px; background: #EDF0EE; color: #3E4B47">测试中</span>
+        </div>
+        <div role="tablist" aria-label="社群分区" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; padding: 4px; border-radius: 14px; background: #DCE5E1">
+          <sc-for list="{{ commTabs }}" as="t" hint-placeholder-count="2">
+            <button type="button" role="tab" aria-selected="{{ t.aria }}" onClick="{{ t.pick }}" style="min-height: 44px; border: 0; border-radius: 10px; background: {{ t.bg }}; color: {{ t.fg }}; font-family: inherit; font-size: 15px; font-weight: {{ t.fw }}">{{ t.label }}</button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ cm.talk }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+              <div>
+                <div style="font-size: 16px; font-weight: 700">我的小组 · 支具 + 运动</div>
+                <div style="font-size: 12px; color: #5B6663">12–15 岁 · 28 人 · 康复治疗师志愿者管理</div>
+              </div>
+              <div style="padding: 10px 12px; border-radius: 12px; background: #F8FAF9; display: flex; flex-direction: column; gap: 4px">
+                <div style="font-size: 14px; font-weight: 700">体育课大家都怎么安排脱支具？</div>
+                <div style="font-size: 12px; color: #5B6663">12 条回复 · 有 1 条来自治疗师</div>
+              </div>
+              <div style="padding: 10px 12px; border-radius: 12px; background: #F8FAF9; display: flex; flex-direction: column; gap: 4px">
+                <div style="font-size: 14px; font-weight: 700">我画的本周曲线图，大家看看对不对</div>
+                <div style="font-size: 12px; color: #5B6663">来自“学习”里的小挑战 · 8 条回复</div>
+              </div>
+            </div>
+            <div style="padding: 14px; border-radius: 18px; background: #DDEDE9; display: flex; flex-direction: column; gap: 10px">
+              <div style="font-size: 16px; font-weight: 700; color: #1F4F49">搭档打卡</div>
+              <div style="display: flex; align-items: center; gap: 12px">
+                <span style="width: 40px; height: 40px; border-radius: 999px; background: #FFFFFF; color: #1F6F66; font-weight: 700; display: flex; align-items: center; justify-content: center">乐</span>
+                <div style="flex: 1">
+                  <div style="font-size: 14px; font-weight: 700">阿乐 · 你的同学</div>
+                  <div style="font-size: 12px; color: #2E3B37">今天已完成训练 · 本周 4 / 6</div>
+                </div>
+                <button type="button" onClick="{{ pat }}" style="min-height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: {{ patBg }}; color: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 700">{{ patText }}</button>
+              </div>
+              <div style="font-size: 12px; color: #2E3B37; line-height: 1.6">只能邀请认识的人 · 互相只看到“今天完成了没有”</div>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline">
+              <h2 style="margin: 0; font-size: 17px; font-weight: 700">支具生活</h2>
+              <span style="font-size: 12px; color: #5B6663">大家的经验 · 治疗师补充</span>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+              <sc-for list="{{ guides }}" as="g" hint-placeholder-count="6">
+                <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: 16px; background: #FFFFFF; min-height: 120px; box-sizing: border-box">
+                  <span style="font-size: 12px; font-weight: 700; color: #6B3416; padding: 2px 8px; border-radius: 999px; background: #F6DCC8; align-self: flex-start">{{ g.tag }}</span>
+                  <span style="font-size: 14px; font-weight: 700; line-height: 1.4">{{ g.title }}</span>
+                  <span style="font-size: 12px; color: #5B6663; line-height: 1.5">{{ g.sub }}</span>
+                  <span style="margin-top: auto; font-size: 11px; color: #3E4B47">{{ g.count }} 条分享</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: baseline">
+              <h2 style="margin: 0; font-size: 17px; font-weight: 700">支具 Deco 展</h2>
+              <button type="button" style="min-height: 36px; border: 0; background: transparent; color: #1F6F66; font-family: inherit; font-size: 13px; font-weight: 700">分享我的</button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+              <div style="aspect-ratio: 3 / 4; border-radius: 14px; background: #C9E3DC; display: flex; flex-direction: column; justify-content: flex-end; padding: 8px; box-sizing: border-box; font-size: 12px; color: #1F4F49; font-weight: 700">贴纸款</div>
+              <div style="aspect-ratio: 3 / 4; border-radius: 14px; background: #F6DCC8; display: flex; flex-direction: column; justify-content: flex-end; padding: 8px; box-sizing: border-box; font-size: 12px; color: #6B3416; font-weight: 700">涂鸦款</div>
+              <div style="aspect-ratio: 3 / 4; border-radius: 14px; background: #2E3B37; display: flex; flex-direction: column; justify-content: flex-end; padding: 8px; box-sizing: border-box; font-size: 12px; color: #EAF2EF; font-weight: 700">星空款</div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ cm.learn }}" hint-placeholder-val="{{ false }}">
+          <div style="display: flex; flex-direction: column; gap: 14px">
+            <div style="display: flex; justify-content: space-between; align-items: baseline">
+              <h2 style="margin: 0; font-size: 17px; font-weight: 700">认知学习</h2>
+              <span style="font-size: 12px; color: #5B6663">每次 1 分钟 · 学完得松果</span>
+            </div>
+            <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+              <span style="align-self: flex-start; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: #F6DCC8; color: #6B3416; font-weight: 700">小测 · +2 松果</span>
+              <div style="font-size: 15px; font-weight: 700; line-height: 1.5">看懂我的分型：Rigo B1 属于哪一类弯型？</div>
+              <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+                <sc-for list="{{ quizOpts }}" as="o" hint-placeholder-count="3">
+                  <button type="button" aria-pressed="{{ o.aria }}" onClick="{{ o.pick }}" style="min-height: 44px; border-radius: 10px; border: {{ o.border }}; background: {{ o.bg }}; color: {{ o.fg }}; font-family: inherit; font-size: 14px; font-weight: {{ o.fw }}">{{ o.label }}</button>
+                </sc-for>
+              </div>
+              <sc-if value="{{ quizRight }}" hint-placeholder-val="{{ false }}">
+                <div style="padding: 10px 12px; border-radius: 10px; background: #DDEDE9; color: #1F4F49; font-size: 13px; line-height: 1.6">答对了。B 型是四弯型，胸弯和腰弯都比较明显，所以处方里既有“降低右髋”，也有针对胸段的肋木动作。</div>
+              </sc-if>
+              <sc-if value="{{ quizWrong }}" hint-placeholder-val="{{ false }}">
+                <div style="padding: 10px 12px; border-radius: 10px; background: #F6DCC8; color: #6B3416; font-size: 13px; line-height: 1.6">再想想：Rigo 分型里 A 是三弯，B 是四弯，E 是单弯。</div>
+              </sc-if>
+            </div>
+            <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+              <span style="align-self: flex-start; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: #F6DCC8; color: #6B3416; font-weight: 700">本周挑战 · +1 松果</span>
+              <div style="font-size: 15px; font-weight: 700">画一画你的脊柱曲线</div>
+              <div style="font-size: 13px; color: #5B6663; line-height: 1.6">处方里的认知练习：骨盆偏哪边？躯干偏哪边？画完拍一张，可以选择分享到小组。</div>
+              <button type="button" onClick="{{ doDraw }}" style="min-height: 44px; border: 0; border-radius: 12px; background: {{ drawBg }}; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700">{{ drawText }}</button>
+            </div>
+            <h2 style="margin: 4px 0 0; font-size: 17px; font-weight: 700">科普</h2>
+            <sc-for list="{{ articles }}" as="a" hint-placeholder-count="4">
+              <div style="padding: 12px 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+                <div style="font-size: 14px; font-weight: 700">{{ a.title }}</div>
+                <div style="font-size: 12px; color: #5B6663">{{ a.sub }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #5B6663; line-height: 1.6">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-top: 3px; flex-shrink: 0"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+          <span>不支持私信陌生人 · 不显示真实姓名 · 广告和偏方会被删除</span>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ========== 我的 ========== -->
+    <sc-if value="{{ s.me }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 24px 20px 20px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: center; gap: 14px">
+          <div style="width: 60px; height: 60px; border-radius: 999px; background: #1F6F66; color: #FFFFFF; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center">禾</div>
+          <div style="flex: 1">
+            <div style="font-size: 22px; font-weight: 700">小禾</div>
+            <div style="font-size: 13px; color: #5B6663">12 岁 · {{ stageLabel }}</div>
+          </div>
+          <button type="button" onClick="{{ nav.stageFromMe }}" style="min-height: 36px; padding: 0 12px; border: 1px solid #C9D4D0; border-radius: 999px; background: transparent; color: #3E4B47; font-family: inherit; font-size: 13px">切换阶段</button>
+        </div>
+        <button type="button" onClick="{{ nav.growth }}" style="padding: 14px; border: 0; border-radius: 18px; background: #1F6F66; color: #FFFFFF; font-family: inherit; text-align: left; display: flex; flex-direction: column; gap: 6px">
+          <span style="display: flex; justify-content: space-between; width: 100%; font-size: 13px; color: #CFE8E2"><span>我的档案</span><span>成长记录 ›</span></span>
+          <span style="font-size: 22px; font-weight: 700">Rigo B1 · 胸 27° · 腰 20°</span>
+          <span style="font-size: 13px; color: #CFE8E2">2026.09 复查 · Risser 1 · 初潮后 5 个月</span>
+        </button>
+        <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 8px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <span style="font-size: 15px; font-weight: 700">档案完整度</span>
+            <span style="font-size: 13px; color: #5B6663">{{ complete }}%</span>
+          </div>
+          <div style="height: 8px; border-radius: 999px; background: #DCE5E1; overflow: hidden"><div style="width: {{ completeW }}; height: 100%; background: #1F6F66"></div></div>
+          <div style="font-size: 13px; color: #3E4B47; line-height: 1.6">{{ completeText }}</div>
+        </div>
+        <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <span style="display: flex; flex-direction: column; gap: 2px">
+              <span style="font-size: 15px; font-weight: 700">复查提醒</span>
+              <span style="font-size: 12px; color: #5B6663">默认关闭 · 打开后复查前一周首页出现准备清单</span>
+            </span>
+            <button type="button" role="switch" aria-checked="{{ remindAria }}" aria-label="复查提醒" onClick="{{ toggleRemind }}" style="width: 48px; height: 28px; border-radius: 999px; border: 0; background: {{ swBg }}; position: relative; padding: 0; flex-shrink: 0">
+              <span style="position: absolute; top: 4px; left: {{ swLeft }}; width: 20px; height: 20px; border-radius: 999px; background: #FFFFFF"></span>
+            </button>
+          </div>
+          <sc-if value="{{ remindOn }}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid #EEF2F0">
+              <label for="appt" style="font-size: 13px; color: #5B6663">下次复查时间（可以不填）</label>
+              <input id="appt" type="text" value="10 月 20 日 周二" style="min-height: 44px; border-radius: 10px; border: 1px solid #C9D4D0; padding: 0 12px; font-family: inherit; font-size: 15px; color: #1F2A27; background: #F8FAF9">
+            </div>
+          </sc-if>
+        </div>
+        <div style="padding: 4px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column">
+          <div style="font-size: 15px; font-weight: 700; padding: 10px 0 6px">我的康复团队</div>
+          <div style="display: flex; align-items: center; gap: 10px; min-height: 52px; border-top: 1px solid #EEF2F0">
+            <div style="flex: 1"><div style="font-size: 14px; font-weight: 700">康复治疗师</div><div style="font-size: 12px; color: #5B6663">邀请后可直接推送和调整动作</div></div>
+            <span style="font-size: 12px; padding: 3px 8px; border-radius: 999px; background: #EDF0EE; color: #3E4B47">即将开放</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; min-height: 52px; border-top: 1px solid #EEF2F0">
+            <div style="flex: 1"><div style="font-size: 14px; font-weight: 700">矫形师 · 支具</div><div style="font-size: 12px; color: #5B6663">支具不合适时一键联系</div></div>
+            <span style="font-size: 13px; color: #1F6F66; font-weight: 700">填写</span>
+          </div>
+        </div>
+        <div style="padding: 4px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column">
+          <button type="button" onClick="{{ nav.brace }}" style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; border: 0; background: transparent; padding: 0; font-family: inherit; font-size: 14px; color: #1F2A27"><span>我的支具与传感器</span><span style="color: #8A9A95">›</span></button>
+          <button type="button" onClick="{{ nav.rewards }}" style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; border: 0; border-top: 1px solid #EEF2F0; background: transparent; padding: 0; font-family: inherit; font-size: 14px; color: #1F2A27"><span>松果与勋章</span><span style="color: #8A9A95">{{ pine }} 颗 ›</span></button>
+          <div style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; border-top: 1px solid #EEF2F0; font-size: 14px"><span>提醒设置</span><span style="color: #5B6663; font-size: 12px">支具 · 训练 · 坐姿</span></div>
+          <div style="display: flex; justify-content: space-between; align-items: center; min-height: 48px; border-top: 1px solid #EEF2F0; font-size: 14px"><span>隐私与数据</span><span style="color: #5B6663; font-size: 12px">视频只存本机 · 可导出</span></div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ========== 我的支具 ========== -->
+    <sc-if value="{{ s.brace }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 16px 20px 24px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: center; gap: 8px">
+          <button type="button" aria-label="返回" onClick="{{ goBack }}" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center; padding: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <span style="font-size: 15px; color: #5B6663">我的支具</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: flex-end">
+          <div>
+            <h1 style="margin: 0; font-size: 26px; font-weight: 700">第 24 天</h1>
+            <div style="font-size: 13px; color: #5B6663">色努式支具 · 每天目标 20 小时</div>
+          </div>
+          <button type="button" onClick="{{ toggleBrace }}" style="min-height: 40px; padding: 0 14px; border: 1.5px solid #1F6F66; border-radius: 999px; background: transparent; color: #1F6F66; font-family: inherit; font-size: 13px; font-weight: 700">{{ braceBtn }}</button>
+        </div>
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #DDEDE9">
+          <div style="flex: 1">
+            <div style="font-size: 14px; font-weight: 700; color: #1F4F49">{{ braceStatus }}</div>
+            <div style="font-size: 12px; color: #2E3B37">传感器自动记录 · 电量 82% · 没有传感器也可以手动点</div>
+          </div>
+        </div>
+        <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <span style="font-size: 15px; font-weight: 700">今天</span>
+            <span style="font-size: 20px; font-weight: 700">14h40m <span style="font-size: 13px; color: #5B6663; font-weight: 400">/ 20h</span></span>
+          </div>
+          <div style="position: relative; width: 322px; height: 28px; border-radius: 8px; background: #EDF0EE; overflow: hidden">
+            <div style="position: absolute; left: 0; top: 0; width: 94px; height: 28px; background: #1F6F66"></div>
+            <div style="position: absolute; left: 94px; top: 0; width: 7px; height: 28px; background: #F6DCC8"></div>
+            <div style="position: absolute; left: 101px; top: 0; width: 94px; height: 28px; background: #1F6F66"></div>
+            <div style="position: absolute; left: 195px; top: 0; width: 20px; height: 28px; background: #F6DCC8"></div>
+            <div style="position: absolute; left: 215px; top: 0; width: 9px; height: 28px; background: #1F6F66"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; width: 322px; font-size: 11px; color: #5B6663"><span>0 点</span><span>6</span><span>12</span><span>18</span><span>24</span></div>
+          <div style="display: flex; gap: 14px; font-size: 12px; color: #3E4B47">
+            <span style="display: flex; align-items: center; gap: 4px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #1F6F66"></span>戴着</span>
+            <span style="display: flex; align-items: center; gap: 4px"><span style="width: 10px; height: 10px; border-radius: 3px; background: #F6DCC8"></span>脱下 · 洗漱 / 体育课</span>
+          </div>
+        </div>
+        <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <span style="font-size: 15px; font-weight: 700">最近 7 天</span>
+            <span style="font-size: 13px; color: #5B6663">平均 19.2 小时 · 达标 4 天</span>
+          </div>
+          <div style="position: relative; height: 96px; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; align-items: end">
+            <div style="position: absolute; left: 0; right: 0; bottom: 67px; border-top: 1.5px dashed #C4602A"></div>
+            <div style="height: 70px; border-radius: 6px 6px 2px 2px; background: #1F6F66"></div>
+            <div style="height: 68px; border-radius: 6px 6px 2px 2px; background: #1F6F66"></div>
+            <div style="height: 60px; border-radius: 6px 6px 2px 2px; background: #8CC2B8"></div>
+            <div style="height: 63px; border-radius: 6px 6px 2px 2px; background: #8CC2B8"></div>
+            <div style="height: 67px; border-radius: 6px 6px 2px 2px; background: #1F6F66"></div>
+            <div style="height: 69px; border-radius: 6px 6px 2px 2px; background: #1F6F66"></div>
+            <div style="height: 49px; border-radius: 6px 6px 2px 2px; background: #DCE5E1; border: 1.5px dashed #8A9A95; box-sizing: border-box"></div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 10px; text-align: center; font-size: 11px; color: #5B6663">
+            <span>四</span><span>五</span><span>六</span><span>日</span><span>一</span><span>二</span><span>今天</span>
+          </div>
+        </div>
+        <button type="button" onClick="{{ nav.talk }}" style="display: flex; align-items: center; justify-content: space-between; min-height: 48px; padding: 0 14px; border: 0; border-radius: 16px; background: #FFFFFF; color: #1F2A27; font-family: inherit; font-size: 14px">
+          <span>戴支具的小经验，去社群看看大家怎么做</span>
+          <span style="color: #8A9A95">›</span>
+        </button>
+      </div>
+    </sc-if>
+
+    <!-- ========== 松果与勋章 ========== -->
+    <sc-if value="{{ s.rewards }}" hint-placeholder-val="{{ false }}">
+      <div style="padding: 16px 20px 28px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; align-items: center; gap: 8px">
+          <button type="button" aria-label="返回" onClick="{{ goBack }}" style="width: 44px; height: 44px; border: 0; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center; padding: 0">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+          </button>
+          <span style="font-size: 15px; color: #5B6663">松果与勋章</span>
+        </div>
+        <div style="padding: 18px; border-radius: 20px; background: #F6DCC8; color: #6B3416; display: flex; align-items: center; gap: 14px">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c4 3 6 6 6 10a6 6 0 0 1-12 0c0-4 2-7 6-10z"></path><path d="M9 12h6M9.5 15.5h5M10 9h4"></path></svg>
+          <div>
+            <div style="font-size: 32px; font-weight: 700; line-height: 1.1">{{ pine }} 颗松果</div>
+            <div style="font-size: 13px">今天已得 {{ gotToday }} 颗</div>
+          </div>
+        </div>
+        <div style="padding: 4px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column">
+          <div style="font-size: 15px; font-weight: 700; padding: 10px 0 6px">今天的松果</div>
+          <sc-for list="{{ tasks }}" as="t" hint-placeholder-count="4">
+            <div style="display: flex; align-items: center; gap: 10px; min-height: 54px; border-top: 1px solid #EEF2F0">
+              <div style="flex: 1; min-width: 0">
+                <div style="font-size: 14px">{{ t.name }}</div>
+                <div style="font-size: 12px; color: #5B6663">{{ t.detail }}</div>
+              </div>
+              <span style="font-size: 14px; font-weight: 700; color: #6B3416">{{ t.pts }}</span>
+              <span style="min-width: 56px; text-align: center; padding: 4px 8px; border-radius: 999px; border: {{ t.border }}; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 12px; font-weight: 700; box-sizing: border-box">{{ t.state }}</span>
+            </div>
+          </sc-for>
+          <div style="font-size: 12px; color: #5B6663; padding: 6px 0 10px">支具和训练分开记录、分开得松果，一项没做到不影响另一项</div>
+        </div>
+        <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+          <div style="display: flex; justify-content: space-between; align-items: baseline">
+            <span style="font-size: 15px; font-weight: 700">补卡</span>
+            <span style="font-size: 12px; color: #5B6663">每周 1 次 · {{ makeupLeft }}</span>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 12px; background: #F8FAF9">
+            <div style="flex: 1">
+              <div style="font-size: 14px; font-weight: 700">10 月 11 日 周日 · 训练未完成</div>
+              <div style="font-size: 12px; color: #5B6663">生病、考试、复查调支具，都可以补</div>
+            </div>
+            <button type="button" onClick="{{ doMakeup }}" style="min-height: 38px; padding: 0 12px; border: 0; border-radius: 999px; background: {{ makeupBg }}; color: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 700">{{ makeupText }}</button>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 4px">
+          <h2 style="margin: 0; font-size: 17px; font-weight: 700">勋章</h2>
+          <span style="font-size: 12px; color: #5B6663">只看坚持，不看度数</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+          <sc-for list="{{ medals }}" as="m" hint-placeholder-count="6">
+            <div style="padding: 12px 6px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
+              <div style="width: 52px; height: 52px; border-radius: 999px; box-sizing: border-box; border: {{ m.border }}; background: {{ m.bg }}; color: {{ m.fg }}; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700">{{ m.badge }}</div>
+              <span style="font-size: 13px; font-weight: 700; line-height: 1.3">{{ m.name }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <sc-if value="{{ showNav }}" hint-placeholder-val="{{ false }}">
+    <nav aria-label="主导航" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid #DCE5E1; background: #FFFFFF; padding: 6px 0 14px; flex-shrink: 0">
+      <button type="button" onClick="{{ nav.today }}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; border: 0; background: transparent; padding: 0; font-family: inherit; font-size: 11px; color: {{ navc.today }}; font-weight: {{ navw.today }}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"></path></svg>今日
+      </button>
+      <button type="button" onClick="{{ nav.train }}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; border: 0; background: transparent; padding: 0; font-family: inherit; font-size: 11px; color: {{ navc.train }}; font-weight: {{ navw.train }}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>训练
+      </button>
+      <button type="button" onClick="{{ nav.growth }}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; border: 0; background: transparent; padding: 0; font-family: inherit; font-size: 11px; color: {{ navc.growth }}; font-weight: {{ navw.growth }}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19l5-6 4 3 7-9"></path></svg>成长
+      </button>
+      <button type="button" onClick="{{ nav.community }}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; border: 0; background: transparent; padding: 0; font-family: inherit; font-size: 11px; color: {{ navc.community }}; font-weight: {{ navw.community }}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c1-3.5 3.5-5 6.5-5s5.5 1.5 6.5 5"></path><path d="M16 5.5a3 3 0 0 1 0 5.5M18.5 15c1.6.7 2.6 2.3 3 5"></path></svg>社群
+      </button>
+      <button type="button" onClick="{{ nav.me }}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; border: 0; background: transparent; padding: 0; font-family: inherit; font-size: 11px; color: {{ navc.me }}; font-weight: {{ navw.me }}">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg>我的
+      </button>
+    </nav>
+  </sc-if>
+</div>
+</template>
+
+<script>
+/* ================= 渲染器 =================
+   DCLogic：业务类的基类，提供 props / state / setState。
+   mount()：把 <template> 渲染进容器；setState 后在下一个微任务整屏重绘。 */
+class DCLogic {
+  constructor(props) { this.props = props || {}; this.state = {}; }
+  setState(patch) {
+    const p = typeof patch === 'function' ? patch(this.state) : patch;
+    this.state = Object.assign({}, this.state, p);
+    if (this.__host) this.__host.schedule();
+  }
+}
+
+function mount(templateEl, rootEl, app, onRender) {
+  const HOLE = /\{\{\s*([^}]+?)\s*\}\}/g;
+  const singleHole = (s) => { const m = String(s || '').match(/^\s*\{\{\s*([^}]+?)\s*\}\}\s*$/); return m ? m[1] : null; };
+  const FOCUSABLE = { input: 1, textarea: 1, select: 1, button: 1, a: 1 };
+  let pending = false;
+  let lastScreen = null;
+
+  function lookup(expr, scope) {
+    if (expr == null) return undefined;
+    expr = expr.trim();
+    if (expr === 'true') return true;
+    if (expr === 'false') return false;
+    const parts = expr.split('.');
+    let v;
+    for (let i = scope.length - 1; i >= 0; i--) {
+      if (Object.prototype.hasOwnProperty.call(scope[i], parts[0])) { v = scope[i][parts[0]]; break; }
+    }
+    for (let k = 1; k < parts.length; k++) { if (v == null) return undefined; v = v[parts[k]]; }
+    return v;
+  }
+  const interp = (str, scope) => str.replace(HOLE, (_, e) => { const v = lookup(e, scope); return v == null ? '' : String(v); });
+
+  function children(node, scope, key, out) {
+    let i = 0;
+    node.childNodes.forEach((c) => { build(c, scope, key + '/' + (i++), out); });
+  }
+  function build(node, scope, key, out) {
+    if (node.nodeType === 3) {
+      const t = node.nodeValue;
+      out.push(document.createTextNode(t.indexOf('{{') !== -1 ? interp(t, scope) : t));
+      return;
+    }
+    if (node.nodeType !== 1) return;
+    const tag = node.localName;
+    if (tag === 'sc-if') {
+      if (lookup(singleHole(node.getAttribute('value')), scope)) children(node, scope, key, out);
+      return;
+    }
+    if (tag === 'sc-for') {
+      const list = lookup(singleHole(node.getAttribute('list')), scope) || [];
+      const as = node.getAttribute('as');
+      list.forEach((item, idx) => { const s = {}; s[as] = item; children(node, scope.concat([s]), key + '#' + idx, out); });
+      return;
+    }
+    const el = node.cloneNode(false);
+    Array.from(node.attributes).forEach((a) => {
+      const name = a.name; const v = a.value;
+      if (/^on[a-z]+$/.test(name)) {
+        el.removeAttribute(name);
+        const fn = lookup(singleHole(v), scope);
+        if (typeof fn === 'function') {
+          const evt = name.slice(2);
+          el.addEventListener(evt === 'change' ? 'input' : evt, (e) => fn(e));
+        }
+        return;
+      }
+      if (v.indexOf('{{') !== -1) {
+        const val = interp(v, scope);
+        el.setAttribute(name, val);
+        if (name === 'value' && 'value' in el) el.value = val;
+      }
+    });
+    const style = node.getAttribute('style') || '';
+    if (FOCUSABLE[tag] || /overflow(-y)?:\s*auto/.test(style)) el.setAttribute('data-k', key);
+    const inner = [];
+    children(node, scope, key, inner);
+    inner.forEach((n) => el.appendChild(n));
+    out.push(el);
+  }
+
+  function render() {
+    const vals = app.renderVals();
+    const screen = app.state.screen;
+    const active = document.activeElement;
+    const focusKey = active && rootEl.contains(active) ? active.getAttribute('data-k') : null;
+    let sel = null;
+    if (focusKey && typeof active.selectionStart === 'number') sel = [active.selectionStart, active.selectionEnd];
+    const scrolls = {}; const drafts = {};
+    rootEl.querySelectorAll('[data-k]').forEach((el) => {
+      const k = el.getAttribute('data-k');
+      if (el.scrollTop) scrolls[k] = el.scrollTop;
+      if (el.localName === 'input' && el.value !== el.defaultValue) drafts[k] = { def: el.defaultValue, val: el.value };
+    });
+    const out = [];
+    children(templateEl.content, [vals], 'r', out);
+    rootEl.replaceChildren.apply(rootEl, out);
+    rootEl.querySelectorAll('input[data-k]').forEach((el) => {
+      const k = el.getAttribute('data-k');
+      const d = drafts[k];
+      if (d && d.def === el.defaultValue) el.value = d.val;
+    });
+    if (screen === lastScreen) {
+      Object.keys(scrolls).forEach((k) => { const el = rootEl.querySelector('[data-k="' + k + '"]'); if (el) el.scrollTop = scrolls[k]; });
+    }
+    if (focusKey) {
+      const el = rootEl.querySelector('[data-k="' + focusKey + '"]');
+      if (el) { el.focus({ preventScroll: true }); if (sel && el.setSelectionRange) { try { el.setSelectionRange(sel[0], sel[1]); } catch (e) { /* 不支持选区的输入框 */ } } }
+    }
+    lastScreen = screen;
+    if (onRender) onRender(app);
+  }
+
+  app.__host = { schedule() { if (pending) return; pending = true; queueMicrotask(() => { pending = false; render(); }); } };
+  render();
+  return { render };
+}
+</script>
+
+<script>
+/* ================= 排卡规则 Scheduler =================
+   纯函数，不读写界面。卡组 = 处方动作中“今天该做”的那些，按模块顺序排列。
+   隔天规则（按单个动作计算）：
+     - 每天的动作：每天出现
+     - 隔天的动作：上次完成日为 d 时，d+1 不出现，d+2 起出现；
+                   从没做过或一直没做，就一直出现（顺延）
+   日期用整数天表示：今天 = 0，明天 = 1，前天 = -2。 */
+const Scheduler = {
+  MODULE_ORDER: ['柔韧', '3D 矫正', '核心', '颈椎', '拉伸放松'],   // ⚠ 待医生确认
+  ALT_MODULES: ['核心'],                                             // 隔天的模块
+  freqOf(card) { return this.ALT_MODULES.indexOf(card.mod) !== -1 ? 'alt' : 'daily'; },
+  isDue(card, lastDoneDay, day) {
+    if (this.freqOf(card) === 'daily') return true;
+    if (lastDoneDay == null) return true;
+    return day - lastDoneDay >= 2;
+  },
+  /** cards: { id: {mod, ...} }；lastDone: { id: 最近完成日 }；返回当天卡组的 id 列表 */
+  buildDeck(cards, lastDone, day) {
+    return Object.keys(cards).map(Number)
+      .filter((id) => this.isDue(cards[id], lastDone[id], day))
+      .sort((a, b) => (this.MODULE_ORDER.indexOf(cards[a].mod) - this.MODULE_ORDER.indexOf(cards[b].mod)) || (a - b));
+  },
+  /** 今天打卡后，推算明天的卡组 */
+  tomorrow(cards, lastDone, doneToday) {
+    const next = Object.assign({}, lastDone);
+    doneToday.forEach((id) => { next[id] = 0; });
+    return this.buildDeck(cards, next, 1);
+  }
+};
+
+/* 示例历史：核心动作上次在前天（-2）练过，所以今天是核心日。 */
+const HISTORY = { lastDone: { 5: -2, 6: -2, 7: -2, 8: -2, 9: -2 } };
+</script>
+
+<script>
+/* ================= 业务逻辑 SpineApp =================
+   state 字段说明：
+     screen / back / stageReturn   当前页面、返回目标、选阶段页从哪进来
+     gender / stage / menarche     建档信息；mat* = 手头有哪些资料
+     done                          今天已打卡的动作 id
+     standDone / swim              撑杆站立、本周蛙泳次数
+     pine / *Rewarded / makeupUsed 松果与各项奖励是否已领取、本周是否补过卡
+     followId / followSingle       跟练中的动作、是否“只练这一个”
+     cardId / cardTab / cardEdit   动作卡片页
+     pain / remindOn / braceOn     疼痛自评、复查提醒开关、支具是否正戴着
+     commTab / quizPick            社群标签页、小测选项
+     drafts                        现场录的草稿：{ name, time, cands: 候选动作 id（0 = 暂不配对）, pick }
+     videos                        已有示范视频的动作 id
+     rxV2 / rxEdit / rxName        是否导入了第 2 版处方、处方编辑中、命名方式
+     recState / recCount / recName 录制流程：ready → rec → name
+     uploadEdit / uploadSaved      复查记录编辑中、是否已保存
+     toast                         顶部提示，切换页面时清空 */
+class SpineApp extends DCLogic {
+  constructor(props) {
+    super(props);
+    const home = (props.startAt ?? '首次使用') === '直接进首页';
+    this.state = {
+      screen: home ? 'today' : 'welcome', back: 'today', stageReturn: 'basics',
+      gender: 'f', stage: 'brace', menarche: 'yes', matReport: true, matRx: true, matNone: false,
+      done: [1, 2, 3, 4], standDone: false, swim: 1,
+      pine: 36, trainRewarded: false, justRewarded: false, quizRewarded: false, drawRewarded: false, uploadRewarded: false, makeupUsed: false,
+      followId: 5, followSingle: false, playing: true,
+      cardId: 3, cardTab: 'learn', cardEdit: false,
+      pain: 3, remindOn: false, braceOn: true, patted: false,
+      commTab: 'talk', quizPick: '',
+      drafts: [
+        { id: 'd1', name: '肋木吹气', time: '10 月 9 日 15:31', cands: [3, 4, 0], pick: 0 },
+        { id: 'd2', name: '', time: '10 月 9 日 15:36', cands: [8, 9, 0], pick: 0 },
+        { id: 'd3', name: '侧桥', time: '10 月 9 日 15:44', cands: [7, 6, 0], pick: 0 }
+      ],
+      videos: [1, 3, 4, 6, 11],
+      rxV2: false, rxEdit: false, rxName: 'keep',
+      recState: 'ready', recCount: 0, recName: '',
+      uploadEdit: false, uploadSaved: false,
+      toast: ''
+    };
+  }
+
+  cards() {
+    const v2 = this.state.rxV2;
+    return {
+      1: { name: '猫—骆驼', mod: '柔韧', amt: '2 分钟', sets: 1, mode: 'timer' },
+      2: { name: '右弓箭步 · 拉伸左髂腰肌', mod: '柔韧', amt: '30 秒', sets: 2, mode: 'timer' },
+      3: { name: '强化运动 · 肋木', mod: '3D 矫正', amt: '5 分钟', sets: 1, mode: 'breath' },
+      4: { name: '肌肉圆柱', mod: '3D 矫正', amt: '5 分钟', sets: 1, mode: 'breath' },
+      5: { name: '卷腹仰卧自行车', mod: '核心', amt: '50 次', sets: 2, mode: 'count' },
+      6: { name: '平板支撑', mod: '核心', amt: '3 分钟', sets: 1, mode: 'timer' },
+      7: { name: '右侧桥', mod: '核心', amt: '3 分钟', sets: 1, mode: 'timer' },
+      8: { name: '臀桥', mod: '核心', amt: v2 ? '120 个' : '100 个', sets: 2, mode: 'count' },
+      9: { name: 'Y-W-T', mod: '核心', amt: '各 30 个', sets: 3, mode: 'count' },
+      10: { name: '颈椎矫正操', mod: '颈椎', amt: '约 5 分钟', sets: 1, mode: 'timer' },
+      11: { name: '跪位 / 坐位前伸', mod: '拉伸放松', amt: '各 2 分钟', sets: 1, mode: 'timer' },
+      12: { name: '悬吊配合呼吸', mod: '拉伸放松', amt: '3 分钟', sets: 1, mode: 'breath' }
+    };
+  }
+  param(c) { return c.amt + (c.sets > 1 ? ' × ' + c.sets + ' 组' : ''); }
+  modeShort(m) { return m === 'count' ? '计数' : (m === 'breath' ? '呼吸' : '计时'); }
+  modeLabel(m) {
+    if (m === 'count') return '计数播报 · 每 10 次报数，组间休息 30 秒';
+    if (m === 'breath') return '呼吸播报 · 吸气 4 拍，吹气 6 拍，配合计时';
+    return '计时播报 · 每 30 秒提醒一次，最后 10 秒倒数';
+  }
+  tips(id) {
+    const t = {
+      3: ['1. 左臀下垫沙包，降低右髋（右腿下压）', '2. 左手握肋木横杆平腰，右手握肋木平头顶', '3. 收紧左前肋及右后背，使劲吹气'],
+      4: ['1. 侧身站在肋木旁，骨盆保持中立', '2. 吸气时向凹侧后方扩张', '3. 呼气时保持矫正姿势，不塌腰'],
+      7: ['1. 右侧卧，前臂撑地，身体成一条直线', '2. 骨盆不要往后坐', '3. 自然呼吸，不憋气']
+    };
+    return t[id] || ['1. 跟着现场录的示范做', '2. 拿不准时先暂停，看一眼关键姿势', '3. 有疼痛就停下，复查时问康复师'];
+  }
+  deckIds() {
+    const s = this.state.stage;
+    if (s === 'check') return [];
+    if (s === 'new') return [1, 3, 4];
+    if (s === 'adult') return [1, 2, 11, 12];
+    // 支具期 / 维持期：按处方和隔天规则排出今天的卡组（见 Scheduler）
+    return Scheduler.buildDeck(this.cards(), HISTORY.lastDone, 0);
+  }
+  left(done) { return this.deckIds().filter((x) => done.indexOf(x) === -1); }
+  go(screen, extra) { this.setState(Object.assign({ screen: screen, toast: '' }, extra || {})); }
+  open(screen) { this.go(screen, { back: this.state.screen }); }
+  finish(done) {
+    const st = { done: done, screen: 'done', toast: '', followSingle: false, justRewarded: false };
+    if (!this.state.trainRewarded) { st.pine = this.state.pine + 3; st.trainRewarded = true; st.justRewarded = true; }
+    this.setState(st);
+  }
+  check(id) {
+    const done = this.state.done.concat([id]);
+    if (this.left(done).length === 0) { this.finish(done); return; }
+    this.setState({ done: done, toast: '已打卡：' + this.cards()[id].name });
+  }
+  startFollow() {
+    const l = this.left(this.state.done);
+    if (l.length === 0) { this.finish(this.state.done); return; }
+    this.go('follow', { followId: l[0], followSingle: false, playing: true, back: this.state.screen === 'follow' ? this.state.back : this.state.screen });
+  }
+  followNext() {
+    const id = this.state.followId;
+    const done = this.state.done.indexOf(id) === -1 ? this.state.done.concat([id]) : this.state.done;
+    const l = this.left(done);
+    if (this.state.followSingle) {
+      if (l.length === 0 && this.deckIds().indexOf(id) !== -1) { this.finish(done); return; }
+      this.setState({ done: done, screen: 'card', followSingle: false, toast: '已打卡：' + this.cards()[id].name });
+      return;
+    }
+    if (l.length === 0) { this.finish(done); return; }
+    this.setState({ done: done, followId: l[0], playing: true });
+  }
+  addDraft(more) {
+    const n = this.state.drafts.length + 1;
+    const d = { id: 'n' + n, name: this.state.recName, time: '今天 ' + (14 + n) + ':0' + n, cands: [2, 10, 12, 0], pick: 0 };
+    const drafts = this.state.drafts.concat([d]);
+    const cnt = this.state.recCount + 1;
+    if (more) { this.setState({ drafts: drafts, recCount: cnt, recState: 'ready', recName: '' }); return; }
+    this.go('train', { drafts: drafts, recCount: 0, recState: 'ready', recName: '', toast: '已保存 ' + cnt + ' 段，处方单到了再一起整理' });
+  }
+  finishMatch() {
+    const picked = this.state.drafts.map((d) => d.cands[d.pick]).filter((x) => x !== 0);
+    const rest = this.state.drafts.filter((d) => d.cands[d.pick] === 0);
+    const videos = this.state.videos.concat(picked.filter((x) => this.state.videos.indexOf(x) === -1));
+    this.go('train', { videos: videos, drafts: rest, toast: '已把 ' + picked.length + ' 段视频配到卡片上' });
+  }
+
+  renderVals() {
+    const S = this.state;
+    const C = this.cards();
+    const sel = (on) => ({ aria: on ? 'true' : 'false', border: on ? '2px solid #1F6F66' : '1px solid #C9D4D0', bg: on ? '#DDEDE9' : 'transparent', fg: on ? '#1F4F49' : '#3E4B47', fw: on ? '700' : '400' });
+    const tab = (on) => ({ aria: on ? 'true' : 'false', bg: on ? '#FFFFFF' : 'transparent', fg: on ? '#1F2A27' : '#3E4B47', fw: on ? '700' : '400' });
+    const scr = S.screen;
+    const names = ['welcome', 'stage', 'basics', 'ready', 'today', 'follow', 'done', 'train', 'record', 'import', 'match', 'card', 'growth', 'upload', 'community', 'me', 'brace', 'rewards'];
+    const s = {};
+    names.forEach((n) => { s[n] = scr === n; });
+    const tabs = ['today', 'train', 'growth', 'community', 'me'];
+    const navc = {}; const navw = {};
+    tabs.forEach((t) => { navc[t] = scr === t ? '#1F6F66' : '#5B6663'; navw[t] = scr === t ? '700' : '400'; });
+
+    const nav = {
+      today: () => this.go('today'),
+      train: () => this.go('train'),
+      growth: () => this.go('growth'),
+      community: () => this.go('community'),
+      me: () => this.go('me'),
+      talk: () => this.go('community', { commTab: 'talk' }),
+      learn: () => this.go('community', { commTab: 'learn' }),
+      ready: () => this.go('ready'),
+      stageFromStart: () => this.go('stage', { stageReturn: 'basics' }),
+      stageFromMe: () => this.go('stage', { stageReturn: 'me' }),
+      record: () => this.go('record', { recState: 'ready', recCount: 0, recName: '' }),
+      import: () => this.go('import', { rxEdit: false }),
+      match: () => this.go('match'),
+      upload: () => this.open('upload'),
+      brace: () => this.open('brace'),
+      rewards: () => this.open('rewards')
+    };
+
+    const stageDefs = [
+      { id: 'check', title: '刚发现侧弯，还在检查', sub: '帮你准备检查，先了解侧弯', label: '还在检查阶段' },
+      { id: 'new', title: '刚开始戴支具（前两周）', sub: '适应期计划，陪你一点点习惯支具', label: '刚开始戴支具' },
+      { id: 'brace', title: '支具 + 运动训练', sub: '记录佩戴时长，按处方安排每天的训练', label: '支具 + 运动期' },
+      { id: 'off', title: '已脱支具，以运动为主', sub: '维持期：坚持训练，守住矫正成果', label: '脱支具维持期' },
+      { id: 'adult', title: '成年后自我管理', sub: '侧弯专属训练，记录疼痛和体态变化', label: '成年自我管理' }
+    ];
+    const stages = stageDefs.map((d) => {
+      const on = S.stage === d.id;
+      return { title: d.title, sub: d.sub, aria: on ? 'true' : 'false', border: on ? '2px solid #1F6F66' : '2px solid transparent', dot: on ? '6px solid #1F6F66' : '2px solid #8A9A95',
+        pick: () => this.setState({ stage: d.id, done: (d.id === 'brace' || d.id === 'off') ? [1, 2, 3, 4] : [], trainRewarded: false }) };
+    });
+    const stageLabel = stageDefs.filter((d) => d.id === S.stage)[0].label;
+    const st = {
+      check: S.stage === 'check', isNew: S.stage === 'new', notNew: S.stage !== 'new',
+      braceRings: S.stage === 'new' || S.stage === 'brace', off: S.stage === 'off', adult: S.stage === 'adult'
+    };
+
+    const genders = [{ id: 'f', label: '女' }, { id: 'm', label: '男' }, { id: 'c', label: '自定义' }].map((g) => Object.assign({ label: g.label, pick: () => this.setState({ gender: g.id }) }, sel(S.gender === g.id)));
+    const menOpts = [{ id: 'no', label: '还没有' }, { id: 'yes', label: '已经来了' }, { id: 'na', label: '不想填' }].map((o) => Object.assign({ label: o.label, pick: () => this.setState({ menarche: o.id }) }, sel(S.menarche === o.id)));
+    const matDefs = [
+      { key: 'matReport', title: '诊断 / 影像报告', sub: '打印的报告拍照就行' },
+      { key: 'matRx', title: '运动处方单', sub: '自动整理成训练卡片，现场录的视频也能配上' },
+      { key: 'matNone', title: '还没有，先用起来', sub: '我们会告诉你检查时该带什么、问什么' }
+    ];
+    const mats = matDefs.map((m) => {
+      const on = S[m.key];
+      return { title: m.title, sub: m.sub, aria: on ? 'true' : 'false', mark: on ? '已选' : '', border: on ? '2px solid #1F6F66' : '1px solid #C9D4D0', bg: on ? '#F5FAF8' : 'transparent',
+        toggle: () => { const o = {}; o[m.key] = !on; this.setState(o); } };
+    });
+    const showMenarche = S.gender !== 'm';
+
+    const ids = this.deckIds();
+    const deck = ids.map((id, i) => {
+      const c = C[id]; const d = S.done.indexOf(id) !== -1;
+      return { n: String(i + 1), name: c.name, mod: c.mod === '核心' ? '核心 · 隔天' : c.mod, param: this.param(c), done: d, todo: !d,
+        check: () => this.check(id), open: () => this.go('card', { cardId: id, cardTab: 'learn', cardEdit: false, back: 'today' }) };
+    });
+    const doneCount = deck.filter((c) => c.done).length;
+    const leftCount = ids.length - doneCount;
+    const ringDash = (ids.length ? 163.4 * doneCount / ids.length : 0).toFixed(1) + ' 163.4';
+    const coreDone = [5, 6, 7, 8, 9].every((x) => S.done.indexOf(x) !== -1);
+
+    const fid = S.followId; const fc = C[fid] || C[1];
+    const fpos = ids.indexOf(fid);
+    const nextIds = this.left(S.done.indexOf(fid) === -1 ? S.done.concat([fid]) : S.done);
+    const fCard = { name: fc.name, mod: fc.mod, param: this.param(fc), modeShort: this.modeShort(fc.mode), tip: this.tips(fid)[0].replace(/^\d\.\s*/, '') };
+    let fBig = '1:48'; let fSmall = '剩余'; let fPhase = S.playing ? '保持' : '已暂停';
+    if (fc.mode === 'count') { fBig = '18 次'; fSmall = '第 1 / ' + fc.sets + ' 组'; fPhase = S.playing ? '跟着数' : '已暂停'; }
+    if (fc.mode === 'breath') { fBig = fid === 3 ? '吹气' : '吸气'; fSmall = '第 3 / 5 次呼吸'; fPhase = S.playing ? '3:12 剩余' : '已暂停'; }
+    const segs = ids.map((id) => ({ bg: id === fid ? '#7FD1C2' : (S.done.indexOf(id) !== -1 ? '#3F7F76' : '#1E534D') }));
+
+    const order = ['柔韧', '3D 矫正', '核心', '颈椎', '拉伸放松'];
+    const modules = order.map((mname) => {
+      const acts = Object.keys(C).map(Number).filter((id) => C[id].mod === mname).map((id) => {
+        const hv = S.videos.indexOf(id) !== -1;
+        return { name: C[id].name, param: this.param(C[id]), vText: hv ? '有示范' : '待录制', vColor: hv ? '#1F6F66' : '#8A5A2B',
+          open: () => this.go('card', { cardId: id, cardTab: 'learn', cardEdit: false, back: 'train' }) };
+      });
+      const alt = mname === '核心';
+      return { name: mname === '核心' ? '核心 / 肩胛带稳定' : mname, freq: alt ? '隔天' : '每天', tagBg: alt ? '#F6DCC8' : '#DDEDE9', tagFg: alt ? '#6B3416' : '#1F4F49', actions: acts };
+    });
+    const cell = (k) => ({ w: k === '-' ? '10px' : '18px', h: k === '-' ? '2px' : '18px', bg: k === 'D' ? '#1F6F66' : (k === '-' ? '#C9D4D0' : 'transparent'), border: k === 'P' ? '2px solid #1F6F66' : '0' });
+    const modDone = (m) => Object.keys(C).map(Number).filter((id) => C[id].mod === m).every((id) => S.done.indexOf(id) !== -1);
+    const daily = (m) => ['D', 'D', modDone(m) ? 'D' : 'P', 'P', 'P', 'P', 'P'];
+    const corePat = coreDone ? ['D', '-', 'D', '-', 'P', '-', 'P'] : ['D', '-', 'P', 'P', '-', 'P', '-'];
+    const weekRows = [
+      { name: '柔韧', cells: daily('柔韧').map(cell) },
+      { name: '3D 矫正', cells: daily('3D 矫正').map(cell) },
+      { name: '核心', cells: corePat.map(cell) },
+      { name: '颈椎', cells: daily('颈椎').map(cell) },
+      { name: '拉伸放松', cells: daily('拉伸放松').map(cell) },
+      { name: '蛙泳', cells: ['D', '-', '-', '-', 'P', '-', 'P'].map(cell) }
+    ];
+
+    const draftRows = S.drafts.map((d, i) => {
+      const t = d.cands[d.pick];
+      return { label: d.name ? '“' + d.name + '”' : '未命名', time: d.time, target: t === 0 ? '暂不配对，先放着' : C[t].name,
+        reason: d.pick === 0 ? (d.name ? '名字相近' : '按录制顺序推测') : '手动选择',
+        cycle: () => { const ds = S.drafts.slice(); ds[i] = Object.assign({}, d, { pick: (d.pick + 1) % d.cands.length }); this.setState({ drafts: ds }); } };
+    });
+    const rxRows = Object.keys(C).map(Number).map((id) => ({ name: C[id].name, mod: C[id].mod, param: this.param(Object.assign({}, C[id], id === 8 ? { amt: '120 个' } : {})), modeShort: this.modeShort(C[id].mode) }));
+    const rxNameOpts = [{ id: 'keep', label: '保留康复师的叫法' }, { id: 'search', label: '我来选标准动作' }].map((o) => Object.assign({ label: o.label, pick: () => this.setState({ rxName: o.id }) }, sel(S.rxName === o.id)));
+
+    const cid = S.cardId; const cc = C[cid] || C[1];
+    const hasVideo = S.videos.indexOf(cid) !== -1;
+    const card = {
+      name: cc.name, mod: cc.mod, freq: cc.mod === '核心' ? '隔天' : '每天', param: this.param(cc),
+      hasVideo: hasVideo, noVideo: !hasVideo, vLabel: hasVideo ? '现场录制的示范' : '待录制示范',
+      vBg: hasVideo ? '#1F6F66' : '#F6DCC8', vFg: hasVideo ? '#FFFFFF' : '#6B3416',
+      modeLabel: this.modeLabel(cc.mode), voice: hasVideo ? '使用中' : '暂无',
+      tips: this.tips(cid).map((x) => ({ text: x })),
+      params: [
+        { label: '每组', value: cc.amt },
+        { label: '组数', value: cc.sets + ' 组' },
+        { label: '播报方式', value: this.modeShort(cc.mode) + '播报' },
+        { label: '频率', value: cc.mod === '核心' ? '隔天' : '每天' }
+      ]
+    };
+    const cardTabs = [{ id: 'learn', label: '学' }, { id: 'practice', label: '练' }, { id: 'check', label: '查' }].map((t) => Object.assign({ label: t.label, pick: () => this.setState({ cardTab: t.id }) }, tab(S.cardTab === t.id)));
+    const ct = { learn: S.cardTab === 'learn', practice: S.cardTab === 'practice', check: S.cardTab === 'check' };
+    const editBtn = (on) => ({ text: on ? '完成' : '⋯', label: on ? '完成编辑' : '编辑', bg: on ? '#1F6F66' : '#EDF0EE', fg: on ? '#FFFFFF' : '#3E4B47' });
+    const cE = editBtn(S.cardEdit); const rE = editBtn(S.rxEdit); const uE = editBtn(S.uploadEdit);
+
+    const pains = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => ({ n: String(n), aria: S.pain === n ? 'true' : 'false', bg: S.pain === n ? '#1F6F66' : '#EDF0EE', fg: S.pain === n ? '#FFFFFF' : '#3E4B47', fw: S.pain === n ? '700' : '400', pick: () => this.setState({ pain: n }) }));
+
+    const upFields = [
+      ['复查日期', '2026 年 10 月 14 日', 'r'], ['胸弯 Cobb 角', '27°', 'r'], ['腰弯 Cobb 角', '20°', 'r'],
+      ['骨骼成熟度', 'Risser 1', 'r'], ['医生建议', '继续佩戴支具，每天 20 小时以上，3 个月后复查', 'm'],
+      ['身高', '156 cm', 'm'], ['医院 / 科室', '［医院名称］· 康复科', 'm']
+    ].map((f) => ({ label: f[0], value: f[1], src: f[2] === 'r' ? '来自报告' : '手动填写', tagBg: f[2] === 'r' ? '#DDEDE9' : '#EDF0EE', tagFg: f[2] === 'r' ? '#1F4F49' : '#3E4B47' }));
+    const visits = (S.uploadSaved ? [{ title: '复查记录', date: '2026.10.14', data: '胸弯 27° · 腰弯 20° · 身高 156 cm · Risser 1', src: '刚刚添加 · 已核对' }] : []).concat([
+      { title: '复查 · 配支具', date: '2026.09.20', data: '胸弯 27° · 腰弯 20° · 身高 155 cm · Risser 1', src: '从报告识别 · 已核对' },
+      { title: '首次诊断', date: '2026.05.12', data: 'Rigo B1 · 胸弯 28° · 腰弯 21° · 身高 152 cm', src: '从报告识别 · 已核对' }
+    ]);
+
+    const commTabs = [{ id: 'talk', label: '交流' }, { id: 'learn', label: '学习' }].map((t) => Object.assign({ label: t.label, pick: () => this.setState({ commTab: t.id }) }, tab(S.commTab === t.id)));
+    const cm = { talk: S.commTab === 'talk', learn: S.commTab === 'learn' };
+    const guides = [
+      { tag: '刚开始', title: '前两周怎么熬', sub: '一点点加时间，难受是正常的', count: '46' },
+      { tag: '皮肤', title: '压红了怎么办', sub: '贴身穿纯棉衣，每次脱下看一看', count: '31' },
+      { tag: '吃饭', title: '支具压着肚子', sub: '少食多餐，饭前先放松几分钟', count: '18' },
+      { tag: '经期', title: '经期更不舒服时', sub: '可以和矫形师商量怎么调整', count: '12' },
+      { tag: '学校', title: '体育课和同学', sub: '怎么安排脱支具，怎么跟同学说', count: '39' },
+      { tag: '运动', title: '脱支具的时间去游泳', sub: '放松肌肉，也是处方的一部分', count: '15' }
+    ];
+    const quizOpts = ['三弯型', '四弯型', '单弯型'].map((o) => Object.assign({ label: o, pick: () => {
+      const st2 = { quizPick: o };
+      if (o === '四弯型' && !S.quizRewarded) { st2.quizRewarded = true; st2.pine = S.pine + 2; st2.toast = '答对了 · +2 松果'; }
+      this.setState(st2);
+    } }, sel(S.quizPick === o)));
+    const articles = [
+      { title: '什么是 Cobb 角？为什么差 5° 以内不用紧张', sub: '审核：康复治疗师 · 2 分钟读完' },
+      { title: '为什么支具每天要戴够时长？', sub: '审核：康复治疗师 · 3 分钟读完' },
+      { title: '第一次复查，要问医生哪些问题', sub: '审核：康复治疗师 · 附可打印清单' },
+      { title: '怎么分辨“矫正馆”的夸大宣传', sub: '审核：康复治疗师' }
+    ];
+
+    const trainCount = 18 + (S.trainRewarded ? 1 : 0);
+    const tk = (name, detail, pts, state) => ({ name: name, detail: detail, pts: '+' + pts, n: pts, state: state === 'done' ? '已获得' : (state === 'later' ? '复查后' : '待完成'),
+      border: state === 'todo' ? '1.5px dashed #C4602A' : '0', bg: state === 'done' ? '#1F6F66' : (state === 'later' ? '#EDF0EE' : 'transparent'),
+      fg: state === 'done' ? '#FFFFFF' : (state === 'later' ? '#3E4B47' : '#6B3416'), isDone: state === 'done' });
+    const tasks = [
+      tk('完成当天训练', S.trainRewarded ? '今天的卡组已全部完成' : '还差 ' + leftCount + ' 个动作 · ' + doneCount + ' / ' + ids.length, 3, S.trainRewarded ? 'done' : 'todo'),
+      tk('支具时长达标', '今天 14h40m / 20h', 2, 'todo'),
+      tk('认知学习小测', S.quizRewarded ? '已答对“看懂我的分型”' : '社群 › 学习，1 分钟', 2, S.quizRewarded ? 'done' : 'todo'),
+      tk('复查后上传记录', S.uploadRewarded ? '已添加 10 月 14 日的记录' : '下次复查后可得', 5, S.uploadRewarded ? 'done' : 'later')
+    ];
+    const gotToday = tasks.filter((t) => t.isDone).reduce((a, t) => a + t.n, 0);
+    const md = (name, kind, badge) => ({ name: name, badge: badge, border: kind === 'wip' ? '3px dashed #C4602A' : '0', bg: kind === 'got' ? '#1F6F66' : (kind === 'wip' ? '#FFFFFF' : '#EDF0EE'), fg: kind === 'got' ? '#FFFFFF' : (kind === 'wip' ? '#6B3416' : '#8A9A95') });
+    const medals = [
+      md('熬过第一周', 'got', '✓'), md('学会 5 个动作', 'got', '✓'), md('第一次复查记录', 'got', '✓'),
+      md('坚持 4 周', 'wip', '3/4'), md('支具达标 30 天', 'wip', '24/30'), md('训练满 30 次', 'wip', trainCount + '/30')
+    ];
+
+    const complete = S.uploadSaved ? 85 : 70;
+    const dateLines = { check: '10 月 14 日 周三 · 检查阶段', new: '10 月 14 日 周三 · 适应期第 5 天', brace: '10 月 14 日 周三 · 支具 + 运动期', off: '10 月 14 日 周三 · 维持期', adult: '10 月 14 日 周三 · 自我管理' };
+
+    return {
+      s: s, st: st, nav: nav, navc: navc, navw: navw,
+      showNav: tabs.indexOf(scr) !== -1,
+      hasToast: !!S.toast, toast: S.toast,
+      goBack: () => this.go(S.back || 'today'),
+      genders: genders, isCustomGender: S.gender === 'c',
+      stages: stages, stageLabel: stageLabel,
+      stageStep: S.stageReturn === 'me' ? '切换阶段' : '2 / 4',
+      stageBtn: S.stageReturn === 'me' ? '保存' : '下一步',
+      stageBack: () => this.go(S.stageReturn === 'me' ? 'me' : 'welcome'),
+      stageNext: () => (S.stageReturn === 'me' ? this.go('me', { toast: '已切换到：' + stageLabel }) : this.go('basics')),
+      basicsTitle: showMenarche ? '再填 2 项就够了' : '再填 1 项就够了',
+      showMenarche: showMenarche, menOpts: menOpts, mats: mats,
+      readyReport: S.matReport ? '拍照上传 · 1 份' : '之后再传',
+      readyRx: S.matRx ? '识别出 12 个动作' : '之后再导入',
+      readyTitle: st.check ? '先了解，再检查' : (st.adult ? '从办公间隙开始' : '今天就可以开始'),
+      readyText: st.check ? '确诊和分型以医院为准。首页会帮你准备检查时要带的东西和要问的问题。' : (st.adult ? '首页会记录腰背感受，并在你久坐时提醒你做几个侧弯专属动作。' : '首页已经按处方排好今天的卡组，逐个打卡或连续跟练都可以。'),
+      dateLine: dateLines[S.stage], pine: S.pine,
+      braceDash: S.braceOn ? '119.8 163.4' : '117.6 163.4', braceHours: st.isNew ? '5h10m' : '14h40m', braceGoal: st.isNew ? '今天目标 8h · 自动' : '目标 20h · 自动',
+      deck: deck, deckLen: ids.length, hasDeck: ids.length > 0, doneCount: doneCount, leftCount: leftCount,
+      hasLeft: leftCount > 0, allDone: ids.length > 0 && leftCount === 0, ringDash: ringDash,
+      coreDayText: coreDone ? '核心已练，明天休息' : '今天是核心日',
+      standDone: S.standDone, standTodo: !S.standDone,
+      doStand: () => this.setState({ standDone: true, toast: '已打卡：撑杆站立' }),
+      swim: S.swim, addSwim: () => this.setState({ swim: Math.min(3, S.swim + 1), toast: S.swim >= 3 ? '本周 3 次已经记满了' : '已记录一次蛙泳' }),
+      showPrep: S.remindOn && (st.braceRings || st.off),
+      makeSummary: () => this.setState({ toast: '复查前摘要已生成，复查时可以直接给医生看' }),
+      pains: pains,
+      startFollow: () => this.startFollow(),
+      exitFollow: () => this.go(S.followSingle ? 'card' : (S.back === 'card' ? 'today' : (S.back || 'today'))),
+      followTitle: S.followSingle ? '单个动作' : '今日 · ' + (fpos + 1) + ' / ' + ids.length,
+      segs: segs, fCard: fCard, fBig: fBig, fSmall: fSmall, fPhase: fPhase,
+      fPoseText: S.videos.indexOf(fid) !== -1 ? '关键姿势照片（来自现场录制）' : '还没有示范，跟着语音做',
+      fNext: S.followSingle ? '练完这一个就回到卡片' : (nextIds.length ? '下一个：' + C[nextIds[0]].name : '这是最后一个动作'),
+      fOpenCard: () => this.go('card', { cardId: fid, cardTab: 'learn', back: 'today' }),
+      playing: S.playing, paused: !S.playing, playLabel: S.playing ? '暂停' : '继续',
+      togglePlay: () => this.setState({ playing: !S.playing }),
+      followNext: () => this.followNext(),
+      justRewarded: S.justRewarded, trainCount: trainCount,
+      rxLine: (S.rxV2 ? '第 2 版运动处方' : '2025 运动处方') + ' · Rigo B1 · 12 个动作',
+      hasDrafts: S.drafts.length > 0, draftCount: S.drafts.length,
+      weekRows: weekRows, modules: modules,
+      recReady: S.recState === 'ready', recRec: S.recState === 'rec', recName: S.recState === 'name',
+      recCount: S.recCount, recNameVal: S.recName,
+      recStart: () => this.setState({ recState: 'rec' }),
+      recStop: () => this.setState({ recState: 'name' }),
+      setRecName: (e) => this.setState({ recName: e.target.value }),
+      recMore: () => this.addDraft(true), recFinish: () => this.addDraft(false),
+      rxRows: rxRows, rxNameOpts: rxNameOpts,
+      rxView: !S.rxEdit, rxEditing: S.rxEdit, rxEditText: rE.text, rxEditLabel: rE.label, rxEditBg: rE.bg, rxEditFg: rE.fg,
+      toggleRxEdit: () => this.setState({ rxEdit: !S.rxEdit }),
+      importBtn: S.drafts.length ? '下一步：配上现场录的视频' : '确认导入，更新卡片',
+      importNext: () => (S.drafts.length ? this.go('match', { rxV2: true }) : this.go('train', { rxV2: true, toast: '处方已更新：臀桥改为 120 个' })),
+      draftRows: draftRows, finishMatch: () => this.finishMatch(),
+      card: card, cardTabs: cardTabs, ct: ct,
+      cardView: !S.cardEdit, cardEditing: S.cardEdit, cardEditText: cE.text, cardEditLabel: cE.label, cardEditBg: cE.bg, cardEditFg: cE.fg,
+      toggleCardEdit: () => this.setState({ cardEdit: !S.cardEdit }),
+      followThis: () => this.go('follow', { followId: cid, followSingle: true, playing: true }),
+      nextVisitText: S.remindOn ? '10 月 20 日 周二 · 已开启提前一周提醒' : '可选填写 · 不填也不会打扰你',
+      visits: visits,
+      upFields: upFields, upView: !S.uploadEdit, upEditing: S.uploadEdit, upEditText: uE.text, upEditLabel: uE.label, upEditBg: uE.bg, upEditFg: uE.fg,
+      toggleUpEdit: () => this.setState({ uploadEdit: !S.uploadEdit }),
+      saveUpload: () => this.go('growth', { uploadSaved: true, uploadEdit: false, uploadRewarded: true, pine: S.uploadRewarded ? S.pine : S.pine + 5, toast: S.uploadRewarded ? '已保存到成长记录' : '已保存到成长记录 · +5 松果' }),
+      commTabs: commTabs, cm: cm, guides: guides,
+      pat: () => this.setState({ patted: true, toast: '已经拍了拍阿乐' }), patBg: S.patted ? '#8A9A95' : '#1F6F66', patText: S.patted ? '已拍拍' : '拍拍她',
+      quizOpts: quizOpts, quizRight: S.quizPick === '四弯型', quizWrong: !!S.quizPick && S.quizPick !== '四弯型',
+      doDraw: () => (S.drawRewarded ? this.setState({ toast: '本周已经完成啦' }) : this.setState({ drawRewarded: true, pine: S.pine + 1, toast: '已上传 · +1 松果，可以选择分享到小组' })),
+      drawBg: S.drawRewarded ? '#8A9A95' : '#1F6F66', drawText: S.drawRewarded ? '本周已完成' : '拍照上传我的曲线图',
+      articles: articles,
+      complete: String(complete), completeW: complete + '%',
+      completeText: S.uploadSaved ? '今天的复查记录已补上。再填上医院名称，就能生成完整的复查前摘要。' : '下次复查后补上影像报告，就能生成一份完整的复查前摘要。',
+      remindOn: S.remindOn, remindAria: S.remindOn ? 'true' : 'false', swBg: S.remindOn ? '#1F6F66' : '#C9D4D0', swLeft: S.remindOn ? '24px' : '4px',
+      toggleRemind: () => this.setState({ remindOn: !S.remindOn, toast: S.remindOn ? '已关闭复查提醒' : '已开启 · 复查前一周首页会出现准备清单' }),
+      braceBtn: S.braceOn ? '现在脱下' : '重新戴上', braceStatus: S.braceOn ? '正在佩戴 · 自动记录中' : '已脱下 · 记得在需要时戴回去',
+      toggleBrace: () => this.setState({ braceOn: !S.braceOn, toast: S.braceOn ? '已记录脱下，正好可以去练一组' : '已记录戴上' }),
+      tasks: tasks, gotToday: String(gotToday), medals: medals,
+      makeupLeft: S.makeupUsed ? '本周已用完' : '本周还剩 1 次', makeupBg: S.makeupUsed ? '#8A9A95' : '#6B3416', makeupText: S.makeupUsed ? '已补卡' : '10 颗补卡',
+      doMakeup: () => (S.makeupUsed ? this.setState({ toast: '这周的补卡次数已经用过了' }) : this.setState({ makeupUsed: true, pine: S.pine - 10, toast: '已补卡：10 月 11 日 · -10 松果' }))
+    };
+  }
+}
+</script>
+
+<script>
+/* ================= 外层演示面板 ================= */
+(function () {
+  const tpl = document.getElementById('spine-ui');
+  const screenEl = document.getElementById('screen');
+  const deviceEl = document.getElementById('device');
+  const caption = document.getElementById('caption');
+  let app = null;
+
+  const SCREENS = [
+    { group: 'A · 首次使用', items: [['welcome', '欢迎'], ['stage', '选择治疗阶段'], ['basics', '再填 2 项'], ['ready', '准备好了']] },
+    { group: 'B · 每天', items: [['today', '今日卡组'], ['follow', '跟练播报'], ['done', '完成打卡'], ['card', '动作卡片']] },
+    { group: 'C · 处方', items: [['train', '训练'], ['record', '现场录动作'], ['import', '拍处方单'], ['match', '配上录像']] },
+    { group: 'D · 支具与成长', items: [['brace', '我的支具'], ['growth', '成长记录'], ['upload', '添加复查记录']] },
+    { group: 'E · 激励与社群', items: [['rewards', '松果与勋章'], ['community', '社群'], ['me', '我的']] }
+  ];
+  const STAGES = [['check', '还在检查'], ['new', '刚戴支具'], ['brace', '支具 + 运动'], ['off', '脱支具维持'], ['adult', '成年自我管理']];
+
+  function jump(id) {
+    const nav = app.renderVals().nav;
+    if (id === 'follow') return app.startFollow();
+    if (id === 'stage') return nav.stageFromStart();
+    if (nav[id] && ['record', 'import', 'match', 'upload', 'brace', 'rewards'].indexOf(id) !== -1) return nav[id]();
+    app.go(id);
+  }
+  function setStage(id) {
+    app.setState({ stage: id, done: (id === 'brace' || id === 'off') ? [1, 2, 3, 4] : [], trainRewarded: false });
+  }
+
+  const groupsEl = document.getElementById('nav-groups');
+  SCREENS.forEach((g) => {
+    const wrap = document.createElement('div'); wrap.className = 'group';
+    const h = document.createElement('h3'); h.textContent = g.group; wrap.appendChild(h);
+    const ul = document.createElement('ul'); ul.className = 'nav-list';
+    g.items.forEach(([id, label]) => {
+      const li = document.createElement('li');
+      const b = document.createElement('button');
+      b.type = 'button'; b.className = 'nav-btn'; b.dataset.screen = id;
+      b.textContent = label; b.title = id;
+      b.addEventListener('click', () => jump(id));
+      li.appendChild(b); ul.appendChild(li);
+    });
+    wrap.appendChild(ul); groupsEl.appendChild(wrap);
+  });
+  const chipsEl = document.getElementById('stage-chips');
+  STAGES.forEach(([id, label]) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'chip'; b.dataset.stage = id; b.textContent = label;
+    b.addEventListener('click', () => setStage(id));
+    chipsEl.appendChild(b);
+  });
+
+  function syncPanel(a) {
+    const s = a.state;
+    caption.innerHTML = '当前页面 <code></code>';
+    caption.lastChild.textContent = s.screen;
+    groupsEl.querySelectorAll('.nav-btn').forEach((b) => b.setAttribute('aria-current', String(b.dataset.screen === s.screen)));
+    chipsEl.querySelectorAll('.chip').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.stage === s.stage)));
+
+    const cards = a.cards();
+    const sum = document.getElementById('tomorrow-summary');
+    const list = document.getElementById('tomorrow-list');
+    list.replaceChildren();
+    const today = a.deckIds();
+    if (!today.length) { sum.textContent = '当前阶段没有训练卡组。'; return; }
+    const tmr = s.stage === 'brace' || s.stage === 'off' ? Scheduler.tomorrow(cards, HISTORY.lastDone, s.done) : today;
+    sum.textContent = '今天 ' + today.length + ' 个动作，已打卡 ' + today.filter((id) => s.done.indexOf(id) !== -1).length + ' 个 · 明天的卡组 ' + tmr.length + ' 个动作。';
+    today.filter((id) => Scheduler.freqOf(cards[id]) === 'alt').forEach((id) => {
+      const li = document.createElement('li');
+      const off = tmr.indexOf(id) === -1;
+      li.innerHTML = '<span></span><span class="state"></span>';
+      li.firstChild.textContent = cards[id].name;
+      li.lastChild.textContent = off ? '今天已练 · 明天休息，后天回来' : '今天还没练 · 顺延到明天';
+      if (off) li.lastChild.classList.add('off');
+      list.appendChild(li);
+    });
+  }
+
+  function fit() {
+    const col = deviceEl.parentElement.clientWidth - 20;
+    const narrow = window.innerWidth <= 860;
+    let s = Math.min(1, col / 390);
+    if (!narrow) s = Math.min(s, (window.innerHeight - 90) / 844);
+    s = Math.max(0.55, s);
+    deviceEl.style.width = Math.round(390 * s) + 'px';
+    deviceEl.style.height = Math.round(844 * s) + 'px';
+    screenEl.style.transform = 'scale(' + s + ')';
+  }
+
+  function start(startAt) {
+    app = new SpineApp({ startAt: startAt });
+    mount(tpl, screenEl, app, syncPanel);
+  }
+  document.getElementById('start-onboarding').addEventListener('click', () => start('首次使用'));
+  document.getElementById('start-home').addEventListener('click', () => start('直接进首页'));
+  window.addEventListener('resize', fit);
+  fit();
+  start('直接进首页');
+})();
+</script>
+</body></html>

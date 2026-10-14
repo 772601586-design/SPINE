@@ -1,0 +1,70 @@
+{
+  "pages": [
+    "pages/welcome/index",
+    "pages/today/index",
+    "pages/train/index",
+    "pages/growth/index",
+    "pages/community/index",
+    "pages/me/index",
+    "pages/stage/index",
+    "pages/basics/index",
+    "pages/ready/index",
+    "pages/follow/index",
+    "pages/done/index",
+    "pages/record/index",
+    "pages/import/index",
+    "pages/match/index",
+    "pages/card/index",
+    "pages/upload/index",
+    "pages/brace/index",
+    "pages/rewards/index"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#F3F5F2",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "Spine",
+    "backgroundColor": "#F3F5F2",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "color": "#5B6663",
+    "selectedColor": "#1F6F66",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/today/index",
+        "text": "今日",
+        "iconPath": "assets/tab/home.png",
+        "selectedIconPath": "assets/tab/home-on.png"
+      },
+      {
+        "pagePath": "pages/train/index",
+        "text": "训练",
+        "iconPath": "assets/tab/grid.png",
+        "selectedIconPath": "assets/tab/grid-on.png"
+      },
+      {
+        "pagePath": "pages/growth/index",
+        "text": "成长",
+        "iconPath": "assets/tab/chart.png",
+        "selectedIconPath": "assets/tab/chart-on.png"
+      },
+      {
+        "pagePath": "pages/community/index",
+        "text": "社群",
+        "iconPath": "assets/tab/people.png",
+        "selectedIconPath": "assets/tab/people-on.png"
+      },
+      {
+        "pagePath": "pages/me/index",
+        "text": "我的",
+        "iconPath": "assets/tab/person.png",
+        "selectedIconPath": "assets/tab/person-on.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

@@ -1,0 +1,105 @@
+<!-- 社群 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 46.15rpx 38.46rpx 38.46rpx; display: flex; flex-direction: column; gap: 26.92rpx">
+  <view style="display: flex; justify-content: space-between; align-items: center">
+    <view style="margin: 0; font-size: 50rpx; font-weight: 700">社群</view>
+    <text style="font-size: 23.08rpx; padding: 7.69rpx 19.23rpx; border-radius: 1921.15rpx; background: #EDF0EE; color: #3E4B47">测试中</text>
+  </view>
+  <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7.69rpx; padding: 7.69rpx; border-radius: 26.92rpx; background: #DCE5E1" aria-label="社群分区">
+    <block wx:for="{{ commTabs }}" wx:for-item="t" wx:for-index="tIndex" wx:key="_k">
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border: 0; border-radius: 19.23rpx; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 28.85rpx; font-weight: {{ t.fw }}" bindtap="act" data-fn="{{ t.pick }}" hover-class="tap">{{ t.label }}</view>
+    </block>
+  </view>
+  <block wx:if="{{ cm.talk }}">
+    <view style="display: flex; flex-direction: column; gap: 26.92rpx">
+      <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
+        <view>
+          <view style="font-size: 30.77rpx; font-weight: 700">我的小组 · 支具 + 运动</view>
+          <view style="font-size: 23.08rpx; color: #5B6663">12–15 岁 · 28 人 · 康复治疗师志愿者管理</view>
+        </view>
+        <view style="padding: 19.23rpx 23.08rpx; border-radius: 23.08rpx; background: #F8FAF9; display: flex; flex-direction: column; gap: 7.69rpx">
+          <view style="font-size: 26.92rpx; font-weight: 700">体育课大家都怎么安排脱支具？</view>
+          <view style="font-size: 23.08rpx; color: #5B6663">12 条回复 · 有 1 条来自治疗师</view>
+        </view>
+        <view style="padding: 19.23rpx 23.08rpx; border-radius: 23.08rpx; background: #F8FAF9; display: flex; flex-direction: column; gap: 7.69rpx">
+          <view style="font-size: 26.92rpx; font-weight: 700">我画的本周曲线图，大家看看对不对</view>
+          <view style="font-size: 23.08rpx; color: #5B6663">来自“学习”里的小挑战 · 8 条回复</view>
+        </view>
+      </view>
+      <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #DDEDE9; display: flex; flex-direction: column; gap: 19.23rpx">
+        <view style="font-size: 30.77rpx; font-weight: 700; color: #1F4F49">搭档打卡</view>
+        <view style="display: flex; align-items: center; gap: 23.08rpx">
+          <text style="width: 76.92rpx; height: 76.92rpx; border-radius: 1921.15rpx; background: #FFFFFF; color: #1F6F66; font-weight: 700; display: flex; align-items: center; justify-content: center">乐</text>
+          <view style="flex: 1">
+            <view style="font-size: 26.92rpx; font-weight: 700">阿乐 · 你的同学</view>
+            <view style="font-size: 23.08rpx; color: #2E3B37">今天已完成训练 · 本周 4 / 6</view>
+          </view>
+          <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 69.23rpx; padding: 0 23.08rpx; border: 0; border-radius: 1921.15rpx; background: {{ patBg }}; color: #FFFFFF; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ pat }}" hover-class="tap">{{ patText }}</view>
+        </view>
+        <view style="font-size: 23.08rpx; color: #2E3B37; line-height: 1.6">只能邀请认识的人 · 互相只看到“今天完成了没有”</view>
+      </view>
+      <view style="display: flex; justify-content: space-between; align-items: baseline">
+        <view style="margin: 0; font-size: 32.69rpx; font-weight: 700">支具生活</view>
+        <text style="font-size: 23.08rpx; color: #5B6663">大家的经验 · 治疗师补充</text>
+      </view>
+      <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 19.23rpx">
+        <block wx:for="{{ guides }}" wx:for-item="g" wx:for-index="gIndex" wx:key="_k">
+          <view style="display: flex; flex-direction: column; gap: 11.54rpx; padding: 23.08rpx; border-radius: 30.77rpx; background: #FFFFFF; min-height: 230.77rpx; box-sizing: border-box">
+            <text style="font-size: 23.08rpx; font-weight: 700; color: #6B3416; padding: 3.85rpx 15.38rpx; border-radius: 1921.15rpx; background: #F6DCC8; align-self: flex-start">{{ g.tag }}</text>
+            <text style="font-size: 26.92rpx; font-weight: 700; line-height: 1.4">{{ g.title }}</text>
+            <text style="font-size: 23.08rpx; color: #5B6663; line-height: 1.5">{{ g.sub }}</text>
+            <text style="margin-top: auto; font-size: 21.15rpx; color: #3E4B47">{{ g.count }} 条分享</text>
+          </view>
+        </block>
+      </view>
+      <view style="display: flex; justify-content: space-between; align-items: baseline">
+        <view style="margin: 0; font-size: 32.69rpx; font-weight: 700">支具 Deco 展</view>
+        <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 69.23rpx; border: 0; background: transparent; color: #1F6F66; font-size: 25rpx; font-weight: 700">分享我的</view>
+      </view>
+      <view style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15.38rpx">
+        <view style="aspect-ratio: 3 / 4; border-radius: 26.92rpx; background: #C9E3DC; display: flex; flex-direction: column; justify-content: flex-end; padding: 15.38rpx; box-sizing: border-box; font-size: 23.08rpx; color: #1F4F49; font-weight: 700">贴纸款</view>
+        <view style="aspect-ratio: 3 / 4; border-radius: 26.92rpx; background: #F6DCC8; display: flex; flex-direction: column; justify-content: flex-end; padding: 15.38rpx; box-sizing: border-box; font-size: 23.08rpx; color: #6B3416; font-weight: 700">涂鸦款</view>
+        <view style="aspect-ratio: 3 / 4; border-radius: 26.92rpx; background: #2E3B37; display: flex; flex-direction: column; justify-content: flex-end; padding: 15.38rpx; box-sizing: border-box; font-size: 23.08rpx; color: #EAF2EF; font-weight: 700">星空款</view>
+      </view>
+    </view>
+  </block>
+  <block wx:if="{{ cm.learn }}">
+    <view style="display: flex; flex-direction: column; gap: 26.92rpx">
+      <view style="display: flex; justify-content: space-between; align-items: baseline">
+        <view style="margin: 0; font-size: 32.69rpx; font-weight: 700">认知学习</view>
+        <text style="font-size: 23.08rpx; color: #5B6663">每次 1 分钟 · 学完得松果</text>
+      </view>
+      <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
+        <text style="align-self: flex-start; font-size: 23.08rpx; padding: 3.85rpx 15.38rpx; border-radius: 1921.15rpx; background: #F6DCC8; color: #6B3416; font-weight: 700">小测 · +2 松果</text>
+        <view style="font-size: 28.85rpx; font-weight: 700; line-height: 1.5">看懂我的分型：Rigo B1 属于哪一类弯型？</view>
+        <view style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11.54rpx">
+          <block wx:for="{{ quizOpts }}" wx:for-item="o" wx:for-index="oIndex" wx:key="_k">
+            <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border-radius: 19.23rpx; border: {{ o.border }}; background: {{ o.bg }}; color: {{ o.fg }}; font-size: 26.92rpx; font-weight: {{ o.fw }}" bindtap="act" data-fn="{{ o.pick }}" hover-class="tap">{{ o.label }}</view>
+          </block>
+        </view>
+        <block wx:if="{{ quizRight }}">
+          <view style="padding: 19.23rpx 23.08rpx; border-radius: 19.23rpx; background: #DDEDE9; color: #1F4F49; font-size: 25rpx; line-height: 1.6">答对了。B 型是四弯型，胸弯和腰弯都比较明显，所以处方里既有“降低右髋”，也有针对胸段的肋木动作。</view>
+        </block>
+        <block wx:if="{{ quizWrong }}">
+          <view style="padding: 19.23rpx 23.08rpx; border-radius: 19.23rpx; background: #F6DCC8; color: #6B3416; font-size: 25rpx; line-height: 1.6">再想想：Rigo 分型里 A 是三弯，B 是四弯，E 是单弯。</view>
+        </block>
+      </view>
+      <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
+        <text style="align-self: flex-start; font-size: 23.08rpx; padding: 3.85rpx 15.38rpx; border-radius: 1921.15rpx; background: #F6DCC8; color: #6B3416; font-weight: 700">本周挑战 · +1 松果</text>
+        <view style="font-size: 28.85rpx; font-weight: 700">画一画你的脊柱曲线</view>
+        <view style="font-size: 25rpx; color: #5B6663; line-height: 1.6">处方里的认知练习：骨盆偏哪边？躯干偏哪边？画完拍一张，可以选择分享到小组。</view>
+        <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border: 0; border-radius: 23.08rpx; background: {{ drawBg }}; color: #FFFFFF; font-size: 26.92rpx; font-weight: 700" bindtap="act" data-fn="{{ doDraw }}" hover-class="tap">{{ drawText }}</view>
+      </view>
+      <view style="margin: 7.69rpx 0 0; font-size: 32.69rpx; font-weight: 700">科普</view>
+      <block wx:for="{{ articles }}" wx:for-item="a" wx:for-index="aIndex" wx:key="_k">
+        <view style="padding: 23.08rpx 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 7.69rpx">
+          <view style="font-size: 26.92rpx; font-weight: 700">{{ a.title }}</view>
+          <view style="font-size: 23.08rpx; color: #5B6663">{{ a.sub }}</view>
+        </view>
+      </block>
+    </view>
+  </block>
+  <view style="display: flex; gap: 15.38rpx; align-items: flex-start; font-size: 23.08rpx; color: #5B6663; line-height: 1.6">
+    <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNCcgaGVpZ2h0PScxNCcgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyM1QjY2NjMnIHN0cm9rZS13aWR0aD0nMi4yJyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnIHN0eWxlPSdtYXJnaW4tdG9wOiAzcHg7IGZsZXgtc2hyaW5rOiAwJz48cmVjdCB4PSc1JyB5PScxMScgd2lkdGg9JzE0JyBoZWlnaHQ9JzEwJyByeD0nMic+PC9yZWN0PjxwYXRoIGQ9J004IDExVjhhNCA0IDAgMCAxIDggMHYzJz48L3BhdGg+PC9zdmc+" style="width: 26.92rpx; height: 26.92rpx; flex-shrink: 0; margin-top: 5.77rpx; flex-shrink: 0" />
+    <text>不支持私信陌生人 · 不显示真实姓名 · 广告和偏方会被删除</text>
+  </view>
+</view>

@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>社群</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F6F66}a:hover{color:#154F49}
+</style>
+</helmet>
+<div style="width: 390px; height: 1720px; box-sizing: border-box; background: #F3F5F2; color: #1F2A27; font-family: 'Noto Sans SC', sans-serif; display: flex; flex-direction: column">
+  <div style="flex: 1; padding: 24px 20px 20px; display: flex; flex-direction: column; gap: 14px">
+
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <h1 style="margin: 0; font-size: 26px; font-weight: 700">社群</h1>
+      <span style="font-size: 12px; padding: 4px 10px; border-radius: 999px; background: #EDF0EE; color: #3E4B47">测试中</span>
+    </div>
+
+    <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; justify-content: space-between; align-items: center">
+        <div>
+          <div style="font-size: 16px; font-weight: 700">我的小组 · 支具 + 运动</div>
+          <div style="font-size: 12px; color: #5B6663">12–15 岁 · 28 人 · 康复治疗师志愿者管理</div>
+        </div>
+        <span style="width: 10px; height: 10px; border-radius: 999px; background: #C4602A" aria-label="有新消息" role="img"></span>
+      </div>
+      <div style="padding: 10px 12px; border-radius: 12px; background: #F8FAF9; display: flex; flex-direction: column; gap: 4px">
+        <div style="font-size: 14px; font-weight: 700">体育课大家都怎么安排脱支具？</div>
+        <div style="font-size: 12px; color: #5B6663">小组成员 · 12 条回复 · 有 1 条来自治疗师</div>
+      </div>
+      <div style="padding: 10px 12px; border-radius: 12px; background: #F8FAF9; display: flex; flex-direction: column; gap: 4px">
+        <div style="font-size: 14px; font-weight: 700">夏天出汗，大家穿什么打底衣？</div>
+        <div style="font-size: 12px; color: #5B6663">小组成员 · 8 条回复</div>
+      </div>
+    </div>
+
+    <div style="padding: 14px; border-radius: 18px; background: #DDEDE9; display: flex; flex-direction: column; gap: 10px">
+      <div style="font-size: 16px; font-weight: 700; color: #1F4F49">搭档打卡</div>
+      <div style="display: flex; align-items: center; gap: 12px">
+        <span style="width: 40px; height: 40px; border-radius: 999px; background: #FFFFFF; color: #1F6F66; font-weight: 700; display: flex; align-items: center; justify-content: center">乐</span>
+        <div style="flex: 1">
+          <div style="font-size: 14px; font-weight: 700">阿乐 · 你的同学</div>
+          <div style="font-size: 12px; color: #2E3B37">今天已完成训练 · 本周 4 / 6</div>
+        </div>
+        <button type="button" style="min-height: 36px; padding: 0 12px; border: 0; border-radius: 999px; background: #1F6F66; color: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 700">拍拍她</button>
+      </div>
+      <div style="font-size: 12px; color: #2E3B37; line-height: 1.6">只能邀请你认识的人 · 互相只看到“今天完成了没有”，看不到度数和视频</div>
+      <button type="button" style="min-height: 44px; border-radius: 12px; border: 1.5px solid #1F6F66; background: transparent; color: #1F6F66; font-family: inherit; font-size: 14px; font-weight: 700">邀请一个搭档</button>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <h2 style="margin: 0; font-size: 17px; font-weight: 700">支具生活</h2>
+      <span style="font-size: 12px; color: #5B6663">大家的经验 · 治疗师补充</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <sc-for list="{{ guides }}" as="g" hint-placeholder-count="6">
+        <div style="display: flex; flex-direction: column; gap: 6px; padding: 12px; border-radius: 16px; background: #FFFFFF; min-height: 120px; box-sizing: border-box">
+          <span style="font-size: 12px; font-weight: 700; color: #6B3416; padding: 2px 8px; border-radius: 999px; background: #F6DCC8; align-self: flex-start">{{ g.tag }}</span>
+          <span style="font-size: 14px; font-weight: 700; line-height: 1.4">{{ g.title }}</span>
+          <span style="font-size: 12px; color: #5B6663; line-height: 1.5">{{ g.sub }}</span>
+          <span style="margin-top: auto; font-size: 11px; color: #3E4B47">{{ g.count }} 条分享</span>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <h2 style="margin: 0; font-size: 17px; font-weight: 700">支具 Deco 展</h2>
+      <button type="button" style="min-height: 36px; border: 0; background: transparent; color: #1F6F66; font-family: inherit; font-size: 13px; font-weight: 700">分享我的</button>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+      <div style="aspect-ratio: 3 / 4; border-radius: 14px; background: #C9E3DC; display: flex; flex-direction: column; justify-content: flex-end; padding: 8px; box-sizing: border-box; font-size: 12px; color: #1F4F49; font-weight: 700">贴纸款</div>
+      <div style="aspect-ratio: 3 / 4; border-radius: 14px; background: #F6DCC8; display: flex; flex-direction: column; justify-content: flex-end; padding: 8px; box-sizing: border-box; font-size: 12px; color: #6B3416; font-weight: 700">涂鸦款</div>
+      <div style="aspect-ratio: 3 / 4; border-radius: 14px; background: #2E3B37; display: flex; flex-direction: column; justify-content: flex-end; padding: 8px; box-sizing: border-box; font-size: 12px; color: #EAF2EF; font-weight: 700">星空款</div>
+    </div>
+    <div style="font-size: 12px; color: #5B6663">只展示支具本身，不展示穿着照片</div>
+
+    <h2 style="margin: 4px 0 0; font-size: 17px; font-weight: 700">科普</h2>
+    <div style="padding: 12px 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+      <div style="font-size: 14px; font-weight: 700">为什么支具每天要戴够时长？戴得越够，效果越好</div>
+      <div style="font-size: 12px; color: #5B6663">审核：康复治疗师 · 3 分钟读完</div>
+    </div>
+    <div style="padding: 12px 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+      <div style="font-size: 14px; font-weight: 700">第一次复查，要问医生哪些问题</div>
+      <div style="font-size: 12px; color: #5B6663">审核：康复治疗师 · 附可打印清单</div>
+    </div>
+    <div style="padding: 12px 14px; border-radius: 16px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+      <div style="font-size: 14px; font-weight: 700">怎么分辨“矫正馆”的夸大宣传</div>
+      <div style="font-size: 12px; color: #5B6663">审核：康复治疗师</div>
+    </div>
+
+    <div style="display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #5B6663; line-height: 1.6">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="margin-top: 3px; flex-shrink: 0"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+      <span>不支持私信陌生人 · 不显示真实姓名 · 广告和偏方会被删除</span>
+    </div>
+  </div>
+
+  <nav style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid #DCE5E1; background: #FFFFFF; padding: 6px 0 14px">
+    <a href="Home.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #5B6663; font-size: 11px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"></path></svg>今日</a>
+    <a href="Plan.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #5B6663; font-size: 11px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>训练</a>
+    <a href="Growth.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #5B6663; font-size: 11px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19l5-6 4 3 7-9"></path></svg>成长</a>
+    <a href="Community.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #1F6F66; font-size: 11px; font-weight: 700; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c1-3.5 3.5-5 6.5-5s5.5 1.5 6.5 5"></path><path d="M16 5.5a3 3 0 0 1 0 5.5M18.5 15c1.6.7 2.6 2.3 3 5"></path></svg>社群</a>
+    <a href="Me.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #5B6663; font-size: 11px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg>我的</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1720}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const guides = [
+      { tag: '刚开始', title: '前两周怎么熬', sub: '一点点加时间，难受是正常的', count: '46' },
+      { tag: '皮肤', title: '压红了怎么办', sub: '贴身穿纯棉衣，每次脱下看一看', count: '31' },
+      { tag: '吃饭', title: '支具压着肚子', sub: '少食多餐，饭前先放松几分钟', count: '18' },
+      { tag: '经期', title: '经期更不舒服时', sub: '可以和矫形师商量怎么调整', count: '12' },
+      { tag: '学校', title: '体育课和同学', sub: '怎么安排脱支具，怎么跟同学说', count: '39' },
+      { tag: '运动', title: '脱支具的时间去游泳', sub: '放松肌肉，也是处方的一部分', count: '15' }
+    ];
+    return { guides };
+  }
+}
+</script>
+</body>
+</html>

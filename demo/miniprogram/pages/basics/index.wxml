@@ -1,0 +1,45 @@
+<!-- 基本信息 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 38.46rpx 38.46rpx 46.15rpx; min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; gap: 26.92rpx">
+  <view style="display: flex; align-items: center; justify-content: space-between">
+    <text style="font-size: 25rpx; color: #5B6663">3 / 4</text>
+    <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border: 0; background: transparent; color: #3E4B47; font-size: 26.92rpx" bindtap="act" data-fn="{{ nav.ready }}" hover-class="tap">跳过</view>
+  </view>
+  <view>
+    <view style="margin: 0; font-size: 46.15rpx; font-weight: 700">{{ basicsTitle }}</view>
+    <view style="margin: 11.54rpx 0 0; font-size: 26.92rpx; color: #5B6663; line-height: 1.6">其余信息可以在复查后慢慢补充。</view>
+  </view>
+  <block wx:if="{{ showMenarche }}">
+    <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 15.38rpx">
+      <view style="display: flex; justify-content: space-between; align-items: baseline">
+        <text style="font-size: 26.92rpx; font-weight: 700" id="men-label">月经初潮</text>
+        <text style="font-size: 23.08rpx; color: #5B6663">用来判断还在不在生长期</text>
+      </view>
+      <view style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11.54rpx">
+        <block wx:for="{{ menOpts }}" wx:for-item="o" wx:for-index="oIndex" wx:key="_k">
+          <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border-radius: 19.23rpx; border: {{ o.border }}; background: {{ o.bg }}; color: {{ o.fg }}; font-size: 26.92rpx; font-weight: {{ o.fw }}" bindtap="act" data-fn="{{ o.pick }}" hover-class="tap">{{ o.label }}</view>
+        </block>
+      </view>
+      <view style="font-size: 25rpx; color: #3E4B47">大约在<text style="font-weight: 700; color: #1F2A27">2026 年 5 月</text>· 记不清可以留空</view>
+    </view>
+  </block>
+  <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
+    <view style="display: flex; justify-content: space-between; align-items: baseline">
+      <text style="font-size: 26.92rpx; font-weight: 700">手上有医院的资料吗？</text>
+      <text style="font-size: 23.08rpx; color: #5B6663">可多选</text>
+    </view>
+    <block wx:for="{{ mats }}" wx:for-item="m" wx:for-index="mIndex" wx:key="_k">
+      <view style="display: flex; align-items: center; gap: 23.08rpx; text-align: left; padding: 19.23rpx 23.08rpx; border-radius: 23.08rpx; border: {{ m.border }}; background: {{ m.bg }}; color: #1F2A27" bindtap="act" data-fn="{{ m.toggle }}" hover-class="tap">
+        <view style="flex: 1; display: flex; flex-direction: column; gap: 3.85rpx">
+          <text style="font-size: 26.92rpx; font-weight: 700">{{ m.title }}</text>
+          <text style="font-size: 23.08rpx; color: #5B6663">{{ m.sub }}</text>
+        </view>
+        <text style="font-size: 23.08rpx; font-weight: 700; color: #1F6F66">{{ m.mark }}</text>
+      </view>
+    </block>
+  </view>
+  <view style="display: flex; gap: 15.38rpx; align-items: flex-start; font-size: 23.08rpx; color: #5B6663; line-height: 1.6">
+    <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNCcgaGVpZ2h0PScxNCcgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyM1QjY2NjMnIHN0cm9rZS13aWR0aD0nMi4yJyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnIHN0eWxlPSdtYXJnaW4tdG9wOiAzcHg7IGZsZXgtc2hyaW5rOiAwJz48cmVjdCB4PSc1JyB5PScxMScgd2lkdGg9JzE0JyBoZWlnaHQ9JzEwJyByeD0nMic+PC9yZWN0PjxwYXRoIGQ9J004IDExVjhhNCA0IDAgMCAxIDggMHYzJz48L3BhdGg+PC9zdmc+" style="width: 26.92rpx; height: 26.92rpx; flex-shrink: 0; margin-top: 5.77rpx; flex-shrink: 0" />
+    <text>资料只用来整理你的档案，不会出现在社群里。</text>
+  </view>
+  <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: auto; min-height: 100rpx; border: 0; border-radius: 26.92rpx; background: #1F6F66; color: #FFFFFF; font-size: 30.77rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.ready }}" hover-class="tap">下一步</view>
+</view>

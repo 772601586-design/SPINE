@@ -1,0 +1,48 @@
+<!-- 欢迎 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 53.85rpx 38.46rpx 46.15rpx; min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; gap: 34.62rpx">
+  <view style="display: flex; justify-content: space-between; align-items: center">
+    <view style="display: flex; align-items: center; gap: 15.38rpx">
+      <view style="width: 69.23rpx; height: 69.23rpx; border-radius: 19.23rpx; background: #1F6F66; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+        <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMicgaGVpZ2h0PScyMicgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyNGRkZGRkYnIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbGluZWpvaW49J3JvdW5kJz48cGF0aCBkPSdNMTIgMmMtMyAzIDMgNSAwIDhzMyA1IDAgOCAwIDQgMCA0Jz48L3BhdGg+PHBhdGggZD0nTTkgNmg2TTkuNSAxMmg1TTkgMThoNic+PC9wYXRoPjwvc3ZnPg==" style="width: 42.31rpx; height: 42.31rpx; flex-shrink: 0" />
+      </view>
+      <text style="font-size: 34.62rpx; font-weight: 700; letter-spacing: 0.96rpx">Spine</text>
+    </view>
+    <text style="font-size: 25rpx; color: #5B6663">1 / 4</text>
+  </view>
+  <view style="height: 307.69rpx; border-radius: 46.15rpx; background: #DDEDE9; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center">
+    <view style="position: absolute; left: -76.92rpx; top: -76.92rpx; width: 346.15rpx; height: 346.15rpx; border-radius: 1921.15rpx; background: #C9E3DC">
+    </view>
+    <view style="position: absolute; right: -57.69rpx; bottom: -96.15rpx; width: 307.69rpx; height: 307.69rpx; border-radius: 1921.15rpx; background: #F6DCC8">
+    </view>
+    <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc5NicgaGVpZ2h0PScxMzAnIHZpZXdCb3g9JzAgMCAxMjAgMTYwJyBmaWxsPSdub25lJyBzdHlsZT0ncG9zaXRpb246IHJlbGF0aXZlJz4KICAgICAgICAgICAgPHBhdGggZD0nTTYwIDEwIEMgNDAgNDAsIDgyIDYwLCA2MCA4NSBTIDM4IDEzMCwgNjAgMTUwJyBzdHJva2U9JyMxRjZGNjYnIHN0cm9rZS13aWR0aD0nNScgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJz48L3BhdGg+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9JzYwJyBjeT0nMTAnIHI9JzcnIGZpbGw9JyMxRjZGNjYnPjwvY2lyY2xlPgogICAgICAgICAgICA8cmVjdCB4PSc0NycgeT0nMzgnIHdpZHRoPScyNicgaGVpZ2h0PSc5JyByeD0nNCcgZmlsbD0nIzFGNkY2Nicgb3BhY2l0eT0nMC4zNSc+PC9yZWN0PgogICAgICAgICAgICA8cmVjdCB4PSc0NycgeT0nNzgnIHdpZHRoPScyNicgaGVpZ2h0PSc5JyByeD0nNCcgZmlsbD0nIzFGNkY2Nicgb3BhY2l0eT0nMC4zNSc+PC9yZWN0PgogICAgICAgICAgICA8cmVjdCB4PSc0NycgeT0nMTE4JyB3aWR0aD0nMjYnIGhlaWdodD0nOScgcng9JzQnIGZpbGw9JyMxRjZGNjYnIG9wYWNpdHk9JzAuMzUnPjwvcmVjdD4KICAgICAgICAgIDwvc3ZnPg==" style="width: 184.62rpx; height: 250rpx; flex-shrink: 0; position: relative" />
+  </view>
+  <view>
+    <view style="margin: 0; font-size: 50rpx; font-weight: 700; line-height: 1.35">陪你把矫正<text>{{'\n'}}</text>变成每天的小事</view>
+    <view style="margin: 15.38rpx 0 0; font-size: 26.92rpx; color: #5B6663; line-height: 1.6">先简单认识一下你。</view>
+  </view>
+  <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 15.38rpx">
+    <view style="display: flex; justify-content: space-between; align-items: baseline">
+      <view style="font-size: 26.92rpx; font-weight: 700">年龄 · 出生年月</view>
+      <text style="font-size: 23.08rpx; color: #5B6663">用来判断生长阶段</text>
+    </view>
+    <input style="min-height: 84.62rpx; border-radius: 19.23rpx; border: 1.92rpx solid #C9D4D0; padding: 0 23.08rpx; font-size: 28.85rpx; color: #1F2A27; background: #F8FAF9; height: 84.62rpx" id="birth" value="2013 年 12 月" placeholder-style="color: #8A9A95" />
+  </view>
+  <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 15.38rpx">
+    <text style="font-size: 26.92rpx; font-weight: 700" id="gender-label">性别</text>
+    <view style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 11.54rpx">
+      <block wx:for="{{ genders }}" wx:for-item="g" wx:for-index="gIndex" wx:key="_k">
+        <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border-radius: 19.23rpx; border: {{ g.border }}; background: {{ g.bg }}; color: {{ g.fg }}; font-size: 26.92rpx; font-weight: {{ g.fw }}" bindtap="act" data-fn="{{ g.pick }}" hover-class="tap">{{ g.label }}</view>
+      </block>
+    </view>
+    <block wx:if="{{ isCustomGender }}">
+      <view style="display: flex; flex-direction: column; gap: 11.54rpx">
+        <view style="font-size: 23.08rpx; color: #5B6663">你希望怎么称呼自己的性别？可以留空</view>
+        <input style="min-height: 84.62rpx; border-radius: 19.23rpx; border: 1.92rpx solid #C9D4D0; padding: 0 23.08rpx; font-size: 28.85rpx; color: #1F2A27; background: #F8FAF9; height: 84.62rpx" id="gender-custom" placeholder="自由填写" placeholder-style="color: #8A9A95" />
+      </view>
+    </block>
+  </view>
+  <view style="margin-top: auto; display: flex; flex-direction: column; gap: 15.38rpx">
+    <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 100rpx; border: 0; border-radius: 26.92rpx; background: #1F6F66; color: #FFFFFF; font-size: 30.77rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.stageFromStart }}" hover-class="tap">下一步</view>
+    <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border: 0; background: transparent; color: #3E4B47; font-size: 26.92rpx" bindtap="act" data-fn="{{ nav.today }}" hover-class="tap">已有账号，直接登录</view>
+  </view>
+</view>

@@ -1,0 +1,110 @@
+<!-- 动作卡片 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 30.77rpx 38.46rpx 53.85rpx; display: flex; flex-direction: column; gap: 30.77rpx">
+  <view style="display: flex; align-items: center; gap: 15.38rpx">
+    <text style="font-size: 28.85rpx; color: #5B6663">动作卡片</text>
+  </view>
+  <view style="display: flex; flex-direction: column; gap: 15.38rpx">
+    <view style="margin: 0; font-size: 50rpx; font-weight: 700">{{ card.name }}</view>
+    <view style="display: flex; gap: 15.38rpx; flex-wrap: wrap">
+      <text style="padding: 7.69rpx 19.23rpx; border-radius: 1921.15rpx; background: {{ card.vBg }}; color: {{ card.vFg }}; font-size: 23.08rpx; font-weight: 500">{{ card.vLabel }}</text>
+      <text style="padding: 7.69rpx 19.23rpx; border-radius: 1921.15rpx; background: #DDEDE9; color: #1F4F49; font-size: 23.08rpx; font-weight: 500">{{ card.mod }} · {{ card.freq }}</text>
+    </view>
+  </view>
+  <view style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7.69rpx; padding: 7.69rpx; border-radius: 26.92rpx; background: #DCE5E1" aria-label="卡片视图">
+    <block wx:for="{{ cardTabs }}" wx:for-item="t" wx:for-index="tIndex" wx:key="_k">
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border: 0; border-radius: 19.23rpx; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 28.85rpx; font-weight: {{ t.fw }}" bindtap="act" data-fn="{{ t.pick }}" hover-class="tap">{{ t.label }}</view>
+    </block>
+  </view>
+  <block wx:if="{{ ct.learn }}">
+    <view style="display: flex; flex-direction: column; gap: 23.08rpx">
+      <block wx:if="{{ card.hasVideo }}">
+        <view style="height: 365.38rpx; border-radius: 30.77rpx; background: #1F2A27; color: #C9D4D0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15.38rpx">
+          <view style="width: 100rpx; height: 100rpx; border-radius: 1921.15rpx; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center">
+            <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMicgaGVpZ2h0PScyMicgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPScjMUYyQTI3Jz48cGF0aCBkPSdNOCA1bDExIDctMTEgN3onPjwvcGF0aD48L3N2Zz4=" style="width: 42.31rpx; height: 42.31rpx; flex-shrink: 0" />
+          </view>
+          <text style="font-size: 25rpx">示范视频 · 现场录制</text>
+        </view>
+        <view style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15.38rpx">
+          <view style="aspect-ratio: 1; border-radius: 23.08rpx; background: #DCE5E1; color: #5B6663; font-size: 23.08rpx; display: flex; align-items: center; justify-content: center">关键姿势 1</view>
+          <view style="aspect-ratio: 1; border-radius: 23.08rpx; background: #DCE5E1; color: #5B6663; font-size: 23.08rpx; display: flex; align-items: center; justify-content: center">关键姿势 2</view>
+          <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; aspect-ratio: 1; border-radius: 23.08rpx; border: 2.88rpx dashed #8A9A95; background: transparent; color: #3E4B47; font-size: 23.08rpx">+ 从视频选帧</view>
+        </view>
+      </block>
+      <block wx:if="{{ card.noVideo }}">
+        <view style="padding: 34.62rpx; border-radius: 30.77rpx; background: #FFFFFF; border: 2.88rpx dashed #C9D4D0; display: flex; flex-direction: column; gap: 19.23rpx; align-items: flex-start">
+          <text style="font-size: 28.85rpx; font-weight: 700">还没有示范视频</text>
+          <text style="font-size: 25rpx; color: #5B6663; line-height: 1.6">下次在康复中心练的时候录一段，或者把已经录好的视频配过来。</text>
+          <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 76.92rpx; padding: 0 26.92rpx; border: 0; border-radius: 1921.15rpx; background: #1F6F66; color: #FFFFFF; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.record }}" hover-class="tap">现场录一段</view>
+        </view>
+      </block>
+      <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 15.38rpx">
+        <view style="margin: 0; font-size: 30.77rpx; font-weight: 700">动作要点</view>
+        <block wx:for="{{ card.tips }}" wx:for-item="tip" wx:for-index="tipIndex" wx:key="_k">
+          <view style="font-size: 26.92rpx; line-height: 1.6">{{ tip.text }}</view>
+        </block>
+      </view>
+    </view>
+  </block>
+  <block wx:if="{{ ct.practice }}">
+    <view style="display: flex; flex-direction: column; gap: 23.08rpx">
+      <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 11.54rpx">
+        <view style="margin: 0 0 7.69rpx; font-size: 30.77rpx; font-weight: 700">播报方式 · 自动识别</view>
+        <view style="font-size: 26.92rpx; font-weight: 700">{{ card.modeLabel }}</view>
+        <view style="font-size: 23.08rpx; color: #5B6663; line-height: 1.6">根据处方里的“{{ card.param }}”自动判断，可以在下方参数里改。</view>
+      </view>
+      <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 7.69rpx">
+        <view style="margin: 0 0 7.69rpx; font-size: 30.77rpx; font-weight: 700">播报的声音</view>
+        <view style="display: flex; justify-content: space-between; align-items: center; font-size: 26.92rpx; min-height: 69.23rpx">
+          <text>现场录下的康复师原声</text>
+          <text style="color: #1F6F66; font-weight: 700">{{ card.voice }}</text>
+        </view>
+        <view style="display: flex; justify-content: space-between; align-items: center; font-size: 26.92rpx; min-height: 69.23rpx; color: #5B6663">
+          <text>系统朗读要点文字</text>
+          <text>备用</text>
+        </view>
+      </view>
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 96.15rpx; border: 0; border-radius: 26.92rpx; background: #1F6F66; color: #FFFFFF; font-size: 28.85rpx; font-weight: 700" bindtap="act" data-fn="{{ followThis }}" hover-class="tap">只练这一个动作</view>
+    </view>
+  </block>
+  <block wx:if="{{ ct.check }}">
+    <view style="display: flex; flex-direction: column; gap: 23.08rpx">
+      <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15.38rpx">
+        <view style="display: flex; flex-direction: column; gap: 11.54rpx">
+          <view style="height: 384.62rpx; border-radius: 26.92rpx; background: #1F2A27; color: #C9D4D0; font-size: 23.08rpx; display: flex; align-items: center; justify-content: center">示范</view>
+          <text style="font-size: 23.08rpx; color: #5B6663">现场录的示范</text>
+        </view>
+        <view style="display: flex; flex-direction: column; gap: 11.54rpx">
+          <view style="height: 384.62rpx; border-radius: 26.92rpx; background: #2E3B37; color: #C9D4D0; font-size: 23.08rpx; display: flex; align-items: center; justify-content: center">我的练习</view>
+          <text style="font-size: 23.08rpx; color: #5B6663">10 月 6 日 自录</text>
+        </view>
+      </view>
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 96.15rpx; border-radius: 26.92rpx; border: 2.88rpx solid #1F6F66; background: transparent; color: #1F6F66; font-size: 28.85rpx; font-weight: 700">录制本周练习</view>
+      <view style="font-size: 25rpx; color: #5B6663; line-height: 1.6">每周一次就够。复查时可以打开给康复师看，视频只保存在本机。</view>
+    </view>
+  </block>
+  <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 7.69rpx">
+    <view style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7.69rpx">
+      <view style="margin: 0; font-size: 30.77rpx; font-weight: 700">训练参数</view>
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-width: 84.62rpx; height: 69.23rpx; padding: 0 23.08rpx; border: 0; border-radius: 1921.15rpx; background: {{ cardEditBg }}; color: {{ cardEditFg }}; font-size: 25rpx; font-weight: 700" aria-label="{{ cardEditLabel }}" bindtap="act" data-fn="{{ toggleCardEdit }}" hover-class="tap">{{ cardEditText }}</view>
+    </view>
+    <block wx:for="{{ card.params }}" wx:for-item="p" wx:for-index="pIndex" wx:key="_k">
+      <view style="display: flex; align-items: center; justify-content: space-between; gap: 19.23rpx; min-height: 84.62rpx; border-top: 1.92rpx solid #E6EBE8; font-size: 26.92rpx">
+        <text style="color: #3E4B47; flex-shrink: 0">{{ p.label }}</text>
+        <block wx:if="{{ cardView }}">
+          <text style="font-weight: 700; text-align: right">{{ p.value }}</text>
+        </block>
+        <block wx:if="{{ cardEditing }}">
+          <input style="width: 326.92rpx; min-height: 69.23rpx; border-radius: 15.38rpx; border: 1.92rpx solid #1F6F66; padding: 0 15.38rpx; font-size: 26.92rpx; font-weight: 700; color: #1F2A27; background: #F8FAF9; height: 69.23rpx" aria-label="{{ p.label }}" value="{{ p.value }}" placeholder-style="color: #8A9A95" />
+        </block>
+      </view>
+    </block>
+    <view style="font-size: 23.08rpx; color: #5B6663; margin-top: 7.69rpx">来自处方单 · 识别有误可以直接改，复查时和康复师核对</view>
+  </view>
+  <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
+    <view style="margin: 0; font-size: 30.77rpx; font-weight: 700">我的补充</view>
+    <view style="font-size: 25rpx; color: #5B6663">给它起个好记的名字</view>
+    <input style="min-height: 84.62rpx; border-radius: 19.23rpx; border: 1.92rpx solid #C9D4D0; padding: 0 23.08rpx; font-size: 26.92rpx; color: #1F2A27; background: #F8FAF9; height: 84.62rpx" id="nick" placeholder="比如：肋木吹气" placeholder-style="color: #8A9A95" />
+    <view style="font-size: 25rpx; color: #5B6663">备注（只有自己看得到）</view>
+    <input style="min-height: 84.62rpx; border-radius: 19.23rpx; border: 1.92rpx solid #C9D4D0; padding: 0 23.08rpx; font-size: 26.92rpx; color: #1F2A27; background: #F8FAF9; height: 84.62rpx" id="note" placeholder="比如：吹气时容易耸肩" placeholder-style="color: #8A9A95" />
+  </view>
+</view>

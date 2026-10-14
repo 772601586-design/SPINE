@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>复诊录制</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#9FE0D3}a:hover{color:#CFF2EA}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #0E1513; color: #EAF2EF; font-family: 'Noto Sans SC', sans-serif; position: relative; overflow: hidden">
+
+  <div style="position: absolute; left: 16px; top: 16px; width: 358px; display: flex; align-items: center; justify-content: space-between">
+    <a href="Plan.dc.html" aria-label="退出录制" style="width: 44px; height: 44px; border-radius: 999px; background: #22332F; color: #EAF2EF; display: flex; align-items: center; justify-content: center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </a>
+    <div style="text-align: center">
+      <div style="font-size: 15px; font-weight: 700">复诊录制&nbsp; &nbsp; 肌肉圆柱</div>
+      <div style="font-size: 12px; color: #A9C3BD">第 2 / 4 个动作</div>
+    </div>
+    <button type="button" style="min-height: 36px; padding: 0 10px; border: 1px solid #4E7E76; border-radius: 999px; background: transparent; color: #CFE3DE; font-family: inherit; font-size: 12px">给康复师看</button>
+  </div>
+
+  
+
+  <svg width="200" height="380" viewBox="0 0 200 380" fill="none" aria-hidden="true" style="position: absolute; left: 95px; top: 140px">
+    <circle cx="100" cy="40" r="28" stroke="#7FD1C2" stroke-width="2" stroke-dasharray="6 6"></circle>
+    <path d="M60 80 Q100 70 140 80 L150 200 Q100 215 50 200 Z" stroke="#7FD1C2" stroke-width="2" stroke-dasharray="6 6"></path>
+    <path d="M60 85 L30 190 M140 85 L170 190" stroke="#7FD1C2" stroke-width="2" stroke-dasharray="6 6"></path>
+    <path d="M70 205 L65 370 M130 205 L135 370" stroke="#7FD1C2" stroke-width="2" stroke-dasharray="6 6"></path>
+  </svg>
+  <div style="position: absolute; left: 0; top: 530px; width: 390px; text-align: center; font-size: 13px; color: #CFE3DE">背面全身入镜 · 手机横放更清楚</div>
+
+  <div style="position: absolute; left: 16px; top: 140px; display: flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: #8E2A1E; font-size: 12px; font-weight: 700">
+    <span style="width: 8px; height: 8px; border-radius: 999px; background: #FFFFFF"></span>
+    0:12
+  </div>
+
+  <div style="position: absolute; left: 0; top: 566px; width: 390px; display: flex; justify-content: center">
+    <button type="button" aria-label="停止录制" style="width: 76px; height: 76px; border-radius: 999px; border: 4px solid #FFFFFF; background: transparent; display: flex; align-items: center; justify-content: center; padding: 0">
+      <span style="width: 30px; height: 30px; border-radius: 8px; background: #E0533F"></span>
+    </button>
+  </div>
+
+  <div style="position: absolute; left: 0; bottom: 0; width: 390px; box-sizing: border-box; padding: 14px 16px 20px; border-radius: 20px 20px 0 0; background: #14211E; display: flex; flex-direction: column; gap: 8px">
+    <div style="display: flex; justify-content: space-between; font-size: 13px"><span style="font-weight: 700">这次要录的动作</span>
+      <span style="color: rgb(169, 195, 189)"><br></span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; font-size: 12px; text-align: center"><span style="padding: 8px 2px; border-radius: 10px; background: rgb(31, 111, 102)">手动输入框</span>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

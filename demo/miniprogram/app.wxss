@@ -1,0 +1,10 @@
+/* 全局样式：页面样式大多写在各页 WXML 的 style 里（由交互原型转换而来） */
+page {
+  background: #F3F5F2;
+  color: #1F2A27;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+/* 可点区域按下时的反馈 */
+.tap { opacity: 0.6; }

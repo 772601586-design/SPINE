@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>跟练</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#9FE0D3}a:hover{color:#CFF2EA}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #143F3A; color: #EAF2EF; font-family: 'Noto Sans SC', sans-serif; padding: 20px 20px 24px; display: flex; flex-direction: column; gap: 14px">
+
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="Home.dc.html" aria-label="结束跟练" style="width: 44px; height: 44px; border-radius: 999px; background: #1E534D; color: #EAF2EF; display: flex; align-items: center; justify-content: center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+    </a>
+    <div style="font-size: 15px; font-weight: 700">今日 · 7 / 12</div>
+    <div style="width: 44px"></div>
+  </div>
+
+  <div style="display: flex; gap: 6px; font-size: 12px">
+    <span style="flex: 5; padding: 5px 0; text-align: center; border-radius: 999px; background: #7FD1C2; color: #0F302C; font-weight: 700">核心 3 / 5</span>
+    <span style="flex: 2; padding: 5px 0; text-align: center; border-radius: 999px; background: #1E534D; color: #A9C3BD">颈椎</span>
+    <span style="flex: 3; padding: 5px 0; text-align: center; border-radius: 999px; background: #1E534D; color: #A9C3BD">拉伸放松</span>
+  </div>
+
+  <div style="height: 140px; border-radius: 16px; background: #1E534D; display: flex; align-items: center; justify-content: center; gap: 10px; color: #A9C3BD; font-size: 13px">
+    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5" cy="9" r="2"></circle><path d="M7 10l13 6M7 12v6M3 18h4"></path></svg>
+    关键姿势照片
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 6px">
+    <h1 style="margin: 0; font-size: 24px; font-weight: 700">右侧桥 · 3 分钟</h1>
+    <div style="display: flex; align-items: center; gap: 10px; font-size: 13px; color: #A9C3BD">
+      <div style="display: flex; align-items: center; gap: 3px; height: 18px" aria-hidden="true">
+        <div style="width: 3px; height: 8px; border-radius: 2px; background: #7FD1C2"></div>
+        <div style="width: 3px; height: 16px; border-radius: 2px; background: #7FD1C2"></div>
+        <div style="width: 3px; height: 11px; border-radius: 2px; background: #7FD1C2"></div>
+        <div style="width: 3px; height: 18px; border-radius: 2px; background: #7FD1C2"></div>
+        <div style="width: 3px; height: 9px; border-radius: 2px; background: #7FD1C2"></div>
+      </div>
+      康复师原声提示 · 0:10
+    </div>
+  </div>
+
+  <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px">
+    <div style="width: 200px; height: 200px; border-radius: 999px; border: 10px solid #7FD1C2; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; background: #18493F">
+      <div style="font-size: 14px; color: #CFE3DE">{{ phase }}</div>
+      <div style="font-size: 44px; font-weight: 700; letter-spacing: 1px">1:48</div>
+      <div style="font-size: 12px; color: #CFE3DE">剩余</div>
+    </div>
+    <div style="font-size: 14px; color: #CFE3DE">身体成一条直线，自然呼吸</div>
+  </div>
+
+  <div style="display: flex; align-items: center; justify-content: center; gap: 28px">
+    <button type="button" aria-label="上一个动作" style="width: 52px; height: 52px; border-radius: 999px; border: 0; background: #1E534D; color: #EAF2EF; display: flex; align-items: center; justify-content: center">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6l-8 6 8 6zM6 6v12"></path></svg>
+    </button>
+    <button type="button" aria-label="{{ playLabel }}" onClick="{{ toggle }}" style="width: 76px; height: 76px; border-radius: 999px; border: 0; background: #7FD1C2; color: #0F302C; display: flex; align-items: center; justify-content: center">
+      <sc-if value="{{ playing }}" hint-placeholder-val="{{ true }}">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>
+      </sc-if>
+      <sc-if value="{{ paused }}" hint-placeholder-val="{{ false }}">
+        <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5l11 7-11 7z"></path></svg>
+      </sc-if>
+    </button>
+    <a href="Done.dc.html" aria-label="下一个动作" style="width: 52px; height: 52px; border-radius: 999px; background: #1E534D; color: #EAF2EF; display: flex; align-items: center; justify-content: center">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l8 6-8 6zM18 6v12"></path></svg>
+    </a>
+  </div>
+
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; border-radius: 14px; background: #1E534D">
+    <span style="font-size: 13px; color: #CFE3DE">下一个：臀桥 100 个 × 2 组</span>
+    <span style="font-size: 12px; color: #A9C3BD">手机放地上，听声音练</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { playing: true };
+  }
+  renderVals() {
+    const playing = this.state.playing;
+    return {
+      playing,
+      paused: !playing,
+      phase: playing ? '保持' : '已暂停',
+      playLabel: playing ? '暂停' : '继续',
+      toggle: () => this.setState({ playing: !playing })
+    };
+  }
+}
+</script>
+</body>
+</html>

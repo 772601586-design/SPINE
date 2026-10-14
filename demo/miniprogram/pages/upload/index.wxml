@@ -1,0 +1,40 @@
+<!-- 添加复查记录 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 30.77rpx 38.46rpx 46.15rpx; display: flex; flex-direction: column; gap: 26.92rpx">
+  <view style="display: flex; align-items: center; gap: 15.38rpx">
+    <text style="font-size: 28.85rpx; color: #5B6663">添加复查记录</text>
+  </view>
+  <view style="display: flex; flex-direction: column; gap: 15.38rpx">
+    <view style="margin: 0; font-size: 30.77rpx; font-weight: 700">1 · 拍下医院给你的资料</view>
+    <view style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 15.38rpx">
+      <view style="aspect-ratio: 3 / 4; border-radius: 19.23rpx; background: #FFFFFF; border: 1.92rpx solid #C9D4D0; font-size: 21.15rpx; color: #5B6663; display: flex; align-items: center; justify-content: center; text-align: center">影像报告</view>
+      <view style="aspect-ratio: 3 / 4; border-radius: 19.23rpx; background: #FFFFFF; border: 1.92rpx solid #C9D4D0; font-size: 21.15rpx; color: #5B6663; display: flex; align-items: center; justify-content: center; text-align: center">X 光片</view>
+      <view style="aspect-ratio: 3 / 4; border-radius: 19.23rpx; background: #FFFFFF; border: 1.92rpx solid #C9D4D0; font-size: 21.15rpx; color: #5B6663; display: flex; align-items: center; justify-content: center; text-align: center">检查报告</view>
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; aspect-ratio: 3 / 4; border-radius: 19.23rpx; border: 2.88rpx dashed #8A9A95; background: transparent; color: #3E4B47; font-size: 42.31rpx" aria-label="再拍一张">+</view>
+    </view>
+  </view>
+  <view style="display: flex; flex-direction: column; gap: 15.38rpx">
+    <view style="display: flex; justify-content: space-between; align-items: center">
+      <view style="margin: 0; font-size: 30.77rpx; font-weight: 700">2 · 核对识别出的信息</view>
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-width: 84.62rpx; height: 69.23rpx; padding: 0 23.08rpx; border: 0; border-radius: 1921.15rpx; background: {{ upEditBg }}; color: {{ upEditFg }}; font-size: 25rpx; font-weight: 700" aria-label="{{ upEditLabel }}" bindtap="act" data-fn="{{ toggleUpEdit }}" hover-class="tap">{{ upEditText }}</view>
+    </view>
+    <block wx:for="{{ upFields }}" wx:for-item="f" wx:for-index="fIndex" wx:key="_k">
+      <view style="padding: 19.23rpx 23.08rpx; border-radius: 23.08rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 7.69rpx">
+        <view style="display: flex; justify-content: space-between; align-items: center">
+          <text style="font-size: 23.08rpx; color: #5B6663">{{ f.label }}</text>
+          <text style="font-size: 21.15rpx; padding: 3.85rpx 15.38rpx; border-radius: 1921.15rpx; background: {{ f.tagBg }}; color: {{ f.tagFg }}">{{ f.src }}</text>
+        </view>
+        <block wx:if="{{ upView }}">
+          <view style="font-size: 28.85rpx; font-weight: 700; line-height: 1.5">{{ f.value }}</view>
+        </block>
+        <block wx:if="{{ upEditing }}">
+          <input style="min-height: 76.92rpx; border-radius: 15.38rpx; border: 1.92rpx solid #1F6F66; padding: 0 19.23rpx; font-size: 28.85rpx; font-weight: 700; color: #1F2A27; background: #F8FAF9; height: 76.92rpx" aria-label="{{ f.label }}" value="{{ f.value }}" placeholder-style="color: #8A9A95" />
+        </block>
+      </view>
+    </block>
+  </view>
+  <view style="display: flex; gap: 15.38rpx; align-items: flex-start; padding: 23.08rpx; border-radius: 23.08rpx; background: #EDF0EE; font-size: 23.08rpx; color: #3E4B47; line-height: 1.6">
+    <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNicgaGVpZ2h0PScxNicgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyMzRTRCNDcnIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbGluZWpvaW49J3JvdW5kJyBzdHlsZT0nbWFyZ2luLXRvcDogMnB4OyBmbGV4LXNocmluazogMCc+PGNpcmNsZSBjeD0nMTInIGN5PScxMicgcj0nOSc+PC9jaXJjbGU+PHBhdGggZD0nTTEyIDh2NU0xMiAxNmguMDEnPjwvcGF0aD48L3N2Zz4=" style="width: 30.77rpx; height: 30.77rpx; flex-shrink: 0; margin-top: 3.85rpx; flex-shrink: 0" />
+    <text>App 只帮你整理和对比，不做诊断。原图会一起保存，度数以原报告为准。</text>
+  </view>
+  <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 100rpx; border: 0; border-radius: 26.92rpx; background: #1F6F66; color: #FFFFFF; font-size: 30.77rpx; font-weight: 700" bindtap="act" data-fn="{{ saveUpload }}" hover-class="tap">保存到成长记录</view>
+</view>

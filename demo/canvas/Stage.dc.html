@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>选择治疗阶段</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F6F66}a:hover{color:#154F49}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F3F5F2; color: #1F2A27; font-family: 'Noto Sans SC', sans-serif; padding: 20px 20px 28px; display: flex; flex-direction: column; gap: 16px">
+
+  <div style="display: flex; align-items: center; justify-content: space-between">
+    <a href="Welcome.dc.html" aria-label="上一步" style="width: 44px; height: 44px; border-radius: 999px; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"></path></svg>
+    </a>
+    <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; width: 140px">
+      <div style="height: 4px; border-radius: 999px; background: #1F6F66"></div>
+      <div style="height: 4px; border-radius: 999px; background: #1F6F66"></div>
+      <div style="height: 4px; border-radius: 999px; background: #C9D4D0"></div>
+      <div style="height: 4px; border-radius: 999px; background: #C9D4D0"></div>
+    </div>
+    <span style="width: 44px; font-size: 13px; color: #5B6663; text-align: right">2 / 4</span>
+  </div>
+
+  <div>
+    <h1 style="margin: 0; font-size: 24px; font-weight: 700">你现在处在哪个阶段？</h1>
+    <p style="margin: 6px 0 0; font-size: 14px; color: #5B6663; line-height: 1.6">不同阶段，首页会为你准备不同的内容。以后复查时也可以随时切换。</p>
+  </div>
+
+  <div style="display: flex; flex-direction: column; gap: 0" role="radiogroup" aria-label="治疗阶段">
+    <sc-for list="{{ stages }}" as="s" hint-placeholder-count="5">
+      <div style="display: flex; gap: 12px">
+        <div style="display: flex; flex-direction: column; align-items: center; width: 20px; flex-shrink: 0">
+          <sc-if value="{{ s.selected }}" hint-placeholder-val="{{ false }}">
+            <span style="width: 20px; height: 20px; margin-top: 16px; border-radius: 999px; border: 6px solid #1F6F66; box-sizing: border-box; background: #FFFFFF"></span>
+          </sc-if>
+          <sc-if value="{{ s.idle }}" hint-placeholder-val="{{ true }}">
+            <span style="width: 20px; height: 20px; margin-top: 16px; border-radius: 999px; border: 2px solid #8A9A95; box-sizing: border-box; background: #F3F5F2"></span>
+          </sc-if>
+          <sc-if value="{{ s.hasLine }}" hint-placeholder-val="{{ true }}">
+            <span style="flex: 1; width: 2px; background: #C9D4D0"></span>
+          </sc-if>
+        </div>
+        <sc-if value="{{ s.selected }}" hint-placeholder-val="{{ false }}">
+          <button type="button" role="radio" aria-checked="true" onClick="{{ s.pick }}" style="flex: 1; margin-bottom: 8px; text-align: left; padding: 12px 14px; border-radius: 14px; border: 2px solid #1F6F66; background: #FFFFFF; font-family: inherit; color: #1F2A27; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 15px; font-weight: 700">{{ s.title }}</span>
+            <span style="font-size: 12px; color: #3E4B47; line-height: 1.5">{{ s.sub }}</span>
+          </button>
+        </sc-if>
+        <sc-if value="{{ s.idle }}" hint-placeholder-val="{{ true }}">
+          <button type="button" role="radio" aria-checked="false" onClick="{{ s.pick }}" style="flex: 1; margin-bottom: 8px; text-align: left; padding: 12px 14px; border-radius: 14px; border: 2px solid transparent; background: #FFFFFF; font-family: inherit; color: #1F2A27; display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 15px; font-weight: 700">{{ s.title }}</span>
+            <span style="font-size: 12px; color: #5B6663; line-height: 1.5">{{ s.sub }}</span>
+          </button>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+
+  <a href="Basics.dc.html" style="margin-top: auto; display: flex; align-items: center; justify-content: center; min-height: 52px; border-radius: 14px; background: #1F6F66; color: #FFFFFF; font-size: 16px; font-weight: 700; text-decoration: none">下一步</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { stage: 'new' };
+  }
+  renderVals() {
+    const cur = this.state.stage;
+    const defs = [
+      { id: 'check', title: '刚发现侧弯，还在检查', sub: '帮你了解检查流程，准备好要问医生的问题' },
+      { id: 'new', title: '刚开始戴支具（前两周）', sub: '适应期计划，陪你一点点习惯支具' },
+      { id: 'brace', title: '支具 + 运动训练', sub: '记录佩戴时长，按处方安排每天的训练' },
+      { id: 'off', title: '已脱支具，以运动为主', sub: '维持期：坚持训练，守住矫正成果' },
+      { id: 'adult', title: '成年后自我管理', sub: '侧弯专属训练，记录疼痛和体态变化' }
+    ];
+    const stages = defs.map((d, i) => ({
+      title: d.title,
+      sub: d.sub,
+      selected: d.id === cur,
+      idle: d.id !== cur,
+      hasLine: i < defs.length - 1,
+      pick: () => this.setState({ stage: d.id })
+    }));
+    return { stages };
+  }
+}
+</script>
+</body>
+</html>

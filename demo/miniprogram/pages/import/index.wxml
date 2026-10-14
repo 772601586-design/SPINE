@@ -1,0 +1,52 @@
+<!-- 导入处方 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 30.77rpx 38.46rpx 46.15rpx; display: flex; flex-direction: column; gap: 26.92rpx">
+  <view style="display: flex; align-items: center; gap: 15.38rpx">
+    <text style="font-size: 28.85rpx; color: #5B6663">导入运动处方</text>
+  </view>
+  <view style="display: flex; gap: 19.23rpx; align-items: center">
+    <view style="display: flex; gap: 11.54rpx">
+      <view style="width: 100rpx; height: 134.62rpx; border-radius: 15.38rpx; background: #FFFFFF; border: 1.92rpx solid #C9D4D0; font-size: 19.23rpx; color: #5B6663; display: flex; align-items: center; justify-content: center">第 1 页</view>
+      <view style="width: 100rpx; height: 134.62rpx; border-radius: 15.38rpx; background: #FFFFFF; border: 1.92rpx solid #C9D4D0; font-size: 19.23rpx; color: #5B6663; display: flex; align-items: center; justify-content: center">第 2 页</view>
+      <view style="width: 100rpx; height: 134.62rpx; border-radius: 15.38rpx; background: #FFFFFF; border: 1.92rpx solid #C9D4D0; font-size: 19.23rpx; color: #5B6663; display: flex; align-items: center; justify-content: center">第 3 页</view>
+    </view>
+    <view style="flex: 1; display: flex; flex-direction: column; gap: 7.69rpx">
+      <text style="font-size: 26.92rpx; font-weight: 700">已拍 3 页</text>
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; align-self: flex-start; min-height: 69.23rpx; padding: 0 23.08rpx; border: 1.92rpx solid #1F6F66; border-radius: 1921.15rpx; background: transparent; color: #1F6F66; font-size: 25rpx">补拍</view>
+    </view>
+  </view>
+  <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #1F6F66; color: #FFFFFF; display: flex; flex-direction: column; gap: 7.69rpx">
+    <view style="font-size: 34.62rpx; font-weight: 700">识别出 12 个动作</view>
+    <view style="font-size: 25rpx; color: #CFE8E2">已按功能分类，并识别出每个动作怎么做组、怎么播报</view>
+  </view>
+  <view style="padding: 23.08rpx 26.92rpx; border-radius: 26.92rpx; background: #F6DCC8; color: #6B3416; font-size: 25rpx; line-height: 1.6">和上一版处方相比有 1 处变化：臀桥 100 个 → 120 个</view>
+  <view style="display: flex; justify-content: space-between; align-items: center">
+    <view style="margin: 0; font-size: 30.77rpx; font-weight: 700">识别结果</view>
+    <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-width: 84.62rpx; height: 69.23rpx; padding: 0 23.08rpx; border: 0; border-radius: 1921.15rpx; background: {{ rxEditBg }}; color: {{ rxEditFg }}; font-size: 25rpx; font-weight: 700" aria-label="{{ rxEditLabel }}" bindtap="act" data-fn="{{ toggleRxEdit }}" hover-class="tap">{{ rxEditText }}</view>
+  </view>
+  <view style="padding: 7.69rpx 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column">
+    <block wx:for="{{ rxRows }}" wx:for-item="r" wx:for-index="rIndex" wx:key="_k">
+      <view style="display: flex; align-items: center; gap: 19.23rpx; min-height: 100rpx; border-bottom: 1.92rpx solid #EEF2F0">
+        <view style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3.85rpx">
+          <text style="font-size: 26.92rpx; font-weight: 700">{{ r.name }}</text>
+          <block wx:if="{{ rxView }}">
+            <text style="font-size: 23.08rpx; color: #5B6663">{{ r.mod }} · {{ r.param }}</text>
+          </block>
+          <block wx:if="{{ rxEditing }}">
+            <input style="min-height: 69.23rpx; border-radius: 15.38rpx; border: 1.92rpx solid #1F6F66; padding: 0 15.38rpx; font-size: 25rpx; color: #1F2A27; background: #F8FAF9; height: 69.23rpx" aria-label="{{ r.name }} 的参数" value="{{ r.param }}" placeholder-style="color: #8A9A95" />
+          </block>
+        </view>
+        <text style="font-size: 23.08rpx; padding: 5.77rpx 15.38rpx; border-radius: 1921.15rpx; background: #DDEDE9; color: #1F4F49; flex-shrink: 0">{{ r.modeShort }}播报</text>
+      </view>
+    </block>
+  </view>
+  <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; border: 3.85rpx solid #E8A87C; display: flex; flex-direction: column; gap: 19.23rpx">
+    <view style="font-size: 26.92rpx; line-height: 1.6"><text style="font-weight: 700">“强化运动”</text>没有找到对应的标准动作，可能是康复师的自定名称。</view>
+    <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11.54rpx">
+      <block wx:for="{{ rxNameOpts }}" wx:for-item="o" wx:for-index="oIndex" wx:key="_k">
+        <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border-radius: 19.23rpx; border: {{ o.border }}; background: {{ o.bg }}; color: {{ o.fg }}; font-size: 25rpx; font-weight: {{ o.fw }}" bindtap="act" data-fn="{{ o.pick }}" hover-class="tap">{{ o.label }}</view>
+      </block>
+    </view>
+  </view>
+  <view style="font-size: 23.08rpx; color: #5B6663; line-height: 1.6">识别只做整理，不改变处方内容。认错了点右上角直接改，原图会一起保存。</view>
+  <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 100rpx; border: 0; border-radius: 26.92rpx; background: #1F6F66; color: #FFFFFF; font-size: 30.77rpx; font-weight: 700" bindtap="act" data-fn="{{ importNext }}" hover-class="tap">{{ importBtn }}</view>
+</view>

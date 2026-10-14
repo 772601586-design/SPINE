@@ -1,0 +1,5 @@
+// 给图标 data URI 里的动态颜色做转义（# 在 URI 里要写成 %23）
+var enc = function (v) {
+  return ('' + v).replace(getRegExp('#', 'g'), '%23').replace(getRegExp(' ', 'g'), '%20');
+};
+module.exports = { enc: enc };

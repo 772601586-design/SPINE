@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>训练</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1F6F66}a:hover{color:#154F49}
+</style>
+</helmet>
+<div style="width: 390px; height: 1560px; box-sizing: border-box; background: #F3F5F2; color: #1F2A27; font-family: 'Noto Sans SC', sans-serif; display: flex; flex-direction: column">
+  <div style="flex: 1; padding: 24px 20px 20px; display: flex; flex-direction: column; gap: 14px">
+
+    <div>
+      <h1 style="margin: 0; font-size: 26px; font-weight: 700">我的训练</h1>
+      <div style="font-size: 13px; color: #5B6663; margin-top: 4px">2025 运动处方 · Rigo B1 · 7 个模块 16 个动作</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+      <a href="Import.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 12px; border-radius: 14px; background: #FFFFFF; color: #1F2A27; text-decoration: none; font-size: 14px; font-weight: 700">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F6F66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+        拍照导入处方
+      </a>
+      <a href="Recording.dc.html" style="display: flex; align-items: center; gap: 8px; padding: 12px; border-radius: 14px; background: #FFFFFF; color: #1F2A27; text-decoration: none; font-size: 14px; font-weight: 700">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F6F66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="M16 10l5-3v10l-5-3"></path></svg>
+        复诊录制模式
+      </a>
+    </div>
+
+    <div style="padding: 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 10px">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <h2 style="margin: 0; font-size: 16px; font-weight: 700">本周安排</h2>
+        <span style="font-size: 12px; color: #5B6663">核心的空心圈会随实际练习日挪动</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 64px repeat(7, minmax(0, 1fr)); gap: 4px; align-items: center; font-size: 12px; color: #5B6663; text-align: center">
+        <span></span>
+        <span>一</span>
+        <span style="padding: 2px 0; border-radius: 6px; background: #1F6F66; color: #FFFFFF; font-weight: 700">二</span>
+        <span>三</span><span>四</span><span>五</span><span>六</span><span>日</span>
+      </div>
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+        <div style="display: grid; grid-template-columns: 64px repeat(7, minmax(0, 1fr)); gap: 4px; align-items: center; min-height: 30px">
+          <span style="font-size: 12px; color: #2E3B37; text-align: left">{{ r.name }}</span>
+          <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="7">
+            <div style="display: flex; justify-content: center">
+              <sc-if value="{{ c.done }}" hint-placeholder-val="{{ false }}">
+                <span style="width: 18px; height: 18px; border-radius: 999px; background: #1F6F66"></span>
+              </sc-if>
+              <sc-if value="{{ c.plan }}" hint-placeholder-val="{{ true }}">
+                <span style="width: 18px; height: 18px; border-radius: 999px; border: 2px solid #1F6F66; box-sizing: border-box"></span>
+              </sc-if>
+              <sc-if value="{{ c.none }}" hint-placeholder-val="{{ false }}">
+                <span style="width: 10px; height: 2px; border-radius: 2px; background: #C9D4D0"></span>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="padding: 14px; border-radius: 18px; background: #DDEDE9; display: flex; flex-direction: column; gap: 10px">
+      <div style="font-size: 15px; font-weight: 700; color: #1F4F49">自动排卡规则</div>
+      <div style="display: flex; align-items: center; gap: 4px; flex-wrap: wrap; font-size: 12px">
+        <span style="padding: 4px 8px; border-radius: 999px; background: #FFFFFF; color: #1F4F49; font-weight: 500">柔韧</span><span style="color: #3F7F76">→</span>
+        <span style="padding: 4px 8px; border-radius: 999px; background: #FFFFFF; color: #1F4F49; font-weight: 500">3D 矫正</span><span style="color: #3F7F76">→</span>
+        <span style="padding: 4px 8px; border-radius: 999px; background: #FFFFFF; color: #1F4F49; font-weight: 500">核心力量</span><span style="color: #3F7F76">→</span>
+        <span style="padding: 4px 8px; border-radius: 999px; background: #FFFFFF; color: #1F4F49; font-weight: 500">颈椎</span><span style="color: #3F7F76">→</span>
+        <span style="padding: 4px 8px; border-radius: 999px; background: #FFFFFF; color: #1F4F49; font-weight: 500">拉伸放松</span>
+      </div>
+      
+    </div>
+
+    <h2 style="margin: 4px 0 0; font-size: 17px; font-weight: 700">训练模块 · 按练习顺序</h2>
+    <sc-for list="{{ modules }}" as="m" hint-placeholder-count="5">
+      <div style="padding: 12px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px">
+          <span style="font-size: 15px; font-weight: 700"><span style="color: #8A9A95; font-weight: 500">{{ m.idx }} </span>{{ m.name }}</span>
+          <sc-if value="{{ m.isDaily }}" hint-placeholder-val="{{ true }}">
+            <span style="padding: 3px 10px; border-radius: 999px; background: #DDEDE9; color: #1F4F49; font-size: 12px; font-weight: 500">{{ m.freq }}</span>
+          </sc-if>
+          <sc-if value="{{ m.isAlt }}" hint-placeholder-val="{{ false }}">
+            <span style="padding: 3px 10px; border-radius: 999px; background: #F6DCC8; color: #6B3416; font-size: 12px; font-weight: 500">{{ m.freq }}</span>
+          </sc-if>
+        </div>
+        <sc-for list="{{ m.actions }}" as="a" hint-placeholder-count="2">
+          <a href="CardDetail.dc.html" style="display: flex; align-items: center; gap: 8px; min-height: 40px; border-top: 1px solid #EEF2F0; color: #1F2A27; text-decoration: none">
+            <span style="flex: 1; font-size: 14px">{{ a.name }}</span>
+            <span style="font-size: 12px; color: #5B6663">{{ a.param }}</span>
+            <sc-if value="{{ a.video }}" hint-placeholder-val="{{ true }}">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1F6F66" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="有示范视频"><rect x="3" y="6" width="13" height="12" rx="2"></rect><path d="M16 10l5-3v10l-5-3"></path></svg>
+            </sc-if>
+            <sc-if value="{{ a.novideo }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size: 11px; color: #8A5A2B">待录制</span>
+            </sc-if>
+          </a>
+        </sc-for>
+      </div>
+    </sc-for>
+
+    <div style="padding: 12px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 4px">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px">
+        <span style="font-size: 15px; font-weight: 700">日常任务 · 不进卡组</span>
+        <span style="font-size: 12px; color: #5B6663">在今日页单独打卡</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; min-height: 40px; border-top: 1px solid #EEF2F0; font-size: 14px"><span>认知学习 · 画脊柱曲线图</span><span style="font-size: 12px; color: #5B6663">每天 10 张</span></div>
+      <div style="display: flex; justify-content: space-between; align-items: center; min-height: 40px; border-top: 1px solid #EEF2F0; font-size: 14px"><span>姿势矫正 · 上课坐姿提醒</span><span style="font-size: 12px; color: #5B6663">上课时间</span></div>
+      <div style="display: flex; justify-content: space-between; align-items: center; min-height: 40px; border-top: 1px solid #EEF2F0; font-size: 14px"><span>姿势矫正 · 撑杆站立</span><span style="font-size: 12px; color: #5B6663">3 分钟</span></div>
+    </div>
+
+    <div style="padding: 12px 14px; border-radius: 18px; background: #FFFFFF; display: flex; flex-direction: column; gap: 6px">
+      <div style="display: flex; justify-content: space-between; align-items: center">
+        <span style="font-size: 15px; font-weight: 700">康复师建议的运动</span>
+        <span style="padding: 3px 10px; border-radius: 999px; background: #F6DCC8; color: #6B3416; font-size: 12px; font-weight: 500">每周 3 次</span>
+      </div>
+      <div style="font-size: 14px">蛙泳 · 每次 30 分钟</div>
+      <div style="font-size: 12px; color: #5B6663">运动中心率 130–150 次/分 · 可连接运动手表自动记录</div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 18px; border: 1.5px dashed #C9D4D0">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#5B6663" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c1-3.5 3.5-5 6.5-5s5.5 1.5 6.5 5"></path><path d="M19 8v6M16 11h6"></path></svg>
+      <div style="flex: 1">
+        <div style="font-size: 14px; font-weight: 700">邀请康复师一起管理处方</div>
+        <div style="font-size: 12px; color: #5B6663">即将开放 · 康复师可以直接推送和调整动作</div>
+      </div>
+    </div>
+  </div>
+
+  <nav style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 1px solid #DCE5E1; background: #FFFFFF; padding: 6px 0 14px">
+    <a href="Home.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #5B6663; font-size: 11px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"></path></svg>今日</a>
+    <a href="Plan.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #1F6F66; font-size: 11px; font-weight: 700; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1.5"></rect><rect x="13" y="4" width="7" height="7" rx="1.5"></rect><rect x="4" y="13" width="7" height="7" rx="1.5"></rect><rect x="13" y="13" width="7" height="7" rx="1.5"></rect></svg>训练</a>
+    <a href="Growth.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #5B6663; font-size: 11px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19l5-6 4 3 7-9"></path></svg>成长</a>
+    <a href="Community.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #5B6663; font-size: 11px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20c1-3.5 3.5-5 6.5-5s5.5 1.5 6.5 5"></path><path d="M16 5.5a3 3 0 0 1 0 5.5M18.5 15c1.6.7 2.6 2.3 3 5"></path></svg>社群</a>
+    <a href="Me.dc.html" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 48px; color: #5B6663; font-size: 11px; text-decoration: none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg>我的</a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1560}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const mk = (pattern) => pattern.split('').map((ch) => ({ done: ch === 'D', plan: ch === 'P', none: ch === '-' }));
+    const rows = [
+      { name: '柔韧', cells: mk('DDPPPPP') },
+      { name: '3D 矫正', cells: mk('DDPPPPP') },
+      { name: '核心', cells: mk('-P-P-P-') },
+      { name: '颈椎', cells: mk('DPPPPPP') },
+      { name: '拉伸放松', cells: mk('DPPPPPP') },
+      { name: '蛙泳', cells: mk('D---P-P') }
+    ];
+    const daily = { isDaily: true, isAlt: false };
+    const alt = { isDaily: false, isAlt: true };
+    const act = (name, param, video) => ({ name, param, video, novideo: !video });
+    const modules = [
+      { idx: '1', name: '柔韧性练习', freq: '每天', ...daily, actions: [act('猫—骆驼', '2 分钟', true), act('右弓箭步 · 拉伸左髂腰肌', '30 秒 × 2', false)] },
+      { idx: '2', name: '3D 矫正练习', freq: '每天', ...daily, actions: [act('强化运动 · 肋木', '5 分钟', true), act('肌肉圆柱', '5 分钟', true)] },
+      { idx: '3', name: '核心 / 肩胛带稳定', freq: '隔天', ...alt, actions: [act('卷腹仰卧自行车', '50 次 × 2', false), act('平板支撑', '3 分钟', true), act('右侧桥', '3 分钟', true), act('臀桥', '100 个 × 2', false), act('Y-W-T', '各 30 个 × 3', false)] },
+      { idx: '4', name: '颈椎矫正', freq: '每天', ...daily, actions: [act('颈椎矫正操（7 个小动作）', '约 5 分钟', false)] },
+      { idx: '5', name: '拉伸放松', freq: '每天', ...daily, actions: [act('跪位 / 坐位前伸', '各 2 分钟', true), act('悬吊配合呼吸', '3 分钟', false)] }
+    ];
+    return { rows, modules };
+  }
+}
+</script>
+</body>
+</html>

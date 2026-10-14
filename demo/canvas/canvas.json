@@ -1,0 +1,345 @@
+{
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Basics.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "A3 最少必要信息",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "Brace.dc.html": {
+      "h": 900,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "D1 我的支具 · 自动记录",
+      "w": 390,
+      "x": 0,
+      "y": 5160
+    },
+    "Card.dc.html": {
+      "h": 1080,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "④ 卡片详情 · 学 / 练 / 查",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "CardDetail.dc.html": {
+      "h": 1120,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "B4 动作卡片 · 学 / 练 / 查",
+      "w": 390,
+      "x": 940,
+      "y": 1200
+    },
+    "Community.dc.html": {
+      "h": 1720,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "E2 社群 · 小组 / 搭档 / 支具生活 / Deco",
+      "w": 390,
+      "x": 470,
+      "y": 7060
+    },
+    "Done.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "B5 完成打卡",
+      "w": 390,
+      "x": 1410,
+      "y": 1200
+    },
+    "Follow.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "B2 跟练 · 呼吸环",
+      "w": 390,
+      "x": 470,
+      "y": 1200
+    },
+    "Growth.dc.html": {
+      "h": 1420,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "D2 成长记录 · 治疗历程与复查时间线",
+      "w": 390,
+      "x": 470,
+      "y": 5160
+    },
+    "Home.dc.html": {
+      "h": 1720,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "B1 今日（三种阶段可切换）",
+      "w": 390,
+      "x": 0,
+      "y": 1200
+    },
+    "Import.dc.html": {
+      "h": 1120,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "C2 拍照导入处方",
+      "w": 390,
+      "x": 470,
+      "y": 3260
+    },
+    "Main.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "① 今日训练 · 卡片计划",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "Me.dc.html": {
+      "h": 1420,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "E4 我的 · 档案与共享设置",
+      "w": 390,
+      "x": 1410,
+      "y": 7060
+    },
+    "Mirror.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "③ 跟练 B · 镜子模式",
+      "w": 390,
+      "x": 940,
+      "y": 0
+    },
+    "Plan.dc.html": {
+      "h": 1560,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "C1 训练 · 处方与本周排卡",
+      "w": 390,
+      "x": 0,
+      "y": 3260
+    },
+    "Profile.dc.html": {
+      "h": 1420,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "⑤ 个人档案 · 2025 运动处方",
+      "w": 390,
+      "x": 1880,
+      "y": 0
+    },
+    "Ready.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "A4 准备好了 · 适应期鼓励",
+      "w": 390,
+      "x": 1410,
+      "y": 0
+    },
+    "Recording.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "C3 复诊录制模式",
+      "w": 390,
+      "x": 940,
+      "y": 3260
+    },
+    "Rewards.dc.html": {
+      "h": 1120,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "E1 松果与勋章 · 补卡",
+      "w": 390,
+      "x": 0,
+      "y": 7060
+    },
+    "Session.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "radius": 28,
+      "title": "② 跟练 A · 呼吸环（语音为主）",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "Stage.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "A2 选择治疗阶段",
+      "w": 390,
+      "x": 470,
+      "y": 0
+    },
+    "Upload.dc.html": {
+      "h": 1180,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "D3 添加复查记录 · 拍照识别",
+      "w": 390,
+      "x": 940,
+      "y": 5160
+    },
+    "Welcome.dc.html": {
+      "h": 844,
+      "is_interactive": true,
+      "page": "v2",
+      "radius": 28,
+      "title": "A1 欢迎 · 年龄与性别",
+      "w": 390,
+      "x": 0,
+      "y": 0
+    },
+    "Prototype.dc.html": {
+      "x": 0,
+      "y": 0,
+      "w": 390,
+      "h": 844,
+      "title": "Spine 交互原型 · 完整体验",
+      "page": "v3",
+      "is_interactive": true,
+      "radius": 28
+    }
+  },
+  "createdOnFiles": {
+    "at": "2026-10-13T07:20:00Z",
+    "v": 1
+  },
+  "designSystems": [],
+  "launch": {
+    "page": "v3",
+    "view": "canvas"
+  },
+  "notes": {
+    "rowA": {
+      "kind": "title1",
+      "maxW": 1800,
+      "page": "v2",
+      "text": "A · 首次使用：循序渐进建档",
+      "w": 240,
+      "x": 0,
+      "y": -290
+    },
+    "rowB": {
+      "kind": "title1",
+      "maxW": 1800,
+      "page": "v2",
+      "text": "B · 每天：今日、跟练与打卡",
+      "w": 240,
+      "x": 0,
+      "y": 910
+    },
+    "rowC": {
+      "kind": "title1",
+      "maxW": 1330,
+      "page": "v2",
+      "text": "C · 处方：自动排卡与复诊录制",
+      "w": 240,
+      "x": 0,
+      "y": 2970
+    },
+    "rowD": {
+      "kind": "title1",
+      "maxW": 1330,
+      "page": "v2",
+      "text": "D · 支具与成长记录",
+      "w": 240,
+      "x": 0,
+      "y": 4870
+    },
+    "rowE": {
+      "kind": "title1",
+      "maxW": 1800,
+      "page": "v2",
+      "text": "E · 激励、社群、家长与我的",
+      "w": 240,
+      "x": 0,
+      "y": 6770
+    },
+    "title": {
+      "kind": "title1",
+      "maxW": 2270,
+      "page": "v1",
+      "text": "Spine · 打卡与跟练 Demo",
+      "w": 240,
+      "x": 0,
+      "y": -300
+    },
+    "v3title": {
+      "kind": "title1",
+      "maxW": 800,
+      "page": "v3",
+      "text": "Spine · 交互原型 v3（点击体验全部功能）",
+      "w": 240,
+      "x": 0,
+      "y": -120
+    }
+  },
+  "order": [
+    "Main.dc.html",
+    "Session.dc.html",
+    "Mirror.dc.html",
+    "Card.dc.html",
+    "Profile.dc.html",
+    "Welcome.dc.html",
+    "Stage.dc.html",
+    "Basics.dc.html",
+    "Ready.dc.html",
+    "Home.dc.html",
+    "Follow.dc.html",
+    "CardDetail.dc.html",
+    "Done.dc.html",
+    "Plan.dc.html",
+    "Import.dc.html",
+    "Recording.dc.html",
+    "Brace.dc.html",
+    "Growth.dc.html",
+    "Upload.dc.html",
+    "Rewards.dc.html",
+    "Community.dc.html",
+    "Me.dc.html",
+    "Prototype.dc.html"
+  ],
+  "pages": [
+    {
+      "id": "v1",
+      "name": "第一版 · 打卡探索"
+    },
+    {
+      "id": "v2",
+      "name": "完整产品 Demo"
+    },
+    {
+      "id": "v3",
+      "name": "交互原型 v3"
+    }
+  ],
+  "title": "Spine 跟练卡片 Demo"
+}
