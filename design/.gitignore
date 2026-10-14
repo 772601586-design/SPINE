@@ -1,0 +1,8 @@
+# Obsidian 本机界面状态（每个人不同，不提交）
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.trash/
+.DS_Store
+# 真实病历资料不进仓库
+*.pdf
