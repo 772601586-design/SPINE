@@ -3,7 +3,12 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "check:wxml": "node scripts/check-wxml.cjs",
+    "check:rhythm": "node scripts/check-rhythm.cjs",
+    "check:recordings": "node scripts/check-local-recordings.cjs",
+    "sync:prototype": "node scripts/sync-prototype.cjs",
+    "check:prototype": "node scripts/check-prototype.cjs && node scripts/check-prototype-entry.cjs"
   },
   "devDependencies": {
     "typescript": "6.0.3"

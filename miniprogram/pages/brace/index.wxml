@@ -1,5 +1,6 @@
 <view class="page">
   <view class="heading"><text class="title">支具管理</text><text class="subtitle">佩戴状态与记录由服务端保存。</text></view>
+  <view class="card" bindtap="openTarget"><text class="card-title">每日个人目标：{{targetHours ? targetHours + ' 小时' : '尚未填写'}}</text><text class="muted">按医嘱填写目标时长，点击修改 ›</text><text wx:if="{{targetError}}" class="error">{{targetError}}</text></view>
   <view wx:if="{{error}}" class="error" bindtap="reload">{{error}} 点击重试</view>
   <view wx:if="{{loading}}" class="card"><view class="empty">正在读取…</view></view>
   <view wx:if="{{braceOptions.length}}" class="card">

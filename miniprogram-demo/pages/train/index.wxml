@@ -1,0 +1,105 @@
+<!-- 训练 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 46.15rpx 38.46rpx 38.46rpx; display: flex; flex-direction: column; gap: 26.92rpx">
+  <view>
+    <view style="margin: 0; font-size: 50rpx; font-weight: 700">我的训练</view>
+    <view style="font-size: 25rpx; color: #5B6663; margin-top: 7.69rpx">{{ rxLine }}</view>
+  </view>
+  <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 19.23rpx">
+    <view style="display: flex; align-items: center; gap: 15.38rpx; padding: 23.08rpx; min-height: 100rpx; border: 0; border-radius: 26.92rpx; background: #FFFFFF; color: #1F2A27; font-size: 26.92rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.record }}" hover-class="tap"><image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMCcgaGVpZ2h0PScyMCcgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyMxRjZGNjYnIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbGluZWpvaW49J3JvdW5kJz48cmVjdCB4PSczJyB5PSc2JyB3aWR0aD0nMTMnIGhlaWdodD0nMTInIHJ4PScyJz48L3JlY3Q+PHBhdGggZD0nTTE2IDEwbDUtM3YxMGwtNS0zJz48L3BhdGg+PC9zdmc+" style="width: 38.46rpx; height: 38.46rpx; flex-shrink: 0" />现场录动作</view>
+    <view style="display: flex; align-items: center; gap: 15.38rpx; padding: 23.08rpx; min-height: 100rpx; border: 0; border-radius: 26.92rpx; background: #FFFFFF; color: #1F2A27; font-size: 26.92rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.import }}" hover-class="tap"><image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMCcgaGVpZ2h0PScyMCcgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyMxRjZGNjYnIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbGluZWpvaW49J3JvdW5kJz48cGF0aCBkPSdNNCA4aDNsMi0zaDZsMiAzaDN2MTFINHonPjwvcGF0aD48Y2lyY2xlIGN4PScxMicgY3k9JzEzJyByPSczLjUnPjwvY2lyY2xlPjwvc3ZnPg==" style="width: 38.46rpx; height: 38.46rpx; flex-shrink: 0" />拍处方单</view>
+  </view>
+  <block wx:if="{{ hasDrafts }}">
+    <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #F8F1EA; border: 2.88rpx dashed #E8A87C; display: flex; flex-direction: column; gap: 19.23rpx">
+      <view style="font-size: 28.85rpx; font-weight: 700">现场录的 {{ draftCount }} 段视频还没整理</view>
+      <view style="font-size: 25rpx; color: #3E4B47; line-height: 1.6">处方单到了就拍下来，App 会把视频配到对应的动作上。没有处方单，也可以先配到现有卡片。</view>
+      <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15.38rpx">
+        <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border: 0; border-radius: 23.08rpx; background: #1F6F66; color: #FFFFFF; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.import }}" hover-class="tap">处方单到了</view>
+        <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border: 2.88rpx solid #1F6F66; border-radius: 23.08rpx; background: transparent; color: #1F6F66; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.match }}" hover-class="tap">先配到现有卡片</view>
+      </view>
+    </view>
+  </block>
+  <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
+    <view style="display: flex; justify-content: space-between; align-items: baseline">
+      <view style="margin: 0; font-size: 30.77rpx; font-weight: 700">本周安排</view>
+      <text style="font-size: 23.08rpx; color: #5B6663">核心的空心圈会随实际练习日挪动</text>
+    </view>
+    <view style="display: grid; grid-template-columns: 123.08rpx repeat(7, minmax(0, 1fr)); gap: 7.69rpx; align-items: center; font-size: 23.08rpx; color: #5B6663; text-align: center">
+      <text></text>
+      <text>一</text>
+      <text>二</text>
+      <text style="padding: 3.85rpx 0; border-radius: 11.54rpx; background: #1F6F66; color: #FFFFFF; font-weight: 700">三</text>
+      <text>四</text>
+      <text>五</text>
+      <text>六</text>
+      <text>日</text>
+    </view>
+    <block wx:for="{{ weekRows }}" wx:for-item="r" wx:for-index="rIndex" wx:key="_k">
+      <view style="display: grid; grid-template-columns: 123.08rpx repeat(7, minmax(0, 1fr)); gap: 7.69rpx; align-items: center; min-height: 57.69rpx">
+        <text style="font-size: 23.08rpx; color: #2E3B37">{{ r.name }}</text>
+        <block wx:for="{{ r.cells }}" wx:for-item="c" wx:for-index="cIndex" wx:key="_k">
+          <view style="display: flex; justify-content: center">
+            <text style="width: {{ c.w }}; height: {{ c.h }}; border-radius: 1921.15rpx; background: {{ c.bg }}; border: {{ c.border }}; box-sizing: border-box"></text>
+          </view>
+        </block>
+      </view>
+    </block>
+  </view>
+  <view style="padding: 23.08rpx 26.92rpx; border-radius: 34.62rpx; background: #DDEDE9; display: flex; align-items: center; gap: 7.69rpx; flex-wrap: wrap; font-size: 23.08rpx">
+    <text style="font-weight: 700; color: #1F4F49; margin-right: 7.69rpx">练习顺序</text>
+    <text style="padding: 7.69rpx 15.38rpx; border-radius: 1921.15rpx; background: #FFFFFF; color: #1F4F49">柔韧</text>
+    <text style="color: #3F7F76">→</text>
+    <text style="padding: 7.69rpx 15.38rpx; border-radius: 1921.15rpx; background: #FFFFFF; color: #1F4F49">3D 矫正</text>
+    <text style="color: #3F7F76">→</text>
+    <text style="padding: 7.69rpx 15.38rpx; border-radius: 1921.15rpx; background: #FFFFFF; color: #1F4F49">核心</text>
+    <text style="color: #3F7F76">→</text>
+    <text style="padding: 7.69rpx 15.38rpx; border-radius: 1921.15rpx; background: #FFFFFF; color: #1F4F49">颈椎</text>
+    <text style="color: #3F7F76">→</text>
+    <text style="padding: 7.69rpx 15.38rpx; border-radius: 1921.15rpx; background: #FFFFFF; color: #1F4F49">拉伸放松</text>
+  </view>
+  <block wx:for="{{ modules }}" wx:for-item="m" wx:for-index="mIndex" wx:key="_k">
+    <view style="padding: 23.08rpx 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 3.85rpx">
+      <view style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7.69rpx">
+        <text style="font-size: 28.85rpx; font-weight: 700">{{ m.name }}</text>
+        <text style="padding: 5.77rpx 19.23rpx; border-radius: 1921.15rpx; background: {{ m.tagBg }}; color: {{ m.tagFg }}; font-size: 23.08rpx; font-weight: 500">{{ m.freq }}</text>
+      </view>
+      <block wx:for="{{ m.actions }}" wx:for-item="a" wx:for-index="aIndex" wx:key="_k">
+        <view style="display: flex; align-items: center; gap: 15.38rpx; min-height: 84.62rpx; border: 0; border-top: 1.92rpx solid #EEF2F0; background: transparent; padding: 0; color: #1F2A27; text-align: left" bindtap="act" data-fn="{{ a.open }}" hover-class="tap">
+          <text style="flex: 1; font-size: 26.92rpx">{{ a.name }}</text>
+          <text style="font-size: 23.08rpx; color: #5B6663">{{ a.param }}</text>
+          <text style="font-size: 21.15rpx; color: {{ a.vColor }}; min-width: 76.92rpx; text-align: right">{{ a.vText }}</text>
+        </view>
+      </block>
+    </view>
+  </block>
+  <view style="padding: 23.08rpx 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 3.85rpx">
+    <view style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7.69rpx">
+      <text style="font-size: 28.85rpx; font-weight: 700">日常任务 · 不进卡组</text>
+      <text style="font-size: 23.08rpx; color: #5B6663">在今日页单独打卡</text>
+    </view>
+    <view style="display: flex; justify-content: space-between; align-items: center; min-height: 76.92rpx; border-top: 1.92rpx solid #EEF2F0; font-size: 26.92rpx">
+      <text>姿势矫正 · 上课坐姿</text>
+      <text style="font-size: 23.08rpx; color: #5B6663">右臀承重，躯干挺直</text>
+    </view>
+    <view style="display: flex; justify-content: space-between; align-items: center; min-height: 76.92rpx; border-top: 1.92rpx solid #EEF2F0; font-size: 26.92rpx">
+      <text>姿势矫正 · 撑杆站立</text>
+      <text style="font-size: 23.08rpx; color: #5B6663">3 分钟</text>
+    </view>
+    <view style="display: flex; justify-content: space-between; align-items: center; min-height: 76.92rpx; border-top: 1.92rpx solid #EEF2F0; font-size: 26.92rpx">
+      <text>康复师建议 · 蛙泳</text>
+      <text style="font-size: 23.08rpx; color: #5B6663">每周 3 次 · 30 分钟</text>
+    </view>
+  </view>
+  <view style="display: flex; align-items: center; gap: 23.08rpx; padding: 23.08rpx 26.92rpx; border: 0; border-radius: 34.62rpx; background: #FFFFFF; color: #1F2A27; text-align: left" bindtap="act" data-fn="{{ nav.learn }}" hover-class="tap">
+    <view style="flex: 1; display: flex; flex-direction: column; gap: 3.85rpx">
+      <text style="font-size: 26.92rpx; font-weight: 700">认知学习 · 画脊柱曲线图</text>
+      <text style="font-size: 23.08rpx; color: #5B6663">处方里的认知练习，挪到了社群 › 学习，不占每天的卡组</text>
+    </view>
+    <text style="font-size: 34.62rpx; color: #8A9A95">›</text>
+  </view>
+  <view style="display: flex; align-items: center; gap: 23.08rpx; padding: 23.08rpx 26.92rpx; border-radius: 34.62rpx; border: 2.88rpx dashed #C9D4D0">
+    <view style="flex: 1">
+      <view style="font-size: 26.92rpx; font-weight: 700">邀请康复师一起管理处方</view>
+      <view style="font-size: 23.08rpx; color: #5B6663">即将开放 · 康复师可以直接推送和调整动作</view>
+    </view>
+  </view>
+</view>

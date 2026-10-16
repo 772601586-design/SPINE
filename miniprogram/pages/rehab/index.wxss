@@ -1,8 +1,12 @@
-.tag { padding: 4rpx 16rpx; border-radius: 999rpx; background: #dfeadf; color: #3d6350; font-size: 21rpx; }
-.line { display: block; margin: 8rpx 0; font-size: 27rpx; line-height: 1.5; }
-.strong { font-weight: 600; font-size: 30rpx; }
-.dot { display: inline-block; width: 14rpx; height: 14rpx; margin-right: 10rpx; border-radius: 50%; background: #b9c3bd; }
-.dot-on { background: #246b57; }
-.row.gap { gap: 20rpx; }
-.compact { flex: 1; margin-top: 20rpx; font-size: 25rpx; }
-.center { display: block; margin-top: 18rpx; text-align: center; }
+.overview { display: flex; gap: 18rpx; }
+.metric { flex: 1; min-width: 0; padding: 24rpx; background: #fff; border-radius: 32rpx; }
+.metric-symbol { font-size: 48rpx; color: #1f6f66; margin-bottom: 12rpx; }
+.metric text { display: block; }
+.metric-value { font-size: 31rpx; font-weight: 700; margin: 8rpx 0; }
+.peach .metric-symbol { color: #c4602a; }
+.intro-card { margin-top: 26rpx; }
+.deck-card .card-title { margin: 16rpx 0 8rpx; }
+.gentle-note { background: #eee9df; }
+.completion-mark { color: #1f6f66; font-size: 23rpx; }
+.deck-done { background: #e8efea; }
+.deck-card .small { display: block; margin-top: 10rpx; }

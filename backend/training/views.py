@@ -16,7 +16,8 @@ from .models import (PersonalActionCard, PersonalActionCardRevision, PlanVersion
 from .serializers import (AttemptSerializer, CardUpdateSerializer, ConfirmSetSerializer,
                           AddActionCardSerializer, PersonalActionCardSerializer, ReorderCardsSerializer,
                           SetExecutionSerializer, StartAttemptSerializer,
-                          TrainingPlanSerializer)
+                          TrainingPlanSerializer, TodayDeckSerializer)
+from .scheduler import today_deck
 from .services import (IdempotencyConflict, RevisionConflict, current_plan, lock_owner,
                        readiness, record_card_revision, require_active_attempt, snapshot_plan)
 
@@ -36,6 +37,12 @@ class TrainingPlanView(APIView):
         if not plan:
             return Response(None)
         return Response(TrainingPlanSerializer(plan).data)
+
+
+class TodayDeckView(APIView):
+    @extend_schema(responses=TodayDeckSerializer)
+    def get(self, request):
+        return Response(TodayDeckSerializer(today_deck(request.user)).data)
 
 
 @extend_schema_view(list=extend_schema(responses=PersonalActionCardSerializer(many=True)),
@@ -228,6 +235,8 @@ class TrainingAttemptViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin,
             attempt.status = TrainingAttempt.COMPLETED if count >= attempt.planned_dose["sets"] else TrainingAttempt.PARTIAL
             attempt.ended_at = timezone.now()
             attempt.save(update_fields=["status", "ended_at"])
+            from life.services import award_training_day
+            award_training_day(request.user)
         return Response(AttemptSerializer(attempt).data)
 
     @action(detail=True, methods=["post"])

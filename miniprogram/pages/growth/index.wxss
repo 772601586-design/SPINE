@@ -1,0 +1,8 @@
+.measure-grid { display: flex; gap: 16rpx; margin: 20rpx 0; }
+.measure-grid > view { flex: 1; padding: 24rpx; border-radius: 22rpx; background: #f3f5f2; text-align: center; }
+.measure-grid text { display: block; }
+.measure-number { font-size: 48rpx; font-weight: 700; color: #1f6f66; }
+.timeline-date { display: block; color: #1f6f66; font-size: 24rpx; margin-bottom: 18rpx; }
+.timeline-card .small { display: block; margin-top: 12rpx; }
+.review-note { display: block; background: #f7eadf; color: #794b2e; padding: 16rpx; border-radius: 14rpx; margin-top: 18rpx; font-size: 23rpx; }
+.measurement-row { display: flex; justify-content: space-between; padding: 22rpx 0; border-bottom: 1rpx solid #edf0ee; }

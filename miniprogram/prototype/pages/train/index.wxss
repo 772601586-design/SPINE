@@ -1,0 +1,19 @@
+/* 全局样式：页面样式大多写在各页 WXML 的 style 里（由交互原型转换而来） */
+page {
+  background: #F3F5F2;
+  color: #1F2A27;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+/* 可点区域按下时的反馈 */
+.tap { opacity: 0.6; }
+
+.prototype-content { line-height: 1.5; }
+.prototype-notice { display: flex; justify-content: space-between; align-items: center; padding: 12rpx 28rpx; background: #f7eadb; color: #794b2e; font-size: 22rpx; gap: 16rpx; }
+.prototype-exit { color: #1f6f66; padding: 8rpx 0; font-weight: 600; }
+.prototype-tab-space { height: calc(120rpx + env(safe-area-inset-bottom)); }
+.prototype-tabs { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; background: #fff; border-top: 1rpx solid #edf0ee; padding: 14rpx 0 calc(14rpx + env(safe-area-inset-bottom)); }
+.prototype-tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6rpx; font-size: 22rpx; color: #5b6663; }
+.prototype-tab-on { color: #1f6f66; font-weight: 700; }
+.prototype-tab image { width: 42rpx; height: 42rpx; }

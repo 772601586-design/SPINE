@@ -1,4 +1,4 @@
-.login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 36rpx; }
+.login-wrap { min-height: 100vh; display: flex; flex-direction: column; gap: 24rpx; align-items: center; justify-content: center; padding: 36rpx; }
 .login-card { width: 100%; max-width: 640rpx; padding: 42rpx 34rpx; border-radius: 28rpx; background: #fff; }
 .brand-mark { width: 84rpx; height: 84rpx; margin: 0 auto 18rpx; border-radius: 50%; background: #eaf3ed; color: #246b57; font-size: 50rpx; line-height: 84rpx; text-align: center; }
 .login-title, .login-subtitle { display: block; text-align: center; }

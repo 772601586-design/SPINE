@@ -1,8 +1,9 @@
 <view class="page">
   <view class="heading">
-    <text class="eyebrow">{{stage === 'profile' ? '你好，我是小树' : '保存已有资料'}}</text>
-    <text class="title">{{stage === 'profile' ? '认识你' : '保存 X 光片'}}</text>
-    <text class="subtitle">基础信息 → X 光片 → 确认档案</text>
+    <text class="eyebrow">{{stepIndex + 1}} / 4 · 你好，我是小树</text>
+    <text class="title">{{stage === 'xray' ? '保存已有资料' : steps[stepIndex]}}</text>
+    <text class="subtitle">{{stage === 'ready' ? '先从一件小事开始，我们陪你慢慢来。' : '不用一次填完，按自己的节奏来。'}}</text>
+    <view class="step-track"><view wx:for="{{steps}}" wx:key="*this" class="step-dot {{index <= stepIndex ? 'step-done' : ''}}"></view></view>
   </view>
 
   <block wx:if="{{loading}}"><view class="card"><view class="empty">正在准备你的档案…</view></view></block>
@@ -27,25 +28,36 @@
     </view>
 
     <view class="card">
+      <text class="card-title">出生年月（可跳过）</text>
+      <picker mode="date" fields="month" value="{{birthMonth}}" start="1900-01" end="{{todayMonth}}" bindchange="onBirthMonth"><view class="field picker-field"><text>{{birthMonth || '选择出生年月'}}</text><text class="arrow">›</text></view></picker>
+      <text wx:if="{{birthMonth}}" class="link" bindtap="clearBirthMonth">暂不填写</text>
+      <text class="label">性别（可跳过）</text>
+      <view wx:for="{{genders}}" wx:key="value" class="pill {{gender === item.value ? 'pill-active' : ''}}" data-value="{{item.value}}" bindtap="chooseGender">{{item.label}}</view>
+      <view wx:if="{{gender === 'custom'}}" class="field"><input value="{{genderCustom}}" maxlength="50" placeholder="填写你的称呼" bindinput="onGenderCustom" /></view>
+    </view>
+      <button class="button" bindtap="nextStep">下一步 · 选择阶段</button>
+      <text class="small center">这些资料仅本人可见，可以随时修改。</text>
+    </block>
+
+    <block wx:elif="{{stage === 'treatment'}}">
+      <text class="muted">你现在处于哪个阶段？只用于整理页面提示，不会替你调整处方。</text>
+      <view wx:for="{{treatments}}" wx:key="value" class="card stage-option {{treatment === item.value ? 'stage-selected' : ''}}" data-value="{{item.value}}" bindtap="chooseTreatment" hover-class="tap"><view class="row"><text class="list-title">{{item.label}}</text><text class="stage-mark">{{treatment === item.value ? '✓' : '○'}}</text></view><text class="muted">{{item.desc}}</text></view>
+      <button class="button" bindtap="nextStep">下一步 · 补充资料</button>
+      <button class="button button-plain" bindtap="previousStep">上一步</button>
+    </block>
+
+    <block wx:elif="{{stage === 'basics'}}">
+    <view wx:if="{{gender === 'female' || gender === 'custom'}}" class="card"><text class="card-title">初潮情况（可跳过）</text><text class="muted">如适用且愿意记录，可以在这里填写。</text><view><view wx:for="{{menarcheOptions}}" wx:key="value" class="pill {{menarche === item.value ? 'pill-active' : ''}}" data-value="{{item.value}}" bindtap="chooseMenarche">{{item.label}}</view></view></view>
+
+    <view class="card">
       <view class="row" bindtap="toggleExtra">
         <text class="card-title tight">补充信息（可跳过）</text>
         <text class="arrow">{{hasExtra ? '收起' : '展开'}}</text>
       </view>
-      <text class="muted">不填不影响使用，随时可以在「个人 → 我的档案」里补上。</text>
+      <text class="muted">不填不影响使用，随时可以在「我的 → 我的档案」里补上。</text>
 
       <block wx:if="{{hasExtra}}">
         <view class="divider"></view>
-
-        <text class="label">出生年月</text>
-        <view class="row">
-          <picker mode="date" fields="month" value="{{birthMonth}}" start="1900-01" end="{{todayMonth}}" bindchange="onBirthMonth">
-            <view class="field picker-field">
-              <text class="{{birthMonth ? '' : 'placeholder'}}">{{birthMonth ? birthMonth : '未填写'}}</text>
-              <text class="arrow">›</text>
-            </view>
-          </picker>
-        </view>
-        <text wx:if="{{birthMonth}}" class="link" bindtap="clearBirthMonth">清除出生年月</text>
 
         <text class="label">诊断状态</text>
         <picker mode="selector" range="{{diagnosisLabels}}" value="{{diagnosisIndex}}" bindchange="onDiagnosis">
@@ -69,11 +81,12 @@
       </block>
     </view>
 
-      <button class="button" loading="{{saving}}" disabled="{{saving}}" bindtap="submit">保存并继续</button>
+      <button class="button" loading="{{saving}}" disabled="{{saving}}" bindtap="submit">保存资料并继续</button>
+      <button class="button button-plain" disabled="{{saving}}" bindtap="previousStep">上一步</button>
       <text class="small center">这些内容仅本人可见，不会用于任何公开推荐。</text>
     </block>
 
-    <block wx:else>
+    <block wx:elif="{{stage === 'xray'}}">
       <view class="card card-green">
         <text class="card-title">请上传已有的 X 光影像</text>
         <text class="muted">影像照片或包含影像的 PDF 均可。报告请在就诊资料中另行保存。只上传你已有的资料，不需要为了完成注册新做检查。</text>
@@ -106,8 +119,15 @@
         </checkbox-group>
       </view>
       <button class="button" loading="{{uploadingXray}}" disabled="{{uploadingXray || !xrayFile}}" bindtap="uploadXray">确认并安全上传，完成建档</button>
-      <button class="button button-plain" bindtap="saveForLater">先保存，稍后补充</button>
+      <button class="button button-plain" disabled="{{uploadingXray}}" bindtap="saveForLater">已有资料以后再补，先开始</button>
       <text class="small center">缺少影像时档案保持草稿；你仍可浏览和记录。完成建档不代表诊断或专业审核。</text>
+    </block>
+
+    <block wx:elif="{{stage === 'ready'}}">
+      <view class="welcome-symbol">✓</view>
+      <view class="card card-green"><text class="card-title">{{encouragement.title}}</text><text class="muted">{{encouragement.encouragement}}</text></view>
+      <view class="card"><view class="row"><text class="small">当前阶段</text><text>{{encouragement.label}}</text></view><view class="divider"></view><text class="muted">可以在「训练」里整理自己的动作，在「成长」里保存测量和复查记录。阶段随时可在「我的」里切换。</text></view>
+      <button class="button" bindtap="enterApp">准备好了，进入今日</button>
     </block>
   </block>
 </view>

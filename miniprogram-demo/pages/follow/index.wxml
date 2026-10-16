@@ -1,0 +1,47 @@
+<!-- 跟练 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="min-height: 100vh; box-sizing: border-box; background: #143F3A; color: #EAF2EF; padding: 38.46rpx 38.46rpx 46.15rpx; display: flex; flex-direction: column; gap: 26.92rpx">
+  <view style="display: flex; align-items: center; justify-content: space-between">
+    <view style="font-size: 28.85rpx; font-weight: 700">{{ followTitle }}</view>
+    <view style="width: 84.62rpx">
+    </view>
+  </view>
+  <view style="display: flex; gap: 7.69rpx">
+    <block wx:for="{{ segs }}" wx:for-item="g" wx:for-index="gIndex" wx:key="_k">
+      <view style="flex: 1; height: 7.69rpx; border-radius: 1921.15rpx; background: {{ g.bg }}">
+      </view>
+    </block>
+  </view>
+  <view style="height: 250rpx; border-radius: 30.77rpx; background: #1E534D; display: flex; align-items: center; justify-content: center; gap: 19.23rpx; color: #A9C3BD; font-size: 25rpx"><image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczNCcgaGVpZ2h0PSczNCcgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyNBOUMzQkQnIHN0cm9rZS13aWR0aD0nMS41JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnPjxjaXJjbGUgY3g9JzEyJyBjeT0nNC41JyByPScyJz48L2NpcmNsZT48cGF0aCBkPSdNMTIgN3Y3TTggMTBsNC0yIDQgMk05IDIxbDMtNyAzIDcnPjwvcGF0aD48L3N2Zz4=" style="width: 65.38rpx; height: 65.38rpx; flex-shrink: 0" />{{ fPoseText }}</view>
+  <view style="display: flex; flex-direction: column; gap: 11.54rpx">
+    <view style="margin: 0; font-size: 46.15rpx; font-weight: 700">{{ fCard.name }}</view>
+    <view style="font-size: 25rpx; color: #A9C3BD">{{ fCard.mod }} · {{ fCard.param }} · {{ fCard.modeShort }}播报</view>
+  </view>
+  <view style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 23.08rpx">
+    <view style="width: 376.92rpx; height: 376.92rpx; border-radius: 1921.15rpx; border: 19.23rpx solid #7FD1C2; box-sizing: border-box; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3.85rpx; background: #18493F">
+      <view style="font-size: 26.92rpx; color: #CFE3DE">{{ fPhase }}</view>
+      <view style="font-size: 76.92rpx; font-weight: 700">{{ fBig }}</view>
+      <view style="font-size: 23.08rpx; color: #CFE3DE">{{ fSmall }}</view>
+    </view>
+    <view style="font-size: 26.92rpx; color: #CFE3DE; text-align: center; line-height: 1.6">{{ fCard.tip }}</view>
+  </view>
+  <view style="display: flex; align-items: center; justify-content: center; gap: 53.85rpx">
+    <view style="width: 100rpx; height: 100rpx; border: 0; border-radius: 1921.15rpx; background: #1E534D; color: #EAF2EF; display: flex; align-items: center; justify-content: center; padding: 0" aria-label="看示范" bindtap="act" data-fn="{{ fOpenCard }}" hover-class="tap">
+      <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMicgaGVpZ2h0PScyMicgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyNFQUYyRUYnIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbGluZWpvaW49J3JvdW5kJz48cmVjdCB4PSczJyB5PSc2JyB3aWR0aD0nMTMnIGhlaWdodD0nMTInIHJ4PScyJz48L3JlY3Q+PHBhdGggZD0nTTE2IDEwbDUtM3YxMGwtNS0zJz48L3BhdGg+PC9zdmc+" style="width: 42.31rpx; height: 42.31rpx; flex-shrink: 0" />
+    </view>
+    <view style="width: 146.15rpx; height: 146.15rpx; border: 0; border-radius: 1921.15rpx; background: #7FD1C2; color: #0F302C; display: flex; align-items: center; justify-content: center; padding: 0" aria-label="{{ playLabel }}" bindtap="act" data-fn="{{ togglePlay }}" hover-class="tap">
+      <block wx:if="{{ playing }}">
+        <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMCcgaGVpZ2h0PSczMCcgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPScjMEYzMDJDJz48cmVjdCB4PSc2JyB5PSc1JyB3aWR0aD0nNCcgaGVpZ2h0PScxNCcgcng9JzEnPjwvcmVjdD48cmVjdCB4PScxNCcgeT0nNScgd2lkdGg9JzQnIGhlaWdodD0nMTQnIHJ4PScxJz48L3JlY3Q+PC9zdmc+" style="width: 57.69rpx; height: 57.69rpx; flex-shrink: 0" />
+      </block>
+      <block wx:if="{{ paused }}">
+        <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMCcgaGVpZ2h0PSczMCcgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPScjMEYzMDJDJz48cGF0aCBkPSdNOCA1bDExIDctMTEgN3onPjwvcGF0aD48L3N2Zz4=" style="width: 57.69rpx; height: 57.69rpx; flex-shrink: 0" />
+      </block>
+    </view>
+    <view style="width: 100rpx; height: 100rpx; border: 0; border-radius: 1921.15rpx; background: #1E534D; color: #EAF2EF; display: flex; align-items: center; justify-content: center; padding: 0" aria-label="完成，下一个" bindtap="act" data-fn="{{ followNext }}" hover-class="tap">
+      <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMicgaGVpZ2h0PScyMicgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyNFQUYyRUYnIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbGluZWpvaW49J3JvdW5kJz48cGF0aCBkPSdNNiA2bDggNi04IDZ6TTE4IDZ2MTInPjwvcGF0aD48L3N2Zz4=" style="width: 42.31rpx; height: 42.31rpx; flex-shrink: 0" />
+    </view>
+  </view>
+  <view style="display: flex; align-items: center; justify-content: space-between; gap: 19.23rpx; padding: 23.08rpx 26.92rpx; border-radius: 26.92rpx; background: #1E534D">
+    <text style="font-size: 25rpx; color: #CFE3DE">{{ fNext }}</text>
+    <text style="font-size: 23.08rpx; color: #A9C3BD; flex-shrink: 0">手机放地上，听声音练</text>
+  </view>
+</view>

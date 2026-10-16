@@ -3,6 +3,10 @@
   <view wx:if="{{error}}" class="error">{{error}} <text bindtap="load">重试</text></view>
   <block wx:if="{{card}}">
     <view class="heading"><text class="title">{{card.name}}</text><text class="subtitle">来源：{{card.source_type === 'library' ? '动作库' : card.source_type === 'prescription' ? '处方整理' : '本人自建'}} · {{card.source_category || ''}}</text></view>
+    <view class="card-tabs"><view wx:for="{{tabs}}" wx:key="value" class="card-tab {{tab === item.value ? 'card-tab-active' : ''}}" data-value="{{item.value}}" bindtap="selectTab">{{item.label}}</view></view>
+    <block wx:if="{{tab === 'learn'}}">
+    <view class="card"><view class="row"><text class="card-title">我的现场示范</text><text class="link" bindtap="openRecordings">整理录像 ›</text></view><text wx:if="{{videoError}}" class="muted">{{videoError}}</text><view wx:for="{{localVideos}}" wx:key="id"><text class="list-title">{{item.title}}</text><video wx:if="{{item.available}}" class="demo-video" src="{{item.filePath}}" controls="{{true}}" binderror="onLocalVideoError" /><text wx:else class="small">这段录像文件已不在本机，请重新录制。</text></view><text wx:if="{{!localVideos.length}}" class="muted">还没有配对的本机录像。可以先录示范，再配到这个动作。</text><text class="small">仅本机当前账号可见，不上传、不跨设备同步。</text></view>
+    <button class="button button-plain" bindtap="recordDemonstration">为这个动作保存现场示范</button>
     <view class="card">
       <text class="card-title">动作指导</text>
       <text class="line">{{card.source_summary || '暂无摘要'}}</text>
@@ -16,9 +20,15 @@
       <text wx:if="{{card.source_url}}" class="small">资料来源：{{card.source_url}}</text>
       <text wx:if="{{!card.source_media || !card.source_media.length}}" class="muted">当前无已审核示范素材；可按下方文字要点自主记录。</text>
     </view>
-    <view class="card">
+    </block>
+    <block wx:elif="{{tab === 'practice'}}">
+    <view class="card card-green"><view class="row"><text class="card-title">按自己的计划练</text><text class="link" bindtap="toggleEditing">{{editing ? '收起编辑' : '编辑参数'}}</text></view><text class="dose-title">{{doseLabel}}</text><text class="line">方向：{{sideLabel}}</text><text class="muted">{{card.schedule_frequency === 'daily' ? '每天练习' : card.schedule_frequency === 'alternate' ? '隔天练习' : '尚未设置频率，暂不排入今日'}}</text><text wx:if="{{card.personal_notes}}" class="line">{{card.personal_notes}}</text><view wx:for="{{card.focus_points}}" wx:key="index" class="line">· {{item}}</view><text wx:if="{{dirty}}" class="notice">参数有未保存的修改，请保存并核对后再开始。</text></view>
+    <view wx:if="{{editing}}" class="card">
       <text class="card-title">本人的训练参数</text>
       <text class="muted">请按本人已有指导填写。留空的必要参数会阻止开始。</text>
+      <text class="field-label">练习频率（按本人处方填写）</text>
+      <view class="choices"><text wx:for="{{frequencies}}" wx:key="value" class="choice {{form.schedule_frequency === item.value ? 'choice-active' : ''}}" data-value="{{item.value}}" bindtap="chooseFrequency">{{item.label}}</text></view>
+      <text class="small">不确定频率时先留空，核对后再排入今日。</text>
       <view class="field"><text>组数</text><input type="number" data-field="sets" value="{{form.sets}}" bindinput="input" placeholder="填写组数" /></view>
       <view class="field"><text>每组次数</text><input type="number" data-field="reps_per_set" value="{{form.reps_per_set}}" bindinput="input" placeholder="可留空" /></view>
       <view class="field"><text>每组呼吸次数</text><input type="number" data-field="breaths_per_set" value="{{form.breaths_per_set}}" bindinput="input" placeholder="可留空" /></view>
@@ -32,7 +42,19 @@
       <button class="button button-plain" loading="{{saving}}" bindtap="saveDraft">保存草稿</button>
       <button class="button button-plain" loading="{{saving}}" bindtap="confirmParameters">保存并核对参数</button>
     </view>
-    <button class="button" disabled="{{card.verification_status !== 'ready'}}" bindtap="start">开始</button>
+    <button class="button" loading="{{starting}}" disabled="{{card.verification_status !== 'ready' || dirty || saving || starting}}" bindtap="start">{{dirty ? '请先保存并核对修改' : '开始'}}</button>
     <text class="small center">状态：{{card.verification_status === 'ready' ? '可开始' : card.verification_status === 'needs_check' ? '待核对' : '待设置'}}</text>
+    </block>
+    <block wx:elif="{{tab === 'check'}}">
+      <view class="card"><text class="card-title">把示范和自己的练习放在一起看</text><text class="muted">可以留一段自己的练习，回看时对照动作要点。有疑问时带给康复师看。</text><button class="button" bindtap="recordPractice">录制或选择我的练习</button><text class="small">录像只保存在本机，不会自动判断动作是否正确，也不会推算 Cobb 角。</text></view>
+      <view wx:if="{{videoError}}" class="error">{{videoError}}</view>
+      <view class="comparison-grid">
+        <view class="comparison-panel"><text class="list-title">现场示范</text><picker wx:if="{{demoOptions.length}}" mode="selector" range="{{demoOptions}}" range-key="label" value="{{demoIndex}}" data-kind="demonstration" bindchange="chooseComparison"><view class="clip-picker">{{demoOptions[demoIndex].label}} ▾</view></picker><video wx:if="{{demoOptions.length}}" class="comparison-video" src="{{demoOptions[demoIndex].filePath}}" controls="{{true}}" binderror="onLocalVideoError" /><view wx:else class="empty">还没有可播放的示范</view></view>
+        <view class="comparison-panel"><text class="list-title">我的练习</text><picker wx:if="{{practiceOptions.length}}" mode="selector" range="{{practiceOptions}}" range-key="label" value="{{practiceIndex}}" data-kind="practice" bindchange="chooseComparison"><view class="clip-picker">{{practiceOptions[practiceIndex].label}} ▾</view></picker><video wx:if="{{practiceOptions.length}}" class="comparison-video" src="{{practiceOptions[practiceIndex].filePath}}" controls="{{true}}" binderror="onLocalVideoError" /><view wx:else class="empty">还没有可播放的练习</view></view>
+      </view>
+      <text wx:if="{{missingVideoCount}}" class="small">{{missingVideoCount}} 段本机文件已不可用，请到录像列表检查或重新录制。</text>
+      <button class="button button-plain" bindtap="recordDemonstration">补充这个动作的现场示范</button>
+      <button class="button button-plain" bindtap="openRecordings">管理全部本机录像</button>
+    </block>
   </block>
 </view>

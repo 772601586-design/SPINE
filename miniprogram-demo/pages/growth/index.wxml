@@ -1,0 +1,73 @@
+<!-- 成长 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 46.15rpx 38.46rpx 38.46rpx; display: flex; flex-direction: column; gap: 26.92rpx">
+  <view>
+    <view style="margin: 0; font-size: 50rpx; font-weight: 700">成长记录</view>
+    <view style="font-size: 25rpx; color: #5B6663; margin-top: 7.69rpx">每一次复查，都会在这里留下痕迹</view>
+  </view>
+  <view style="padding: 30.77rpx 26.92rpx 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 26.92rpx">
+    <view style="display: flex; justify-content: space-between; align-items: baseline">
+      <view>
+        <view style="font-size: 25rpx; color: #5B6663">我的治疗历程</view>
+        <view style="font-size: 46.15rpx; font-weight: 700">第 156 天</view>
+      </view>
+      <text style="font-size: 23.08rpx; color: #5B6663">自 2026.05.12 确诊</text>
+    </view>
+    <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15.38rpx; text-align: center">
+      <view style="padding: 15.38rpx 0; border-radius: 23.08rpx; background: #F3F5F2">
+        <view style="font-size: 34.62rpx; font-weight: 700">24</view>
+        <view style="font-size: 23.08rpx; color: #5B6663">天戴支具</view>
+      </view>
+      <view style="padding: 15.38rpx 0; border-radius: 23.08rpx; background: #F3F5F2">
+        <view style="font-size: 34.62rpx; font-weight: 700">{{ trainCount }}</view>
+        <view style="font-size: 23.08rpx; color: #5B6663">次训练</view>
+      </view>
+    </view>
+  </view>
+  <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 15.38rpx">
+    <view style="display: flex; justify-content: space-between; align-items: baseline">
+      <text style="font-size: 28.85rpx; font-weight: 700">Cobb 角变化</text>
+      <text style="font-size: 21.15rpx; color: #5B6663; padding: 3.85rpx 15.38rpx; border-radius: 1921.15rpx; background: #EDF0EE">示例数据</text>
+    </view>
+    <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSczMjInIGhlaWdodD0nMTcwJyB2aWV3Qm94PScwIDAgMzIyIDE3MCcgcm9sZT0naW1nJyBhcmlhLWxhYmVsPSfog7jlvK/ku44gMjgg5bqm5YiwIDI3IOW6pu+8jOiFsOW8r+S7jiAyMSDluqbliLAgMjAg5bqm77yM5Y+Y5YyW5Zyo5rWL6YeP6K+v5beu6IyD5Zu05YaFJz4KICAgICAgICAgICAgPGxpbmUgeDE9JzMwJyB5MT0nMjAnIHgyPSczMTAnIHkyPScyMCcgc3Ryb2tlPScjRUVGMkYwJz48L2xpbmU+CiAgICAgICAgICAgIDxsaW5lIHgxPSczMCcgeTE9JzYwJyB4Mj0nMzEwJyB5Mj0nNjAnIHN0cm9rZT0nI0VFRjJGMCc+PC9saW5lPgogICAgICAgICAgICA8bGluZSB4MT0nMzAnIHkxPScxMDAnIHgyPSczMTAnIHkyPScxMDAnIHN0cm9rZT0nI0VFRjJGMCc+PC9saW5lPgogICAgICAgICAgICA8bGluZSB4MT0nMzAnIHkxPScxNDAnIHgyPSczMTAnIHkyPScxNDAnIHN0cm9rZT0nI0RDRTVFMSc+PC9saW5lPgogICAgICAgICAgICA8dGV4dCB4PSc0JyB5PScyNCcgZm9udC1zaXplPScxMCcgZmlsbD0nIzVCNjY2Myc+NDDCsDwvdGV4dD4KICAgICAgICAgICAgPHRleHQgeD0nNCcgeT0nNjQnIGZvbnQtc2l6ZT0nMTAnIGZpbGw9JyM1QjY2NjMnPjMwwrA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9JzQnIHk9JzEwNCcgZm9udC1zaXplPScxMCcgZmlsbD0nIzVCNjY2Myc+MjDCsDwvdGV4dD4KICAgICAgICAgICAgPHRleHQgeD0nNCcgeT0nMTQ0JyBmb250LXNpemU9JzEwJyBmaWxsPScjNUI2NjYzJz4xMMKwPC90ZXh0PgogICAgICAgICAgICA8cG9seWdvbiBwb2ludHM9JzYwLDQ4IDE5MCw1MiAxOTAsOTIgNjAsODgnIGZpbGw9JyMxRjZGNjYnIG9wYWNpdHk9JzAuMTInPjwvcG9seWdvbj4KICAgICAgICAgICAgPGxpbmUgeDE9JzYwJyB5MT0nNjgnIHgyPScxOTAnIHkyPSc3Micgc3Ryb2tlPScjMUY2RjY2JyBzdHJva2Utd2lkdGg9JzMnPjwvbGluZT4KICAgICAgICAgICAgPGNpcmNsZSBjeD0nNjAnIGN5PSc2OCcgcj0nNScgZmlsbD0nIzFGNkY2Nic+PC9jaXJjbGU+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9JzE5MCcgY3k9JzcyJyByPSc1JyBmaWxsPScjMUY2RjY2Jz48L2NpcmNsZT4KICAgICAgICAgICAgPHRleHQgeD0nNjYnIHk9JzYyJyBmb250LXNpemU9JzExJyBmaWxsPScjMUY0RjQ5JyBmb250LXdlaWdodD0nNzAwJz7og7ggMjjCsDwvdGV4dD4KICAgICAgICAgICAgPHRleHQgeD0nMTk2JyB5PSc2NicgZm9udC1zaXplPScxMScgZmlsbD0nIzFGNEY0OScgZm9udC13ZWlnaHQ9JzcwMCc+MjfCsDwvdGV4dD4KICAgICAgICAgICAgPGxpbmUgeDE9JzYwJyB5MT0nOTYnIHgyPScxOTAnIHkyPScxMDAnIHN0cm9rZT0nI0M0NjAyQScgc3Ryb2tlLXdpZHRoPSczJz48L2xpbmU+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9JzYwJyBjeT0nOTYnIHI9JzUnIGZpbGw9JyNDNDYwMkEnPjwvY2lyY2xlPgogICAgICAgICAgICA8Y2lyY2xlIGN4PScxOTAnIGN5PScxMDAnIHI9JzUnIGZpbGw9JyNDNDYwMkEnPjwvY2lyY2xlPgogICAgICAgICAgICA8dGV4dCB4PSc2NicgeT0nMTE0JyBmb250LXNpemU9JzExJyBmaWxsPScjNkIzNDE2JyBmb250LXdlaWdodD0nNzAwJz7ohbAgMjHCsDwvdGV4dD4KICAgICAgICAgICAgPHRleHQgeD0nMTk2JyB5PScxMTgnIGZvbnQtc2l6ZT0nMTEnIGZpbGw9JyM2QjM0MTYnIGZvbnQtd2VpZ2h0PSc3MDAnPjIwwrA8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9JzYwJyB5PScxNjInIGZvbnQtc2l6ZT0nMTAnIGZpbGw9JyM1QjY2NjMnIHRleHQtYW5jaG9yPSdtaWRkbGUnPjXmnIg8L3RleHQ+CiAgICAgICAgICAgIDx0ZXh0IHg9JzE5MCcgeT0nMTYyJyBmb250LXNpemU9JzEwJyBmaWxsPScjNUI2NjYzJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJz455pyIPC90ZXh0PgogICAgICAgICAgPC9zdmc+" style="width: 619.23rpx; height: 326.92rpx; flex-shrink: 0" />
+    <view style="padding: 19.23rpx 23.08rpx; border-radius: 19.23rpx; background: #DDEDE9; font-size: 25rpx; color: #1F4F49; line-height: 1.6">两次的差别在测量误差（约 ±5°）以内。浅色带是误差范围，具体请以医生的解读为准。</view>
+  </view>
+  <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 19.23rpx">
+    <view style="padding: 23.08rpx; border-radius: 30.77rpx; background: #FFFFFF">
+      <view style="font-size: 23.08rpx; color: #5B6663">身高</view>
+      <view style="font-size: 34.62rpx; font-weight: 700">155 cm</view>
+      <view style="font-size: 23.08rpx; color: #1F6F66">4 个月 +3 cm</view>
+    </view>
+    <view style="padding: 23.08rpx; border-radius: 30.77rpx; background: #FFFFFF">
+      <view style="font-size: 23.08rpx; color: #5B6663">骨骼成熟度</view>
+      <view style="font-size: 34.62rpx; font-weight: 700">Risser 1</view>
+    </view>
+  </view>
+  <view style="display: flex; align-items: center; gap: 23.08rpx; padding: 23.08rpx 26.92rpx; border: 0; border-radius: 30.77rpx; background: #FFFFFF; color: #1F2A27; text-align: left" bindtap="act" data-fn="{{ nav.me }}" hover-class="tap">
+    <view style="flex: 1; display: flex; flex-direction: column; gap: 3.85rpx">
+      <text style="font-size: 26.92rpx; font-weight: 700">下次复查</text>
+      <text style="font-size: 23.08rpx; color: #5B6663">{{ nextVisitText }}</text>
+    </view>
+    <text style="font-size: 34.62rpx; color: #8A9A95">›</text>
+  </view>
+  <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 19.23rpx">
+    <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 92.31rpx; border: 0; border-radius: 23.08rpx; background: #1F6F66; color: #FFFFFF; font-size: 26.92rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.upload }}" hover-class="tap">添加复查记录</view>
+    <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 92.31rpx; border-radius: 23.08rpx; border: 2.88rpx solid #1F6F66; background: transparent; color: #1F6F66; font-size: 26.92rpx; font-weight: 700" bindtap="act" data-fn="{{ makeSummary }}" hover-class="tap">生成复查前摘要</view>
+  </view>
+  <view style="margin: 7.69rpx 0 0; font-size: 32.69rpx; font-weight: 700">复查时间线</view>
+  <block wx:for="{{ visits }}" wx:for-item="v" wx:for-index="vIndex" wx:key="_k">
+    <view style="display: flex; gap: 23.08rpx">
+      <view style="display: flex; flex-direction: column; align-items: center; width: 26.92rpx">
+        <text style="width: 26.92rpx; height: 26.92rpx; border-radius: 1921.15rpx; background: #1F6F66; margin-top: 7.69rpx"></text>
+        <text style="flex: 1; width: 3.85rpx; background: #C9D4D0"></text>
+      </view>
+      <view style="flex: 1; margin-bottom: 19.23rpx; padding: 23.08rpx 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 7.69rpx">
+        <view style="display: flex; justify-content: space-between; align-items: baseline">
+          <text style="font-size: 28.85rpx; font-weight: 700">{{ v.title }}</text>
+          <text style="font-size: 23.08rpx; color: #5B6663">{{ v.date }}</text>
+        </view>
+        <view style="font-size: 25rpx; color: #2E3B37">{{ v.data }}</view>
+        <text style="align-self: flex-start; font-size: 21.15rpx; padding: 3.85rpx 15.38rpx; border-radius: 1921.15rpx; background: #EDF0EE; color: #3E4B47">{{ v.src }}</text>
+      </view>
+    </view>
+  </block>
+</view>

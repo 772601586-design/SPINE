@@ -13,24 +13,26 @@ const SECTIONS: Array<{ title: string; entries: Entry[] }> = [
     title: '我的内容',
     entries: [
       { key: 'profile', label: '我的档案', desc: '基础资料、身体测量、就诊时间线', path: '/pages/personal/profile/index', available: true },
+      { key: 'treatment', label: '切换阶段', desc: '更新当前阶段，让陪伴提示更贴近你', path: '/pages/treatment-stage/index', available: true },
       { key: 'records', label: '我的记录', desc: '支具佩戴与感受历史', path: '/pages/brace-history/index', available: true },
+      { key: 'brace', label: '我的支具', desc: '支具档案、佩戴与感受', path: '/pages/brace/index', available: true },
       { key: 'moods', label: '私人心情', desc: '心情符号与文字，可选择转发为社区草稿', path: '/pages/personal/moods/index', available: false },
-      { key: 'discomfort', label: '身体记录', desc: '疼痛位置、背景与分值', path: '/pages/personal/discomfort/index', available: false },
+      { key: 'discomfort', label: '身体记录', desc: '疼痛位置、背景与分值', path: '/pages/life/index?tab=pain', available: true },
     ],
   },
   {
     title: '社区与内容',
     entries: [
-      { key: 'posts', label: '我的发布', desc: '已发布、审核中与未通过的分享', path: '/pages/personal/posts/index', available: false },
+      { key: 'posts', label: '我的发布', desc: '进入社群可筛选我的分享和审核状态', path: '/pages/community/index', available: true },
       { key: 'bookmarks', label: '收藏与科普', desc: '收藏的动作与科普文章', path: '/pages/personal/bookmarks/index', available: false },
-      { key: 'achievements', label: '成就', desc: '按真实记录授予，不设每日打卡', path: '/pages/personal/achievements/index', available: false },
+      { key: 'achievements', label: '松果与勋章', desc: '按已保存的真实记录累计，查看奖励流水', path: '/pages/life/index?tab=rewards', available: true },
     ],
   },
   {
     title: '系统',
     entries: [
       { key: 'notifications', label: '通知', desc: '社区审核、评论与提醒', path: '/pages/personal/notifications/index', available: false },
-      { key: 'settings', label: '设置', desc: '隐私、提醒、账号数据管理', path: '/pages/personal/settings/index', available: false },
+      { key: 'settings', label: '提醒与目标', desc: '复查日期、久坐提醒、支具目标和游泳安排', path: '/pages/life/index?tab=reminder', available: true },
     ],
   },
 ];
@@ -60,12 +62,17 @@ Page({
       const entry = section.entries.find(item => item.key === key);
       if (!entry) continue;
       if (!entry.available) { wx.showToast({ title: '该功能尚未开放', icon: 'none' }); return; }
-      wx.navigateTo({ url: entry.path });
+      if (entry.path === '/pages/community/index') wx.switchTab({ url: entry.path });
+      else wx.navigateTo({ url: entry.path });
       return;
     }
   },
 
   openProfile() { wx.navigateTo({ url: '/pages/personal/profile/index' }); },
+  openLife(event: { currentTarget: { dataset: { tab: string } } }) {
+    wx.navigateTo({ url: `/pages/life/index?tab=${event.currentTarget.dataset.tab}` });
+  },
+  openPrototype() { wx.reLaunch({ url: '/prototype/pages/welcome/index' }); },
 
   async logout() {
     if (this.data.busy) return;

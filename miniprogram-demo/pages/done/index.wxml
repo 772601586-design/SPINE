@@ -1,0 +1,39 @@
+<!-- 完成打卡 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 53.85rpx 38.46rpx 46.15rpx; min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; gap: 30.77rpx">
+  <view style="display: flex; flex-direction: column; align-items: center; gap: 19.23rpx; padding-top: 15.38rpx">
+    <view style="width: 161.54rpx; height: 161.54rpx; border-radius: 1921.15rpx; background: #1F6F66; color: #FFFFFF; display: flex; align-items: center; justify-content: center">
+      <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0MCcgaGVpZ2h0PSc0MCcgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyNGRkZGRkYnIHN0cm9rZS13aWR0aD0nMi40JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnPjxwYXRoIGQ9J001IDEybDUgNSA5LTEwJz48L3BhdGg+PC9zdmc+" style="width: 76.92rpx; height: 76.92rpx; flex-shrink: 0" />
+    </view>
+    <view style="margin: 0; font-size: 46.15rpx; font-weight: 700">今天的训练都完成了</view>
+    <block wx:if="{{ justRewarded }}">
+      <view style="display: flex; align-items: center; gap: 11.54rpx; padding: 11.54rpx 26.92rpx; border-radius: 1921.15rpx; background: #F6DCC8; color: #6B3416; font-size: 26.92rpx; font-weight: 700">训练 +3 松果 · 现在共 {{ pine }} 颗</view>
+    </block>
+  </view>
+  <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
+    <view style="display: flex; justify-content: space-between; align-items: baseline">
+      <text style="font-size: 26.92rpx; font-weight: 700">本周完成度</text>
+      <text style="font-size: 25rpx; color: #5B6663">3 / 7 天</text>
+    </view>
+    <view style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 11.54rpx; text-align: center; font-size: 23.08rpx; color: #5B6663">
+      <view style="display: flex; flex-direction: column; align-items: center; gap: 7.69rpx"><text style="width: 57.69rpx; height: 57.69rpx; border-radius: 1921.15rpx; background: #1F6F66"></text>一</view>
+      <view style="display: flex; flex-direction: column; align-items: center; gap: 7.69rpx"><text style="width: 57.69rpx; height: 57.69rpx; border-radius: 1921.15rpx; background: #1F6F66"></text>二</view>
+      <view style="display: flex; flex-direction: column; align-items: center; gap: 7.69rpx"><text style="width: 57.69rpx; height: 57.69rpx; border-radius: 1921.15rpx; background: #1F6F66; box-shadow: 0 0 0 5.77rpx #F6DCC8"></text>三</view>
+      <view style="display: flex; flex-direction: column; align-items: center; gap: 7.69rpx"><text style="width: 57.69rpx; height: 57.69rpx; border-radius: 1921.15rpx; border: 3.85rpx dashed #C9D4D0; box-sizing: border-box"></text>四</view>
+      <view style="display: flex; flex-direction: column; align-items: center; gap: 7.69rpx"><text style="width: 57.69rpx; height: 57.69rpx; border-radius: 1921.15rpx; border: 3.85rpx dashed #C9D4D0; box-sizing: border-box"></text>五</view>
+      <view style="display: flex; flex-direction: column; align-items: center; gap: 7.69rpx"><text style="width: 57.69rpx; height: 57.69rpx; border-radius: 1921.15rpx; border: 3.85rpx dashed #C9D4D0; box-sizing: border-box"></text>六</view>
+      <view style="display: flex; flex-direction: column; align-items: center; gap: 7.69rpx"><text style="width: 57.69rpx; height: 57.69rpx; border-radius: 1921.15rpx; border: 3.85rpx dashed #C9D4D0; box-sizing: border-box"></text>日</view>
+    </view>
+    <view style="font-size: 23.08rpx; color: #5B6663">按周看完成度，偶尔一天没练不会清零</view>
+  </view>
+  <view style="display: flex; align-items: center; gap: 23.08rpx; padding: 23.08rpx 26.92rpx; border: 0; border-radius: 30.77rpx; background: #FFFFFF; color: #1F2A27; text-align: left" bindtap="act" data-fn="{{ nav.rewards }}" hover-class="tap">
+    <view style="width: 76.92rpx; height: 76.92rpx; border-radius: 23.08rpx; background: #DDEDE9; color: #1F6F66; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+      <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMicgaGVpZ2h0PScyMicgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyMxRjZGNjYnIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbGluZWpvaW49J3JvdW5kJz48Y2lyY2xlIGN4PScxMicgY3k9JzknIHI9JzYnPjwvY2lyY2xlPjxwYXRoIGQ9J005IDE0bC0yIDcgNS0zIDUgMy0yLTcnPjwvcGF0aD48L3N2Zz4=" style="width: 42.31rpx; height: 42.31rpx; flex-shrink: 0" />
+    </view>
+    <view style="flex: 1; display: flex; flex-direction: column; gap: 3.85rpx">
+      <text style="font-size: 26.92rpx; font-weight: 700">勋章“训练满 30 次”：{{ trainCount }} / 30</text>
+      <text style="font-size: 23.08rpx; color: #5B6663">查看所有勋章和补卡</text>
+    </view>
+    <text style="font-size: 34.62rpx; color: #8A9A95">›</text>
+  </view>
+  <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: auto; min-height: 100rpx; border: 0; border-radius: 26.92rpx; background: #1F6F66; color: #FFFFFF; font-size: 30.77rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.today }}" hover-class="tap">回到今日</view>
+</view>

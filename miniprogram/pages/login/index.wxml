@@ -10,4 +10,5 @@
       <text class="login-footnote">首次登录会为你自动创建账号；记录仅本人可见。</text>
     </block>
   </view>
+  <view class="login-card"><text class="login-title">先看看完整 demo</text><text class="login-subtitle">18 个原型页面与全部演示流程，无需登录。使用独立示例数据。</text><button class="button button-plain" bindtap="openPrototype">进入完整 demo 体验</button></view>
 </view>

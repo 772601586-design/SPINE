@@ -6,3 +6,11 @@
 .choice-active { background:#e8f1e8; color:#2f624b; font-weight:600; }
 .notes { box-sizing:border-box; width:100%; min-height:140rpx; margin:18rpx 0; padding:16rpx; border-radius:12rpx; background:#f6f8f2; }
 .demo-image, .demo-video { display:block; width:100%; height:360rpx; margin:16rpx 0; border-radius:14rpx; }
+.card-tabs { display: flex; padding: 8rpx; gap: 6rpx; background: #e4ebe6; border-radius: 24rpx; }
+.card-tab { flex: 1; text-align: center; padding: 20rpx 4rpx; color: #68796e; font-size: 24rpx; border-radius: 18rpx; }
+.card-tab-active { background: #fff; color: #1f6f66; font-weight: 700; }
+.dose-title { display: block; font-size: 36rpx; font-weight: 700; color: #1f6f66; margin: 16rpx 0; }
+.comparison-grid { display: flex; gap: 16rpx; margin: 24rpx 0; }
+.comparison-panel { flex: 1; min-width: 0; background: #fff; border-radius: 24rpx; padding: 18rpx; }
+.comparison-video { width: 100%; height: 280rpx; margin-top: 16rpx; border-radius: 12rpx; }
+.clip-picker { font-size: 22rpx; color: #1f6f66; margin-top: 12rpx; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

@@ -1,0 +1,16 @@
+<view class="page">
+  <view class="heading"><text class="eyebrow">一点一滴，都是成长</text><text class="title">成长记录</text><text class="subtitle">每一次测量与复查，都在这里留下痕迹。</text></view>
+  <view wx:if="{{error}}" class="error" bindtap="reload">{{error}}</view>
+  <view wx:if="{{loading}}" class="card empty">正在读取成长记录…</view>
+  <block wx:elif="{{!error}}">
+    <view wx:if="{{chartError}}" class="error" bindtap="loadSummary">{{chartError}}</view>
+    <view wx:if="{{summary}}" class="card"><text class="card-title">一点点积累</text><text class="muted">已完成训练 {{summary.training_count}} 次 · 有佩戴记录 {{summary.brace_record_days}} 天</text><text wx:if="{{summary.record_days !== null}}" class="muted">距首条精确日期就诊记录 {{summary.record_days}} 天</text><button class="button button-plain" bindtap="openSummary">生成复查准备摘要</button></view>
+    <view class="card"><text class="card-title">Cobb 测量记录趋势</text><text class="muted">{{summary.measurement_note}}</text><picker wx:if="{{curveGroups.length}}" range="{{curveGroups}}" range-key="label" value="{{curveGroup}}" bindchange="selectCurve"><view class="small">{{curveGroups[curveGroup].label}} · 切换 ›</view></picker><canvas wx:if="{{curvePoints.length}}" canvas-id="cobb-chart" style="width:300px;height:220px;margin:20rpx auto" /><text wx:else class="muted">填写精确日期、部位、方向及端椎后，可查看同类测量记录；资料不全的记录仍保留在就诊详情中。</text><view wx:for="{{curvePoints}}" wx:key="index" class="measurement-row"><text>{{item.date}}</text><text>{{item.angle}}°</text></view></view>
+    <view class="card"><view class="row"><text class="card-title">最近一次身体测量</text><text class="small">{{latestDate || '暂无记录'}}</text></view><view class="measure-grid"><view><text class="measure-number">{{height}}</text><text class="small">身高 / cm</text></view><view><text class="measure-number">{{weight}}</text><text class="small">体重 / kg</text></view></view><button class="button button-plain" bindtap="openProfile">记录新的身高与体重</button></view>
+    <view class="section-heading"><text class="section-title">我的复查时间线</text><text class="link" bindtap="addVisit">＋ 添加记录</text></view>
+    <view wx:if="{{!visits.length}}" class="card empty">还没有复查记录。把报告和医生的建议一起保存下来吧。</view>
+    <view wx:for="{{visits}}" wx:key="id" class="card timeline-card" data-id="{{item.id}}" bindtap="openVisit" hover-class="tap"><text class="timeline-date">● {{item.date}}</text><text class="card-title">{{item.title || '就诊记录'}}</text><text class="muted">{{item.institution || '未填写机构'}}</text><text class="small">{{item.attachment_count}} 份资料 · {{item.curve_count}} 条弯曲测量 ›</text><text wx:if="{{item.next_review_date}}" class="review-note">下次复查备忘：{{item.next_review_date}}</text></view>
+    <view class="section-heading"><text class="section-title">身体测量记录</text></view>
+    <view class="card"><view wx:if="{{!measurements.length}}" class="empty">记录第一次测量，慢慢积累自己的成长轨迹。</view><view wx:for="{{measurements}}" wx:key="id" class="measurement-row"><text class="small">{{item.date}}</text><text>{{item.height_cm || '—'}} cm · {{item.weight_kg || '—'}} kg</text></view></view>
+  </block>
+</view>

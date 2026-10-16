@@ -1,0 +1,2 @@
+.done-symbol { width: 120rpx; height: 120rpx; margin: 46rpx 0 32rpx; border-radius: 50%; background: #ddede9; color: #1f6f66; font-size: 64rpx; text-align: center; line-height: 120rpx; }
+.progress-number { display: block; color: #1f6f66; font-size: 52rpx; font-weight: 700; margin: 12rpx 0; }

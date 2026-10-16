@@ -1,0 +1,85 @@
+<!-- 我的 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 46.15rpx 38.46rpx 38.46rpx; display: flex; flex-direction: column; gap: 26.92rpx">
+  <view style="display: flex; align-items: center; gap: 26.92rpx">
+    <view style="width: 115.38rpx; height: 115.38rpx; border-radius: 1921.15rpx; background: #1F6F66; color: #FFFFFF; font-size: 46.15rpx; font-weight: 700; display: flex; align-items: center; justify-content: center">禾</view>
+    <view style="flex: 1">
+      <view style="font-size: 42.31rpx; font-weight: 700">小禾</view>
+      <view style="font-size: 25rpx; color: #5B6663">12 岁 · {{ stageLabel }}</view>
+    </view>
+    <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 69.23rpx; padding: 0 23.08rpx; border: 1.92rpx solid #C9D4D0; border-radius: 1921.15rpx; background: transparent; color: #3E4B47; font-size: 25rpx" bindtap="act" data-fn="{{ nav.stageFromMe }}" hover-class="tap">切换阶段</view>
+  </view>
+  <view style="padding: 26.92rpx; border: 0; border-radius: 34.62rpx; background: #1F6F66; color: #FFFFFF; text-align: left; display: flex; flex-direction: column; gap: 11.54rpx" bindtap="act" data-fn="{{ nav.growth }}" hover-class="tap">
+    <view style="display: flex; justify-content: space-between; width: 100%; font-size: 25rpx; color: #CFE8E2">
+      <text>我的档案</text>
+      <text>成长记录 ›</text>
+    </view>
+    <text style="font-size: 42.31rpx; font-weight: 700">Rigo B1 · 胸 27° · 腰 20°</text>
+    <text style="font-size: 25rpx; color: #CFE8E2">2026.09 复查 · Risser 1 · 初潮后 5 个月</text>
+  </view>
+  <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 15.38rpx">
+    <view style="display: flex; justify-content: space-between; align-items: baseline">
+      <text style="font-size: 28.85rpx; font-weight: 700">档案完整度</text>
+      <text style="font-size: 25rpx; color: #5B6663">{{ complete }}%</text>
+    </view>
+    <view style="height: 15.38rpx; border-radius: 1921.15rpx; background: #DCE5E1; overflow: hidden">
+      <view style="width: {{ completeW }}; height: 100%; background: #1F6F66">
+      </view>
+    </view>
+    <view style="font-size: 25rpx; color: #3E4B47; line-height: 1.6">{{ completeText }}</view>
+  </view>
+  <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
+    <view style="display: flex; justify-content: space-between; align-items: center">
+      <view style="display: flex; flex-direction: column; gap: 3.85rpx">
+        <text style="font-size: 28.85rpx; font-weight: 700">复查提醒</text>
+        <text style="font-size: 23.08rpx; color: #5B6663">默认关闭 · 打开后复查前一周首页出现准备清单</text>
+      </view>
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 92.31rpx; height: 53.85rpx; border-radius: 1921.15rpx; border: 0; background: {{ swBg }}; position: relative; padding: 0; flex-shrink: 0" aria-label="复查提醒" bindtap="act" data-fn="{{ toggleRemind }}" hover-class="tap">
+        <text style="position: absolute; top: 7.69rpx; left: {{ swLeft }}; width: 38.46rpx; height: 38.46rpx; border-radius: 1921.15rpx; background: #FFFFFF"></text>
+      </view>
+    </view>
+    <block wx:if="{{ remindOn }}">
+      <view style="display: flex; flex-direction: column; gap: 11.54rpx; padding-top: 19.23rpx; border-top: 1.92rpx solid #EEF2F0">
+        <view style="font-size: 25rpx; color: #5B6663">下次复查时间（可以不填）</view>
+        <input style="min-height: 84.62rpx; border-radius: 19.23rpx; border: 1.92rpx solid #C9D4D0; padding: 0 23.08rpx; font-size: 28.85rpx; color: #1F2A27; background: #F8FAF9; height: 84.62rpx" id="appt" value="10 月 20 日 周二" placeholder-style="color: #8A9A95" />
+      </view>
+    </block>
+  </view>
+  <view style="padding: 7.69rpx 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column">
+    <view style="font-size: 28.85rpx; font-weight: 700; padding: 19.23rpx 0 11.54rpx">我的康复团队</view>
+    <view style="display: flex; align-items: center; gap: 19.23rpx; min-height: 100rpx; border-top: 1.92rpx solid #EEF2F0">
+      <view style="flex: 1">
+        <view style="font-size: 26.92rpx; font-weight: 700">康复治疗师</view>
+        <view style="font-size: 23.08rpx; color: #5B6663">邀请后可直接推送和调整动作</view>
+      </view>
+      <text style="font-size: 23.08rpx; padding: 5.77rpx 15.38rpx; border-radius: 1921.15rpx; background: #EDF0EE; color: #3E4B47">即将开放</text>
+    </view>
+    <view style="display: flex; align-items: center; gap: 19.23rpx; min-height: 100rpx; border-top: 1.92rpx solid #EEF2F0">
+      <view style="flex: 1">
+        <view style="font-size: 26.92rpx; font-weight: 700">矫形师 · 支具</view>
+        <view style="font-size: 23.08rpx; color: #5B6663">支具不合适时一键联系</view>
+      </view>
+      <text style="font-size: 25rpx; color: #1F6F66; font-weight: 700">填写</text>
+    </view>
+  </view>
+  <view style="padding: 7.69rpx 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column">
+    <view style="display: flex; justify-content: space-between; align-items: center; min-height: 92.31rpx; border: 0; background: transparent; padding: 0; font-size: 26.92rpx; color: #1F2A27" bindtap="act" data-fn="{{ nav.brace }}" hover-class="tap">
+      <text>我的支具与传感器</text>
+      <text style="color: #8A9A95">›</text>
+    </view>
+    <view style="display: flex; justify-content: space-between; align-items: center; min-height: 92.31rpx; border: 0; border-top: 1.92rpx solid #EEF2F0; background: transparent; padding: 0; font-size: 26.92rpx; color: #1F2A27" bindtap="act" data-fn="{{ nav.rewards }}" hover-class="tap">
+      <text>松果与勋章</text>
+      <text style="color: #8A9A95">{{ pine }} 颗 ›</text>
+    </view>
+    <view style="display: flex; justify-content: space-between; align-items: center; min-height: 92.31rpx; border-top: 1.92rpx solid #EEF2F0; font-size: 26.92rpx">
+      <text>提醒设置</text>
+      <text style="color: #5B6663; font-size: 23.08rpx">支具 · 训练 · 坐姿</text>
+    </view>
+    <view style="display: flex; justify-content: space-between; align-items: center; min-height: 92.31rpx; border-top: 1.92rpx solid #EEF2F0; font-size: 26.92rpx">
+      <text>隐私与数据</text>
+      <text style="color: #5B6663; font-size: 23.08rpx">视频只存本机 · 可导出</text>
+    </view>
+  </view>
+  <view style="padding: 0 38.46rpx 60rpx">
+    <view bindtap="resetDemo" hover-class="tap" style="text-align: center; font-size: 24rpx; color: #5B6663; padding: 24rpx; border: 2rpx dashed #C9D4D0; border-radius: 24rpx">重置示例数据，从首次使用重新开始</view>
+  </view>
+</view>

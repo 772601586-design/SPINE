@@ -1,12 +1,19 @@
 {
   "pages": [
     "pages/login/index",
+    "pages/life/index",
+    "pages/prescription/index",
     "pages/onboarding/profile/index",
     "pages/rehab/index",
     "pages/rehab/activity/index",
+    "pages/growth/index",
+    "pages/treatment-stage/index",
     "pages/rehab/exercises/index",
     "pages/rehab/card/index",
     "pages/rehab/follow/index",
+    "pages/rehab/done/index",
+    "pages/rehab/recordings/index",
+    "pages/rehab/match/index",
     "pages/community/index",
     "pages/personal/index",
     "pages/personal/profile/index",
@@ -21,22 +28,35 @@
     "pages/brace-trends/index",
     "pages/follow-ups/index"
   ],
+  "subPackages": [{
+    "root": "prototype",
+    "name": "prototype",
+    "pages": [
+      "pages/welcome/index", "pages/today/index", "pages/train/index", "pages/growth/index",
+      "pages/community/index", "pages/me/index", "pages/stage/index", "pages/basics/index",
+      "pages/ready/index", "pages/follow/index", "pages/done/index", "pages/record/index",
+      "pages/import/index", "pages/match/index", "pages/card/index", "pages/upload/index",
+      "pages/brace/index", "pages/rewards/index"
+    ]
+  }],
   "window": {
     "navigationBarTitleText": "小树",
-    "navigationBarBackgroundColor": "#f5f7f5",
+    "navigationBarBackgroundColor": "#F3F5F2",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#f5f7f5",
+    "backgroundColor": "#F3F5F2",
     "backgroundTextStyle": "light"
   },
   "tabBar": {
     "color": "#68736d",
-    "selectedColor": "#246b57",
+    "selectedColor": "#1F6F66",
     "backgroundColor": "#ffffff",
     "borderStyle": "white",
     "list": [
-      { "pagePath": "pages/rehab/index", "text": "康复" },
-      { "pagePath": "pages/community/index", "text": "社区" },
-      { "pagePath": "pages/personal/index", "text": "个人" }
+      { "pagePath": "pages/rehab/index", "text": "今日", "iconPath": "assets/tab/home.png", "selectedIconPath": "assets/tab/home-on.png" },
+      { "pagePath": "pages/rehab/activity/index", "text": "训练", "iconPath": "assets/tab/grid.png", "selectedIconPath": "assets/tab/grid-on.png" },
+      { "pagePath": "pages/growth/index", "text": "成长", "iconPath": "assets/tab/chart.png", "selectedIconPath": "assets/tab/chart-on.png" },
+      { "pagePath": "pages/community/index", "text": "社群", "iconPath": "assets/tab/people.png", "selectedIconPath": "assets/tab/people-on.png" },
+      { "pagePath": "pages/personal/index", "text": "我的", "iconPath": "assets/tab/person.png", "selectedIconPath": "assets/tab/person-on.png" }
     ]
   },
   "style": "v2",

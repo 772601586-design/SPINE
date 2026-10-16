@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     "django.contrib.auth", "django.contrib.contenttypes",
     "django.contrib.sessions", "django.contrib.messages",
     "django.contrib.staticfiles", "rest_framework", "corsheaders",
-    "drf_spectacular", "rest_framework.authtoken", "core", "braces", "profiles", "medical", "exercises", "training",
+    "drf_spectacular", "rest_framework.authtoken", "core", "braces", "profiles", "medical", "exercises", "training", "life",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

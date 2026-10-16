@@ -1,3 +1,5 @@
 .tight { margin-bottom: 0; }
 .tag { padding: 4rpx 16rpx; border-radius: 999rpx; background: #edf4ef; color: #246b57; font-size: 21rpx; }
 .tag-muted { background: #eef1ef; color: #8a948e; }
+
+.groups{display:flex;gap:16rpx;margin:24rpx 0}.group{padding:16rpx 24rpx;background:#fff;border-radius:24rpx}.group.active{background:#1f6f66;color:white}.post-input{box-sizing:border-box;width:100%;min-height:160rpx;padding:20rpx;background:#f3f5f2;border-radius:16rpx;margin:20rpx 0}.post-body{display:block;white-space:pre-wrap;line-height:1.8;margin:20rpx 0}.post-actions{display:flex;gap:16rpx}.post-actions button{flex:1;font-size:26rpx}

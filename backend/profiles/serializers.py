@@ -67,6 +67,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = (
             "id", "nickname", "avatar", "birth_month", "diagnosis_status",
+            "treatment_stage", "gender", "gender_custom", "menarche_status",
             "first_diagnosed_date", "management_methods", "notes",
             "onboarding_status", "completed_at", "completed_revision",
             "revision", "created_at", "updated_at", "expected_revision",
@@ -82,6 +83,12 @@ class ProfileSerializer(serializers.ModelSerializer):
     def validate_diagnosis_status(self, value):
         # 客户端用 "" 表示"没填"也接受，统一归一化为 None。
         return value or None
+
+    def validate(self, attrs):
+        gender = attrs.get("gender", getattr(self.instance, "gender", ""))
+        if gender != Profile.Gender.CUSTOM:
+            attrs["gender_custom"] = ""
+        return attrs
 
     def validate_management_methods(self, value):
         if value is None:

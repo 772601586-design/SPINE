@@ -1,12 +1,17 @@
-import { configureUnauthorizedHandler, initSession } from './services/session';
+import { clearSession, configureUnauthorizedHandler, initSession } from './services/session';
+import { startReminders, stopReminders } from './services/reminders';
 
 App({
   onLaunch() {
     configureUnauthorizedHandler(() => {
-      wx.clearStorageSync();
+      clearSession();
+      const pages = getCurrentPages();
+      if (pages[pages.length - 1]?.route.startsWith('prototype/')) return;
       wx.reLaunch({ url: '/pages/login/index' });
     });
-    void initSession();
+    void initSession().then(() => startReminders());
   },
+  onShow() { void startReminders(); },
+  onHide() { stopReminders(); },
   globalData: {},
 });

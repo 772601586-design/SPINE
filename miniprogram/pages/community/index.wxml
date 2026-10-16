@@ -1,29 +1,12 @@
 <view class="page">
-  <view class="heading">
-    <text class="title">社区</text>
-    <text class="subtitle">交流与表达，按自己的节奏来。</text>
-  </view>
-
-  <view wx:if="{{error}}" class="error" bindtap="retry">{{error}} 点击重试</view>
-  <view wx:if="{{loading}}" class="card"><view class="empty">正在加载…</view></view>
-
-  <block wx:else>
-    <view class="card">
-      <view class="row"><text class="card-title tight">最新</text><text class="tag tag-muted">尚未开放</text></view>
-      <text class="muted">帖子需要先经过审核才会公开展示。</text>
-      <view class="empty">暂无可展示的社区内容</view>
-      <button class="button button-plain" bindtap="compose">写分享</button>
-    </view>
-
-    <view class="card">
-      <text class="card-title">心情帖</text>
-      <text class="muted">可以只写心情，也可以选择仅自己可见。</text>
-      <view class="empty">私人心情与转发草稿尚未开放</view>
-    </view>
-
-    <view class="card">
-      <text class="card-title">专业科普</text>
-      <view class="empty">经审核的科普内容尚未接入</view>
-    </view>
-  </block>
+  <view class="heading"><text class="eyebrow">一起走，慢慢来</text><text class="title">同行社群</text><text class="subtitle">分享生活经验。公开分享请避免姓名、联系方式和私人医疗资料。</text></view>
+  <button class="button button-plain" bindtap="openLearning">支具生活指南 · 认知学习 · 每周绘画</button>
+  <view class="groups"><text wx:for="{{groups}}" wx:key="key" class="group {{group === item.key ? 'active' : ''}}" data-group="{{item.key}}" bindtap="selectGroup">{{item.label}}</text></view>
+  <button class="button button-plain" bindtap="toggleMine">{{mine ? '查看分组全部分享' : '查看我的分享和审核状态'}}</button>
+  <view class="card"><text class="card-title">写下今天想分享的事</text><textarea class="post-input" maxlength="2000" value="{{body}}" bindinput="inputBody" placeholder="文字分享会在审核通过后公开" /><button class="button" loading="{{busy}}" disabled="{{busy || !body}}" bindtap="compose">提交分享</button></view>
+  <view wx:if="{{error}}" class="error" bindtap="retry">{{error}} · 点击重试</view>
+  <view wx:if="{{loading}}" class="card empty">正在读取分享…</view>
+  <view wx:elif="{{!posts.length}}" class="card empty">这个分组还没有可见分享。</view>
+  <view wx:for="{{posts}}" wx:key="id" class="card"><text class="card-title">{{item.author}}</text><text class="small">{{item.created_at}}</text><text class="post-body">{{item.body}}</text><text wx:if="{{item.mine}}" class="muted">{{item.status === 'published' ? '已发布' : item.status === 'pending' ? '审核中' : '未通过'}} {{item.moderation_note}}</text><view class="post-actions"><button wx:if="{{item.status === 'published'}}" class="button button-plain" data-id="{{item.id}}" disabled="{{busy}}" bindtap="like">{{item.liked ? '已赞' : '点赞'}} {{item.like_count}}</button><button wx:if="{{!item.mine}}" class="button button-plain" data-id="{{item.id}}" bindtap="startReport">举报</button><button wx:if="{{item.mine}}" class="button button-plain" data-id="{{item.id}}" disabled="{{busy}}" bindtap="remove">删除</button></view></view>
+  <view wx:if="{{reportId}}" class="card"><text class="card-title">举报原因</text><textarea maxlength="500" class="post-input" value="{{reason}}" bindinput="inputReason" placeholder="请描述问题" /><button class="button" disabled="{{busy || !reason}}" bindtap="submitReport">提交举报</button><button class="button button-plain" bindtap="cancelReport">取消</button></view>
 </view>

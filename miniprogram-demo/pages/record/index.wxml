@@ -1,0 +1,44 @@
+<!-- 现场录动作 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="min-height: 100vh; box-sizing: border-box; background: #0E1513; color: #EAF2EF; padding: 30.77rpx 30.77rpx 38.46rpx; display: flex; flex-direction: column; gap: 23.08rpx">
+  <view style="display: flex; align-items: center; justify-content: space-between">
+    <view style="text-align: center">
+      <view style="font-size: 28.85rpx; font-weight: 700">现场录动作</view>
+      <view style="font-size: 23.08rpx; color: #A9C3BD">这次已录 {{ recCount }} 段</view>
+    </view>
+    <view style="width: 84.62rpx">
+    </view>
+  </view>
+  <view style="position: relative; flex: 1; min-height: 903.85rpx; border-radius: 38.46rpx; background: #16201D; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 23.08rpx">
+    <block wx:if="{{ recRec }}">
+      <view style="position: absolute; left: 26.92rpx; top: 26.92rpx; display: flex; align-items: center; gap: 11.54rpx; padding: 7.69rpx 19.23rpx; border-radius: 1921.15rpx; background: #8E2A1E; font-size: 23.08rpx; font-weight: 700"><text style="width: 15.38rpx; height: 15.38rpx; border-radius: 1921.15rpx; background: #FFFFFF"></text>0:12</view>
+    </block>
+    <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNTAnIGhlaWdodD0nMjkwJyB2aWV3Qm94PScwIDAgMjAwIDM4MCcgZmlsbD0nbm9uZSc+CiAgICAgICAgICAgIDxjaXJjbGUgY3g9JzEwMCcgY3k9JzQwJyByPScyOCcgc3Ryb2tlPScjN0ZEMUMyJyBzdHJva2Utd2lkdGg9JzInIHN0cm9rZS1kYXNoYXJyYXk9JzYgNic+PC9jaXJjbGU+CiAgICAgICAgICAgIDxwYXRoIGQ9J002MCA4MCBRMTAwIDcwIDE0MCA4MCBMMTUwIDIwMCBRMTAwIDIxNSA1MCAyMDAgWicgc3Ryb2tlPScjN0ZEMUMyJyBzdHJva2Utd2lkdGg9JzInIHN0cm9rZS1kYXNoYXJyYXk9JzYgNic+PC9wYXRoPgogICAgICAgICAgICA8cGF0aCBkPSdNNjAgODUgTDMwIDE5MCBNMTQwIDg1IEwxNzAgMTkwJyBzdHJva2U9JyM3RkQxQzInIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWRhc2hhcnJheT0nNiA2Jz48L3BhdGg+CiAgICAgICAgICAgIDxwYXRoIGQ9J003MCAyMDUgTDY1IDM3MCBNMTMwIDIwNSBMMTM1IDM3MCcgc3Ryb2tlPScjN0ZEMUMyJyBzdHJva2Utd2lkdGg9JzInIHN0cm9rZS1kYXNoYXJyYXk9JzYgNic+PC9wYXRoPgogICAgICAgICAgPC9zdmc+" style="width: 288.46rpx; height: 557.69rpx; flex-shrink: 0" />
+    <view style="font-size: 25rpx; color: #CFE3DE">背面全身入镜 · 康复师在旁边讲的话也会一起录下</view>
+  </view>
+  <block wx:if="{{ recReady }}">
+    <view style="display: flex; flex-direction: column; align-items: center; gap: 15.38rpx">
+      <view style="width: 146.15rpx; height: 146.15rpx; border-radius: 1921.15rpx; border: 7.69rpx solid #FFFFFF; background: transparent; display: flex; align-items: center; justify-content: center; padding: 0" aria-label="开始录制" bindtap="act" data-fn="{{ recStart }}" hover-class="tap">
+        <text style="width: 107.69rpx; height: 107.69rpx; border-radius: 1921.15rpx; background: #E0533F"></text>
+      </view>
+      <text style="font-size: 23.08rpx; color: #A9C3BD">先录下来，不用马上起名，处方单到了再一起整理</text>
+    </view>
+  </block>
+  <block wx:if="{{ recRec }}">
+    <view style="display: flex; flex-direction: column; align-items: center; gap: 15.38rpx">
+      <view style="width: 146.15rpx; height: 146.15rpx; border-radius: 1921.15rpx; border: 7.69rpx solid #FFFFFF; background: transparent; display: flex; align-items: center; justify-content: center; padding: 0" aria-label="停止录制" bindtap="act" data-fn="{{ recStop }}" hover-class="tap">
+        <text style="width: 57.69rpx; height: 57.69rpx; border-radius: 15.38rpx; background: #E0533F"></text>
+      </view>
+      <text style="font-size: 23.08rpx; color: #A9C3BD">录完一个动作就停</text>
+    </view>
+  </block>
+  <block wx:if="{{ recName }}">
+    <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #14211E; display: flex; flex-direction: column; gap: 19.23rpx">
+      <view style="font-size: 26.92rpx; font-weight: 700">这段动作叫什么？</view>
+      <input style="min-height: 84.62rpx; border-radius: 19.23rpx; border: 1.92rpx solid #4E7E76; padding: 0 23.08rpx; font-size: 28.85rpx; color: #EAF2EF; background: #0E1513; height: 84.62rpx" id="rec-name" placeholder="可以先不填，比如：侧桥、肋木吹气" value="{{ recNameVal }}" bindinput="act" data-fn="{{ setRecName }}" placeholder-style="color: #8A9A95" />
+      <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15.38rpx">
+        <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 88.46rpx; border: 2.88rpx solid #7FD1C2; border-radius: 23.08rpx; background: transparent; color: #7FD1C2; font-size: 26.92rpx; font-weight: 700" bindtap="act" data-fn="{{ recMore }}" hover-class="tap">再录一个</view>
+        <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 88.46rpx; border: 0; border-radius: 23.08rpx; background: #7FD1C2; color: #0F302C; font-size: 26.92rpx; font-weight: 700" bindtap="act" data-fn="{{ recFinish }}" hover-class="tap">录完了</view>
+      </view>
+    </view>
+  </block>
+</view>

@@ -1,7 +1,7 @@
 <view class="page">
   <view class="heading">
     <text class="title">{{mode === 'create' ? '新增就诊' : '就诊详情'}}</text>
-    <text class="subtitle">记录医生写的内容和你自己的备注；平台不做识别或诊断。</text>
+    <text class="subtitle">记录医生写的内容和你自己的备注；文字识别需本人核对，平台不生成诊断。</text>
   </view>
 
   <view wx:if="{{loading}}" class="card"><view class="empty">正在读取…</view></view>
@@ -12,6 +12,7 @@
   </block>
 
   <block wx:else>
+    <view class="card"><text class="card-title">印刷报告文字识别</text><text class="muted">只识别文字，不从 X 光影像测量角度。核对后可加入备注；Cobb 等数据仍需在测量区逐条录入。</text><button class="button button-plain" loading="{{recognizing}}" disabled="{{recognizing || saving}}" bindtap="chooseReportOCR">选择报告图片并识别</button><block wx:if="{{ocrText}}"><textarea class="field" maxlength="20000" value="{{ocrText}}" bindinput="onOCRText" /><button class="button button-plain" bindtap="confirmOCR">已核对文字，加入备注</button></block></view>
     <view wx:if="{{error}}" class="error" bindtap="save">{{error}}</view>
 
     <view class="card">

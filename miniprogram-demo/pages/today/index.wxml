@@ -1,0 +1,150 @@
+<!-- 今日 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<wxs module="u" src="../../core/u.wxs" />
+<view style="padding: 46.15rpx 38.46rpx 38.46rpx; display: flex; flex-direction: column; gap: 26.92rpx">
+  <view style="display: flex; justify-content: space-between; align-items: flex-end">
+    <view>
+      <view style="font-size: 25rpx; color: #5B6663">{{ dateLine }}</view>
+      <view style="margin: 7.69rpx 0 0; font-size: 50rpx; font-weight: 700">下午好，小禾</view>
+    </view>
+    <view style="display: flex; align-items: center; gap: 11.54rpx; min-height: 76.92rpx; border: 0; background: #F6DCC8; color: #6B3416; padding: 0 23.08rpx; border-radius: 1921.15rpx; font-size: 26.92rpx; font-weight: 700" aria-label="松果与勋章" bindtap="act" data-fn="{{ nav.rewards }}" hover-class="tap"><image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNicgaGVpZ2h0PScxNicgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyM2QjM0MTYnIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbGluZWpvaW49J3JvdW5kJz48cGF0aCBkPSdNMTIgM2M0IDMgNiA2IDYgMTBhNiA2IDAgMCAxLTEyIDBjMC00IDItNyA2LTEweic+PC9wYXRoPjxwYXRoIGQ9J005IDEyaDZNOS41IDE1LjVoNSc+PC9wYXRoPjwvc3ZnPg==" style="width: 30.77rpx; height: 30.77rpx; flex-shrink: 0" />{{ pine }}</view>
+  </view>
+  <block wx:if="{{ st.check }}">
+    <view style="padding: 30.77rpx; border-radius: 34.62rpx; background: #DDEDE9; display: flex; flex-direction: column; gap: 19.23rpx">
+      <view style="font-size: 30.77rpx; font-weight: 700; color: #1F4F49">还在检查，也可以先用起来</view>
+      <view style="font-size: 25rpx; color: #2E3B37; line-height: 1.7">确诊和分型以医院检查为准。拿到报告前，先做好这几件事：</view>
+      <view style="font-size: 26.92rpx; color: #1F2A27; line-height: 2">· 带上之前拍过的片子<text>{{'\n'}}</text>· 记下想问医生的问题<text>{{'\n'}}</text>· 花 1 分钟了解什么是 Cobb 角</view>
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 92.31rpx; border: 0; border-radius: 23.08rpx; background: #1F6F66; color: #FFFFFF; font-size: 28.85rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.upload }}" hover-class="tap">拿到报告了，拍照上传</view>
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border: 2.88rpx solid #1F6F66; border-radius: 23.08rpx; background: transparent; color: #1F6F66; font-size: 26.92rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.learn }}" hover-class="tap">先了解一下侧弯</view>
+    </view>
+  </block>
+  <block wx:if="{{ st.braceRings }}">
+    <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 19.23rpx">
+      <view style="display: flex; align-items: center; gap: 19.23rpx; padding: 23.08rpx; border: 0; border-radius: 34.62rpx; background: #FFFFFF; color: #1F2A27; text-align: left" bindtap="act" data-fn="{{ nav.brace }}" hover-class="tap">
+        <image src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='60'%20height='60'%20viewBox='0%200%2064%2064'%20style='flex-shrink:%200'%3E%3Ccircle%20cx='32'%20cy='32'%20r='26'%20fill='none'%20stroke='%23DCE5E1'%20stroke-width='8'%3E%3C/circle%3E%3Ccircle%20cx='32'%20cy='32'%20r='26'%20fill='none'%20stroke='%231F6F66'%20stroke-width='8'%20stroke-linecap='round'%20stroke-dasharray='{{ u.enc(braceDash) }}'%20transform='rotate(-90%2032%2032)'%3E%3C/circle%3E%3C/svg%3E" style="width: 115.38rpx; height: 115.38rpx; flex-shrink: 0; flex-shrink: 0" />
+        <view style="display: flex; flex-direction: column; gap: 3.85rpx">
+          <text style="font-size: 23.08rpx; color: #5B6663">支具</text>
+          <text style="font-size: 32.69rpx; font-weight: 700">{{ braceHours }}</text>
+          <text style="font-size: 21.15rpx; color: #5B6663">{{ braceGoal }}</text>
+        </view>
+      </view>
+      <view style="display: flex; align-items: center; gap: 19.23rpx; padding: 23.08rpx; border-radius: 34.62rpx; background: #FFFFFF">
+        <image src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='60'%20height='60'%20viewBox='0%200%2064%2064'%20style='flex-shrink:%200'%3E%3Ccircle%20cx='32'%20cy='32'%20r='26'%20fill='none'%20stroke='%23F3E3D6'%20stroke-width='8'%3E%3C/circle%3E%3Ccircle%20cx='32'%20cy='32'%20r='26'%20fill='none'%20stroke='%23C4602A'%20stroke-width='8'%20stroke-linecap='round'%20stroke-dasharray='{{ u.enc(ringDash) }}'%20transform='rotate(-90%2032%2032)'%3E%3C/circle%3E%3C/svg%3E" style="width: 115.38rpx; height: 115.38rpx; flex-shrink: 0; flex-shrink: 0" />
+        <view style="display: flex; flex-direction: column; gap: 3.85rpx">
+          <text style="font-size: 23.08rpx; color: #5B6663">训练</text>
+          <text style="font-size: 32.69rpx; font-weight: 700">{{ doneCount }} / {{ deckLen }} 个</text>
+          <text style="font-size: 21.15rpx; color: #5B6663">{{ coreDayText }}</text>
+        </view>
+      </view>
+    </view>
+  </block>
+  <block wx:if="{{ st.isNew }}">
+    <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #DDEDE9; display: flex; flex-direction: column; gap: 15.38rpx">
+      <view style="font-size: 28.85rpx; font-weight: 700; color: #1F4F49">适应期 · 第 5 天</view>
+      <view style="font-size: 25rpx; color: #2E3B37; line-height: 1.7">今天的目标是戴满 8 小时，训练先学会处方里的几个动作就好。闷、硌、不想戴都很正常。</view>
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; align-self: flex-start; min-height: 69.23rpx; padding: 0 23.08rpx; border: 0; border-radius: 1921.15rpx; background: #FFFFFF; color: #1F6F66; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.talk }}" hover-class="tap">看看大家怎么熬过前两周 ›</view>
+    </view>
+  </block>
+  <block wx:if="{{ st.off }}">
+    <view style="display: flex; flex-direction: column; gap: 26.92rpx">
+      <view style="display: flex; align-items: center; gap: 23.08rpx; padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF">
+        <image src="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='60'%20height='60'%20viewBox='0%200%2064%2064'%20style='flex-shrink:%200'%3E%3Ccircle%20cx='32'%20cy='32'%20r='26'%20fill='none'%20stroke='%23F3E3D6'%20stroke-width='8'%3E%3C/circle%3E%3Ccircle%20cx='32'%20cy='32'%20r='26'%20fill='none'%20stroke='%23C4602A'%20stroke-width='8'%20stroke-linecap='round'%20stroke-dasharray='{{ u.enc(ringDash) }}'%20transform='rotate(-90%2032%2032)'%3E%3C/circle%3E%3C/svg%3E" style="width: 115.38rpx; height: 115.38rpx; flex-shrink: 0; flex-shrink: 0" />
+        <view>
+          <view style="font-size: 23.08rpx; color: #5B6663">今天的训练</view>
+          <view style="font-size: 38.46rpx; font-weight: 700">{{ doneCount }} / {{ deckLen }} 个</view>
+          <view style="font-size: 23.08rpx; color: #5B6663">维持期每周至少练 5 天</view>
+        </view>
+      </view>
+      <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #DDEDE9; display: flex; flex-direction: column; gap: 11.54rpx">
+        <view style="font-size: 28.85rpx; font-weight: 700; color: #1F4F49">脱下支具，不是结束</view>
+        <view style="font-size: 25rpx; color: #2E3B37; line-height: 1.7">这个阶段度数可能会有少量回退，这是预期内的。坚持训练，是守住这几年成果最重要的事。</view>
+      </view>
+    </view>
+  </block>
+  <block wx:if="{{ st.adult }}">
+    <view style="display: flex; flex-direction: column; gap: 26.92rpx">
+      <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
+        <view style="font-size: 28.85rpx; font-weight: 700">今天腰背感觉怎么样？</view>
+        <view style="display: grid; grid-template-columns: repeat(11, minmax(0, 1fr)); gap: 5.77rpx">
+          <block wx:for="{{ pains }}" wx:for-item="p" wx:for-index="pIndex" wx:key="_k">
+            <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 76.92rpx; padding: 0; border: 0; border-radius: 15.38rpx; background: {{ p.bg }}; color: {{ p.fg }}; font-size: 25rpx; font-weight: {{ p.fw }}" bindtap="act" data-fn="{{ p.pick }}" hover-class="tap">{{ p.n }}</view>
+          </block>
+        </view>
+        <view style="display: flex; justify-content: space-between; font-size: 21.15rpx; color: #5B6663">
+          <text>0 不痛</text>
+          <text>10 很痛</text>
+        </view>
+      </view>
+      <view style="display: flex; align-items: center; gap: 23.08rpx; padding: 26.92rpx; border-radius: 34.62rpx; background: #F6DCC8">
+        <view style="flex: 1">
+          <view style="font-size: 26.92rpx; font-weight: 700; color: #6B3416">已经连续坐了 52 分钟</view>
+          <view style="font-size: 23.08rpx; color: #6B3416">起来做一组侧弯专属的办公间隙练习</view>
+        </view>
+        <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 73.08rpx; padding: 0 26.92rpx; border: 0; border-radius: 1921.15rpx; background: #6B3416; color: #FFFFFF; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ startFollow }}" hover-class="tap">开始</view>
+      </view>
+    </view>
+  </block>
+  <block wx:if="{{ hasDeck }}">
+    <view style="display: flex; flex-direction: column; gap: 19.23rpx">
+      <view style="display: flex; justify-content: space-between; align-items: baseline">
+        <view style="margin: 0; font-size: 32.69rpx; font-weight: 700">今日卡组 · 按顺序练</view>
+        <text style="font-size: 23.08rpx; color: #5B6663">{{ deckLen }} 个动作</text>
+      </view>
+      <view style="padding: 7.69rpx 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column">
+        <block wx:for="{{ deck }}" wx:for-item="c" wx:for-index="cIndex" wx:key="_k">
+          <view style="display: flex; align-items: center; gap: 19.23rpx; min-height: 103.85rpx; border-bottom: 1.92rpx solid #E6EBE8">
+            <text style="width: 38.46rpx; font-size: 23.08rpx; color: #8A9A95; flex-shrink: 0">{{ c.n }}</text>
+            <view style="flex: 1; min-width: 0; text-align: left; border: 0; background: transparent; padding: 11.54rpx 0; color: #1F2A27; display: flex; flex-direction: column; gap: 3.85rpx" bindtap="act" data-fn="{{ c.open }}" hover-class="tap">
+              <text style="font-size: 26.92rpx; font-weight: 700">{{ c.name }}</text>
+              <text style="font-size: 23.08rpx; color: #5B6663">{{ c.mod }} · {{ c.param }}</text>
+            </view>
+            <block wx:if="{{ c.done }}">
+              <view style="display: flex; align-items: center; gap: 7.69rpx; font-size: 25rpx; font-weight: 700; color: #1F6F66"><image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNicgaGVpZ2h0PScxNicgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyMxRjZGNjYnIHN0cm9rZS13aWR0aD0nMi40JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnPjxwYXRoIGQ9J001IDEybDUgNSA5LTEwJz48L3BhdGg+PC9zdmc+" style="width: 30.77rpx; height: 30.77rpx; flex-shrink: 0" />已完成</view>
+            </block>
+            <block wx:if="{{ c.todo }}">
+              <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 69.23rpx; padding: 0 23.08rpx; border: 1.92rpx solid #1F6F66; border-radius: 1921.15rpx; background: transparent; color: #1F6F66; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ c.check }}" hover-class="tap">打卡</view>
+            </block>
+          </view>
+        </block>
+        <block wx:if="{{ hasLeft }}">
+          <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin: 23.08rpx 0 19.23rpx; min-height: 92.31rpx; border: 0; border-radius: 23.08rpx; background: #1F6F66; color: #FFFFFF; font-size: 28.85rpx; font-weight: 700" bindtap="act" data-fn="{{ startFollow }}" hover-class="tap">跟练剩下的 {{ leftCount }} 个动作</view>
+        </block>
+        <block wx:if="{{ allDone }}">
+          <view style="margin: 23.08rpx 0 19.23rpx; min-height: 92.31rpx; border-radius: 23.08rpx; background: #DDEDE9; color: #1F4F49; font-size: 26.92rpx; font-weight: 700; display: flex; align-items: center; justify-content: center">今天的训练都完成了</view>
+        </block>
+      </view>
+    </view>
+  </block>
+  <block wx:if="{{ st.braceRings }}">
+    <view style="padding: 7.69rpx 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column">
+      <view style="display: flex; align-items: center; gap: 19.23rpx; min-height: 103.85rpx; border-bottom: 1.92rpx solid #E6EBE8">
+        <view style="flex: 1">
+          <view style="font-size: 26.92rpx; font-weight: 700">撑杆站立 3 分钟</view>
+          <view style="font-size: 23.08rpx; color: #5B6663">姿势矫正 · 日常</view>
+        </view>
+        <block wx:if="{{ standDone }}">
+          <text style="font-size: 25rpx; font-weight: 700; color: #1F6F66">已完成</text>
+        </block>
+        <block wx:if="{{ standTodo }}">
+          <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 69.23rpx; padding: 0 23.08rpx; border: 1.92rpx solid #1F6F66; border-radius: 1921.15rpx; background: transparent; color: #1F6F66; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ doStand }}" hover-class="tap">打卡</view>
+        </block>
+      </view>
+      <view style="display: flex; align-items: center; gap: 19.23rpx; min-height: 103.85rpx">
+        <view style="flex: 1">
+          <view style="font-size: 26.92rpx; font-weight: 700">蛙泳 · 本周 {{ swim }} / 3 次</view>
+          <view style="font-size: 23.08rpx; color: #5B6663">康复师建议 · 30 分钟 · 心率 130–150</view>
+        </view>
+        <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 69.23rpx; padding: 0 23.08rpx; border: 1.92rpx solid #1F6F66; border-radius: 1921.15rpx; background: transparent; color: #1F6F66; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ addSwim }}" hover-class="tap">记一次</view>
+      </view>
+    </view>
+  </block>
+  <block wx:if="{{ showPrep }}">
+    <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 15.38rpx">
+      <view style="display: flex; justify-content: space-between; align-items: center">
+        <text style="font-size: 28.85rpx; font-weight: 700">复查准备 · 10 月 20 日 周二</text>
+        <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 69.23rpx; border: 0; background: transparent; color: #1F6F66; font-size: 23.08rpx" bindtap="act" data-fn="{{ nav.me }}" hover-class="tap">提醒设置 ›</view>
+      </view>
+      <view style="font-size: 25rpx; color: #2E3B37; line-height: 1.8">□ 带上支具<text>{{'\n'}}</text>□ 最近一次的练习视频<text>{{'\n'}}</text>□ 想问医生的问题（已记下 1 条）</view>
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border: 2.88rpx solid #1F6F66; border-radius: 23.08rpx; background: transparent; color: #1F6F66; font-size: 26.92rpx; font-weight: 700" bindtap="act" data-fn="{{ makeSummary }}" hover-class="tap">生成复查前摘要</view>
+    </view>
+  </block>
+</view>

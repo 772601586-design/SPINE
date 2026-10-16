@@ -61,7 +61,7 @@ Page({
       wx.showToast({ title: error instanceof Error ? error.message : '添加失败，请重试', icon: 'none' });
     }
   },
-  openPlan() { wx.navigateBack({ delta: 1 }); },
+  openPlan() { wx.switchTab({ url: '/pages/rehab/activity/index' }); },
   clearFilters() {
     const filters = { region: '', muscle: '', goal: '', posture: '', equipment: '', category: '' };
     this.setData({ selectedRegion: '', selectedMuscle: '', selectedGoal: '', selectedPosture: '', selectedEquipment: '', selectedCategory: '' });

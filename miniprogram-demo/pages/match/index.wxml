@@ -1,0 +1,25 @@
+<!-- 配上录像 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 30.77rpx 38.46rpx 46.15rpx; display: flex; flex-direction: column; gap: 26.92rpx">
+  <view style="display: flex; align-items: center; gap: 15.38rpx">
+    <text style="font-size: 28.85rpx; color: #5B6663">配上现场录的视频</text>
+  </view>
+  <view>
+    <view style="margin: 0; font-size: 42.31rpx; font-weight: 700">这 {{ draftCount }} 段视频，配到哪个动作？</view>
+    <view style="margin: 11.54rpx 0 0; font-size: 25rpx; color: #5B6663; line-height: 1.6">已经按名字和录制顺序帮你猜好了，不对就点“换一个”。</view>
+  </view>
+  <block wx:for="{{ draftRows }}" wx:for-item="d" wx:for-index="dIndex" wx:key="_k">
+    <view style="padding: 23.08rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; gap: 23.08rpx; align-items: center">
+      <view style="width: 123.08rpx; height: 161.54rpx; border-radius: 19.23rpx; background: #1F2A27; color: #C9D4D0; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+        <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMicgaGVpZ2h0PScyMicgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPScjQzlENEQwJz48cGF0aCBkPSdNOCA1bDExIDctMTEgN3onPjwvcGF0aD48L3N2Zz4=" style="width: 42.31rpx; height: 42.31rpx; flex-shrink: 0" />
+      </view>
+      <view style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 7.69rpx">
+        <text style="font-size: 23.08rpx; color: #5B6663">{{ d.label }} · {{ d.time }}</text>
+        <text style="font-size: 28.85rpx; font-weight: 700">配到：{{ d.target }}</text>
+        <text style="align-self: flex-start; font-size: 21.15rpx; padding: 3.85rpx 15.38rpx; border-radius: 1921.15rpx; background: #DDEDE9; color: #1F4F49">{{ d.reason }}</text>
+      </view>
+      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 69.23rpx; padding: 0 19.23rpx; border: 1.92rpx solid #1F6F66; border-radius: 1921.15rpx; background: transparent; color: #1F6F66; font-size: 23.08rpx; font-weight: 700; flex-shrink: 0" bindtap="act" data-fn="{{ d.cycle }}" hover-class="tap">换一个</view>
+    </view>
+  </block>
+  <view style="font-size: 23.08rpx; color: #5B6663; line-height: 1.6">视频只保存在本机。没配上的会留在“待整理”里，下次再配。</view>
+  <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 100rpx; border: 0; border-radius: 26.92rpx; background: #1F6F66; color: #FFFFFF; font-size: 30.77rpx; font-weight: 700" bindtap="act" data-fn="{{ finishMatch }}" hover-class="tap">完成，更新卡片</view>
+</view>

@@ -43,7 +43,7 @@ function unwrap<T>(payload: unknown): T {
   return payload as T;
 }
 
-export function request<T>(method: WxRequestOptions['method'], path: string, data?: Record<string, unknown>): Promise<T> {
+export function request<T>(method: WxRequestOptions['method'], path: string, data?: Record<string, unknown>, options: { timeout?: number } = {}): Promise<T> {
   if (!API_BASE_URL) return Promise.reject(new Error('尚未配置此运行环境的 API 地址。'));
   const parsed = /^https?:\/\//.test(API_BASE_URL);
   if (!parsed || (RUNTIME_TARGET !== 'developerTool' && !API_BASE_URL.startsWith('https://'))) {
@@ -59,7 +59,7 @@ export function request<T>(method: WxRequestOptions['method'], path: string, dat
       method: method ?? 'GET',
       data,
       header,
-      timeout: 12000,
+      timeout: options.timeout ?? 12000,
       success(response) {
         if (response.statusCode >= 200 && response.statusCode < 300) { resolve(unwrap<T>(response.data)); return; }
         if (response.statusCode === 401) unauthorized?.();

@@ -2,7 +2,7 @@ import type {
   Brace, BodyMeasurement, ComfortEntry, ComfortFollowUp, CurveMeasurement, Identity,
   Profile, User, Visit, VisitDetail, WearRevision, WearSession, WearStatistics,
   ExerciseTaxonomy, ExerciseVersion,
-  PersonalActionCard, TrainingPlan, TrainingAttempt, WearEndResponse,
+  PersonalActionCard, TrainingPlan, TrainingAttempt, WearEndResponse, TodayDeck,
 } from '../models/types';
 import { request } from './request';
 
@@ -59,6 +59,7 @@ export const api = {
     return request<ExerciseVersion[]>('GET', `/api/v1/exercises/${query ? `?${query}` : ''}`);
   },
   trainingPlan() { return request<TrainingPlan | null>('GET', '/api/v1/training/plan/'); },
+  todayDeck() { return request<TodayDeck>('GET', '/api/v1/training/today/'); },
   actionCard(id: number) { return request<PersonalActionCard>('GET', `/api/v1/training/cards/${id}/`); },
   addActionCard(exerciseVersionId: number) {
     return request<PersonalActionCard>('POST', '/api/v1/training/cards/from-exercise/', { exercise_version_id: exerciseVersionId });

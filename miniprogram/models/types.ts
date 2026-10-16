@@ -19,6 +19,7 @@ export interface PersonalActionCard {
   source_precautions: string | null; source_media: { type: string; url?: string; caption?: string }[] | null;
   source_url: string | null; source_category: string | null; name: string; order: number; revision: number;
   active: boolean; verification_status: CardReadiness; sets: number | null; reps_per_set: number | null;
+  schedule_frequency: '' | 'daily' | 'alternate';
   breaths_per_set: number | null; hold_seconds: number | null; side: string; rest_seconds: number | null;
   equipment: string[]; focus_points: string[]; personal_notes: string; completed_sets: number;
 }
@@ -33,6 +34,18 @@ export interface TrainingAttempt {
   voice_media: { type: string; url: string; caption?: string }[];
   status: 'in_progress' | 'paused' | 'completed' | 'partial' | 'aborted';
   started_at: string; ended_at: string | null; completed_sets: number;
+}
+
+export interface TodayAction {
+  card: Pick<PersonalActionCard, 'id' | 'name' | 'order' | 'source_category' | 'sets' | 'reps_per_set'
+    | 'breaths_per_set' | 'hold_seconds' | 'schedule_frequency' | 'verification_status'>;
+  done: boolean; completed_sets_today: number;
+}
+export interface TodayDeck {
+  date: string; timezone: string; plan_id: number | null; plan_title: string; plan_status: string;
+  available: boolean; cards: TodayAction[]; tomorrow: Array<{ id: number; name: string }>;
+  done_count: number; remaining_count: number; rest_count: number; unconfigured_count: number; needs_setup_count: number;
+  open_attempt: { id: number; card_name: string; status: 'in_progress' | 'paused' } | null;
 }
 
 /** 身份与建档状态（GET /api/v1/me/）。不含 openid 等私有标识。 */
@@ -51,6 +64,7 @@ export interface Attachment {
 export interface Profile {
   id: string; nickname: string; avatar: Attachment | null;
   birth_month: string; diagnosis_status: string | null;
+  treatment_stage: string; gender: string; gender_custom: string; menarche_status: string;
   first_diagnosed_date: string | null;
   management_methods: string[]; notes: string;
   onboarding_status: 'draft' | 'complete' | 'needs_update';

@@ -23,7 +23,7 @@ class PersonalActionCardSerializer(serializers.ModelSerializer):
                   "source_steps", "source_precautions", "source_media", "source_url", "source_category",
                   "name", "order", "revision", "active", "verification_status", "sets", "reps_per_set",
                   "breaths_per_set", "hold_seconds", "side", "rest_seconds", "equipment", "focus_points",
-                  "personal_notes", "completed_sets", "created_at", "updated_at")
+                  "personal_notes", "schedule_frequency", "completed_sets", "created_at", "updated_at")
         read_only_fields = fields
 
     def get_completed_sets(self, obj) -> int:
@@ -45,6 +45,50 @@ class CardUpdateSerializer(serializers.Serializer):
     focus_points = serializers.ListField(child=serializers.CharField(max_length=240), max_length=3, required=False)
     personal_notes = serializers.CharField(max_length=3000, required=False, allow_blank=True)
     confirm_parameters = serializers.BooleanField(required=False, default=False)
+    schedule_frequency = serializers.ChoiceField(choices=PersonalActionCard.ScheduleFrequency.choices, allow_blank=True, required=False)
+
+
+class TodayActionSerializer(serializers.ModelSerializer):
+    source_category = serializers.CharField(source="source_version.get_category_display", read_only=True, allow_null=True)
+
+    class Meta:
+        model = PersonalActionCard
+        fields = ("id", "name", "order", "source_category", "sets", "reps_per_set", "breaths_per_set",
+                  "hold_seconds", "schedule_frequency", "verification_status")
+
+
+class TodayCardSerializer(serializers.Serializer):
+    card = TodayActionSerializer()
+    done = serializers.BooleanField()
+    completed_sets_today = serializers.IntegerField()
+
+
+class DeckPreviewSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    name = serializers.CharField()
+
+
+class OpenAttemptSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    card_name = serializers.CharField()
+    status = serializers.CharField()
+
+
+class TodayDeckSerializer(serializers.Serializer):
+    date = serializers.DateField()
+    timezone = serializers.CharField()
+    plan_id = serializers.IntegerField(allow_null=True)
+    plan_title = serializers.CharField()
+    plan_status = serializers.CharField()
+    available = serializers.BooleanField()
+    cards = TodayCardSerializer(many=True)
+    tomorrow = DeckPreviewSerializer(many=True)
+    done_count = serializers.IntegerField()
+    remaining_count = serializers.IntegerField()
+    rest_count = serializers.IntegerField()
+    unconfigured_count = serializers.IntegerField()
+    needs_setup_count = serializers.IntegerField()
+    open_attempt = OpenAttemptSerializer(allow_null=True)
 
 
 class PlanVersionSerializer(serializers.ModelSerializer):

@@ -1,6 +1,7 @@
 <view class="page">
   <view class="heading">
-    <text class="title">个人</text>
+    <text class="eyebrow">小树陪你，一起长大</text>
+    <text class="title">我的</text>
     <text class="subtitle">{{subtitle}}</text>
   </view>
 
@@ -14,6 +15,7 @@
     </view>
   </view>
 
+  <view class="card"><text class="card-title">生活与记录</text><button class="button button-plain" data-tab="reminder" bindtap="openLife">复查与久坐提醒 · 支具目标</button><button class="button button-plain" data-tab="pain" bindtap="openLife">身体感受记录</button><button class="button button-plain" data-tab="rewards" bindtap="openLife">松果与勋章</button><button class="button button-plain" data-tab="learning" bindtap="openLife">学习与支具生活指南</button></view>
   <view wx:for="{{sections}}" wx:key="title" wx:for-item="section" class="group">
     <text class="group-title">{{section.title}}</text>
     <view class="card">
@@ -27,6 +29,7 @@
     </view>
   </view>
 
+  <view class="card card-green"><text class="card-title">完整 demo 体验</text><text class="muted">查看全部 18 个原型页面，包括处方导入、社群学习、松果勋章和复查流程。示例数据与本人记录分开。</text><button class="button button-plain" bindtap="openPrototype">进入完整 demo</button></view>
   <button class="button button-danger" loading="{{busy}}" disabled="{{busy}}" bindtap="logout">退出登录</button>
   <view wx:if="{{error}}" class="error">{{error}}</view>
   <text class="small center">退出只清除本机会话，服务端会同时撤销该令牌。</text>

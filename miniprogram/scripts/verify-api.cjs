@@ -6,6 +6,7 @@ global.wx = {
   setStorageSync: (key, value) => storage.set(key, value),
   removeStorageSync: key => storage.delete(key),
   clearStorageSync: () => storage.clear(),
+  getStorageInfoSync: () => ({keys: Array.from(storage.keys())}),
   reLaunch() {},
   switchTab() {},
   showToast() {},

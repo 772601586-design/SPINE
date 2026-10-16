@@ -1,5 +1,6 @@
 import type { Brace, ComfortEntry, WearSession, WearStatistics } from '../../models/types';
 import { api } from '../../services/api';
+import { life } from '../../services/life';
 import { requireSession } from '../../services/session';
 
 function label(seconds: number): string { const mins = Math.floor(Math.max(seconds, 0) / 60); return `${Math.floor(mins / 60)}小时${mins % 60}分钟`; }
@@ -9,7 +10,7 @@ function nowId(): string { const hex = Array.from({ length: 32 }, () => Math.flo
 Page({
   data: { loading: true, busy: false, error: '', braceOptions: [] as Brace[], selectedIndex: 0, selectedId: 0,
     selectedName: '', canStart: false, active: null as WearSession | null, activeBraceName: '', activeStarted: '', elapsedText: '', activeIsDifferent: false,
-    todayText: '', hasToday: false, recentFeelings: [] as Array<Record<string, unknown>>, startRequestId: '' },
+    todayText: '', hasToday: false, recentFeelings: [] as Array<Record<string, unknown>>, startRequestId: '', targetHours: '', targetError: '' },
   timer: 0,
   onLoad() { void this.reload(); },
   onShow() { if (this.data.selectedId) void this.reload(); this.updateElapsed(); },
@@ -18,6 +19,7 @@ Page({
   async reload() {
     if (!await requireSession()) return;
     this.setData({ loading: true, error: '' });
+    void this.loadTarget();
     try {
       const [braces, wears, feelings] = await Promise.all([api.braces(), api.wears(), api.feelings()]);
       const active = wears.find(w => !w.ended_at) ?? null;
@@ -49,6 +51,11 @@ Page({
     await this.reload();
   },
   openArchive() { wx.navigateTo({ url: '/pages/brace-archive/index' }); },
+  async loadTarget() {
+    try { const preferences = await life.preferences(); this.setData({ targetHours: preferences.brace_target_hours || '', targetError: '' }); }
+    catch (_) { this.setData({ targetError: '个人目标暂时无法读取。' }); }
+  },
+  openTarget() { wx.navigateTo({ url: '/pages/life/index?tab=reminder' }); },
   addBrace() { wx.navigateTo({ url: '/pages/brace-form/index' }); },
   async startWear() {
     if (this.data.busy || !this.data.selectedId || this.data.active) return;
@@ -70,7 +77,7 @@ Page({
           success: async choice => {
             try { await api.braceTrainingPromptChoice(active.id, choice.confirm ? 'continue' : 'skip'); }
             catch (_) { wx.showToast({ title: '选择暂未同步，请稍后重试', icon: 'none' }); }
-            if (choice.confirm) wx.navigateTo({ url: '/pages/rehab/activity/index' });
+            if (choice.confirm) wx.switchTab({ url: '/pages/rehab/activity/index' });
           },
         });
       } else {

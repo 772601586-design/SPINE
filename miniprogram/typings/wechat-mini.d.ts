@@ -23,10 +23,21 @@ interface WxUploadOptions {
   success?: (response: WxUploadResponse) => void;
   fail?: (error: { errMsg: string }) => void;
 }
-interface WxMediaFile { tempFilePath: string; size: number; fileType?: string }
+interface WxMediaFile { tempFilePath: string; size: number; fileType?: string; duration?: number }
+interface WxFileSystemManager {
+  access(options: { path: string; success?: () => void; fail?: (error: { errMsg: string }) => void }): void;
+  mkdir(options: { dirPath: string; recursive?: boolean; success?: () => void; fail?: (error: { errMsg: string }) => void }): void;
+  copyFile(options: { srcPath: string; destPath: string; success?: () => void; fail?: (error: { errMsg: string }) => void }): void;
+  unlink(options: { filePath: string; success?: () => void; fail?: (error: { errMsg: string }) => void }): void;
+}
 interface WxChosenFile { path: string; name: string; size: number; type?: string }
 interface WxInnerAudioContext { src: string; play(): void; stop(): void; destroy(): void; onEnded(callback: () => void): void; onError(callback: (error: { errMsg: string }) => void): void }
 interface WxApi {
+  nextTick(callback: () => void): void;
+  createCanvasContext(id: string, context?: unknown): { clearRect(x: number, y: number, w: number, h: number): void; setStrokeStyle(color: string): void; setFillStyle(color: string): void; setFontSize(size: number): void; setLineWidth(width: number): void; beginPath(): void; moveTo(x: number, y: number): void; lineTo(x: number, y: number): void; stroke(): void; fill(): void; arc(x: number, y: number, r: number, start: number, end: number): void; fillText(text: string, x: number, y: number): void; draw(): void };
+  env: { USER_DATA_PATH: string };
+  getFileSystemManager(): WxFileSystemManager;
+  getStorageInfoSync(): { keys: string[]; currentSize: number; limitSize: number };
   request(options: WxRequestOptions): { abort(): void };
   uploadFile(options: WxUploadOptions): { abort(): void };
   login(options: { success?: (result: { code: string; errMsg: string }) => void; fail?: (error: { errMsg: string }) => void }): void;
@@ -35,6 +46,7 @@ interface WxApi {
   removeStorageSync(key: string): void;
   clearStorageSync(): void;
   navigateTo(options: { url: string; success?: () => void; fail?: (error: { errMsg: string }) => void }): void;
+  redirectTo(options: { url: string; success?: () => void; fail?: (error: { errMsg: string }) => void }): void;
   navigateBack(options?: { delta?: number }): void;
   switchTab(options: { url: string }): void;
   reLaunch(options: { url: string }): void;
@@ -59,6 +71,7 @@ interface WxApi {
   createInnerAudioContext(): WxInnerAudioContext;
 }
 declare const wx: WxApi;
+declare function getCurrentPages(): Array<{ route: string }>;
 
 interface MiniPageContext<T = Record<string, unknown>> {
   data: T;
@@ -78,6 +91,6 @@ interface MiniPageOptions<T = Record<string, unknown>> {
  * `this.data` 的类型约束就全部失效了。
  */
 declare function Page<T>(options: { data: T; [key: string]: unknown } & ThisType<MiniPageContext<T>>): void;
-declare function App(options: { onLaunch?: () => void; globalData?: Record<string, unknown> }): void;
+declare function App(options: { onLaunch?: () => void; onShow?: () => void; onHide?: () => void; globalData?: Record<string, unknown> }): void;
 declare function setInterval(handler: () => void, timeout?: number): number;
 declare function clearInterval(handle?: number): void;

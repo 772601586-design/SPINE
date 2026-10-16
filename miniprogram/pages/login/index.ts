@@ -1,8 +1,6 @@
 import { ApiError } from '../../services/request';
 import { getCurrentIdentity, initSession, signInWithWechat } from '../../services/session';
 
-let inFlight = false;
-
 function messageFor(error: unknown): string {
   if (error instanceof ApiError) {
     return error.status === 503
@@ -26,20 +24,24 @@ Page({
   data: { busy: true, error: '' },
   onLoad() { void this.begin(); },
   async begin() {
-    if (inFlight) return;
-    inFlight = true;
+    if (this._loginInFlight) return;
+    this._loginInFlight = true;
     this.setData({ busy: true, error: '' });
     try {
-      if ((await initSession()) === 'signedIn') { enterApp(); return; }
+      const session = await initSession();
+      if (this._prototypeRequested) return;
+      if (session === 'signedIn') { enterApp(); return; }
       const { isNew } = await signInWithWechat();
+      if (this._prototypeRequested) return;
       if (isNew) wx.showToast({ title: '已创建你的账号', icon: 'none' });
       enterApp();
     } catch (error) {
-      this.setData({ error: messageFor(error) });
+      if (!this._prototypeRequested) this.setData({ error: messageFor(error) });
     } finally {
-      inFlight = false;
-      this.setData({ busy: false });
+      this._loginInFlight = false;
+      if (!this._prototypeRequested) this.setData({ busy: false });
     }
   },
   retry() { void this.begin(); },
+  openPrototype() { this._prototypeRequested = true; wx.reLaunch({ url: '/prototype/pages/welcome/index' }); },
 });

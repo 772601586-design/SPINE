@@ -38,6 +38,10 @@ class PlanVersion(models.Model):
 
 
 class PersonalActionCard(models.Model):
+    class ScheduleFrequency(models.TextChoices):
+        DAILY = "daily", "每天"
+        ALTERNATE = "alternate", "隔天"
+
     LIBRARY, PRESCRIPTION, CUSTOM = "library", "prescription", "custom"
     SOURCES = [(v, v.title()) for v in (LIBRARY, PRESCRIPTION, CUSTOM)]
     NEEDS_SETUP, NEEDS_CHECK, READY = "needs_setup", "needs_check", "ready"
@@ -50,6 +54,7 @@ class PersonalActionCard(models.Model):
     order = models.PositiveIntegerField(default=0)
     revision = models.PositiveIntegerField(default=1)
     active = models.BooleanField(default=True)
+    schedule_frequency = models.CharField(max_length=12, choices=ScheduleFrequency.choices, blank=True, default="")
     verification_status = models.CharField(max_length=16, choices=READINESS, default=NEEDS_SETUP)
     sets = models.PositiveSmallIntegerField(null=True, blank=True)
     reps_per_set = models.PositiveSmallIntegerField(null=True, blank=True)
@@ -77,7 +82,7 @@ class PersonalActionCard(models.Model):
         return {"sets": self.sets, "reps_per_set": self.reps_per_set, "breaths_per_set": self.breaths_per_set,
                 "hold_seconds": self.hold_seconds, "side": self.side, "rest_seconds": self.rest_seconds,
                 "equipment": self.equipment, "focus_points": self.focus_points, "personal_notes": self.personal_notes,
-                "verification_status": self.verification_status}
+                "verification_status": self.verification_status, "schedule_frequency": self.schedule_frequency}
 
 
 class PersonalActionCardRevision(models.Model):

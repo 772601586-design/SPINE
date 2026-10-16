@@ -30,9 +30,15 @@
 - 开发者工具 CLI 入口：`D:\app\wechat_devtools\cli.bat`。
 - **CLI / 自动化前提**：IDE「设置 → 安全设置 → 服务端口」必须开启（`echo y |` 管道无法自动开启）。开启后 `cli.bat islogin/open/preview` 可用；但 **`cli auto` 从 agent 侧会挂起**（需新开 Electron 窗口，受沙箱 GPU 阻断），因此 `D:\SPINE\scripts\verify-wechat-login.js`（真实 `wx.login` 端到端 + 截图）只能在**用户桌面终端**运行。依赖 `miniprogram-automator` 装在 `C:\Users\58724\.workbuddy\binaries\node\workspace\node_modules`。
 - 判断微信凭证是否有效：调 `jscode2session` 用假 code，返回 `40029` = 密钥正确，`40125` = 密钥错，`40013` = AppID 错。
+- **模拟器报 `something wrong in electron appservice` 时的标准排查路径**：先跑 tsc + 脚本校验 app.json 页面/组件/图标（代码侧通常无事），然后读工具日志
+  `C:\Users\58724\AppData\Local\微信开发者工具\User Data\763398046a4ab7ca0f65014753be8f28\WeappLog\logs\*.log`。
+  已遇到过的真实原因：`WeappVendor\<版本>.wxvpkg verify md5 error`（RC 版工具 2.02.2609231 用旧签名校验基础库 3.17.4，文件本身完整、与 CDN 一致）→ 修法是换个调试基础库版本（`project.private.config.json` 的 `libVersion`，以 IDE「详情 → 本地设置」为准）。
+  `cfg.json` 的 `md5` 是混淆签名，不能与真实 md5 对比。
 - 开发期账号密码登录（`spine_a`/`spine_b` + `backend/.env` 的 `SPINE_DEV_PASSWORD`）仍保留，供后端测试与联调脚本使用，界面已不再暴露入口。
 
 ## 小程序前端约定（写新页面前必读）
+
+- **WXML `{{}}` 里必须写裸运算符，禁止 HTML 实体**：编译器在表达式内不做实体解码，`&lt;` / `&amp;` 会被读成 `&` + `lt` + `;`，报 `Bad attr class/wx:if ... unexpected ';'`（`&amp;` 有时报 `unexpected }`）。写 `{{a <= b}}`、`{{a && b}}` 即可。批量复查用 Python 扫 `rglob('*.wxml')` 中的 `{{...}}`，查 `&amp;/&lt;/&gt;/&#/NBSP/全角空格/零宽字符`。
 
 - **`this.data` 必须保持有类型**：`typings/wechat-mini.d.ts` 里 `Page` 声明为
   `declare function Page<T>(options: { data: T; [key: string]: unknown } & ThisType<MiniPageContext<T>>): void;`

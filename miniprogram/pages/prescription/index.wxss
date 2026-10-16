@@ -1,0 +1,1 @@
+.field{box-sizing:border-box;width:100%;padding:20rpx;background:#f3f5f2;border-radius:14rpx;min-height:84rpx;margin:12rpx 0}.dose-grid{display:grid;grid-template-columns:1fr 1fr;gap:12rpx}.change{padding:20rpx 0;border-bottom:1rpx solid #e0e7e1}.change text{display:block}

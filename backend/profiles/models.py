@@ -40,6 +40,23 @@ class ManagementMethod(models.TextChoices):
 
 
 class Profile(models.Model):
+    class TreatmentStage(models.TextChoices):
+        CHECK = "check", "刚发现侧弯，还在检查"
+        NEW = "new", "刚开始戴支具"
+        BRACE = "brace", "支具与运动训练"
+        MAINTENANCE = "maintenance", "已脱支具，以运动为主"
+        ADULT = "adult", "成年后自我管理"
+
+    class Gender(models.TextChoices):
+        FEMALE = "female", "女"
+        MALE = "male", "男"
+        CUSTOM = "custom", "自定义"
+
+    class MenarcheStatus(models.TextChoices):
+        NOT_YET = "not_yet", "还没有"
+        STARTED = "started", "已经来了"
+        PREFER_NOT = "prefer_not", "不想填"
+
     class OnboardingStatus(models.TextChoices):
         DRAFT = "draft", "待补充 X 光影像"
         COMPLETE = "complete", "建档资料已确认"
@@ -59,6 +76,10 @@ class Profile(models.Model):
         Attachment, null=True, blank=True, on_delete=models.SET_NULL, related_name="+"
     )
     birth_month = models.CharField(max_length=7, blank=True, default="", validators=[BIRTH_MONTH_VALIDATOR])
+    treatment_stage = models.CharField(max_length=16, choices=TreatmentStage.choices, blank=True, default="")
+    gender = models.CharField(max_length=16, choices=Gender.choices, blank=True, default="")
+    gender_custom = models.CharField(max_length=50, blank=True, default="")
+    menarche_status = models.CharField(max_length=16, choices=MenarcheStatus.choices, blank=True, default="")
     # 建档只强制昵称；诊断状态留空表示"还没填"，不替用户猜。
     diagnosis_status = models.CharField(
         max_length=24, choices=DiagnosisStatus.choices, blank=True, null=True

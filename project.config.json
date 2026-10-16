@@ -1,6 +1,6 @@
 {
-  "description": "SPINE repository root. Mini program source lives in the miniprogram/ subfolder.",
-  "miniprogramRoot": "miniprogram/",
+  "description": "SPINE demo reproduction from spine1/demo/miniprogram. The backend-connected client remains in miniprogram/.",
+  "miniprogramRoot": "miniprogram-demo/",
   "compileType": "miniprogram",
   "appid": "wxec55146112612082",
   "projectname": "SPINE",
@@ -10,13 +10,21 @@
     "enhance": true,
     "postcss": true,
     "minified": false,
-    "useCompilerPlugins": ["typescript"]
+    "useCompilerPlugins": [
+      "typescript"
+    ]
   },
   "simulatorPluginLibVersion": {},
   "packOptions": {
     "ignore": [
-      { "type": "folder", "value": "node_modules" },
-      { "type": "folder", "value": "scripts" }
+      {
+        "type": "folder",
+        "value": "node_modules"
+      },
+      {
+        "type": "folder",
+        "value": "scripts"
+      }
     ],
     "include": []
   },

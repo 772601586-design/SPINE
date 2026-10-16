@@ -1,0 +1,14 @@
+<view class="page">
+  <view class="heading"><text class="eyebrow">把现场所学，放回自己的卡片</text><text class="title">这段录像配哪个动作？</text><text class="subtitle">请对照本人处方和现场指导确认，可以暂时不配。</text></view>
+  <view wx:if="{{error}}" class="error">{{error}}<button class="button button-plain" disabled="{{saving}}" bindtap="reload">重新加载</button></view>
+  <view wx:if="{{loading}}" class="card empty">正在读取动作卡片…</view>
+  <block wx:elif="{{recording}}">
+    <view class="card"><text class="card-title">{{recording.title}}</text><video wx:if="{{recording.available}}" class="recording-video" src="{{recording.filePath}}" controls="{{true}}" binderror="onVideoError" /><text wx:else class="muted">录像文件已不在本机，请返回列表重新录制。</text></view>
+    <view wx:if="{{!cards.length}}" class="card"><text class="muted">还没有个人动作卡片。可以先到动作库添加；录像会留在待整理中。</text><button class="button button-plain" bindtap="openLibrary">查看动作库</button></view>
+    <view wx:for="{{cards}}" wx:key="id" class="card match-option {{selected === item.id ? 'selected' : ''}}" data-id="{{item.id}}" bindtap="select"><view class="row"><text class="card-title">{{item.name}}</text><text class="mark">{{selected === item.id ? '✓' : '○'}}</text></view><text class="muted">{{item.dose}}</text></view>
+    <view wx:for="{{cards}}" wx:key="id"><text wx:if="{{item.reason}}" class="small">建议核对“{{item.name}}”：{{item.reason}}。点击上方动作可切换选择。</text></view>
+    <text class="small">名称建议仅帮助整理；配对需本人对照处方确认。</text>
+    <button class="button" loading="{{saving}}" disabled="{{saving || !selected || !recording.available}}" bindtap="save">确认配到这个动作</button>
+    <button class="button button-plain" disabled="{{saving}}" bindtap="returnToList">暂时不配，继续保留</button>
+  </block>
+</view>

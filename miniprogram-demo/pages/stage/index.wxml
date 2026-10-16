@@ -1,0 +1,22 @@
+<!-- 选择治疗阶段 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
+<view style="padding: 38.46rpx 38.46rpx 46.15rpx; min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; gap: 30.77rpx">
+  <view style="display: flex; align-items: center; justify-content: space-between">
+    <text style="font-size: 25rpx; color: #5B6663">{{ stageStep }}</text>
+  </view>
+  <view>
+    <view style="margin: 0; font-size: 46.15rpx; font-weight: 700">你现在处在哪个阶段？</view>
+    <view style="margin: 11.54rpx 0 0; font-size: 26.92rpx; color: #5B6663; line-height: 1.6">不同阶段，首页会为你准备不同的内容。以后复查时也可以在“我的”里切换。</view>
+  </view>
+  <view style="display: flex; flex-direction: column; gap: 15.38rpx" aria-label="治疗阶段">
+    <block wx:for="{{ stages }}" wx:for-item="t" wx:for-index="tIndex" wx:key="_k">
+      <view style="display: flex; align-items: center; gap: 23.08rpx; text-align: left; padding: 23.08rpx 26.92rpx; border-radius: 26.92rpx; border: {{ t.border }}; background: #FFFFFF; color: #1F2A27" bindtap="act" data-fn="{{ t.pick }}" hover-class="tap">
+        <text style="width: 38.46rpx; height: 38.46rpx; border-radius: 1921.15rpx; border: {{ t.dot }}; box-sizing: border-box; flex-shrink: 0"></text>
+        <view style="display: flex; flex-direction: column; gap: 3.85rpx">
+          <text style="font-size: 28.85rpx; font-weight: 700">{{ t.title }}</text>
+          <text style="font-size: 23.08rpx; color: #5B6663; line-height: 1.5">{{ t.sub }}</text>
+        </view>
+      </view>
+    </block>
+  </view>
+  <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; margin-top: auto; min-height: 100rpx; border: 0; border-radius: 26.92rpx; background: #1F6F66; color: #FFFFFF; font-size: 30.77rpx; font-weight: 700" bindtap="act" data-fn="{{ stageNext }}" hover-class="tap">{{ stageBtn }}</view>
+</view>

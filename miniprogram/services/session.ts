@@ -1,6 +1,7 @@
 import type { Identity, User } from '../models/types';
 import { api } from './api';
 import { ApiError, configureUnauthorizedHandler as setUnauthorizedHandler } from './request';
+import { LOCAL_RECORDING_PREFIX } from '../config/local-recordings';
 
 const TOKEN_KEY = 'spine.session.token';
 let currentUser: User | null = null;
@@ -17,7 +18,12 @@ export function getCurrentUser(): User | null { return currentUser; }
 export function getCurrentIdentity(): Identity | null { return currentIdentity; }
 
 export function clearSession(): void {
-  wx.clearStorageSync();
+  // Recordings belong to a local account-specific library and survive sign-out.
+  // Tokens, pending submissions and other cached private data are still removed.
+  wx.removeStorageSync(TOKEN_KEY);
+  for (const key of wx.getStorageInfoSync().keys) {
+    if (!key.startsWith(LOCAL_RECORDING_PREFIX)) wx.removeStorageSync(key);
+  }
   currentUser = null;
   currentIdentity = null;
   restorePromise = Promise.resolve('signedOut');

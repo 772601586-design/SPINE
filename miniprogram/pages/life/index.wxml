@@ -1,0 +1,35 @@
+<view class="page">
+  <view class="heading"><text class="eyebrow">照顾自己的每一天</text><text class="title">生活与记录</text></view>
+  <view class="tabs"><text wx:for="{{tabs}}" wx:key="key" class="tab {{tab === item.key ? 'selected' : ''}}" data-tab="{{item.key}}" bindtap="selectTab">{{item.title}}</text></view>
+  <view wx:if="{{error}}" class="error">{{error}}<button class="button button-plain" bindtap="reload">重新加载</button></view>
+  <view wx:if="{{result}}" class="card card-green">{{result}}</view>
+  <view wx:if="{{loading}}" class="card empty">正在读取个人记录…</view>
+  <block wx:else>
+    <view wx:if="{{tab === 'swim' || tab === 'pain'}}" class="card">
+      <text class="card-title">{{tab === 'swim' ? '记录一次游泳' : '记录身体感受'}}</text>
+      <picker mode="date" value="{{date}}" data-field="date" bindchange="input"><view class="field">日期：{{date}}</view></picker>
+      <input wx:if="{{tab === 'swim'}}" class="field" type="number" value="{{minutes}}" data-field="minutes" bindinput="input" placeholder="实际游泳分钟数" />
+      <input wx:else class="field" type="number" value="{{pain}}" data-field="pain" bindinput="input" placeholder="疼痛 0～10 分，0 表示无痛" />
+      <textarea class="field" maxlength="2000" value="{{notes}}" data-field="notes" bindinput="input" placeholder="位置、当时在做什么、想记下的感受（可选）" />
+      <button class="button" loading="{{busy}}" disabled="{{busy}}" bindtap="saveRecord">保存记录</button>
+      <text wx:if="{{tab === 'swim'}}" class="muted">本周已记录 {{summary.swim_week_count}} 次。每周哪几天游泳由你按个人安排设置。</text>
+    </view>
+    <view wx:if="{{tab === 'swim' || tab === 'pain'}}" class="card"><text class="card-title">历史记录</text><block wx:for="{{records}}" wx:key="id"><view wx:if="{{item.kind === tab}}" class="record"><text>{{item.date}} · {{item.kind === 'swim' ? item.minutes + ' 分钟' : item.pain + ' / 10'}}</text><text class="muted">{{item.notes}}</text></view></block><text wx:if="{{!records.length}}" class="muted">还没有记录。</text></view>
+    <view wx:if="{{tab === 'reminder'}}" class="card">
+      <text class="card-title">复查提醒（可选）</text><button class="button button-plain" bindtap="toggleReview">{{reviewEnabled ? '已开启，点击关闭' : '已关闭，点击开启'}}</button>
+      <picker mode="date" value="{{reviewDate}}" data-field="reviewDate" bindchange="input"><view class="field">复查日期：{{reviewDate || '请选择'}}</view></picker>
+      <text class="card-title">久坐提醒</text><input class="field" type="number" value="{{sedentary}}" data-field="sedentary" bindinput="input" placeholder="分钟：0 关闭，10～240 开启" />
+      <text class="muted">小程序在前台时计时提醒；退出后不发送微信通知。</text>
+      <text class="card-title">个人支具目标（小时 / 天）</text><input class="field" type="digit" value="{{targetHours}}" data-field="targetHours" bindinput="input" placeholder="按医嘱填写，可留空" />
+      <text class="card-title">每周游泳安排</text><view class="tabs"><text wx:for="{{weekdays}}" wx:key="index" data-index="{{item.index}}" bindtap="toggleWeekday" class="tab {{item.selected ? 'selected' : ''}}">周{{item.label}}</text></view>
+      <button class="button" loading="{{busy}}" disabled="{{busy}}" bindtap="savePreferences">保存设置</button>
+    </view>
+    <block wx:if="{{tab === 'learning'}}">
+      <view wx:if="{{article}}" class="card"><text class="card-title">{{article.title}}</text><text class="muted">审核：{{article.reviewer}}</text><text class="article-body">{{article.body}}</text><text wx:if="{{article.question}}" class="card-title">{{article.question}}</text><button wx:for="{{article.options}}" wx:key="index" data-index="{{index}}" class="button button-plain" disabled="{{busy}}" bindtap="answer">{{item}}</button><button class="button button-plain" bindtap="closeArticle">返回列表</button></view>
+      <block wx:else><view wx:if="{{!articles.length}}" class="card empty">暂无已审核文章。指南和学习内容审核后会出现在这里。</view><view wx:for="{{articles}}" wx:key="id" class="card" data-id="{{item.id}}" bindtap="openArticle"><text class="small">{{item.category === 'guide' ? '支具生活指南' : '认知学习'}} · {{item.topic}}</text><text class="card-title">{{item.title}} ›</text></view></block>
+      <view class="card"><text class="card-title">每周画下自己的理解</text><text class="muted">图片仅本人可见，不公开到社群。</text><image wx:if="{{drawingPath}}" src="{{drawingPath}}" mode="widthFix" class="drawing" /><button class="button button-plain" loading="{{uploading}}" disabled="{{uploading || busy}}" bindtap="chooseDrawing">选择绘画图片</button><button class="button" disabled="{{!drawingAttachment || busy || uploading}}" loading="{{busy}}" bindtap="saveDrawing">保存私人绘画</button><view wx:for="{{records}}" wx:key="id"><text wx:if="{{item.kind === 'drawing'}}" class="muted">{{item.date}} · 绘画已保存</text></view></view>
+    </block>
+    <view wx:if="{{tab === 'rewards'}}" class="card"><text class="card-title">我的松果：{{rewards.balance}}</text><text class="muted">{{rewards.rules}}</text><view class="medals"><view wx:for="{{rewards.medals}}" wx:key="key" class="medal {{item.earned ? 'earned' : ''}}">{{item.earned ? '★' : '☆'}} {{item.label}}</view></view><text class="card-title">奖励流水</text><view wx:for="{{rewards.ledger}}" wx:key="id" class="record"><text>{{item.label}} · {{item.points > 0 ? '+' : ''}}{{item.points}}</text><text class="small">{{item.created_at}}</text></view><text wx:if="{{!rewards.ledger.length}}" class="muted">保存真实记录后，奖励会在这里累计。</text><text class="card-title">补记日历</text><text class="muted">补记一个过去的日期，消耗 10 松果。实际训练量按真实完成情况另行记录。</text><picker mode="date" value="{{date}}" data-field="date" bindchange="input"><view class="field">{{date}} · 选择日期</view></picker><button class="button button-plain" disabled="{{busy}}" loading="{{busy}}" bindtap="makeup">补记这个日期 · 10 松果</button><view wx:for="{{records}}" wx:key="id"><text wx:if="{{item.kind === 'makeup'}}" class="muted">{{item.date}} · 已补记</text></view></view>
+    <view wx:if="{{tab === 'summary'}}" class="card"><text class="card-title">复查前摘要</text><text class="article-body">{{summary.summary_text}}</text><button class="button" bindtap="copySummary">复制摘要，便于保存或打印</button><text class="muted">包含个人资料，请自行决定分享对象。</text></view>
+  </block>
+</view>

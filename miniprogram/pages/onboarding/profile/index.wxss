@@ -10,3 +10,10 @@
 .center { display: block; margin-top: 16rpx; text-align: center; }
 .confirm-row { display: flex; align-items: center; gap: 12rpx; margin-top: 24rpx; color: #24382e; font-size: 27rpx; line-height: 1.5; }
 .xray-preview { width: 100%; max-height: 560rpx; margin-top: 16rpx; border-radius: 16rpx; background: #f6f8f2; }
+.step-track { display: flex; gap: 12rpx; margin-top: 28rpx; }
+.step-dot { flex: 1; height: 7rpx; border-radius: 8rpx; background: #dce5e1; }
+.step-done { background: #1f6f66; }
+.stage-option { border: 2rpx solid transparent; }
+.stage-selected { border-color: #1f6f66; background: #ddede9; }
+.stage-mark { color: #1f6f66; font-size: 32rpx; }
+.welcome-symbol { margin: 40rpx auto; width: 120rpx; height: 120rpx; border-radius: 50%; background: #1f6f66; color: white; text-align: center; line-height: 120rpx; font-size: 60rpx; }

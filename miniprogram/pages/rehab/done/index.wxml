@@ -1,0 +1,12 @@
+<view class="page">
+  <view wx:if="{{loading}}" class="card empty">正在整理本次记录…</view>
+  <view wx:if="{{error}}" class="error">{{error}}<button class="button button-plain" bindtap="reload">重新加载</button></view>
+  <block wx:if="{{!loading && attempt}}">
+    <view class="done-symbol">✓</view>
+    <view class="heading"><text class="title">{{attempt.status === 'completed' ? '这一项，记录好了' : '今天练了多少，都记下来'}}</text><text class="subtitle">{{attempt.card_name}}</text></view>
+    <view class="card card-green"><text class="card-title">已确认 {{attempt.completed_sets}} 组</text><text class="muted">本次计划 {{attempt.planned_dose.sets}} 组 · {{attempt.status === 'completed' ? '已记录完成' : attempt.status === 'partial' ? '部分完成已保存' : attempt.status === 'paused' ? '已暂停，可以继续' : '记录已保存，可以回看'}}</text></view>
+    <view wx:if="{{deck}}" class="card"><text class="card-title">{{deck.date}} · 今日卡组</text><text class="progress-number">{{deck.done_count}} / {{deck.cards.length}} 项</text><text class="muted">{{deck.remaining_count ? '按自己的节奏，准备好再继续。' : deck.cards.length ? '今日安排已记录完成，好好休息一下吧。' : '今天没有待练安排，按自己的计划来。'}}</text></view>
+    <button wx:if="{{nextName}}" class="button" loading="{{starting}}" disabled="{{starting}}" bindtap="continueToday">接着练 · {{nextName}}</button>
+    <button class="button button-plain" bindtap="backToday">回到今日</button>
+  </block>
+</view>

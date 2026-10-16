@@ -27,6 +27,8 @@ from exercises.models import Exercise, ExerciseVersion, Goal, Muscle, Region
 from training.models import (BraceTrainingPrompt, PersonalActionCard, PersonalActionCardRevision,
                              PlanVersion, SetExecution, TrainingAttempt, TrainingPlan)
 from exercises.admin import ExerciseAdmin, ExerciseVersionAdmin, GoalAdmin, MuscleAdmin, RegionAdmin
+from life.models import (Article, DailyRecord, LearningRecord, Post, PostLike, PostReport,
+                         Preferences, PrescriptionImport, Reward)
 
 # 允许出现在后台的模型：只放"内容运营"对象。阶段一还没有内容模型落地，
 # 所以这里是空的——空着比先塞几个用户模型进去"看起来有个后台"要诚实。
@@ -38,6 +40,7 @@ CONTENT_OPERATION_ADMIN = {
 }
 for model in CONTENT_OPERATION_MODELS:
     admin.site.register(model, CONTENT_OPERATION_ADMIN[model])
+CONTENT_OPERATION_MODELS += (Article, Post, PostReport)
 
 # 明确禁止进后台的模型：用户私域数据与登录凭证。
 PRIVATE_MODELS = (
@@ -47,6 +50,7 @@ PRIVATE_MODELS = (
     Brace, WearSession, WearRevision, ComfortEntry, ComfortFollowUp,
     Token, TrainingPlan, PlanVersion, PersonalActionCard, PersonalActionCardRevision,
     TrainingAttempt, SetExecution, BraceTrainingPrompt,
+    Preferences, DailyRecord, LearningRecord, Reward, PostLike, PrescriptionImport,
 )
 
 admin.site.site_header = "SPINE 内容后台"

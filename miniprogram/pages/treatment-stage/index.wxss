@@ -1,0 +1,3 @@
+.stage-option { border: 2rpx solid transparent; }
+.selected { background: #ddede9; border-color: #1f6f66; }
+.mark { font-size: 32rpx; color: #1f6f66; }

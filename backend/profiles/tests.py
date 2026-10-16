@@ -50,6 +50,18 @@ def make_avatar(client, filename="avatar.png"):
     return data["id"]
 
 
+def make_profile_attachment(client, filename):
+    intent = client.post(reverse("attachment-upload-intent"), {
+        "purpose": "medical", "filename": filename, "mime_type": "image/png", "size_bytes": len(PNG),
+    }, format="json")
+    data = payload(intent)
+    client.post(data["upload_url"], {
+        "file": SimpleUploadedFile(filename, PNG, content_type="image/png"),
+    }, format="multipart")
+    client.post(reverse("attachment-complete", args=[data["id"]]), format="json")
+    return data["id"]
+
+
 @override_settings(PRIVATE_STORAGE_ROOT=STORAGE_ROOT)
 class ProfileTests(APITestCase):
     @classmethod
@@ -95,6 +107,69 @@ class ProfileTests(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertEqual(failure(response)["code"], ErrorCode.VALIDATION_ERROR)
 
+    def test_stage_is_optional_and_old_profile_defaults_are_empty(self):
+        self.client.patch(reverse("me-profile"), {"nickname": "小林"}, format="json")
+        body = payload(self.client.get(reverse("me-profile")))
+        for field in ("treatment_stage", "gender", "gender_custom", "menarche_status"):
+            self.assertEqual(body[field], "")
+
+    def test_stage_roundtrip_and_clear_do_not_change_other_profile_data(self):
+        self.client.patch(reverse("me-profile"), {
+            "nickname": "小林", "management_methods": ["brace"], "notes": "原有备注",
+        }, format="json")
+        for stage in (*Profile.TreatmentStage.values, ""):
+            profile = Profile.objects.get(user=self.user)
+            response = self.client.patch(reverse("me-profile"), {
+                "treatment_stage": stage, "expected_revision": profile.revision,
+            }, format="json")
+            self.assertEqual(response.status_code, 200, response.content)
+            body = payload(self.client.get(reverse("me-profile")))
+            self.assertEqual(body["treatment_stage"], stage)
+            self.assertEqual(body["management_methods"], ["brace"])
+            self.assertEqual(body["notes"], "原有备注")
+        self.assertEqual(self.other_client.get(reverse("me-profile")).status_code, 404)
+
+    def test_stage_rejects_unknown_values_and_stale_updates(self):
+        self.client.patch(reverse("me-profile"), {"nickname": "小林", "treatment_stage": "check"}, format="json")
+        invalid = self.client.patch(reverse("me-profile"), {"treatment_stage": "automatic"}, format="json")
+        self.assertEqual(invalid.status_code, 400)
+        saved = self.client.patch(reverse("me-profile"), {
+            "treatment_stage": "new", "expected_revision": 1,
+        }, format="json")
+        self.assertEqual(saved.status_code, 200)
+        stale = self.client.patch(reverse("me-profile"), {
+            "treatment_stage": "adult", "expected_revision": 1,
+        }, format="json")
+        self.assertEqual(stale.status_code, 409)
+        self.assertEqual(Profile.objects.get(user=self.user).treatment_stage, "new")
+
+    def test_custom_gender_validates_and_clears_when_changed(self):
+        missing = self.client.patch(reverse("me-profile"), {
+            "nickname": "小林", "gender": "custom", "gender_custom": "  ",
+        }, format="json")
+        self.assertEqual(missing.status_code, 200, missing.content)
+        self.assertEqual(payload(missing)["gender_custom"], "")
+        saved = self.client.patch(reverse("me-profile"), {
+            "nickname": "小林", "gender": "custom", "gender_custom": "自定义称呼", "menarche_status": "prefer_not",
+        }, format="json")
+        self.assertEqual(saved.status_code, 200, saved.content)
+        self.assertEqual(payload(saved)["gender_custom"], "自定义称呼")
+        changed = self.client.patch(reverse("me-profile"), {"gender": ""}, format="json")
+        self.assertEqual(payload(changed)["gender_custom"], "")
+        self.assertEqual(payload(changed)["menarche_status"], "prefer_not")
+
+    def test_stage_change_preserves_training_plan_and_parameters(self):
+        from training.models import PersonalActionCard, TrainingPlan
+
+        self.client.patch(reverse("me-profile"), {"nickname": "小林"}, format="json")
+        plan = TrainingPlan.objects.create(owner=self.user)
+        card = PersonalActionCard.objects.create(owner=self.user, plan=plan, name="原有动作", sets=2, reps_per_set=10)
+        before = list(PersonalActionCard.objects.filter(pk=card.pk).values())
+        response = self.client.patch(reverse("me-profile"), {"treatment_stage": "adult"}, format="json")
+        self.assertEqual(response.status_code, 200, response.content)
+        self.assertEqual(list(PersonalActionCard.objects.filter(pk=card.pk).values()), before)
+        self.assertEqual(TrainingPlan.objects.filter(owner=self.user).count(), 1)
+
     def test_blank_nickname_is_rejected(self):
         response = self.client.patch(reverse("me-profile"), {"nickname": "   "}, format="json")
         self.assertEqual(response.status_code, 400)
@@ -138,19 +213,6 @@ class ProfileTests(APITestCase):
         self.client.delete(reverse("attachment-detail", args=[xray_id]))
         self.assertEqual(Profile.objects.get(user=self.user).onboarding_status, "needs_update")
         self.assertTrue(Profile.objects.filter(user=self.user).exists())
-
-
-def make_profile_attachment(client, filename):
-    intent = client.post(reverse("attachment-upload-intent"), {
-        "purpose": "medical", "filename": filename, "mime_type": "image/png", "size_bytes": len(PNG),
-    }, format="json")
-    data = payload(intent)
-    client.post(data["upload_url"], {
-        "file": SimpleUploadedFile(filename, PNG, content_type="image/png"),
-    }, format="multipart")
-    client.post(reverse("attachment-complete", args=[data["id"]]), format="json")
-    return data["id"]
-
     def test_patch_me_is_equivalent_to_patch_profile(self):
         self.client.patch(reverse("me-profile"), {"nickname": "小林"}, format="json")
         response = self.client.patch(reverse("me-identity"), {"notes": "复诊前记录"}, format="json")

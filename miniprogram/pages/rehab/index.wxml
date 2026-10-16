@@ -1,48 +1,25 @@
 <view class="page">
-  <view class="heading">
-    <text class="title">康复</text>
-    <text class="subtitle">动作与运动、支具佩戴，都从这里开始。</text>
-  </view>
-
-  <view wx:if="{{error}}" class="error" bindtap="reload">{{error}} 点击重试</view>
-  <view wx:if="{{loading}}" class="card"><view class="empty">正在读取你的康复概览…</view></view>
-
+  <view class="heading"><text class="eyebrow">{{dateLine}} · 和小树一起慢慢来</text><text class="title">{{greeting}}，{{nickname}}</text></view>
+  <view wx:if="{{loading}}" class="card empty">正在整理你的记录…</view>
   <block wx:else>
-    <!-- 动作与运动 -->
-    <view class="card card-green">
-      <view class="row"><text class="card-title">动作与运动</text><text class="tag">板块</text></view>
-      <block wx:if="{{hasPlan}}">
-        <text class="line">当前周期：{{planLabel}}</text>
-        <text class="line">所属阶段：{{phaseLabel}}</text>
-        <text class="line">本周课次：{{weekText}}</text>
-        <text class="line" wx:if="{{recentSwim}}">最近游泳：{{recentSwim}}</text>
-      </block>
-      <block wx:else>
-        <text class="muted">还没有周期计划。可以先记录游泳，或者创建一个周期来安排课次。</text>
-        <view class="row gap">
-          <button class="button button-plain compact" bindtap="createPlan">创建周期计划</button>
-          <button class="button button-plain compact" bindtap="openSwimming">记录游泳</button>
-        </view>
-      </block>
-      <button class="button" bindtap="openActivity">进入动作与运动</button>
+    <view wx:if="{{lifeError}}" class="error" bindtap="loadLife">{{lifeError}}</view>
+    <view wx:if="{{lifeSummary.review}}" class="card card-green"><text class="card-title">复查准备 · {{lifeSummary.review.date}}</text><text class="muted">{{lifeSummary.review.days >= 0 ? '距离计划复查还有 ' + lifeSummary.review.days + ' 天' : '计划日期已过，可以更新复查安排'}}</text><text wx:for="{{lifeSummary.review.checklist}}" wx:key="*this" class="muted">□ {{item}}</text><button class="button button-plain" data-tab="summary" bindtap="openLife">整理复查摘要</button></view>
+    <view wx:if="{{lifeSummary.swim_today}}" class="card"><text class="card-title">今日辅助运动 · 游泳</text><text class="muted">本周已记录 {{lifeSummary.swim_week_count}} 次，按个人安排进行。</text><button class="button button-plain" data-tab="swim" bindtap="openLife">记录本次游泳</button></view>
+    <view class="overview">
+      <view class="metric" bindtap="openBrace" hover-class="tap"><view class="metric-symbol">◷</view><text class="small">今日支具 · {{wearing ? '佩戴中' : '已确认累计'}}</text><text class="metric-value">{{braceError ? '读取失败' : wearText}}</text><text class="small">{{hasBrace ? braceName : '点击管理支具'}} ›</text></view>
+      <view class="metric peach" bindtap="openActivity" hover-class="tap"><view class="metric-symbol">✦</view><text class="small">今日训练</text><text class="metric-value">{{planError ? '读取失败' : (deck ? deck.done_count : 0) + ' / ' + cards.length + ' 项'}}</text><text class="small">已记录完成 · 按个人计划进行 ›</text></view>
     </view>
-
-    <!-- 支具佩戴 -->
-    <view class="card">
-      <view class="row"><text class="card-title">支具佩戴</text><text class="tag">模块</text></view>
-      <block wx:if="{{hasBrace}}">
-        <text class="line strong">{{braceName}}</text>
-        <text class="line">
-          <text class="dot {{wearing ? 'dot-on' : ''}}"></text>{{wearing ? '佩戴中' : '当前未佩戴'}}
-        </text>
-        <text wx:if="{{wearing}}" class="line">本次暂估：{{elapsedText}}（服务端记录为准）</text>
-        <text class="line">{{dayLabel}}确认累计：{{dayConfirmed ? dayText : '暂无确认记录'}}</text>
-      </block>
-      <view wx:else class="empty">还没有支具档案，进入后可添加。</view>
-      <button class="button" bindtap="openBrace">{{hasBrace ? '进入支具佩戴' : '添加支具'}}</button>
-    </view>
+    <view wx:if="{{braceError}}" class="error" bindtap="reload">{{braceError}}</view>
+    <view wx:if="{{planError}}" class="error" bindtap="reload">{{planError}}</view>
+    <view wx:if="{{profileError}}" class="error" bindtap="reload">{{profileError}}</view>
+    <view class="card card-green intro-card"><text class="pill">{{encouragement.label}}</text><text class="card-title">{{encouragement.title}}</text><text class="muted">{{encouragement.encouragement}}</text><button wx:if="{{deck.open_attempt || readyCount}}" class="button" loading="{{starting}}" disabled="{{starting}}" bindtap="startToday">{{deck.open_attempt ? '继续未结束的训练' : '开始今日跟练'}} ›</button><button wx:else class="button" bindtap="openActivity">{{cards.length ? '今日卡组已完成，查看训练' : '整理我的训练卡组'}} ›</button></view>
+    <view wx:if="{{deck.open_attempt}}" class="card"><text class="card-title">上次训练还在这里</text><text class="muted">{{deck.open_attempt.card_name}} · {{deck.open_attempt.status === 'paused' ? '已暂停' : '进行中'}}</text><button class="button button-plain" bindtap="startToday" disabled="{{starting}}">恢复本次训练</button></view>
+    <view class="section-heading"><text class="section-title">今日动作卡组</text><text class="link" bindtap="openActivity">管理卡组 ›</text></view>
+    <text class="small">{{planTitle || '还没有训练计划'}} · 动作安排以本人处方为准</text>
+    <view wx:if="{{!cards.length && !planError}}" class="card empty">{{!deck.plan_id ? '先从训练页添加动作，再设置本人处方中的频率。' : !deck.available ? '当前计划暂停或不在计划日期内，暂不安排今日训练。' : deck.rest_count ? '今天可以歇一歇，按自己的计划来。' : '还没有可安排的动作，请先设置频率并核对参数。'}}</view>
+    <view wx:if="{{deck.unconfigured_count || deck.needs_setup_count}}" class="card" bindtap="openActivity"><text class="muted">{{deck.unconfigured_count}} 个动作待设置频率，{{deck.needs_setup_count}} 个动作待核对参数。去训练页整理 ›</text></view>
+    <view wx:for="{{cards}}" wx:key="id" class="card deck-card {{item.done ? 'deck-done' : ''}}" data-id="{{item.card.id}}" bindtap="openCard" hover-class="tap"><view class="row"><text class="pill">{{item.card.source_category || '个人动作'}}</text><text class="completion-mark">{{item.done ? '✓ 已记录完成' : '○ 待练习'}} ›</text></view><text class="card-title">{{item.card.name}}</text><text class="muted">{{item.dose}}</text><text wx:if="{{item.completed_sets_today}}" class="small">今日已记录 {{item.completed_sets_today}} 组</text></view>
+    <view wx:if="{{deck.tomorrow.length}}" class="card"><text class="card-title">明日预览 · {{deck.tomorrow.length}} 项</text><view wx:for="{{deck.tomorrow}}" wx:key="id" class="muted">{{index + 1}}. {{item.name}}</view><text class="small">按当前已保存的记录预览，完成练习后会更新。</text></view>
+    <view class="card gentle-note" bindtap="openGrowth" hover-class="tap"><text class="card-title">看看一路走来的变化</text><text class="muted">身高、复查和就诊资料，都留在成长记录里。 ›</text></view>
   </block>
-
-  <button class="button button-plain" bindtap="reload" loading="{{loading}}">刷新</button>
-  <text class="small center">固定计划会显示下次安排；灵活计划只显示本周可完成的课次。</text>
 </view>

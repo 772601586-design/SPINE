@@ -33,6 +33,14 @@
         </view>
       </picker>
 
+      <text class="label">当前阶段</text>
+      <view class="row" bindtap="openTreatment"><text>{{treatmentLabel}}</text><text class="link">切换 ›</text></view>
+      <text class="label">性别（可选）</text>
+      <view><view wx:for="{{genders}}" wx:key="value" class="pill {{gender === item.value ? 'pill-active' : ''}}" data-value="{{item.value}}" bindtap="chooseGender">{{item.label}}</view></view>
+      <view wx:if="{{gender === 'custom'}}" class="field"><input value="{{genderCustom}}" maxlength="50" placeholder="填写你的称呼" bindinput="onGenderCustom" /></view>
+      <block wx:if="{{gender === 'female' || gender === 'custom'}}"><text class="label">初潮情况（如适用，可选）</text>
+      <view><view wx:for="{{menarcheOptions}}" wx:key="value" class="pill {{menarche === item.value ? 'pill-active' : ''}}" data-value="{{item.value}}" bindtap="chooseMenarche">{{item.label}}</view></view></block>
+
       <text class="label">诊断状态</text>
       <picker mode="selector" range="{{diagnosisLabels}}" value="{{diagnosisIndex}}" bindchange="onDiagnosis">
         <view class="field picker-field"><text>{{diagnosisLabels[diagnosisIndex]}}</text><text class="arrow">›</text></view>

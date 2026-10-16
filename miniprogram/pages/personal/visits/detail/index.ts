@@ -1,7 +1,7 @@
 import { currentMonth, todayDate, type Option } from '../../../../config/profile-options';
 import type { DatePrecision, VisitDetail } from '../../../../models/types';
 import { api } from '../../../../services/api';
-import { ApiError } from '../../../../services/request';
+import { ApiError, request } from '../../../../services/request';
 import { requireOnboarded } from '../../../../services/session';
 import { isPreviewableImage, mimeFor, uploadPrivateFile } from '../../../../services/upload';
 
@@ -89,6 +89,7 @@ Page({
     adviceExcerpt: '',
     notes: '',
     revision: 0,
+    ocrText: '', recognizing: false,
 
     categoryLabels: CATEGORY_OPTIONS.map(item => item.label),
     categoryIndex: 0,
@@ -190,6 +191,28 @@ Page({
   onDiagnosis(event: { detail: { value: string } }) { this.setData({ diagnosisExcerpt: event.detail.value }); },
   onAdvice(event: { detail: { value: string } }) { this.setData({ adviceExcerpt: event.detail.value }); },
   onNotes(event: { detail: { value: string } }) { this.setData({ notes: event.detail.value }); },
+  onOCRText(event: { detail: { value: string } }) { this.setData({ ocrText: event.detail.value }); },
+  chooseReportOCR() {
+    if (this.data.recognizing || this.data.saving) return;
+    wx.chooseMedia({ count: 1, mediaType: ['image'], sizeType: ['compressed'], success: async result => {
+      const file = result.tempFiles[0];
+      if (!file) return;
+      this.setData({ recognizing: true, error: '' });
+      try {
+        const attachment = await uploadPrivateFile('medical', { path: file.tempFilePath,
+          name: file.tempFilePath.split('/').pop() || 'report.jpg', size: file.size });
+        const recognized = await request<{ text: string }>('POST', '/api/v1/life/ocr/', { attachment: attachment.id }, { timeout: 60000 });
+        this.setData({ ocrText: recognized.text });
+      } catch (error) { this.setData({ error: messageFor(error) }); }
+      finally { this.setData({ recognizing: false }); }
+    } });
+  },
+  confirmOCR() {
+    if (!this.data.ocrText.trim()) return;
+    const notes = [this.data.notes, `报告文字（本人核对）\n${this.data.ocrText.trim()}`].filter(Boolean).join('\n\n');
+    if (notes.length > 2000) { this.setData({ error: '核对后的备注合计不能超过 2000 字，请精简后再保存。' }); return; }
+    this.setData({ notes, ocrText: '' });
+  },
 
   payload(): Record<string, unknown> {
     const precision = this.data.precision;

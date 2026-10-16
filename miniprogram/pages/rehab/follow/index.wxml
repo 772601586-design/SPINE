@@ -1,14 +1,15 @@
 <view class="page">
   <view wx:if="{{loading}}" class="card"><view class="empty">正在恢复本次训练…</view></view>
-  <view wx:if="{{error}}" class="error">{{error}}</view>
+  <view wx:if="{{error}}" class="error">{{error}}<text wx:if="{{!pending}}" bindtap="load"> 点击刷新进度</text></view>
   <block wx:if="{{attempt}}">
-    <block wx:if="{{savedSet}}">
+    <view wx:if="{{attempt.status === 'completed' || attempt.status === 'partial' || attempt.status === 'aborted'}}" class="card"><text class="card-title">本次训练已保存</text><text class="muted">已记录 {{attempt.completed_sets}} 组</text><button class="button" bindtap="openSummary">查看本次记录</button></view>
+    <block wx:elif="{{savedSet}}">
       <view class="card success-card"><text class="success-title">本组打卡成功</text><text class="card-title">{{attempt.card_name}}</text>
         <text class="line">已完成 {{attempt.completed_sets}} 组 / 计划 {{attempt.planned_dose.sets}} 组</text>
         <text class="muted">本组的实际记录已保存到服务端。</text>
       </view>
       <button wx:if="{{attempt.completed_sets < attempt.planned_dose.sets}}" class="button" bindtap="continueNext">继续下一组</button>
-      <button class="button button-plain" bindtap="finish">{{attempt.completed_sets >= attempt.planned_dose.sets ? '完成本次训练' : '结束本次训练'}}</button>
+      <button class="button button-plain" loading="{{finishing}}" disabled="{{finishing || syncing || pending}}" bindtap="finish">{{attempt.completed_sets >= attempt.planned_dose.sets ? '完成本次训练' : '结束本次训练'}}</button>
     </block>
     <block wx:else>
       <view class="card card-green">
@@ -17,7 +18,11 @@
         <text wx:if="{{attempt.planned_dose.reps_per_set}}" class="line">按个人设置完成 {{attempt.planned_dose.reps_per_set}} 次</text>
         <text wx:if="{{attempt.planned_dose.breaths_per_set}}" class="line">按个人设置完成 {{attempt.planned_dose.breaths_per_set}} 次呼吸</text>
         <text wx:if="{{attempt.planned_dose.hold_seconds}}" class="line">按个人设置保持 {{attempt.planned_dose.hold_seconds}} 秒</text>
-        <text class="voice-note">语音播报服务尚未接入，请按卡片文字要点自主练习；播放器结束不会自动记为完成。</text>
+        <view class="rhythm-ring" style="transform: rotate({{rhythmProgress * 3.6}}deg)"><view class="rhythm-label" style="transform: rotate({{-rhythmProgress * 3.6}}deg)">{{rhythmValue}} {{rhythmUnit}}</view></view><text class="muted">进度 {{rhythmProgress}}% · {{rhythmFinished ? '节奏结束' : rhythmRunning ? '跟练中' : '未开始或已暂停'}}</text>
+        <input wx:if="{{!attempt.planned_dose.hold_seconds}}" class="actual-input" type="number" value="{{stepSeconds}}" bindinput="inputStep" placeholder="每次节奏秒数（1～60）" />
+        <text class="voice-note">计时或计数由已核对的个人参数生成。次数间隔由本人设置；结束后仍需确认实际完成量。</text>
+        <button class="button button-plain" bindtap="toggleRhythmVoice">数字节奏播报：{{rhythmVoice ? '开启' : '关闭'}}</button>
+        <button class="button button-plain" disabled="{{attempt.status !== 'in_progress'}}" bindtap="{{rhythmRunning ? 'pauseRhythm' : 'startRhythm'}}">{{rhythmRunning ? '暂停节奏' : rhythmFinished ? '重新开始节奏' : '开始 / 继续节奏'}}</button>
         <button wx:if="{{attempt.voice_media.length}}" class="button button-plain" bindtap="playVoice">播放已审核指导音频</button>
       </view>
       <view class="card"><text class="card-title">确认这一组</text>
@@ -25,9 +30,9 @@
         <input wx:if="{{attempt.planned_dose.reps_per_set}}" class="actual-input" type="number" data-field="reps" value="{{actual.reps}}" bindinput="inputActual" placeholder="本组实际次数" />
         <input wx:if="{{attempt.planned_dose.breaths_per_set}}" class="actual-input" type="number" data-field="breaths" value="{{actual.breaths}}" bindinput="inputActual" placeholder="本组实际呼吸次数" />
         <input wx:if="{{attempt.planned_dose.hold_seconds}}" class="actual-input" type="number" data-field="hold" value="{{actual.hold}}" bindinput="inputActual" placeholder="本组实际保持秒数" />
-        <button class="button" loading="{{syncing}}" disabled="{{attempt.status !== 'in_progress' || pending}}" bindtap="completeSet">本组已完成</button>
-        <button class="button button-plain" bindtap="pauseResume">{{attempt.status === 'paused' ? '继续训练' : '暂停'}}</button>
-        <button class="button button-plain" bindtap="finish">提前结束本次训练</button>
+        <button class="button" loading="{{syncing}}" disabled="{{attempt.status !== 'in_progress' || pending || syncing || finishing || changingState}}" bindtap="completeSet">本组已完成</button>
+        <button class="button button-plain" disabled="{{syncing || finishing || changingState}}" bindtap="pauseResume">{{attempt.status === 'paused' ? '继续训练' : '暂停'}}</button>
+        <button class="button button-plain" loading="{{finishing}}" disabled="{{pending || syncing || finishing || changingState}}" bindtap="finish">提前结束本次训练</button>
       </view>
       <view wx:if="{{pending}}" class="card pending-card"><text class="card-title">本组已保存到设备，待同步</text><text class="muted">网络恢复后重试会使用同一请求编号，避免重复累计。</text><button class="button button-plain" bindtap="retrySync">重试同步</button></view>
     </block>

@@ -1,0 +1,10 @@
+<view class="page">
+  <view class="heading"><text class="eyebrow">每个阶段，都有自己的节奏</text><text class="title">现在的你</text><text class="subtitle">选一个接近当前情况的阶段，之后随时可以修改。</text></view>
+  <view wx:if="{{loading}}" class="card empty">正在读取阶段资料…</view>
+  <view wx:if="{{error}}" class="error">{{error}}<button class="button button-plain" bindtap="reload">重新加载</button></view>
+  <block wx:if="{{!loading && revision}}">
+    <view wx:for="{{stages}}" wx:key="value" class="card stage-option {{selected === item.value ? 'selected' : ''}}" data-value="{{item.value}}" bindtap="choose" hover-class="tap"><view class="row"><text class="list-title">{{item.label}}</text><text class="mark">{{selected === item.value ? '✓' : '○'}}</text></view><text class="muted">{{item.desc}}</text></view>
+    <text class="small">切换只改变陪伴提示，你的动作处方、训练参数与历史记录会保留。</text>
+    <button class="button" loading="{{saving}}" disabled="{{saving || conflict}}" bindtap="save">保存当前阶段</button>
+  </block>
+</view>

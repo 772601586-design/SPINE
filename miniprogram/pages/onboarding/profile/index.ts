@@ -1,5 +1,6 @@
 import {
   DIAGNOSIS_LABELS, DIAGNOSIS_OPTIONS, MANAGEMENT_OPTIONS, currentMonth, todayDate, type Option,
+  GENDER_OPTIONS, MENARCHE_OPTIONS, TREATMENT_STAGES, treatmentStage,
 } from '../../../config/profile-options';
 import { api } from '../../../services/api';
 import { ApiError } from '../../../services/request';
@@ -36,12 +37,17 @@ Page({
     todayDate: todayDate(),
     nickname: '',
     birthMonth: '',
+    gender: '', genderCustom: '', menarche: '', treatment: '',
+    genders: GENDER_OPTIONS, menarcheOptions: MENARCHE_OPTIONS, treatments: TREATMENT_STAGES,
+    encouragement: treatmentStage(''), revision: 0,
     diagnosisIndex: 0,
     diagnosisLabels: DIAGNOSIS_LABELS,
     methods: MANAGEMENT_OPTIONS.map(item => ({ ...item, checked: false })) as MethodOption[],
     notes: '',
     hasExtra: false,
-    stage: 'profile' as 'profile' | 'xray',
+    stage: 'profile' as 'profile' | 'treatment' | 'basics' | 'xray' | 'ready',
+    steps: ['认识你', '选择阶段', '补充资料', '准备好了'],
+    stepIndex: 0,
     xrayConfirmed: false,
     xrayFile: null as LocalFile | null,
     xrayIsImage: false,
@@ -69,6 +75,9 @@ Page({
         const key = `spine.onboarding.visit:${identity.id}`;
         this.setData({ loading: false, ready: true, stage: 'xray', nickname: profile.nickname,
           birthMonth: profile.birth_month, notes: profile.notes,
+          gender: profile.gender, genderCustom: profile.gender_custom, menarche: profile.menarche_status,
+          treatment: profile.treatment_stage, encouragement: treatmentStage(profile.treatment_stage), revision: profile.revision,
+          stepIndex: 2,
           visitId: String(wx.getStorageSync(key) || '') });
       } catch (_) { this.setData({ loading: false, blocking: '暂时无法读取已保存的档案，请重试。' }); }
       return;
@@ -82,6 +91,33 @@ Page({
   onBirthMonth(event: { detail: { value: string } }) { this.setData({ birthMonth: event.detail.value }); },
   onDiagnosis(event: { detail: { value: string } }) { this.setData({ diagnosisIndex: Number(event.detail.value) }); },
   onNotes(event: { detail: { value: string } }) { this.setData({ notes: event.detail.value }); },
+  chooseGender(event: { currentTarget: { dataset: { value: string } } }) {
+    const gender = event.currentTarget.dataset.value;
+    this.setData({ gender, genderCustom: gender === 'custom' ? this.data.genderCustom : '' });
+  },
+  onGenderCustom(event: { detail: { value: string } }) { this.setData({ genderCustom: event.detail.value }); },
+  chooseMenarche(event: { currentTarget: { dataset: { value: string } } }) {
+    this.setData({ menarche: event.currentTarget.dataset.value });
+  },
+  chooseTreatment(event: { currentTarget: { dataset: { value: string } } }) {
+    const treatment = event.currentTarget.dataset.value;
+    this.setData({ treatment, encouragement: treatmentStage(treatment) });
+  },
+  nextStep() {
+    if (this.data.stage === 'profile') {
+      if (!this.data.nickname.trim()) { this.setData({ error: '请先填写昵称。' }); return; }
+      this.setData({ stage: 'treatment', stepIndex: 1, error: '' });
+    } else if (this.data.stage === 'treatment') {
+      this.setData({ stage: 'basics', stepIndex: 2, error: '' });
+    }
+  },
+  previousStep() {
+    if (this.data.saving || this.data.uploadingXray) return;
+    this.setData({ stage: this.data.stage === 'basics' ? 'treatment' : 'profile',
+      stepIndex: this.data.stage === 'basics' ? 1 : 0, error: '' });
+  },
+  showReady() { this.setData({ stage: 'ready', stepIndex: 3, error: '' }); },
+  enterApp() { wx.switchTab({ url: '/pages/rehab/index' }); },
   toggleExtra() { this.setData({ hasExtra: !this.data.hasExtra }); },
 
   toggleMethod(event: { currentTarget: { dataset: { index: number } } }) {
@@ -117,14 +153,18 @@ Page({
     const nickname = this.data.nickname.trim();
     if (!nickname) throw new Error('请先填写昵称。');
     if (nickname.length > 50) throw new Error('昵称最多 50 个字。');
-    const payload: Record<string, unknown> = { nickname };
+    const payload: Record<string, unknown> = { nickname,
+      treatment_stage: this.data.treatment, gender: this.data.gender,
+      gender_custom: this.data.genderCustom.trim(), menarche_status: this.data.menarche };
+    if (this.data.revision) payload.expected_revision = this.data.revision;
     if (this.data.birthMonth) payload.birth_month = this.data.birthMonth;
     const diagnosis = DIAGNOSIS_OPTIONS[this.data.diagnosisIndex]?.value;
     if (diagnosis) payload.diagnosis_status = diagnosis;
     const selected = this.data.methods.filter(item => item.checked).map(item => item.value);
     if (selected.length) payload.management_methods = selected;
     if (this.data.notes.trim()) payload.notes = this.data.notes.trim();
-    await api.saveProfile(payload);
+    const saved = await api.saveProfile(payload);
+    this.setData({ revision: saved.revision });
     await refreshIdentity();
     this.setData({ stage: 'xray' });
   },
@@ -172,7 +212,7 @@ Page({
         wx.removeStorageSync(`spine.onboarding.dismissed:${userId}`);
       }
       wx.showToast({ title: '档案已建立', icon: 'success' });
-      wx.switchTab({ url: '/pages/rehab/index' });
+      this.showReady();
     } catch (error) {
       this.setData({ error: fieldErrorFor(error).message });
     } finally {
@@ -181,13 +221,10 @@ Page({
   },
 
   async saveForLater() {
-    if (this.data.stage === 'profile') {
-      try { await this.saveProfileDraft(); }
-      catch (error) { this.setData({ error: fieldErrorFor(error).message }); return; }
-    }
+    if (this.data.stage !== 'xray' || this.data.saving || this.data.uploadingXray) return;
     const userId = getCurrentIdentity()?.id;
     if (userId) wx.setStorageSync(`spine.onboarding.dismissed:${userId}`, true);
-    wx.switchTab({ url: '/pages/rehab/index' });
+    this.showReady();
   },
 
   async submit() {
