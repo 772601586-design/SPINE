@@ -26,12 +26,12 @@
   </view>
   <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
     <view style="display: flex; justify-content: space-between; align-items: baseline">
-      <text style="font-size: 28.85rpx; font-weight: 700">补卡</text>
+      <text style="font-size: 28.85rpx; font-weight: 700">补记真实训练</text>
       <text style="font-size: 23.08rpx; color: #5B6663">每周 1 次 · {{ makeupLeft }}</text>
     </view>
     <view style="display: flex; align-items: center; gap: 19.23rpx; padding: 19.23rpx 23.08rpx; border-radius: 23.08rpx; background: #F8FAF9">
       <view style="flex: 1">
-        <view style="font-size: 26.92rpx; font-weight: 700">10 月 11 日 周日 · 训练未完成</view>
+        <view style="font-size: 26.92rpx; font-weight: 700">选择实际训练日期，填写真实完成量</view>
         <view style="font-size: 23.08rpx; color: #5B6663">生病、考试、复查调支具，都可以补</view>
       </view>
       <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 73.08rpx; padding: 0 23.08rpx; border: 0; border-radius: 1921.15rpx; background: {{ makeupBg }}; color: #FFFFFF; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ doMakeup }}" hover-class="tap">{{ makeupText }}</view>

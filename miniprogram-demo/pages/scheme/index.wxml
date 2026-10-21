@@ -1,0 +1,28 @@
+<view class="flow-page">
+  <view wx:if="{{document}}">
+    <text class="scheme-name">{{document.originalName || '拍摄的方案单'}}</text>
+    <image wx:if="{{document.kind === 'image'}}" src="{{document.path}}" mode="widthFix" class="scheme-image" bindtap="previewImage" />
+    <view wx:elif="{{document.kind === 'document'}}" class="flow-card"><text class="flow-heading">{{document.originalName}}</text><button class="flow-button flow-secondary" bindtap="previewFile">查看文件内容</button></view>
+    <view wx:if="{{document.kind === 'text' || reviewing || text}}" class="flow-card"><text class="flow-heading">{{document.kind === 'text' ? '文件内容' : '方案文字'}}</text><text class="flow-small">可核对或粘贴原件内容，未明确的训练要求需补齐。</text><textarea class="flow-input scheme-text" value="{{text}}" maxlength="20000" bindinput="inputText" placeholder="方案文字将在这里展示，也可以粘贴或填写原件内容" /></view>
+    <button class="flow-button" loading="{{busy}}" disabled="{{busy}}" bindtap="generate">生成训练计划</button>
+  </view>
+  <view wx:if="{{error}}" class="flow-error">{{error}}</view>
+  <block wx:if="{{reviewing}}">
+    <text class="flow-heading flow-section">核对训练要求</text>
+    <view wx:for="{{rows}}" wx:key="id" class="flow-card" wx:for-index="rowIndex">
+      <text wx:if="{{item.sourceDoseText}}" class="flow-small">原方案要求：{{item.sourceDoseText}}</text>
+      <text class="flow-label">动作名称</text><input class="flow-input" value="{{item.name}}" data-index="{{rowIndex}}" data-field="name" bindinput="inputRow" maxlength="160" />
+      <text class="flow-label">动作组别（选填）</text><input class="flow-input" value="{{item.groupName}}" data-index="{{rowIndex}}" data-field="groupName" bindinput="inputRow" maxlength="80" placeholder="如柔韧性练习、3D矫正练习" />
+      <text class="flow-label">组数</text><input class="flow-input" type="number" value="{{item.sets}}" data-index="{{rowIndex}}" data-field="sets" bindinput="inputRow" />
+      <picker range="{{modes}}" range-key="label" data-index="{{rowIndex}}" bindchange="chooseMode"><view class="flow-input">{{item.mode === 'timer' ? '每组秒数' : item.mode === 'breath' ? '每组呼吸次数' : item.mode === 'count' ? '每组次数' : '请选择训练类型'}} ⌄</view></picker>
+      <input class="flow-input" type="number" value="{{item.amount}}" data-index="{{rowIndex}}" data-field="amount" bindinput="inputRow" placeholder="每组完成量" />
+      <text class="flow-label">动作要点</text><textarea class="flow-input" value="{{item.notes}}" data-index="{{rowIndex}}" data-field="notes" bindinput="inputRow" maxlength="2000" />
+      <text wx:for="{{item.warnings}}" wx:key="*this" wx:for-item="warning" class="flow-small">{{warning}}</text>
+      <text wx:if="{{item.frequency}}" class="flow-small">方案频次：{{item.frequency}}，下一步请按原件安排日程。</text>
+      <button class="flow-button flow-secondary" data-index="{{rowIndex}}" bindtap="removeRow">移除这个动作</button>
+    </view>
+    <button class="flow-button flow-secondary" bindtap="addRow">＋ 添加动作</button>
+    <view class="flow-row flow-card" bindtap="toggleCheck"><text class="flow-check {{checked ? 'flow-checked' : ''}}">{{checked ? '✓' : ''}}</text><text class="flow-flex">已对照方案单核对以上动作和要求</text></view>
+    <button class="flow-button" disabled="{{busy || !rows.length}}" bindtap="confirmPlan">确认并安排训练计划</button>
+  </block>
+</view>

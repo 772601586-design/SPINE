@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f3f5f2" />
+    <title>小树 · 页面预览</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%231f6f66'/%3E%3Cpath d='M31 49V31C18 33 12 23 14 15c11-1 19 5 19 16 1-13 7-21 18-20 0 14-5 22-18 22' fill='%23dcece2'/%3E%3C/svg%3E" />
+    <link rel="stylesheet" href="/preview/preview.css" />
+    <style id="global-style"></style>
+    <style id="page-style"></style>
+    <script src="/preview/runtime.js" defer></script>
+  </head>
+  <body>
+    <div class="preview-shell">
+      <aside class="preview-sidebar" aria-label="Demo 导航">
+        <a class="preview-brand" href="#/pages/train/index" aria-label="小树，返回训练页">
+          <span class="preview-brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none"><path d="M16 26V15M16 19C7 20 4 14 5 8c7 0 12 4 11 11ZM16 17C16 8 20 4 27 5c0 8-4 12-11 12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </span>
+          <span><strong>小树</strong><small>项目 Demo</small></span>
+        </a>
+
+        <nav class="preview-navigation" aria-label="页面快速导航">
+          <p class="preview-nav-label">主要页面</p>
+          <button class="preview-nav-item active" type="button" data-route="/pages/train/index"><span class="preview-nav-symbol" aria-hidden="true">▦</span><span>训练</span><span class="preview-nav-current" aria-hidden="true"></span></button>
+          <button class="preview-nav-item" type="button" data-route="/pages/growth/index"><span class="preview-nav-symbol" aria-hidden="true">↗</span><span>成长</span><span class="preview-nav-current" aria-hidden="true"></span></button>
+          <button class="preview-nav-item" type="button" data-route="/pages/community/index"><span class="preview-nav-symbol" aria-hidden="true">◎</span><span>社群</span><span class="preview-nav-current" aria-hidden="true"></span></button>
+          <button class="preview-nav-item" type="button" data-route="/pages/me/index"><span class="preview-nav-symbol" aria-hidden="true">♧</span><span>我的</span><span class="preview-nav-current" aria-hidden="true"></span></button>
+
+          <p class="preview-nav-label preview-nav-label-secondary">训练流程</p>
+          <button class="preview-nav-item" type="button" data-route="/pages/capture/index"><span class="preview-step" aria-hidden="true">01</span><span>现场录视频</span></button>
+          <button class="preview-nav-item" type="button" data-route="/pages/card/index"><span class="preview-step" aria-hidden="true">02</span><span>整理动作卡</span></button>
+          <button class="preview-nav-item" type="button" data-route="/pages/plan/index"><span class="preview-step" aria-hidden="true">03</span><span>建立训练计划</span></button>
+          <button class="preview-nav-item" type="button" data-route="/pages/follow/index"><span class="preview-step" aria-hidden="true">04</span><span>语音跟练</span></button>
+          <button class="preview-nav-item" type="button" data-route="/pages/execution/index"><span class="preview-step" aria-hidden="true">05</span><span>保存训练记录</span></button>
+        </nav>
+
+        <div class="preview-sidebar-bottom">
+          <div class="preview-local-status"><span aria-hidden="true"></span>本地浏览器预览</div>
+          <p>页面可以直接操作。摄像、微信等原生能力请在微信开发者工具中体验。</p>
+        </div>
+      </aside>
+
+      <main class="preview-workspace" aria-label="小程序预览工作区">
+        <header class="preview-toolbar">
+          <div class="preview-toolbar-title"><span class="preview-toolbar-dot" aria-hidden="true"></span><span>页面预览</span></div>
+          <div class="preview-toolbar-actions">
+            <div class="preview-size-control" role="group" aria-label="手机预览宽度">
+              <button type="button" data-width="375" aria-label="375 像素宽度">375</button>
+              <button type="button" data-width="390" aria-label="390 像素宽度" class="active">390</button>
+              <button type="button" data-width="430" aria-label="430 像素宽度">430</button>
+            </div>
+            <span class="preview-toolbar-divider" aria-hidden="true"></span>
+            <button type="button" class="preview-reload" id="reload-demo" title="刷新当前页面" aria-label="刷新当前页面"><svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M15.8 7A6.4 6.4 0 1 0 16 12M16 3v4.5h-4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>刷新</span></button>
+          </div>
+        </header>
+
+        <div class="preview-stage">
+          <section class="preview-phone" id="phone" aria-label="小树小程序">
+            <div class="preview-statusbar" aria-hidden="true"><span>9:41</span><div class="preview-phone-island"></div><div class="preview-phone-indicators"><svg viewBox="0 0 18 14" fill="currentColor"><rect x="1" y="9" width="3" height="4" rx=".6"/><rect x="5" y="6" width="3" height="7" rx=".6"/><rect x="9" y="3" width="3" height="10" rx=".6"/><rect x="13" width="3" height="13" rx=".6"/></svg><svg viewBox="0 0 18 14" fill="none"><path d="M1 4.2a12.5 12.5 0 0 1 16 0M4 7.3a7.8 7.8 0 0 1 10 0M7 10.4a3.3 3.3 0 0 1 4 0" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="9" cy="12.2" r="1" fill="currentColor" stroke="none"/></svg><svg viewBox="0 0 27 14" fill="none"><rect x="1" y="1" width="22" height="12" rx="3" stroke="currentColor" stroke-width="1"/><rect x="3" y="3" width="18" height="8" rx="1.3" fill="currentColor"/><path d="M25 5v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div></div>
+            <header class="preview-native-nav" id="native-nav">
+              <button type="button" id="nav-back" aria-label="返回上一页" hidden><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m15 5-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              <span id="nav-title">训练</span>
+              <div class="preview-wechat-capsule" aria-hidden="true"><span>•••</span><i></i><span class="preview-capsule-circle"></span></div>
+            </header>
+            <div id="app-content" class="miniapp" tabindex="-1"><div class="preview-loading"><span></span><p>正在打开小树…</p></div></div>
+            <nav id="tabbar" class="preview-tabbar" aria-label="小程序底部导航"></nav>
+            <div class="preview-home-indicator" aria-hidden="true"><span></span></div>
+            <div id="toast" class="preview-toast" role="status" aria-live="polite"></div>
+            <div id="runtime-error" class="preview-runtime-error" role="alert" hidden></div>
+          </section>
+        </div>
+
+        <footer class="preview-footer"><span class="preview-footer-label">当前页面</span><code id="preview-route">/pages/train/index</code><span class="preview-footer-hint">操作记录保存在本机</span></footer>
+      </main>
+    </div>
+  </body>
+</html>

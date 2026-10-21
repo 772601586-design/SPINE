@@ -1,30 +1,30 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { spawnSync } = require('node:child_process');
-
+const vm = require('node:vm');
 const root = path.resolve(__dirname, '..');
-const source = path.join(root, 'spine1/demo/miniprogram');
-const destination = path.join(root, 'miniprogram-demo');
-let compared = 0;
-function same(relative) {
-  const original = path.join(source, relative);
-  if (fs.statSync(original).isDirectory()) {
-    for (const entry of fs.readdirSync(original)) same(path.join(relative, entry));
-    return;
-  }
-  assert.ok(fs.readFileSync(original).equals(fs.readFileSync(path.join(destination, relative))), `${relative} differs from the source demo`);
-  compared++;
-}
-for (const entry of ['app.js', 'app.json', 'app.wxss', 'sitemap.json', 'core', 'pages', 'assets']) same(entry);
 const project = JSON.parse(fs.readFileSync(path.join(root, 'project.config.json'), 'utf8'));
 assert.equal(project.miniprogramRoot, 'miniprogram-demo/');
-const app = JSON.parse(fs.readFileSync(path.join(destination, 'app.json'), 'utf8'));
-assert.equal(app.pages.length, 18);
-assert.equal(app.tabBar.list.length, 5);
-assert.equal(app.pages[0], 'pages/welcome/index');
-const result = spawnSync(process.execPath, [path.join(source, 'tools/check.js'), destination], { encoding: 'utf8' });
-assert.equal(result.status, 0, result.stderr);
-assert.match(result.stdout, /PROBLEMS\s+0\b/, result.stdout);
-console.log(result.stdout.trim());
-console.log(`PASS: ${compared} runtime files are byte-for-byte identical to the source demo; project opens the 18-page native demo directly.`);
+JSON.parse(fs.readFileSync(path.join(root, 'project.private.config.json'), 'utf8'));
+let templateCount = 0;
+function checkFiles(directory) {
+  for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+    const filename = path.join(directory, entry.name);
+    if (entry.isDirectory()) { checkFiles(filename); continue; }
+    const source = fs.readFileSync(filename, 'utf8');
+    if (entry.name.endsWith('.json')) JSON.parse(source);
+    if (entry.name.endsWith('.wxml')) {
+      for (const match of source.matchAll(/{{([\s\S]*?)}}/g)) {
+        new vm.Script(`(${match[1]})`, { filename: path.relative(root, filename) });
+      }
+      templateCount++;
+    }
+  }
+}
+checkFiles(path.join(root, project.miniprogramRoot, 'pages'));
+JSON.parse(fs.readFileSync(path.join(root, project.miniprogramRoot, 'app.json'), 'utf8'));
+console.log(`PASS: project/page JSON and ${templateCount} WXML template expressions parse successfully.`);
+const design = JSON.parse(fs.readFileSync(path.join(root, 'miniprogram-demo/design-version.json'), 'utf8'));
+assert.equal(design.baseline, 'output/design/xiaoshu-merged-training.png');
+require('./check-training-design.cjs');
+console.log('PASS: active demo follows the merged training layout and six-step recording flow from output/design.');

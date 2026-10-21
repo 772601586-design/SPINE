@@ -1,7 +1,1 @@
-{
-  "navigationBarTitleText": "训练",
-  "navigationBarBackgroundColor": "#F3F5F2",
-  "navigationBarTextStyle": "black",
-  "backgroundColor": "#F3F5F2",
-  "usingComponents": {}
-}
+{"navigationBarTitleText": "训练", "disableScroll": true}

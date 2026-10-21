@@ -1,0 +1,80 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const vm = require('node:vm');
+const path = require('node:path');
+const root = path.resolve(__dirname, '../miniprogram-demo');
+const clone = value => JSON.parse(JSON.stringify(value));
+const storage = {}; let failWrite = false;
+const wx = { getStorageSync: key => clone(storage[key] || null), setStorageSync(key, value) {
+  if (failWrite) throw Error('storage full'); storage[key] = clone(value);
+}, showToast() {}, navigateTo(options) { wx.lastUrl = options.url; } };
+const trainingModule = { exports: {} };
+vm.runInNewContext(fs.readFileSync(path.join(root, 'core/training.js'), 'utf8'), { module: trainingModule, wx });
+const t = trainingModule.exports;
+const before = t.load();
+const custom = t.saveCard({ name: '既有动作', sets: 2, amount: 3, mode: 'count', groupName: '自定义组' }, true);
+t.importAttachmentPlan();
+let state = t.load(); const reference = state.cards.filter(card => card.id.startsWith('attachment-2025-'));
+assert.equal(reference.length, 24);
+assert.equal(new Set(reference.map(card => card.groupName)).size, 7);
+assert.ok(state.cards.some(card => card.id === custom.id));
+assert.equal(state.plans.find(plan => plan.id === 'sample-plan').active, false);
+const size = JSON.stringify(storage); t.importAttachmentPlan(); assert.equal(JSON.stringify(storage), size, 'import is idempotent');
+const unknown = reference.find(card => card.name === '鼻尖写“8”');
+assert.equal(unknown.confirmed, false); assert.equal(unknown.sets, 0);
+assert.ok(t.dose(unknown).includes('待核对'));
+assert.equal(t.complete({ ...unknown, values: [] }), false, 'an empty requirement cannot be completed');
+const plan = state.plans.find(plan => plan.id === 'attachment-2025-regular');
+assert.equal(t.due(plan, t.today(), state), true);
+assert.equal(t.due(plan, '2099-01-01', state), false, 'unspecified frequency does not silently become daily');
+const record = t.session(plan.id, t.today(), false);
+const lunge = record.rows.find(row => row.name.includes('右弓箭步'));
+assert.equal(lunge.groupName, '柔韧性练习');
+assert.equal(t.guidedComplete(lunge), false);
+let saved = t.saveGuidedSet(record.id, lunge.cardId, 0);
+assert.equal(t.guidedComplete(saved.rows.find(row => row.cardId === lunge.cardId)), false, 'one cadence set does not complete a two-set item');
+saved = t.saveGuidedSet(record.id, lunge.cardId, 1);
+const guided = saved.rows.find(row => row.cardId === lunge.cardId);
+assert.equal(t.guidedComplete(guided), true);
+assert.equal(t.complete(guided), false, 'cadence must not forge actual completion');
+assert.deepEqual(clone(guided.values), [null, null]);
+t.saveSet(record.id, lunge.cardId, 0, 30); t.saveSet(record.id, lunge.cardId, 1, 30);
+assert.equal(t.complete(t.load().sessions.find(row => row.id === record.id).rows.find(row => row.cardId === lunge.cardId)), true);
+assert.throws(() => t.saveGuidedSet(record.id, unknown.id, 0), /核对/);
+const persisted = JSON.stringify(storage); failWrite = true;
+assert.throws(() => t.saveGuidedSet(record.id, lunge.cardId, 1), /storage full/);
+assert.equal(JSON.stringify(storage), persisted); failWrite = false;
+// A requirement reviewed later becomes runnable without rewriting completed rows.
+t.saveCard({ ...unknown, sets: 1, amount: 8, mode: 'count' }, true);
+const updated = t.session(plan.id, t.today(), false);
+assert.equal(updated.rows.find(row => row.cardId === unknown.id).confirmed, true);
+assert.deepEqual(clone(updated.rows.find(row => row.cardId === lunge.cardId).values), [30,30]);
+let definition;
+vm.runInNewContext(fs.readFileSync(path.join(root, 'pages/train/index.js'), 'utf8'), { wx, Page: value => { definition = value; },
+  require: name => name.endsWith('/training') ? t : name.endsWith('/store') ? { enter() {} } : {} });
+const page = { ...definition, data: clone(definition.data), setData(values) { Object.assign(this.data, clone(values)); } };
+page.onShow();
+assert.equal(page.data.groups[0].name, '认知能力学习');
+assert.equal(page.data.groups[4].name, '核心/肩胛带稳定性训练');
+assert.equal(page.data.groups.reduce((sum, group) => sum + group.rows.length, 0), 24);
+assert.ok(page.data.records.find(row => row.cardId === lunge.cardId).guidedDone);
+const pending = page.data.records.find(row => !row.ready); page.launch(pending);
+assert.ok(wx.lastUrl.includes('/pages/card/index?id='));
+let followDefinition, clock = 0;
+class Clock extends Date { static now() { return clock; } }
+vm.runInNewContext(fs.readFileSync(path.join(root, 'pages/follow/index.js'), 'utf8'), {
+  wx, Date: Clock, Page: value => { followDefinition = value; }, setInterval() { return 1; }, clearInterval() {},
+  require: name => name.endsWith('/training') ? t : { speak() {}, stop() {} },
+});
+const follow = { ...followDefinition, data: clone(followDefinition.data), setData(values) { Object.assign(this.data, clone(values)); } };
+const standing = updated.rows.find(row => row.name.includes('撑杆站立'));
+follow.onLoad({ session: record.id, card: standing.cardId });
+assert.equal(follow.data.currentDone, false);
+follow.start(); clock = standing.amount * 1000; follow.tick();
+assert.equal(follow.data.finished, true);
+assert.equal(follow.data.currentDone, true, 'visible action title crosses out as cadence ends');
+const finalRow = t.load().sessions.find(row => row.id === record.id).rows.find(row => row.cardId === standing.cardId);
+assert.deepEqual(clone(finalRow.values), [null]);
+assert.equal(t.guidedComplete(finalRow), true);
+follow.onHide();
+console.log('PASS: seven attachment groups, 24 explicit actions, missing quantities, one-time import, schedule preservation, independent cadence progress, actual completion, failed writes and later review.');

@@ -1,3 +1,14 @@
+<view class="flow-page"><view class="flow-card">
+<view class="flow-row"><text class="flow-heading">支具</text><text class="flow-pill">{{braceWearing ? '正在佩戴' : '未在佩戴'}}</text></view>
+<view class="flow-row" style="margin:28rpx 0"><view><text class="flow-muted">今日佩戴</text><view class="flow-heading">{{braceToday}}</view></view><view><text class="flow-muted">累计佩戴</text><view class="flow-heading">{{braceDays}} 天</view></view></view>
+<text class="flow-muted">累计时长 {{braceTotal}}</text>
+<button class="flow-button" style="margin-top:24rpx" bindtap="toggleBraceRecord">{{braceWearing ? '脱下支具，保存记录' : '戴上支具，开始记录'}}</button>
+<text class="flow-small">按实际戴上、脱下时间记录，同一天多次佩戴合并统计。</text>
+<text wx:if="{{braceError}}" class="flow-error">{{braceError}}</text>
+<view class="flow-section"><text class="flow-heading">佩戴时长记录</text></view>
+<text wx:if="{{!braceHistory.length}}" class="flow-muted">暂无佩戴记录，戴上支具后开始记录。</text>
+<view wx:for="{{braceHistory}}" wx:key="date" class="flow-row" style="padding:18rpx 0"><text>{{item.date}}</text><text>{{item.duration}}</text></view>
+</view><view class="flow-row flow-section"><text class="flow-heading">训练历史</text><text class="flow-link" bindtap="trainingSummary">周期汇总 ›</text></view><view wx:if="{{!trainingHistory.length}}" class="flow-card flow-empty">还没有实际训练记录。</view><view wx:for="{{trainingHistory}}" wx:key="id" class="flow-card" data-id="{{item.id}}" bindtap="openTrainingRecord"><view class="flow-row"><text class="flow-heading">{{item.date}}</text><text class="flow-pill">{{item.status}}</text></view><text class="flow-muted">{{item.name}} · {{item.count}} 个动作 · 查看各组实际量 ›</text></view><view wx:if="{{summaryText}}" class="flow-card"><text class="flow-heading">训练周期汇总</text><text style="white-space:pre-wrap;display:block;margin:20rpx 0">{{summaryText}}</text><button class="flow-button" bindtap="copyTrainingSummary">复制汇总</button></view></view>
 <!-- 成长 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
 <view style="padding: 46.15rpx 38.46rpx 38.46rpx; display: flex; flex-direction: column; gap: 26.92rpx">
   <view>
@@ -14,7 +25,7 @@
     </view>
     <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15.38rpx; text-align: center">
       <view style="padding: 15.38rpx 0; border-radius: 23.08rpx; background: #F3F5F2">
-        <view style="font-size: 34.62rpx; font-weight: 700">24</view>
+        <view style="font-size: 34.62rpx; font-weight: 700">{{braceDays}}</view>
         <view style="font-size: 23.08rpx; color: #5B6663">天戴支具</view>
       </view>
       <view style="padding: 15.38rpx 0; border-radius: 23.08rpx; background: #F3F5F2">
@@ -51,7 +62,7 @@
   </view>
   <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 19.23rpx">
     <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 92.31rpx; border: 0; border-radius: 23.08rpx; background: #1F6F66; color: #FFFFFF; font-size: 26.92rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.upload }}" hover-class="tap">添加复查记录</view>
-    <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 92.31rpx; border-radius: 23.08rpx; border: 2.88rpx solid #1F6F66; background: transparent; color: #1F6F66; font-size: 26.92rpx; font-weight: 700" bindtap="act" data-fn="{{ makeSummary }}" hover-class="tap">生成复查前摘要</view>
+    <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 92.31rpx; border-radius: 23.08rpx; border: 2.88rpx solid #1F6F66; background: transparent; color: #1F6F66; font-size: 26.92rpx; font-weight: 700" bindtap="trainingSummary" hover-class="tap">生成复查前摘要</view>
   </view>
   <view style="margin: 7.69rpx 0 0; font-size: 32.69rpx; font-weight: 700">复查时间线</view>
   <block wx:for="{{ visits }}" wx:for-item="v" wx:for-index="vIndex" wx:key="_k">

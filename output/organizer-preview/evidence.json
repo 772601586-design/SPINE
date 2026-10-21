@@ -1,0 +1,22 @@
+{
+  "contract": "Redesign the existing card page as a local source-organizing workflow: retain on-site videos, add medical/training document originals, recognize actual printed text locally, select the action corresponding to the video, and explicitly review/save requirements. Missing and conflicting requirements remain unresolved; medical records never generate exercise doses.",
+  "targetViewports": ["1440x1000", "390x844", "375x812"],
+  "accessibility": {"status": "pass", "evidence": "The page uses native input fields/buttons, labels and visible focus styles from the preview host. Interactive WXML supports Enter/Space and the review acknowledgement has checkbox semantics. Form validation prevents confirmation without acknowledgement. Reviewed the rendered text fit and existing product contrast; this was not a full WCAG audit."},
+  "responsive": {"status": "pass", "evidence": "Inspected the desktop empty page and mobile uploaded-document, recognized-action and requirement-review sections. At 375 and 390 widths the two source-upload tiles and dose fields fit in the container; the mobile document has no horizontal overflow."},
+  "contentStates": {
+    "loading": {"status": "pass", "evidence": "The actual browser test submitted two source images to Windows OCR sequentially and waited for the busy recognition operation to finish before selecting results."},
+    "empty": {"status": "pass", "evidence": "A clean browser context shows the video empty state, two document-upload choices, disabled recognition before a document exists, and an optional manual-requirements section."},
+    "error": {"status": "pass", "evidence": "A damaged test image produced a real API failure. Its original remained listed with retry/manual-entry controls; entering source text recovered the document without altering recognized actions from the valid training source."},
+    "partial": {"status": "pass", "evidence": "Model/controller regressions confirm absent dose fields stay empty, contradictory requirements across documents stay unresolved, and explicit frequency is only retained as source text for later schedule confirmation."},
+    "success": {"status": "pass", "evidence": "Actual OCR extracted two explicit actions from a generated training-sheet fixture. The browser selected a candidate, checked exact sets/amount/unit, required acknowledgement, saved its video/source/frequency references and retained the batch's documents after refresh. Two consecutive imported video files retained distinct draft references; native camera recording/playback still needs device verification."},
+    "permission": {"status": "not-applicable", "reason": "The browser demo uses a user-triggered file picker and a loopback-only OCR endpoint. Native WeChat camera/album permission dialogs are outside this browser host and require developer-tools or real-device testing."}
+  },
+  "renderedEvidence": [
+    {"viewport": "1440x1000", "artifact": "empty-desktop-1440x1000.png", "observation": "New source-first page inside the existing editable demo, before video or documents are added."},
+    {"viewport": "390x844", "artifact": "documents-mobile-390x844.png", "observation": "Recorded-source and document-upload sections; actual source documents are retained separately."},
+    {"viewport": "390x844", "artifact": "recognized-mobile-390x844.png", "observation": "Actions and explicit requirements extracted from the generated training sheet, with original text for comparison."},
+    {"viewport": "390x844", "artifact": "review-mobile-390x844.png", "observation": "Original source, editable exercise fields, explicit frequency hint and acknowledgement are grouped for review."},
+    {"viewport": "375x812", "artifact": "recorded-mobile-375x812.png", "observation": "Narrow-screen source-organizing page stays within the mobile viewport."},
+    {"viewport": "375x812", "artifact": "recognition-error-mobile-375x812.png", "observation": "Real invalid-image failure leaves source and manual recovery controls available."}
+  ]
+}

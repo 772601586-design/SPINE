@@ -46,7 +46,7 @@ function bindPage(screen, keys, extra) {
     onLoad() {
       // 首次使用的入口：已经建过档的用户直接进首页
       if (screen === 'welcome' && store.app.state.onboarded) {
-        wx.switchTab({ url: '/pages/today/index' });
+        wx.switchTab({ url: '/pages/train/index' });
       }
     },
     onShow() {

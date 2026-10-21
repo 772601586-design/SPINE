@@ -1,0 +1,37 @@
+<view class="flow-page">
+  <text class="flow-title">现场录制</text>
+  <text class="flow-muted">拍完一段，填写动作名称和关键要点，再拍下一个动作。</text>
+  <view wx:if="{{error}}" class="flow-error">{{error}}</view>
+  <view class="flow-card">
+    <button class="flow-button" disabled="{{busy || selecting}}" loading="{{busy}}" bindtap="record">{{createdCount ? '继续录制下一段' : '录制本段视频'}}</button>
+    <text class="flow-small">视频自动保存到本机，填写动作信息后可继续拍摄。</text>
+  </view>
+  <view class="flow-row"><text class="flow-heading">已保存草稿</text><text class="flow-pill">{{drafts.length}} 段</text></view>
+  <view wx:for="{{drafts}}" wx:key="id" class="flow-card">
+    <text class="flow-heading">{{item.name}}</text>
+    <video wx:if="{{item.video}}" src="{{item.video}}" controls class="flow-video" />
+    <text class="flow-link" data-id="{{item.id}}" bindtap="open">整理这张动作卡 ›</text>
+  </view>
+  <button class="flow-button" disabled="{{busy || selecting}}" bindtap="finish">完成并整理</button>
+</view>
+<view wx:if="{{detailsOpen}}" class="capture-source-layer" catchtouchmove="stopTouch">
+  <view class="capture-source-mask"></view>
+  <view class="capture-source-panel">
+    <text class="capture-source-title">本段动作信息</text>
+    <text class="capture-details-label">动作名称</text>
+    <input class="flow-input" maxlength="160" value="{{actionName}}" bindinput="inputName" placeholder="例如：坐姿呼吸练习" />
+    <text class="capture-details-label">动作关键要点</text>
+    <textarea class="flow-input capture-details-notes" maxlength="2000" value="{{actionNotes}}" bindinput="inputNotes" placeholder="记录康复师强调的姿势、方向和注意要点" />
+    <text class="capture-details-label">动作部位（可多选）</text>
+    <checkbox-group class="capture-taxonomy" bindchange="selectRegions">
+      <label wx:for="{{regionOptions}}" wx:key="code"><checkbox value="{{item.code}}" checked="{{item.checked}}" color="#1f6f66" />{{item.name}}</label>
+    </checkbox-group>
+    <text class="capture-details-label">相关肌肉（可多选）</text>
+    <checkbox-group class="capture-taxonomy" bindchange="selectMuscles">
+      <label wx:for="{{muscleOptions}}" wx:key="code"><checkbox value="{{item.code}}" checked="{{item.checked}}" color="#1f6f66" />{{item.name}}</label>
+    </checkbox-group>
+    <text wx:if="{{detailsError}}" class="flow-error">{{detailsError}}</text>
+    <button class="flow-button" disabled="{{busy || selecting}}" loading="{{busy}}" bindtap="saveAndNext">保存并拍下一个动作</button>
+    <button class="capture-source-cancel" disabled="{{busy || selecting}}" bindtap="saveDetails">保存本段，暂不继续</button>
+  </view>
+</view>

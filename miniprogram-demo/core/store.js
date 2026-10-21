@@ -12,8 +12,8 @@
 const SpineApp = require('./spine-app');
 
 const STORAGE_KEY = 'spine-state-v1';
-const TABS = ['today', 'train', 'growth', 'community', 'me'];
-const routeOf = (screen) => 'pages/' + screen + '/index';
+const TABS = ['train', 'growth', 'community', 'me'];
+const routeOf = (screen) => 'pages/' + (screen === 'today' ? 'train' : screen) + '/index';
 
 let app = null;
 let scheduled = false;
@@ -40,7 +40,7 @@ function currentPage() {
 
 function navigate(screen) {
   const url = '/' + routeOf(screen);
-  if (TABS.indexOf(screen) !== -1) {
+  if (screen === 'today' || TABS.indexOf(screen) !== -1) {
     app.state.onboarded = true;
     wx.switchTab({ url });
     return;
@@ -92,7 +92,7 @@ module.exports = {
   vm() { if (!app) load(); return app.renderVals(); },
   /** 清空本地数据，从首次使用重新开始 */
   reset() {
-    try { wx.removeStorageSync(STORAGE_KEY); } catch (e) { /* ignore */ }
+    try { wx.removeStorageSync(STORAGE_KEY); wx.removeStorageSync(require('./training').KEY); wx.removeStorageSync(require('./documents').KEY); wx.removeStorageSync(require('./brace-records').KEY); } catch (e) { /* ignore */ }
     app = null;
     load();
     wx.reLaunch({ url: '/' + routeOf('welcome') });

@@ -4,6 +4,9 @@ const path = require('node:path');
 const root = path.resolve(__dirname, '..');
 const source = path.join(root, 'spine1/demo/miniprogram');
 const destination = path.join(root, 'miniprogram-demo');
+if (fs.existsSync(path.join(destination, 'design-version.json'))) {
+  throw new Error('miniprogram-demo now follows output/design. Source synchronization would overwrite the implemented flow; the original remains in spine1/demo/miniprogram.');
+}
 const entries = ['app.js', 'app.json', 'app.wxss', 'sitemap.json', 'core', 'pages', 'assets'];
 for (const entry of entries) {
   fs.cpSync(path.join(source, entry), path.join(destination, entry), { recursive: true });

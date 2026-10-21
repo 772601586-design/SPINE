@@ -1,0 +1,479 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="2820" viewBox="0 0 2400 2820"><defs><style>text{font-family:"Microsoft YaHei","Noto Sans CJK SC",sans-serif;letter-spacing:.1px}</style></defs>
+<rect x="0" y="0" width="2400" height="2820" rx="0" fill="#EAF0E9" stroke="none"/>
+<g transform="translate(120 96) scale(1.25)">
+<path d="M0 24V0" fill="none" stroke="#1F6F66" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M0 13C-19 14-24-1-20-9C-6-10 1 1 0 13" fill="#1F6F66" stroke="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M0 4C0-9 11-17 24-15C25-2 12 7 0 4" fill="#1F6F66" stroke="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="166" y="108" font-size="38" fill="#1F6F66" font-weight="700" text-anchor="start">小树</text>
+<text x="2304" y="104" font-size="23" fill="#718078" font-weight="500" text-anchor="end">PRODUCT FLOW / 01</text>
+<text x="96" y="190" font-size="59" fill="#1F2A27" font-weight="700" text-anchor="start">让现场指导，顺畅成为每天的练习</text>
+<text x="99" y="240" font-size="27" fill="#718078" font-weight="400" text-anchor="start">先记录，再核对；按已确认的要求安排，保存每一次真实完成。</text>
+<rect x="1940" y="155" width="364" height="40" rx="20" fill="#DCE7DC" stroke="none"/>
+<text x="2122" y="182" font-size="21" fill="#496255" font-weight="500" text-anchor="middle">界面方案 · 数据为示例</text>
+<text x="96" y="308" font-size="23" fill="#1F6F66" font-weight="700" text-anchor="start">01</text>
+<text x="148" y="308" font-size="27" fill="#1F2A27" font-weight="600" text-anchor="start">现场录制</text>
+<g transform="translate(96 330)">
+<rect x="-1" y="-1" width="702" height="1112" rx="32" fill="#FFF" stroke="#D5E1DA"/>
+<clipPath id="clip01"><rect width="700" height="1110" rx="32"/></clipPath><g clip-path="url(#clip01)">
+<rect x="0" y="0" width="700" height="1110" rx="0" fill="#F3F5F2" stroke="none"/>
+<text x="30" y="34" font-size="19" fill="#1F2A27" font-weight="600" text-anchor="start">9:41</text>
+<text x="665" y="34" font-size="18" fill="#1F2A27" font-weight="600" text-anchor="end">•••  ▰</text>
+<path d="M43 77L33 87L43 97" fill="none" stroke="#1F2A27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="350" y="97" font-size="30" fill="#1F2A27" font-weight="650" text-anchor="middle">现场录制</text>
+<text x="30" y="145" font-size="21" fill="#718078" font-weight="400" text-anchor="start">训练  /  现场录动作</text>
+<rect x="30" y="175" width="640" height="385" rx="20" fill="#DFE9E2" stroke="none"/>
+<g transform="translate(30 175)">
+<rect x="428.8" y="15" width="153.6" height="273.34999999999997" rx="5" fill="#EEF4ED" stroke="none"/>
+<path d="M505.6 15L505.6 288.34999999999997" stroke="#D5E1D5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M428.8 134.75L582.4 134.75" stroke="#D5E1D5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<rect x="20" y="308" width="600" height="50.050000000000004" rx="10" fill="#BCCBC0" stroke="none"/>
+<circle cx="288" cy="134.75" r="28.875" fill="#D4AC89" stroke="none" stroke-width="2"/>
+<path d="M275 173.25Q255 231 278 281.05L339 281.05" fill="none" stroke="#7B9E8C" stroke-width="34.65" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M283 277.2L344 277.2L360 308" fill="none" stroke="#4C6960" stroke-width="21.175" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M276 188.65L308 231L350 211.75" fill="none" stroke="#D4AC89" stroke-width="14.245" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M256 207.9V308M251 250.25H320V308" fill="none" stroke="#A1B4A6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<rect x="52" y="197" width="247" height="40" rx="20" fill="#F9FAF7" stroke="none"/>
+<text x="175.5" y="224" font-size="21" fill="#1F2A27" font-weight="500" text-anchor="middle">●  正在录制第 3 段</text>
+<rect x="515" y="197" width="130" height="40" rx="20" fill="#25443BCC" stroke="none"/>
+<text x="580" y="225" font-size="23" fill="white" font-weight="600" text-anchor="middle">00:26</text>
+<text x="30" y="611" font-size="28" fill="#1F2A27" font-weight="600" text-anchor="start">已保存草稿</text>
+<rect x="577" y="581" width="93" height="40" rx="20" fill="#DDEDE9" stroke="none"/>
+<text x="623.5" y="608" font-size="21" fill="#1F6F66" font-weight="500" text-anchor="middle">2 段</text>
+<rect x="30" y="635" width="154" height="98" rx="20" fill="#DFE9E2" stroke="none"/>
+<g transform="translate(30 635)">
+<rect x="103.18" y="15" width="36.96" height="69.58" rx="5" fill="#EEF4ED" stroke="none"/>
+<path d="M121.66000000000001 15L121.66000000000001 84.58" stroke="#D5E1D5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M103.18 34.3L140.14000000000001 34.3" stroke="#D5E1D5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<rect x="20" y="78.4" width="114" height="12.74" rx="10" fill="#BCCBC0" stroke="none"/>
+<circle cx="69.3" cy="34.3" r="7.35" fill="#D4AC89" stroke="none" stroke-width="2"/>
+<path d="M56.3 44.099999999999994Q36.3 58.8 59.3 71.53999999999999L120.3 71.53999999999999" fill="none" stroke="#7B9E8C" stroke-width="8.82" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M64.3 70.56L125.3 70.56L141.3 78.4" fill="none" stroke="#4C6960" stroke-width="5.39" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M57.3 48.019999999999996L89.3 58.8L131.3 53.9" fill="none" stroke="#D4AC89" stroke-width="3.626" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M37.3 52.92V78.4M32.3 63.7H101.3V78.4" fill="none" stroke="#A1B4A6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="80.08" cy="50.96" r="22" fill="#FFFFFFDD" stroke="none" stroke-width="2"/>
+<path d="M75.08 41.96L89.08 50.96L75.08 59.96Z" fill="#1F6F66" stroke="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<rect x="212" y="635" width="154" height="98" rx="20" fill="#DFE9E2" stroke="none"/>
+<g transform="translate(212 635)">
+<rect x="103.18" y="15" width="36.96" height="69.58" rx="5" fill="#EEF4ED" stroke="none"/>
+<path d="M121.66000000000001 15L121.66000000000001 84.58" stroke="#D5E1D5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M103.18 34.3L140.14000000000001 34.3" stroke="#D5E1D5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<rect x="20" y="78.4" width="114" height="12.74" rx="10" fill="#BCCBC0" stroke="none"/>
+<circle cx="69.3" cy="34.3" r="7.35" fill="#D4AC89" stroke="none" stroke-width="2"/>
+<path d="M56.3 44.099999999999994Q36.3 58.8 59.3 71.53999999999999L120.3 71.53999999999999" fill="none" stroke="#7B9E8C" stroke-width="8.82" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M64.3 70.56L125.3 70.56L141.3 78.4" fill="none" stroke="#4C6960" stroke-width="5.39" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M57.3 48.019999999999996L89.3 58.8L131.3 53.9" fill="none" stroke="#D4AC89" stroke-width="3.626" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M37.3 52.92V78.4M32.3 63.7H101.3V78.4" fill="none" stroke="#A1B4A6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="80.08" cy="50.96" r="22" fill="#FFFFFFDD" stroke="none" stroke-width="2"/>
+<path d="M75.08 41.96L89.08 50.96L75.08 59.96Z" fill="#1F6F66" stroke="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="35" y="765" font-size="22" fill="#718078" font-weight="400" text-anchor="start">视频 01</text>
+<text x="217" y="765" font-size="22" fill="#718078" font-weight="400" text-anchor="start">视频 02</text>
+<circle cx="588" cy="683" r="40" fill="white" stroke="none" stroke-width="2"/>
+<circle cx="588" cy="683" r="23" fill="#BD6557" stroke="none" stroke-width="2"/>
+<text x="30" y="822" font-size="25" fill="#718078" font-weight="400" text-anchor="start">每段自动保存，不用现在填表</text>
+<rect x="30" y="855" width="640" height="64" rx="18" fill="#1F6F66" stroke="none"/>
+<text x="350" y="897" font-size="27" fill="white" font-weight="600" text-anchor="middle">结束本段，继续录制</text>
+<rect x="30" y="933" width="640" height="64" rx="18" fill="#E8F0EB" stroke="none"/>
+<text x="350" y="975" font-size="27" fill="#1F6F66" font-weight="600" text-anchor="middle">完成并整理</text>
+<rect x="0" y="1018" width="700" height="92" rx="0" fill="#FFF" stroke="none"/>
+<path d="M0 1018L700 1018" stroke="#E3EAE5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<g transform="translate(70 1046)">
+<path d="M-13 0L0-12L13 0M-9-3V13H9V-3M-3 13V5H3V13" fill="none" stroke="#95A19B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="70" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">今日</text>
+<rect x="171" y="1025" width="78" height="43" rx="21" fill="#E8F2ED" stroke="none"/>
+<g transform="translate(210 1046)">
+<rect x="-12" y="-12" width="10" height="10" rx="2" fill="none" stroke="#1F6F66"/>
+<rect x="3" y="-12" width="10" height="10" rx="2" fill="none" stroke="#1F6F66"/>
+<rect x="-12" y="3" width="10" height="10" rx="2" fill="none" stroke="#1F6F66"/>
+<rect x="3" y="3" width="10" height="10" rx="2" fill="none" stroke="#1F6F66"/>
+</g>
+<text x="210" y="1090" font-size="21" fill="#1F6F66" font-weight="600" text-anchor="middle">训练</text>
+<g transform="translate(350 1046)">
+<path d="M-13 12L13 12" stroke="#95A19B" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M-9 5L-9 -2" stroke="#95A19B" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M0 5L0 -12" stroke="#95A19B" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M9 5L9 -6" stroke="#95A19B" stroke-width="4" fill="none" stroke-linecap="round"/>
+</g>
+<text x="350" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">成长</text>
+<g transform="translate(490 1046)">
+<circle cx="-5" cy="-6" r="5" fill="none" stroke="#95A19B" stroke-width="2"/>
+<circle cx="8" cy="-4" r="4" fill="none" stroke="#95A19B" stroke-width="2"/>
+<path d="M-16 12Q-16 0-5 0Q6 0 6 12M6 2Q17 2 17 12" fill="none" stroke="#95A19B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="490" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">社群</text>
+<g transform="translate(630 1046)">
+<circle cx="0" cy="-7" r="6" fill="none" stroke="#95A19B" stroke-width="2"/>
+<path d="M-12 14Q-12 1 0 1Q12 1 12 14" fill="none" stroke="#95A19B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="630" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">我的</text>
+</g></g>
+<text x="850" y="308" font-size="23" fill="#1F6F66" font-weight="700" text-anchor="start">02</text>
+<text x="902" y="308" font-size="27" fill="#1F2A27" font-weight="600" text-anchor="start">整理动作卡</text>
+<g transform="translate(850 330)">
+<rect x="-1" y="-1" width="702" height="1112" rx="32" fill="#FFF" stroke="#D5E1DA"/>
+<clipPath id="clip02"><rect width="700" height="1110" rx="32"/></clipPath><g clip-path="url(#clip02)">
+<rect x="0" y="0" width="700" height="1110" rx="0" fill="#F3F5F2" stroke="none"/>
+<text x="30" y="34" font-size="19" fill="#1F2A27" font-weight="600" text-anchor="start">9:41</text>
+<text x="665" y="34" font-size="18" fill="#1F2A27" font-weight="600" text-anchor="end">•••  ▰</text>
+<path d="M43 77L33 87L43 97" fill="none" stroke="#1F2A27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="350" y="97" font-size="30" fill="#1F2A27" font-weight="650" text-anchor="middle">整理动作卡</text>
+<text x="30" y="145" font-size="21" fill="#718078" font-weight="400" text-anchor="start">训练  /  动作卡</text>
+<text x="30" y="199" font-size="35" fill="#1F2A27" font-weight="700" text-anchor="start">坐姿呼吸练习</text>
+<rect x="465" y="169" width="205" height="40" rx="20" fill="#F5E8DB" stroke="none"/>
+<text x="567.5" y="196" font-size="21" fill="#95613C" font-weight="500" text-anchor="middle">草稿 · 待核对</text>
+<rect x="30" y="222" width="640" height="54" rx="17" fill="#E4EBE5" stroke="none"/>
+<rect x="34" y="226" width="207" height="46" rx="13" fill="white" stroke="none"/>
+<text x="137" y="258" font-size="24" fill="#1F6F66" font-weight="600" text-anchor="middle">学</text>
+<text x="350" y="258" font-size="24" fill="#718078" font-weight="400" text-anchor="middle">练</text>
+<text x="563" y="258" font-size="24" fill="#718078" font-weight="400" text-anchor="middle">查</text>
+<rect x="30" y="296" width="640" height="208" rx="20" fill="#DFE9E2" stroke="none"/>
+<g transform="translate(30 296)">
+<rect x="428.8" y="15" width="153.6" height="147.68" rx="5" fill="#EEF4ED" stroke="none"/>
+<path d="M505.6 15L505.6 162.68" stroke="#D5E1D5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M428.8 72.8L582.4 72.8" stroke="#D5E1D5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<rect x="20" y="166.4" width="600" height="27.04" rx="10" fill="#BCCBC0" stroke="none"/>
+<circle cx="288" cy="72.8" r="15.6" fill="#D4AC89" stroke="none" stroke-width="2"/>
+<path d="M275 93.6Q255 124.8 278 151.84L339 151.84" fill="none" stroke="#7B9E8C" stroke-width="18.72" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M283 149.76L344 149.76L360 166.4" fill="none" stroke="#4C6960" stroke-width="11.44" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M276 101.92L308 124.8L350 114.4" fill="none" stroke="#D4AC89" stroke-width="7.696" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M256 112.32000000000001V166.4M251 135.20000000000002H320V166.4" fill="none" stroke="#A1B4A6" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<circle cx="332.8" cy="108.16" r="22" fill="#FFFFFFDD" stroke="none" stroke-width="2"/>
+<path d="M327.8 99.16L341.8 108.16L327.8 117.16Z" fill="#1F6F66" stroke="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="30" y="547" font-size="25" fill="#1F2A27" font-weight="600" text-anchor="start">个人要点</text>
+<text x="30" y="585" font-size="25" fill="#718078" font-weight="400" text-anchor="start">保持肩部放松，按现场指导练习</text>
+<rect x="30" y="613" width="640" height="181" rx="24" fill="white" stroke="none"/>
+<text x="53" y="656" font-size="27" fill="#1F2A27" font-weight="600" text-anchor="start">训练要求</text>
+<text x="53" y="704" font-size="24" fill="#718078" font-weight="400" text-anchor="start">组数</text>
+<text x="215" y="704" font-size="26" fill="#1F2A27" font-weight="600" text-anchor="start">3 组</text>
+<text x="353" y="704" font-size="24" fill="#718078" font-weight="400" text-anchor="start">每组次数</text>
+<text x="571" y="704" font-size="26" fill="#1F2A27" font-weight="600" text-anchor="start">5 次</text>
+<path d="M53 726L647 726" stroke="#E3EAE5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<text x="53" y="767" font-size="23" fill="#718078" font-weight="400" text-anchor="start">来源：现场指导（手动填写）</text>
+<rect x="33" y="820" width="23" height="23" rx="5" fill="white" stroke="#AABDB1"/>
+<text x="71" y="841" font-size="24" fill="#1F2A27" font-weight="400" text-anchor="start">已按现场指导核对录入要求</text>
+<text x="30" y="879" font-size="20" fill="#718078" font-weight="400" text-anchor="start">核对仅表示本人确认录入内容</text>
+<rect x="30" y="900" width="640" height="64" rx="18" fill="#1F6F66" stroke="none"/>
+<text x="350" y="942" font-size="27" fill="white" font-weight="600" text-anchor="middle">保存并核对</text>
+<text x="179" y="994" font-size="23" fill="#1F6F66" font-weight="600" text-anchor="middle">先存草稿</text>
+<text x="524" y="994" font-size="23" fill="#1F6F66" font-weight="600" text-anchor="middle">补充处方单</text>
+<rect x="0" y="1018" width="700" height="92" rx="0" fill="#FFF" stroke="none"/>
+<path d="M0 1018L700 1018" stroke="#E3EAE5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<g transform="translate(70 1046)">
+<path d="M-13 0L0-12L13 0M-9-3V13H9V-3M-3 13V5H3V13" fill="none" stroke="#95A19B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="70" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">今日</text>
+<rect x="171" y="1025" width="78" height="43" rx="21" fill="#E8F2ED" stroke="none"/>
+<g transform="translate(210 1046)">
+<rect x="-12" y="-12" width="10" height="10" rx="2" fill="none" stroke="#1F6F66"/>
+<rect x="3" y="-12" width="10" height="10" rx="2" fill="none" stroke="#1F6F66"/>
+<rect x="-12" y="3" width="10" height="10" rx="2" fill="none" stroke="#1F6F66"/>
+<rect x="3" y="3" width="10" height="10" rx="2" fill="none" stroke="#1F6F66"/>
+</g>
+<text x="210" y="1090" font-size="21" fill="#1F6F66" font-weight="600" text-anchor="middle">训练</text>
+<g transform="translate(350 1046)">
+<path d="M-13 12L13 12" stroke="#95A19B" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M-9 5L-9 -2" stroke="#95A19B" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M0 5L0 -12" stroke="#95A19B" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M9 5L9 -6" stroke="#95A19B" stroke-width="4" fill="none" stroke-linecap="round"/>
+</g>
+<text x="350" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">成长</text>
+<g transform="translate(490 1046)">
+<circle cx="-5" cy="-6" r="5" fill="none" stroke="#95A19B" stroke-width="2"/>
+<circle cx="8" cy="-4" r="4" fill="none" stroke="#95A19B" stroke-width="2"/>
+<path d="M-16 12Q-16 0-5 0Q6 0 6 12M6 2Q17 2 17 12" fill="none" stroke="#95A19B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="490" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">社群</text>
+<g transform="translate(630 1046)">
+<circle cx="0" cy="-7" r="6" fill="none" stroke="#95A19B" stroke-width="2"/>
+<path d="M-12 14Q-12 1 0 1Q12 1 12 14" fill="none" stroke="#95A19B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="630" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">我的</text>
+</g></g>
+<text x="1604" y="308" font-size="23" fill="#1F6F66" font-weight="700" text-anchor="start">03</text>
+<text x="1656" y="308" font-size="27" fill="#1F2A27" font-weight="600" text-anchor="start">建立训练计划</text>
+<g transform="translate(1604 330)">
+<rect x="-1" y="-1" width="702" height="1112" rx="32" fill="#FFF" stroke="#D5E1DA"/>
+<clipPath id="clip03"><rect width="700" height="1110" rx="32"/></clipPath><g clip-path="url(#clip03)">
+<rect x="0" y="0" width="700" height="1110" rx="0" fill="#F3F5F2" stroke="none"/>
+<text x="30" y="34" font-size="19" fill="#1F2A27" font-weight="600" text-anchor="start">9:41</text>
+<text x="665" y="34" font-size="18" fill="#1F2A27" font-weight="600" text-anchor="end">•••  ▰</text>
+<path d="M43 77L33 87L43 97" fill="none" stroke="#1F2A27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="350" y="97" font-size="30" fill="#1F2A27" font-weight="650" text-anchor="middle">建立训练计划</text>
+<text x="30" y="145" font-size="21" fill="#718078" font-weight="400" text-anchor="start">训练  /  计划与安排</text>
+<rect x="30" y="174" width="640" height="96" rx="24" fill="white" stroke="none"/>
+<text x="52" y="211" font-size="21" fill="#718078" font-weight="400" text-anchor="start">计划名称</text>
+<text x="52" y="249" font-size="28" fill="#1F2A27" font-weight="600" text-anchor="start">我的训练计划</text>
+<text x="30" y="318" font-size="28" fill="#1F2A27" font-weight="600" text-anchor="start">训练清单</text>
+<text x="670" y="318" font-size="21" fill="#718078" font-weight="400" text-anchor="end">按已确认的顺序排列</text>
+<rect x="30" y="338" width="640" height="152" rx="24" fill="white" stroke="none"/>
+<circle cx="65" cy="380" r="19" fill="#DDEDE9" stroke="none" stroke-width="2"/>
+<text x="65" y="388" font-size="22" fill="#1F6F66" font-weight="600" text-anchor="middle">1</text>
+<text x="101" y="389" font-size="27" fill="#1F2A27" font-weight="500" text-anchor="start">坐姿呼吸练习</text>
+<text x="631" y="389" font-size="28" fill="#718078" font-weight="400" text-anchor="start">≡</text>
+<circle cx="65" cy="449" r="19" fill="#DDEDE9" stroke="none" stroke-width="2"/>
+<text x="65" y="457" font-size="22" fill="#1F6F66" font-weight="600" text-anchor="middle">2</text>
+<text x="101" y="458" font-size="27" fill="#1F2A27" font-weight="500" text-anchor="start">靠墙站姿练习</text>
+<text x="631" y="458" font-size="28" fill="#718078" font-weight="400" text-anchor="start">≡</text>
+<text x="30" y="544" font-size="28" fill="#1F2A27" font-weight="600" text-anchor="start">训练日程</text>
+<rect x="30" y="566" width="113" height="40" rx="20" fill="white" stroke="none"/>
+<text x="86.5" y="593" font-size="21" fill="#718078" font-weight="500" text-anchor="middle">每天</text>
+<rect x="156" y="566" width="164" height="40" rx="20" fill="#1F6F66" stroke="none"/>
+<text x="238" y="593" font-size="21" fill="white" font-weight="500" text-anchor="middle">固定星期</text>
+<rect x="334" y="566" width="113" height="40" rx="20" fill="white" stroke="none"/>
+<text x="390.5" y="593" font-size="21" fill="#718078" font-weight="500" text-anchor="middle">隔天</text>
+<rect x="460" y="566" width="210" height="40" rx="20" fill="white" stroke="none"/>
+<text x="565" y="593" font-size="21" fill="#718078" font-weight="500" text-anchor="middle">周期内若干次</text>
+<circle cx="70" cy="660" r="29" fill="#1F6F66" stroke="none" stroke-width="2"/>
+<text x="70" y="670" font-size="25" fill="white" font-weight="500" text-anchor="middle">一</text>
+<circle cx="163" cy="660" r="29" fill="white" stroke="none" stroke-width="2"/>
+<text x="163" y="670" font-size="25" fill="#718078" font-weight="500" text-anchor="middle">二</text>
+<circle cx="256" cy="660" r="29" fill="#1F6F66" stroke="none" stroke-width="2"/>
+<text x="256" y="670" font-size="25" fill="white" font-weight="500" text-anchor="middle">三</text>
+<circle cx="349" cy="660" r="29" fill="white" stroke="none" stroke-width="2"/>
+<text x="349" y="670" font-size="25" fill="#718078" font-weight="500" text-anchor="middle">四</text>
+<circle cx="442" cy="660" r="29" fill="#1F6F66" stroke="none" stroke-width="2"/>
+<text x="442" y="670" font-size="25" fill="white" font-weight="500" text-anchor="middle">五</text>
+<circle cx="535" cy="660" r="29" fill="white" stroke="none" stroke-width="2"/>
+<text x="535" y="670" font-size="25" fill="#718078" font-weight="500" text-anchor="middle">六</text>
+<circle cx="628" cy="660" r="29" fill="white" stroke="none" stroke-width="2"/>
+<text x="628" y="670" font-size="25" fill="#718078" font-weight="500" text-anchor="middle">日</text>
+<rect x="30" y="722" width="640" height="76" rx="24" fill="white" stroke="none"/>
+<text x="52" y="771" font-size="25" fill="#718078" font-weight="400" text-anchor="start">开始日期</text>
+<text x="639" y="771" font-size="27" fill="#1F2A27" font-weight="600" text-anchor="end">2026.10.19</text>
+<rect x="30" y="819" width="640" height="69" rx="24" fill="#DDEDE9" stroke="none"/>
+<text x="54" y="863" font-size="26" fill="#1F6F66" font-weight="600" text-anchor="start">每周一、三、五练习</text>
+<text x="30" y="930" font-size="22" fill="#718078" font-weight="400" text-anchor="start">频次与训练量均以已确认要求为准</text>
+<rect x="30" y="963" width="640" height="64" rx="18" fill="#1F6F66" stroke="none"/>
+<text x="350" y="1005" font-size="27" fill="white" font-weight="600" text-anchor="middle">确认并加入计划</text>
+</g></g>
+<text x="96" y="1558" font-size="23" fill="#1F6F66" font-weight="700" text-anchor="start">04</text>
+<text x="148" y="1558" font-size="27" fill="#1F2A27" font-weight="600" text-anchor="start">今日</text>
+<g transform="translate(96 1580)">
+<rect x="-1" y="-1" width="702" height="1112" rx="32" fill="#FFF" stroke="#D5E1DA"/>
+<clipPath id="clip04"><rect width="700" height="1110" rx="32"/></clipPath><g clip-path="url(#clip04)">
+<rect x="0" y="0" width="700" height="1110" rx="0" fill="#F3F5F2" stroke="none"/>
+<text x="30" y="34" font-size="19" fill="#1F2A27" font-weight="600" text-anchor="start">9:41</text>
+<text x="665" y="34" font-size="18" fill="#1F2A27" font-weight="600" text-anchor="end">•••  ▰</text>
+<path d="M43 77L33 87L43 97" fill="none" stroke="#1F2A27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="350" y="97" font-size="30" fill="#1F2A27" font-weight="650" text-anchor="middle">今日</text>
+<text x="30" y="145" font-size="21" fill="#718078" font-weight="400" text-anchor="start">10月21日  周三</text>
+<text x="30" y="204" font-size="35" fill="#1F2A27" font-weight="700" text-anchor="start">今天，按自己的节奏练</text>
+<rect x="32" y="235" width="78" height="90" rx="20" fill="white" stroke="none"/>
+<text x="71" y="268" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">一</text>
+<text x="71" y="306" font-size="26" fill="#1F2A27" font-weight="600" text-anchor="middle">19</text>
+<rect x="125" y="235" width="78" height="90" rx="20" fill="white" stroke="none"/>
+<text x="164" y="268" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">二</text>
+<text x="164" y="306" font-size="26" fill="#1F2A27" font-weight="600" text-anchor="middle">20</text>
+<rect x="218" y="235" width="78" height="90" rx="20" fill="#1F6F66" stroke="none"/>
+<text x="257" y="268" font-size="21" fill="#C9E0DA" font-weight="400" text-anchor="middle">三</text>
+<text x="257" y="306" font-size="26" fill="white" font-weight="600" text-anchor="middle">21</text>
+<rect x="311" y="235" width="78" height="90" rx="20" fill="white" stroke="none"/>
+<text x="350" y="268" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">四</text>
+<text x="350" y="306" font-size="26" fill="#1F2A27" font-weight="600" text-anchor="middle">22</text>
+<rect x="404" y="235" width="78" height="90" rx="20" fill="white" stroke="none"/>
+<text x="443" y="268" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">五</text>
+<text x="443" y="306" font-size="26" fill="#1F2A27" font-weight="600" text-anchor="middle">23</text>
+<rect x="497" y="235" width="78" height="90" rx="20" fill="white" stroke="none"/>
+<text x="536" y="268" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">六</text>
+<text x="536" y="306" font-size="26" fill="#1F2A27" font-weight="600" text-anchor="middle">24</text>
+<rect x="590" y="235" width="78" height="90" rx="20" fill="white" stroke="none"/>
+<text x="629" y="268" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">日</text>
+<text x="629" y="306" font-size="26" fill="#1F2A27" font-weight="600" text-anchor="middle">25</text>
+<rect x="30" y="353" width="640" height="142" rx="24" fill="#DDEDE9" stroke="none"/>
+<text x="54" y="400" font-size="29" fill="#1F6F66" font-weight="600" text-anchor="start">今日训练清单</text>
+<text x="54" y="451" font-size="23" fill="#1F6F66" font-weight="400" text-anchor="start">已完成</text>
+<text x="548" y="461" font-size="49" fill="#1F6F66" font-weight="650" text-anchor="start">1</text>
+<text x="585" y="458" font-size="21" fill="#1F6F66" font-weight="400" text-anchor="start">/ 2 个动作</text>
+<rect x="30" y="517" width="640" height="119" rx="24" fill="white" stroke="none"/>
+<circle cx="68" cy="576" r="19" fill="#1F6F66" stroke="none" stroke-width="2"/>
+<path d="M60 576l6 6l12 -13" fill="none" stroke="white" stroke-width="3.3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="109" y="565" font-size="28" fill="#1F2A27" font-weight="600" text-anchor="start">坐姿呼吸练习</text>
+<text x="109" y="605" font-size="24" fill="#718078" font-weight="400" text-anchor="start">已完成 · 3组 × 5次</text>
+<rect x="30" y="653" width="640" height="140" rx="24" fill="white" stroke="none"/>
+<circle cx="68" cy="716" r="19" fill="white" stroke="#9CB4A7" stroke-width="2"/>
+<text x="109" y="701" font-size="28" fill="#1F2A27" font-weight="600" text-anchor="start">靠墙站姿练习</text>
+<text x="109" y="745" font-size="24" fill="#1F6F66" font-weight="400" text-anchor="start">进行中 · 已完成1 / 3组</text>
+<rect x="109" y="766" width="511" height="6" rx="3" fill="#E9EFEB" stroke="none"/>
+<rect x="109" y="766" width="171" height="6" rx="3" fill="#1F6F66" stroke="none"/>
+<text x="30" y="836" font-size="22" fill="#718078" font-weight="400" text-anchor="start">勾选圆圈，表示这个动作本次要求已完成</text>
+<rect x="30" y="865" width="640" height="64" rx="18" fill="#1F6F66" stroke="none"/>
+<text x="350" y="907" font-size="27" fill="white" font-weight="600" text-anchor="middle">继续语音跟练</text>
+<rect x="30" y="944" width="640" height="64" rx="18" fill="#E8F0EB" stroke="none"/>
+<text x="350" y="986" font-size="27" fill="#1F6F66" font-weight="600" text-anchor="middle">线下练完，记录一下</text>
+<rect x="0" y="1018" width="700" height="92" rx="0" fill="#FFF" stroke="none"/>
+<path d="M0 1018L700 1018" stroke="#E3EAE5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<rect x="31" y="1025" width="78" height="43" rx="21" fill="#E8F2ED" stroke="none"/>
+<g transform="translate(70 1046)">
+<path d="M-13 0L0-12L13 0M-9-3V13H9V-3M-3 13V5H3V13" fill="none" stroke="#1F6F66" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="70" y="1090" font-size="21" fill="#1F6F66" font-weight="600" text-anchor="middle">今日</text>
+<g transform="translate(210 1046)">
+<rect x="-12" y="-12" width="10" height="10" rx="2" fill="none" stroke="#95A19B"/>
+<rect x="3" y="-12" width="10" height="10" rx="2" fill="none" stroke="#95A19B"/>
+<rect x="-12" y="3" width="10" height="10" rx="2" fill="none" stroke="#95A19B"/>
+<rect x="3" y="3" width="10" height="10" rx="2" fill="none" stroke="#95A19B"/>
+</g>
+<text x="210" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">训练</text>
+<g transform="translate(350 1046)">
+<path d="M-13 12L13 12" stroke="#95A19B" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M-9 5L-9 -2" stroke="#95A19B" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M0 5L0 -12" stroke="#95A19B" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M9 5L9 -6" stroke="#95A19B" stroke-width="4" fill="none" stroke-linecap="round"/>
+</g>
+<text x="350" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">成长</text>
+<g transform="translate(490 1046)">
+<circle cx="-5" cy="-6" r="5" fill="none" stroke="#95A19B" stroke-width="2"/>
+<circle cx="8" cy="-4" r="4" fill="none" stroke="#95A19B" stroke-width="2"/>
+<path d="M-16 12Q-16 0-5 0Q6 0 6 12M6 2Q17 2 17 12" fill="none" stroke="#95A19B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="490" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">社群</text>
+<g transform="translate(630 1046)">
+<circle cx="0" cy="-7" r="6" fill="none" stroke="#95A19B" stroke-width="2"/>
+<path d="M-12 14Q-12 1 0 1Q12 1 12 14" fill="none" stroke="#95A19B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="630" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">我的</text>
+</g></g>
+<text x="850" y="1558" font-size="23" fill="#1F6F66" font-weight="700" text-anchor="start">05</text>
+<text x="902" y="1558" font-size="27" fill="#1F2A27" font-weight="600" text-anchor="start">保存训练记录</text>
+<g transform="translate(850 1580)">
+<rect x="-1" y="-1" width="702" height="1112" rx="32" fill="#FFF" stroke="#D5E1DA"/>
+<clipPath id="clip05"><rect width="700" height="1110" rx="32"/></clipPath><g clip-path="url(#clip05)">
+<rect x="0" y="0" width="700" height="1110" rx="0" fill="#F3F5F2" stroke="none"/>
+<text x="30" y="34" font-size="19" fill="#1F2A27" font-weight="600" text-anchor="start">9:41</text>
+<text x="665" y="34" font-size="18" fill="#1F2A27" font-weight="600" text-anchor="end">•••  ▰</text>
+<path d="M43 77L33 87L43 97" fill="none" stroke="#1F2A27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="350" y="97" font-size="30" fill="#1F2A27" font-weight="650" text-anchor="middle">保存训练记录</text>
+<text x="30" y="145" font-size="21" fill="#718078" font-weight="400" text-anchor="start">今日  /  记录实际完成</text>
+<text x="30" y="202" font-size="35" fill="#1F2A27" font-weight="700" text-anchor="start">靠墙站姿练习</text>
+<rect x="30" y="225" width="344" height="40" rx="20" fill="#DDEDE9" stroke="none"/>
+<text x="202" y="252" font-size="21" fill="#1F6F66" font-weight="500" text-anchor="middle">本次要求  3组 × 30秒</text>
+<text x="30" y="323" font-size="28" fill="#1F2A27" font-weight="600" text-anchor="start">实际完成量</text>
+<text x="670" y="323" font-size="21" fill="#718078" font-weight="400" text-anchor="end">按真实练习填写</text>
+<rect x="30" y="345" width="640" height="236" rx="24" fill="white" stroke="none"/>
+<text x="54" y="390" font-size="25" fill="#1F2A27" font-weight="400" text-anchor="start">第1组</text>
+<text x="360" y="390" font-size="27" fill="#1F2A27" font-weight="600" text-anchor="middle">30 秒</text>
+<rect x="490" y="361" width="154" height="40" rx="20" fill="#DDEDE9" stroke="none"/>
+<text x="567" y="388" font-size="21" fill="#1F6F66" font-weight="500" text-anchor="middle">完成</text>
+<path d="M54 414L647 414" stroke="#E3EAE5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<text x="54" y="467" font-size="25" fill="#1F2A27" font-weight="400" text-anchor="start">第2组</text>
+<text x="360" y="467" font-size="27" fill="#1F2A27" font-weight="600" text-anchor="middle">20 秒</text>
+<rect x="490" y="438" width="154" height="40" rx="20" fill="#F7ECDD" stroke="none"/>
+<text x="567" y="465" font-size="21" fill="#936235" font-weight="500" text-anchor="middle">部分完成</text>
+<path d="M54 491L647 491" stroke="#E3EAE5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<text x="54" y="544" font-size="25" fill="#1F2A27" font-weight="400" text-anchor="start">第3组</text>
+<text x="360" y="544" font-size="27" fill="#718078" font-weight="600" text-anchor="middle">—</text>
+<rect x="490" y="515" width="154" height="40" rx="20" fill="#F0F3EF" stroke="none"/>
+<text x="567" y="542" font-size="21" fill="#718078" font-weight="500" text-anchor="middle">未完成</text>
+<text x="350" y="629" font-size="25" fill="#1F6F66" font-weight="600" text-anchor="middle">＋ 添加实际完成量</text>
+<rect x="30" y="660" width="640" height="65" rx="18" fill="#E1E9E2" stroke="none"/>
+<rect x="35" y="665" width="313" height="55" rx="14" fill="white" stroke="none"/>
+<text x="190" y="703" font-size="26" fill="#1F6F66" font-weight="600" text-anchor="middle">部分完成</text>
+<text x="510" y="703" font-size="26" fill="#718078" font-weight="400" text-anchor="middle">全部完成</text>
+<rect x="30" y="747" width="640" height="83" rx="24" fill="white" stroke="none"/>
+<text x="52" y="797" font-size="23" fill="#718078" font-weight="400" text-anchor="start">今天的感受（选填）</text>
+<rect x="30" y="852" width="640" height="64" rx="18" fill="#1F6F66" stroke="none"/>
+<text x="350" y="894" font-size="27" fill="white" font-weight="600" text-anchor="middle">保存实际完成量</text>
+<rect x="30" y="930" width="640" height="64" rx="18" fill="#E8F0EB" stroke="none"/>
+<text x="350" y="972" font-size="27" fill="#1F6F66" font-weight="600" text-anchor="middle">保存后继续训练</text>
+<text x="350" y="1047" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">跟练与手动记录共用进度</text>
+<text x="350" y="1080" font-size="21" fill="#1F6F66" font-weight="500" text-anchor="middle">补记真实训练不消耗松果</text>
+</g></g>
+<text x="1604" y="1558" font-size="23" fill="#1F6F66" font-weight="700" text-anchor="start">06</text>
+<text x="1656" y="1558" font-size="27" fill="#1F2A27" font-weight="600" text-anchor="start">成长</text>
+<g transform="translate(1604 1580)">
+<rect x="-1" y="-1" width="702" height="1112" rx="32" fill="#FFF" stroke="#D5E1DA"/>
+<clipPath id="clip06"><rect width="700" height="1110" rx="32"/></clipPath><g clip-path="url(#clip06)">
+<rect x="0" y="0" width="700" height="1110" rx="0" fill="#F3F5F2" stroke="none"/>
+<text x="30" y="34" font-size="19" fill="#1F2A27" font-weight="600" text-anchor="start">9:41</text>
+<text x="665" y="34" font-size="18" fill="#1F2A27" font-weight="600" text-anchor="end">•••  ▰</text>
+<path d="M43 77L33 87L43 97" fill="none" stroke="#1F2A27" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="350" y="97" font-size="30" fill="#1F2A27" font-weight="650" text-anchor="middle">成长</text>
+<text x="30" y="145" font-size="21" fill="#718078" font-weight="400" text-anchor="start">训练记录  /  周期回顾</text>
+<text x="30" y="201" font-size="35" fill="#1F2A27" font-weight="700" text-anchor="start">本周训练回顾</text>
+<text x="30" y="243" font-size="24" fill="#718078" font-weight="400" text-anchor="start">2026.10.19 — 10.25</text>
+<rect x="30" y="269" width="640" height="129" rx="24" fill="white" stroke="none"/>
+<text x="54" y="309" font-size="23" fill="#718078" font-weight="400" text-anchor="start">已记录</text>
+<text x="54" y="369" font-size="47" fill="#1F6F66" font-weight="650" text-anchor="start">3</text>
+<text x="99" y="366" font-size="23" fill="#718078" font-weight="400" text-anchor="start">次</text>
+<path d="M350 291L350 377" stroke="#E3EAE5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<text x="382" y="309" font-size="23" fill="#718078" font-weight="400" text-anchor="start">其中部分完成</text>
+<text x="382" y="369" font-size="47" fill="#1F6F66" font-weight="650" text-anchor="start">1</text>
+<text x="422" y="366" font-size="23" fill="#718078" font-weight="400" text-anchor="start">次</text>
+<rect x="30" y="419" width="640" height="243" rx="24" fill="white" stroke="none"/>
+<rect x="65" y="469" width="26" height="105" rx="8" fill="#EFF3EE" stroke="none"/>
+<rect x="65" y="498" width="26" height="76" rx="8" fill="#1F6F66" stroke="none"/>
+<text x="78" y="609" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">19</text>
+<rect x="155" y="469" width="26" height="105" rx="8" fill="#EFF3EE" stroke="none"/>
+<text x="168" y="609" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">20</text>
+<rect x="245" y="469" width="26" height="105" rx="8" fill="#EFF3EE" stroke="none"/>
+<rect x="245" y="522" width="26" height="52" rx="8" fill="#C69C70" stroke="none"/>
+<text x="258" y="609" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">21</text>
+<rect x="335" y="469" width="26" height="105" rx="8" fill="#EFF3EE" stroke="none"/>
+<text x="348" y="609" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">22</text>
+<rect x="425" y="469" width="26" height="105" rx="8" fill="#EFF3EE" stroke="none"/>
+<rect x="425" y="490" width="26" height="84" rx="8" fill="#1F6F66" stroke="none"/>
+<text x="438" y="609" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">23</text>
+<rect x="515" y="469" width="26" height="105" rx="8" fill="#EFF3EE" stroke="none"/>
+<text x="528" y="609" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">24</text>
+<rect x="605" y="469" width="26" height="105" rx="8" fill="#EFF3EE" stroke="none"/>
+<text x="618" y="609" font-size="21" fill="#718078" font-weight="400" text-anchor="middle">25</text>
+<circle cx="78" cy="638" r="6" fill="#1F6F66" stroke="none" stroke-width="2"/>
+<text x="94" y="646" font-size="18" fill="#718078" font-weight="400" text-anchor="start">已记录</text>
+<circle cx="244" cy="638" r="6" fill="#C69C70" stroke="none" stroke-width="2"/>
+<text x="260" y="646" font-size="18" fill="#718078" font-weight="400" text-anchor="start">部分完成</text>
+<circle cx="454" cy="638" r="6" fill="#DCE5DB" stroke="none" stroke-width="2"/>
+<text x="470" y="646" font-size="18" fill="#718078" font-weight="400" text-anchor="start">未记录</text>
+<text x="30" y="704" font-size="22" fill="#718078" font-weight="400" text-anchor="start">未记录不代表未训练，可补记真实练习</text>
+<text x="30" y="757" font-size="28" fill="#1F2A27" font-weight="600" text-anchor="start">训练历史</text>
+<text x="670" y="757" font-size="22" fill="#1F6F66" font-weight="500" text-anchor="end">查看全部 ›</text>
+<rect x="30" y="775" width="640" height="116" rx="24" fill="white" stroke="none"/>
+<text x="53" y="818" font-size="25" fill="#1F2A27" font-weight="400" text-anchor="start">10月21日</text>
+<text x="640" y="818" font-size="23" fill="#956B3E" font-weight="500" text-anchor="end">部分完成</text>
+<path d="M53 837L647 837" stroke="#E3EAE5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<text x="53" y="875" font-size="25" fill="#1F2A27" font-weight="400" text-anchor="start">10月19日</text>
+<text x="640" y="875" font-size="23" fill="#1F6F66" font-weight="500" text-anchor="end">已完成</text>
+<rect x="30" y="910" width="640" height="87" rx="24" fill="#DDEDE9" stroke="none"/>
+<text x="53" y="949" font-size="26" fill="#1F6F66" font-weight="600" text-anchor="start">复查资料</text>
+<text x="53" y="978" font-size="20" fill="#1F6F66" font-weight="400" text-anchor="start">训练记录与个人备注</text>
+<text x="640" y="963" font-size="24" fill="#1F6F66" font-weight="600" text-anchor="end">周期汇总  ›</text>
+<rect x="0" y="1018" width="700" height="92" rx="0" fill="#FFF" stroke="none"/>
+<path d="M0 1018L700 1018" stroke="#E3EAE5" stroke-width="2" fill="none" stroke-linecap="round"/>
+<g transform="translate(70 1046)">
+<path d="M-13 0L0-12L13 0M-9-3V13H9V-3M-3 13V5H3V13" fill="none" stroke="#95A19B" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="70" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">今日</text>
+<g transform="translate(210 1046)">
+<rect x="-12" y="-12" width="10" height="10" rx="2" fill="none" stroke="#95A19B"/>
+<rect x="3" y="-12" width="10" height="10" rx="2" fill="none" stroke="#95A19B"/>
+<rect x="-12" y="3" width="10" height="10" rx="2" fill="none" stroke="#95A19B"/>
+<rect x="3" y="3" width="10" height="10" rx="2" fill="none" stroke="#95A19B"/>
+</g>
+<text x="210" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">训练</text>
+<rect x="311" y="1025" width="78" height="43" rx="21" fill="#E8F2ED" stroke="none"/>
+<g transform="translate(350 1046)">
+<path d="M-13 12L13 12" stroke="#1F6F66" stroke-width="2" fill="none" stroke-linecap="round"/>
+<path d="M-9 5L-9 -2" stroke="#1F6F66" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M0 5L0 -12" stroke="#1F6F66" stroke-width="4" fill="none" stroke-linecap="round"/>
+<path d="M9 5L9 -6" stroke="#1F6F66" stroke-width="4" fill="none" stroke-linecap="round"/>
+</g>
+<text x="350" y="1090" font-size="21" fill="#1F6F66" font-weight="600" text-anchor="middle">成长</text>
+<g transform="translate(490 1046)">
+<circle cx="-5" cy="-6" r="5" fill="none" stroke="#95A19B" stroke-width="2"/>
+<circle cx="8" cy="-4" r="4" fill="none" stroke="#95A19B" stroke-width="2"/>
+<path d="M-16 12Q-16 0-5 0Q6 0 6 12M6 2Q17 2 17 12" fill="none" stroke="#95A19B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="490" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">社群</text>
+<g transform="translate(630 1046)">
+<circle cx="0" cy="-7" r="6" fill="none" stroke="#95A19B" stroke-width="2"/>
+<path d="M-12 14Q-12 1 0 1Q12 1 12 14" fill="none" stroke="#95A19B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<text x="630" y="1090" font-size="21" fill="#95A19B" font-weight="400" text-anchor="middle">我的</text>
+</g></g>
+<text x="96" y="2752" font-size="26" fill="#1F6F66" font-weight="600" text-anchor="start">动作卡统一支持「学 · 练 · 查」</text>
+<text x="2304" y="2752" font-size="24" fill="#718078" font-weight="400" text-anchor="end">资料状态与完成状态分开  ·  计划变更保留历史  ·  跟练与手动记录不重复计数</text>
+</svg>

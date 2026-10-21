@@ -1,0 +1,15 @@
+const t = require('../../core/training');
+Page({
+  data: { id: '', name: '我的训练计划', start: t.today(), active: true, schedule: 'daily', cycleDays: '7', cycleTimes: '3', choices: [], selected: [], error: '',
+    modes: [{ key: 'daily', label: '每天' }, { key: 'weekdays', label: '固定星期' }, { key: 'alternate', label: '隔天' }, { key: 'period', label: '周期内若干次' }],
+    weekdays: ['一','二','三','四','五','六','日'].map((label,index) => ({ label, index, selected: [0,2,4].includes(index) })) },
+  onLoad(query) { const state = t.load(), plan = state.plans.find(item => item.id === query.id); if (plan) this.setData(Object.assign({}, plan, { cycleDays: String(plan.cycleDays), cycleTimes: String(plan.cycleTimes), selected: plan.cardIds.map(cardId => state.cards.find(card => card.id === cardId)).filter(Boolean), weekdays: this.data.weekdays.map(day => Object.assign({}, day, { selected: plan.weekdays.includes(day.index) })) })); else if (query.card) this.setData({ selected: state.cards.filter(card => card.id === query.card && card.confirmed) }); else if (query.cards) { const ids = decodeURIComponent(query.cards).split(','); this.setData({ selected: ids.map(id => state.cards.find(card => card.id === id && card.confirmed)).filter(Boolean) }); } this.refresh(); },
+  refresh() { this.setData({ choices: t.load().cards.map(card => Object.assign({}, card, { selected: this.data.selected.some(item => item.id === card.id) })) }); },
+  input(e) { this.setData({ [e.currentTarget.dataset.field]: e.detail.value }); },
+  schedule(e) { this.setData({ schedule: e.currentTarget.dataset.mode }); },
+  weekday(e) { this.setData({ weekdays: this.data.weekdays.map(day => Object.assign({}, day, { selected: day.index === Number(e.currentTarget.dataset.index) ? !day.selected : day.selected })) }); },
+  toggleCard(e) { const card = this.data.choices.find(item => item.id === e.currentTarget.dataset.id); if (!card.confirmed) { this.setData({ error: '草稿不能加入计划，请先核对动作卡。' }); return; } this.setData({ selected: card.selected ? this.data.selected.filter(item => item.id !== card.id) : this.data.selected.concat(card) }); this.refresh(); },
+  move(e) { const selected = this.data.selected.slice(), index = Number(e.currentTarget.dataset.index), next = index + Number(e.currentTarget.dataset.delta); if (next < 0 || next >= selected.length) return; const value = selected[index]; selected[index] = selected[next]; selected[next] = value; this.setData({ selected }); },
+  toggleActive() { this.setData({ active: !this.data.active }); },
+  save() { try { const plan = t.savePlan({ id: this.data.id, name: this.data.name, start: this.data.start, schedule: this.data.schedule, active: this.data.active, cycleDays: this.data.cycleDays, cycleTimes: this.data.cycleTimes, weekdays: this.data.weekdays.filter(day => day.selected).map(day => day.index), cardIds: this.data.selected.map(card => card.id) }); this.setData({ id: plan.id, error: '' }); wx.showToast({ title: '计划已保存', icon: 'success' }); wx.switchTab({ url: '/pages/train/index' }); } catch (error) { this.setData({ error: error.message }); } },
+});

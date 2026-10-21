@@ -1,110 +1,58 @@
-<!-- 动作卡片 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
-<view style="padding: 30.77rpx 38.46rpx 53.85rpx; display: flex; flex-direction: column; gap: 30.77rpx">
-  <view style="display: flex; align-items: center; gap: 15.38rpx">
-    <text style="font-size: 28.85rpx; color: #5B6663">动作卡片</text>
+<view class="organize-page">
+  <view class="organize-header">
+    <view class="organize-header-line"><text class="organize-eyebrow">从现场记录，到我的动作卡</text><text class="organize-status {{confirmed ? 'organize-status-done' : ''}}">{{confirmed ? '已核对' : '待核对'}}</text></view>
+    <text class="organize-title">整理现场记录</text><text class="organize-subtitle">视频先留住，资料收到后再补全</text>
+    <view class="organize-path"><text class="organize-path-active">留视频</text><text class="organize-path-arrow">›</text><text>补资料</text><text class="organize-path-arrow">›</text><text>核对要求</text></view>
   </view>
-  <view style="display: flex; flex-direction: column; gap: 15.38rpx">
-    <view style="margin: 0; font-size: 50rpx; font-weight: 700">{{ card.name }}</view>
-    <view style="display: flex; gap: 15.38rpx; flex-wrap: wrap">
-      <text style="padding: 7.69rpx 19.23rpx; border-radius: 1921.15rpx; background: {{ card.vBg }}; color: {{ card.vFg }}; font-size: 23.08rpx; font-weight: 500">{{ card.vLabel }}</text>
-      <text style="padding: 7.69rpx 19.23rpx; border-radius: 1921.15rpx; background: #DDEDE9; color: #1F4F49; font-size: 23.08rpx; font-weight: 500">{{ card.mod }} · {{ card.freq }}</text>
+  <view wx:if="{{confirmed}}" class="organize-tabs"><text data-tab="learn" bindtap="selectTab" class="{{tab === 'learn' ? 'organize-tab-selected' : ''}}">学 · 动作资料</text><text data-tab="practice" bindtap="selectTab" class="{{tab === 'practice' ? 'organize-tab-selected' : ''}}">练</text><text data-tab="check" bindtap="selectTab" class="{{tab === 'check' ? 'organize-tab-selected' : ''}}">查</text></view>
+  <view wx:if="{{error}}" class="organize-error">{{error}}</view>
+  <block wx:if="{{tab === 'learn'}}">
+    <view class="organize-card organize-video-card">
+      <view class="organize-section-heading"><view class="organize-section-name"><text class="organize-step">01</text><text class="organize-heading">现场视频</text></view><text class="organize-caption">先保存，再慢慢整理</text></view>
+      <picker wx:if="{{videoOptions.length > 1}}" range="{{videoOptions}}" range-key="name" value="{{videoIndex}}" bindchange="selectVideo" class="organize-video-picker"><view class="organize-video-picker-line"><text class="organize-video-label">{{videoLabel}}</text><text class="organize-link">切换录段⌄</text></view></picker>
+      <video wx:if="{{video}}" src="{{video}}" controls class="organize-video" />
+      <view wx:else class="organize-video-empty" bindtap="capture"><view class="organize-video-icon"><view></view></view><text class="organize-empty-title">留住现场示范和指导</text><text class="organize-empty-subtitle">已有录制可以稍后补充，也可以先整理资料</text></view>
+      <view class="organize-video-footer"><text class="organize-caption">把现场示范与方案中的动作对应</text><button class="organize-button organize-button-small organize-button-soft" bindtap="capture">{{video ? '继续录视频' : '补充现场视频'}}<text class="organize-button-plus">＋</text></button></view>
     </view>
-  </view>
-  <view style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7.69rpx; padding: 7.69rpx; border-radius: 26.92rpx; background: #DCE5E1" aria-label="卡片视图">
-    <block wx:for="{{ cardTabs }}" wx:for-item="t" wx:for-index="tIndex" wx:key="_k">
-      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border: 0; border-radius: 19.23rpx; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 28.85rpx; font-weight: {{ t.fw }}" bindtap="act" data-fn="{{ t.pick }}" hover-class="tap">{{ t.label }}</view>
-    </block>
-  </view>
-  <block wx:if="{{ ct.learn }}">
-    <view style="display: flex; flex-direction: column; gap: 23.08rpx">
-      <block wx:if="{{ card.hasVideo }}">
-        <view style="height: 365.38rpx; border-radius: 30.77rpx; background: #1F2A27; color: #C9D4D0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15.38rpx">
-          <view style="width: 100rpx; height: 100rpx; border-radius: 1921.15rpx; background: #FFFFFF; color: #1F2A27; display: flex; align-items: center; justify-content: center">
-            <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScyMicgaGVpZ2h0PScyMicgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPScjMUYyQTI3Jz48cGF0aCBkPSdNOCA1bDExIDctMTEgN3onPjwvcGF0aD48L3N2Zz4=" style="width: 42.31rpx; height: 42.31rpx; flex-shrink: 0" />
-          </view>
-          <text style="font-size: 25rpx">示范视频 · 现场录制</text>
-        </view>
-        <view style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15.38rpx">
-          <view style="aspect-ratio: 1; border-radius: 23.08rpx; background: #DCE5E1; color: #5B6663; font-size: 23.08rpx; display: flex; align-items: center; justify-content: center">关键姿势 1</view>
-          <view style="aspect-ratio: 1; border-radius: 23.08rpx; background: #DCE5E1; color: #5B6663; font-size: 23.08rpx; display: flex; align-items: center; justify-content: center">关键姿势 2</view>
-          <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; aspect-ratio: 1; border-radius: 23.08rpx; border: 2.88rpx dashed #8A9A95; background: transparent; color: #3E4B47; font-size: 23.08rpx">+ 从视频选帧</view>
-        </view>
+    <view class="organize-card">
+      <view class="organize-section-heading"><view class="organize-section-name"><text class="organize-step">02</text><text class="organize-heading">补充收到的资料</text></view><text class="organize-optional">可稍后补</text></view>
+      <text class="organize-section-note">拍照或从相册添加，识别后再和视频对应。</text>
+      <view class="organize-document-grid">
+        <view class="organize-upload-tile" bindtap="uploadDocument" data-type="medical"><view class="organize-upload-top"><view class="organize-file-icon organize-file-medical"><text>＋</text><view></view></view><text class="organize-upload-plus">＋</text></view><text class="organize-tile-title">病例单</text><text class="organize-tile-note">补充病情与注意事项</text></view>
+        <view class="organize-upload-tile" bindtap="uploadDocument" data-type="training"><view class="organize-upload-top"><view class="organize-file-icon organize-file-training"><view></view><view></view><view></view></view><text class="organize-upload-plus">＋</text></view><text class="organize-tile-title">训练方案单</text><text class="organize-tile-note">提取动作与训练要求</text></view>
+      </view>
+      <view wx:if="{{documents.length}}" class="organize-documents">
+        <view wx:for="{{documents}}" wx:key="id" class="organize-document"><view class="organize-document-main"><image class="organize-document-thumb" src="{{item.path}}" mode="aspectFill" bindtap="previewDocument" data-id="{{item.id}}" /><view class="organize-document-info"><view class="organize-document-title-line"><text class="organize-document-title">{{item.typeLabel}}</text><text class="organize-document-status {{item.error ? 'organize-text-error' : ''}}">{{item.statusLabel}}</text></view><text class="organize-document-excerpt">{{item.error || item.shortText || '资料已保存，等待识别文字'}}</text><view class="organize-document-actions"><text class="organize-link" bindtap="previewDocument" data-id="{{item.id}}">查看原件</text><text wx:if="{{!item.recognizing}}" class="organize-link" bindtap="editDocumentText" data-id="{{item.id}}">{{item.shortText ? '校对原文' : '手动录入'}}</text><text wx:if="{{!item.recognizing && (item.status === 'pending' || item.status === 'failed')}}" class="organize-link" bindtap="recognizeOne" data-id="{{item.id}}">{{item.status === 'failed' ? '重试识别' : '识别文字'}}</text></view></view></view></view>
+      </view>
+      <view wx:if="{{manualTextOpen}}" class="organize-transcript"><view class="organize-transcript-title-line"><text class="organize-document-title">{{activeDocumentTypeLabel}} · 原文校对</text><text class="organize-caption">可手动补充</text></view><textarea class="organize-input organize-transcript-input" value="{{documentText}}" bindinput="inputDocumentText" maxlength="12000" placeholder="输入或粘贴单据中的原文，保留动作名称、组次、时长与频次等要求" /><view class="organize-transcript-buttons"><button class="organize-button organize-button-soft organize-button-small" bindtap="cancelDocumentText">取消</button><button class="organize-button organize-button-small" bindtap="saveDocumentText">保存原文并整理</button></view></view>
+      <button class="organize-button organize-recognize-button" bindtap="recognizeDocuments" disabled="{{recognizing || !documents.length}}">{{recognizing ? recognizingLabel : '识别并整理资料'}}</button>
+      <view class="organize-footnote"><text class="organize-footnote-mark">i</text><text>识别后请对照原件核对；缺少的要求留空补充。</text></view>
+      <view wx:if="{{contextText}}" class="organize-context"><view class="organize-context-heading" bindtap="toggleContext"><text class="organize-document-title">病例资料摘录</text><text class="organize-caption">{{contextExpanded ? '收起⌃' : '展开⌄'}}</text></view><text wx:if="{{contextExpanded}}" class="organize-context-text">{{contextText}}</text></view>
+    </view>
+    <view wx:if="{{showRecognizedActions}}" class="organize-card">
+      <view class="organize-section-heading"><view class="organize-section-name"><text class="organize-step">03</text><text class="organize-heading">核对并对应到视频</text></view><text wx:if="{{actionCount}}" class="organize-count">{{actionCount}} 个动作</text></view>
+      <text class="organize-section-note">选择方案中与当前视频对应的动作，再核对下方要求。</text>
+      <view wx:for="{{actionItems}}" wx:key="id" class="organize-candidate" bindtap="applyCandidate" data-id="{{item.id}}"><view class="organize-candidate-heading"><text class="organize-candidate-name">{{item.name}}</text><text class="organize-candidate-link">对应此视频 →</text></view><text class="organize-candidate-dose">{{item.dose || '训练量待补充'}}<text wx:if="{{item.frequency}}"> · {{item.frequency}}</text></text><text wx:if="{{item.sourceText}}" class="organize-candidate-source">原文：{{item.sourceText}}</text><text wx:if="{{item.matchLabel}}" class="organize-candidate-match">{{item.matchLabel}}</text></view>
+      <view wx:if="{{!actionCount}}" class="organize-no-actions"><text class="organize-document-title">暂未提取到明确的动作要求</text><text class="organize-section-note">可校对资料原文，或按已收到的现场指导手动补充。</text></view>
+    </view>
+    <view class="organize-card organize-requirements">
+      <view class="organize-manual-heading" bindtap="toggleManual"><view class="organize-section-name"><text class="organize-step">{{showRecognizedActions ? '04' : '03'}}</text><text class="organize-heading">当前动作要求</text></view><text class="organize-link">{{manualExpanded ? '收起⌃' : '手动补充⌄'}}</text></view>
+      <text wx:if="{{!manualExpanded}}" class="organize-section-note">资料未收到，也可以根据明确的现场指导填写。</text>
+      <block wx:if="{{manualExpanded}}">
+        <view wx:if="{{sourceText}}" class="organize-source"><text class="organize-source-label">对应原文</text><text class="organize-source-text">{{sourceText}}</text></view>
+        <view wx:if="{{sourceDoseText}}" class="organize-source"><text class="organize-source-label">原方案要求</text><text class="organize-source-text">{{sourceDoseText}}</text></view>
+        <text class="organize-label">动作名称</text><input class="organize-input" value="{{name}}" data-field="name" bindinput="input" placeholder="填写现场指导中的动作名称" />
+        <text class="organize-label">动作组别<text class="organize-label-optional">选填</text></text><input class="organize-input" value="{{groupName}}" data-field="groupName" bindinput="input" maxlength="80" placeholder="如柔韧性练习、3D矫正练习" />
+        <text class="organize-label">个人要点<text class="organize-label-optional">选填</text></text><textarea class="organize-input organize-notes" value="{{notes}}" data-field="notes" bindinput="input" maxlength="2000" placeholder="如摆位、发力、呼吸和需要注意的地方" />
+        <text class="organize-label">完成量单位</text><view class="organize-modes"><text wx:for="{{modes}}" wx:key="key" data-mode="{{item.key}}" bindtap="mode" class="{{mode === item.key ? 'organize-mode-selected' : ''}}">{{item.label}}</text></view>
+        <view class="organize-dose-grid"><view><text class="organize-label">组数</text><view class="organize-input-unit"><input class="organize-input" type="number" value="{{sets}}" data-field="sets" bindinput="input" placeholder="待确认" /><text>组</text></view></view><view><text class="organize-label">每组完成量</text><view class="organize-input-unit"><input class="organize-input" type="number" value="{{amount}}" data-field="amount" bindinput="input" placeholder="待确认" /><text>{{unit}}</text></view></view></view>
+        <view wx:if="{{frequencyText}}" class="organize-frequency"><text class="organize-source-label">方案频次</text><text>{{frequencyText}}</text><text class="organize-caption">保存后在训练计划中确认安排。</text></view>
+        <view wx:if="{{warnings.length}}" class="organize-warnings"><text wx:for="{{warnings}}" wx:key="*this">{{item}}</text></view>
+        <view class="organize-confirm" bindtap="check" aria-role="checkbox" aria-checked="{{checked}}"><view class="organize-checkbox {{checked ? 'organize-checkbox-checked' : ''}}">{{checked ? '✓' : ''}}</view><text>已对照原件或明确的现场指导，核对以上要求</text></view><text class="organize-confirm-note">未确认的要求可留空，先保存为草稿。</text>
       </block>
-      <block wx:if="{{ card.noVideo }}">
-        <view style="padding: 34.62rpx; border-radius: 30.77rpx; background: #FFFFFF; border: 2.88rpx dashed #C9D4D0; display: flex; flex-direction: column; gap: 19.23rpx; align-items: flex-start">
-          <text style="font-size: 28.85rpx; font-weight: 700">还没有示范视频</text>
-          <text style="font-size: 25rpx; color: #5B6663; line-height: 1.6">下次在康复中心练的时候录一段，或者把已经录好的视频配过来。</text>
-          <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 76.92rpx; padding: 0 26.92rpx; border: 0; border-radius: 1921.15rpx; background: #1F6F66; color: #FFFFFF; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ nav.record }}" hover-class="tap">现场录一段</view>
-        </view>
-      </block>
-      <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 15.38rpx">
-        <view style="margin: 0; font-size: 30.77rpx; font-weight: 700">动作要点</view>
-        <block wx:for="{{ card.tips }}" wx:for-item="tip" wx:for-index="tipIndex" wx:key="_k">
-          <view style="font-size: 26.92rpx; line-height: 1.6">{{ tip.text }}</view>
-        </block>
-      </view>
     </view>
+    <view class="organize-save-area"><button wx:if="{{manualExpanded}}" class="organize-button organize-save-button" bindtap="saveConfirmed">核对并保存动作卡</button><button wx:if="{{confirmed}}" class="organize-button organize-button-soft" bindtap="plan">加入训练计划</button><button class="organize-button organize-draft-button" bindtap="saveDraft">先存草稿</button><text class="organize-bottom-note">视频、资料和训练要求，都保存在这一张动作卡里</text></view>
   </block>
-  <block wx:if="{{ ct.practice }}">
-    <view style="display: flex; flex-direction: column; gap: 23.08rpx">
-      <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 11.54rpx">
-        <view style="margin: 0 0 7.69rpx; font-size: 30.77rpx; font-weight: 700">播报方式 · 自动识别</view>
-        <view style="font-size: 26.92rpx; font-weight: 700">{{ card.modeLabel }}</view>
-        <view style="font-size: 23.08rpx; color: #5B6663; line-height: 1.6">根据处方里的“{{ card.param }}”自动判断，可以在下方参数里改。</view>
-      </view>
-      <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 7.69rpx">
-        <view style="margin: 0 0 7.69rpx; font-size: 30.77rpx; font-weight: 700">播报的声音</view>
-        <view style="display: flex; justify-content: space-between; align-items: center; font-size: 26.92rpx; min-height: 69.23rpx">
-          <text>现场录下的康复师原声</text>
-          <text style="color: #1F6F66; font-weight: 700">{{ card.voice }}</text>
-        </view>
-        <view style="display: flex; justify-content: space-between; align-items: center; font-size: 26.92rpx; min-height: 69.23rpx; color: #5B6663">
-          <text>系统朗读要点文字</text>
-          <text>备用</text>
-        </view>
-      </view>
-      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 96.15rpx; border: 0; border-radius: 26.92rpx; background: #1F6F66; color: #FFFFFF; font-size: 28.85rpx; font-weight: 700" bindtap="act" data-fn="{{ followThis }}" hover-class="tap">只练这一个动作</view>
-    </view>
-  </block>
-  <block wx:if="{{ ct.check }}">
-    <view style="display: flex; flex-direction: column; gap: 23.08rpx">
-      <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15.38rpx">
-        <view style="display: flex; flex-direction: column; gap: 11.54rpx">
-          <view style="height: 384.62rpx; border-radius: 26.92rpx; background: #1F2A27; color: #C9D4D0; font-size: 23.08rpx; display: flex; align-items: center; justify-content: center">示范</view>
-          <text style="font-size: 23.08rpx; color: #5B6663">现场录的示范</text>
-        </view>
-        <view style="display: flex; flex-direction: column; gap: 11.54rpx">
-          <view style="height: 384.62rpx; border-radius: 26.92rpx; background: #2E3B37; color: #C9D4D0; font-size: 23.08rpx; display: flex; align-items: center; justify-content: center">我的练习</view>
-          <text style="font-size: 23.08rpx; color: #5B6663">10 月 6 日 自录</text>
-        </view>
-      </view>
-      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 96.15rpx; border-radius: 26.92rpx; border: 2.88rpx solid #1F6F66; background: transparent; color: #1F6F66; font-size: 28.85rpx; font-weight: 700">录制本周练习</view>
-      <view style="font-size: 25rpx; color: #5B6663; line-height: 1.6">每周一次就够。复查时可以打开给康复师看，视频只保存在本机。</view>
-    </view>
-  </block>
-  <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 7.69rpx">
-    <view style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 7.69rpx">
-      <view style="margin: 0; font-size: 30.77rpx; font-weight: 700">训练参数</view>
-      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-width: 84.62rpx; height: 69.23rpx; padding: 0 23.08rpx; border: 0; border-radius: 1921.15rpx; background: {{ cardEditBg }}; color: {{ cardEditFg }}; font-size: 25rpx; font-weight: 700" aria-label="{{ cardEditLabel }}" bindtap="act" data-fn="{{ toggleCardEdit }}" hover-class="tap">{{ cardEditText }}</view>
-    </view>
-    <block wx:for="{{ card.params }}" wx:for-item="p" wx:for-index="pIndex" wx:key="_k">
-      <view style="display: flex; align-items: center; justify-content: space-between; gap: 19.23rpx; min-height: 84.62rpx; border-top: 1.92rpx solid #E6EBE8; font-size: 26.92rpx">
-        <text style="color: #3E4B47; flex-shrink: 0">{{ p.label }}</text>
-        <block wx:if="{{ cardView }}">
-          <text style="font-weight: 700; text-align: right">{{ p.value }}</text>
-        </block>
-        <block wx:if="{{ cardEditing }}">
-          <input style="width: 326.92rpx; min-height: 69.23rpx; border-radius: 15.38rpx; border: 1.92rpx solid #1F6F66; padding: 0 15.38rpx; font-size: 26.92rpx; font-weight: 700; color: #1F2A27; background: #F8FAF9; height: 69.23rpx" aria-label="{{ p.label }}" value="{{ p.value }}" placeholder-style="color: #8A9A95" />
-        </block>
-      </view>
-    </block>
-    <view style="font-size: 23.08rpx; color: #5B6663; margin-top: 7.69rpx">来自处方单 · 识别有误可以直接改，复查时和康复师核对</view>
-  </view>
-  <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
-    <view style="margin: 0; font-size: 30.77rpx; font-weight: 700">我的补充</view>
-    <view style="font-size: 25rpx; color: #5B6663">给它起个好记的名字</view>
-    <input style="min-height: 84.62rpx; border-radius: 19.23rpx; border: 1.92rpx solid #C9D4D0; padding: 0 23.08rpx; font-size: 26.92rpx; color: #1F2A27; background: #F8FAF9; height: 84.62rpx" id="nick" placeholder="比如：肋木吹气" placeholder-style="color: #8A9A95" />
-    <view style="font-size: 25rpx; color: #5B6663">备注（只有自己看得到）</view>
-    <input style="min-height: 84.62rpx; border-radius: 19.23rpx; border: 1.92rpx solid #C9D4D0; padding: 0 23.08rpx; font-size: 26.92rpx; color: #1F2A27; background: #F8FAF9; height: 84.62rpx" id="note" placeholder="比如：吹气时容易耸肩" placeholder-style="color: #8A9A95" />
-  </view>
+  <view wx:elif="{{tab === 'practice'}}" class="organize-card"><text class="organize-heading">按计划练习</text><text class="organize-practice-dose">{{sets || '待填写'}} 组 × {{amount || '待填写'}} {{unit}}</text><text class="organize-section-note">从训练首页进入已确认的计划，跟练和手动记录共用进度。</text><button class="organize-button" bindtap="plan">安排到训练计划</button></view>
+  <block wx:else><view class="organize-card"><text class="organize-heading">示范与我的练习</text><video wx:if="{{video}}" src="{{video}}" controls class="organize-video" /><video wx:if="{{practice}}" src="{{practice}}" controls class="organize-video" /><button class="organize-button organize-button-soft" bindtap="capturePractice">录制我的练习对照视频</button><text wx:if="{{!practice}}" class="organize-section-note">暂未保存练习对照视频。</text></view><view wx:for="{{history}}" wx:key="id" class="organize-card"><text class="organize-heading">{{item.date}}</text><text class="organize-section-note">当时要求：{{item.dose}}</text><text class="organize-history-actual">实际：{{item.actual}} {{item.unit}}</text></view><view wx:if="{{!history.length}}" class="organize-card organize-history-empty">还没有实际练习记录。</view></block>
 </view>

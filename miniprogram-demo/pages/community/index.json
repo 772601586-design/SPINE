@@ -1,7 +1,7 @@
 {
   "navigationBarTitleText": "社群",
-  "navigationBarBackgroundColor": "#F3F5F2",
+  "navigationBarBackgroundColor": "#FFFFFF",
   "navigationBarTextStyle": "black",
-  "backgroundColor": "#F3F5F2",
+  "backgroundColor": "#FFFFFF",
   "usingComponents": {}
 }

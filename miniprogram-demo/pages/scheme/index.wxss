@@ -1,0 +1,3 @@
+.scheme-name{display:block;font-size:28rpx;color:#52665a;margin-bottom:20rpx;word-break:break-all}
+.scheme-image{display:block;width:100%;border-radius:18rpx}
+.scheme-text{height:340rpx;line-height:1.7}

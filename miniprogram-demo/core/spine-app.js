@@ -407,8 +407,8 @@ class SpineApp extends DCLogic {
       braceBtn: S.braceOn ? '现在脱下' : '重新戴上', braceStatus: S.braceOn ? '正在佩戴 · 自动记录中' : '已脱下 · 记得在需要时戴回去',
       toggleBrace: () => this.setState({ braceOn: !S.braceOn, toast: S.braceOn ? '已记录脱下，正好可以去练一组' : '已记录戴上' }),
       tasks: tasks, gotToday: String(gotToday), medals: medals,
-      makeupLeft: S.makeupUsed ? '本周已用完' : '本周还剩 1 次', makeupBg: S.makeupUsed ? '#8A9A95' : '#6B3416', makeupText: S.makeupUsed ? '已补卡' : '10 颗补卡',
-      doMakeup: () => (S.makeupUsed ? this.setState({ toast: '这周的补卡次数已经用过了' }) : this.setState({ makeupUsed: true, pine: S.pine - 10, toast: '已补卡：10 月 11 日 · -10 松果' }))
+      makeupLeft: '按真实训练日期补记', makeupBg: '#1F6F66', makeupText: '免费补记训练',
+      doMakeup: () => this.go('execution')
     };
   }
 }
