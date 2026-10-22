@@ -1,0 +1,11 @@
+<view class="tab-bar">
+  <view wx:for="{{tabs}}" wx:key="path" class="tab-item {{selected === index ? 'tab-selected' : ''}}" data-index="{{index}}" bindtap="switchTab" aria-role="button" aria-label="{{item.label}}" aria-current="{{selected === index ? 'page' : 'false'}}">
+    <view class="tab-icon icon-{{item.icon}}" aria-hidden="true">
+      <block wx:if="{{item.icon === 'planning'}}"><view class="plan-outline"></view><view class="plan-line plan-one"></view><view class="plan-line plan-two"></view><view class="plan-line plan-three"></view></block>
+      <block wx:elif="{{item.icon === 'training'}}"><view class="grid-square"></view><view class="grid-square"></view><view class="grid-square"></view><view class="grid-square"></view></block>
+      <block wx:elif="{{item.icon === 'community'}}"><view class="people-head people-left"></view><view class="people-head people-right"></view><view class="people-body people-left"></view><view class="people-body people-right"></view></block>
+      <block wx:else><view class="profile-head"></view><view class="profile-body"></view></block>
+    </view>
+    <text class="tab-label">{{item.label}}</text>
+  </view>
+</view>

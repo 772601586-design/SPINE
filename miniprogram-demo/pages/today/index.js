@@ -1,1 +1,1 @@
-Page({ onLoad() { wx.switchTab({ url: '/pages/train/index' }); } });
+Page({ onLoad() { wx.switchTab({ url: '/pages/planning/index' }); } });

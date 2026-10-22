@@ -2,8 +2,19 @@
   <scroll-view class="training-scroll" scroll-y="{{true}}" show-scrollbar="{{false}}">
   <view class="training-content">
   <view wx:if="{{error}}" class="flow-error">{{error}}</view>
+  <view class="flow-card">
+<view class="flow-row"><text class="flow-heading">支具</text><text class="flow-pill">{{braceWearing ? '正在佩戴' : '未在佩戴'}}</text></view>
+<view class="flow-row" style="margin:28rpx 0"><view><text class="flow-muted">今日佩戴</text><view class="flow-heading">{{braceToday}}</view></view><view><text class="flow-muted">累计佩戴</text><view class="flow-heading">{{braceDays}} 天</view></view></view>
+<text class="flow-muted">累计时长 {{braceTotal}}</text>
+<button class="flow-button" style="margin-top:24rpx" bindtap="toggleBraceRecord">{{braceWearing ? '脱下支具，保存记录' : '戴上支具，开始记录'}}</button>
+<text class="flow-small">按实际戴上、脱下时间记录，同一天多次佩戴合并统计。</text>
+<text wx:if="{{braceError}}" class="flow-error">{{braceError}}</text>
+<view class="flow-section"><text class="flow-heading">佩戴时长记录</text></view>
+<text wx:if="{{!braceHistory.length}}" class="flow-muted">暂无佩戴记录，戴上支具后开始记录。</text>
+<view wx:for="{{braceHistory}}" wx:key="date" class="flow-row" style="padding:18rpx 0"><text>{{item.date}}</text><text>{{item.duration}}</text></view>
+</view>
   <view class="flow-card"><view class="flow-row"><text class="flow-heading">当日训练清单</text><text class="flow-pill">已完成 {{complete}} / {{total}}</text></view><text class="flow-muted">按已确认的计划顺序练习</text>
-    <view wx:if="{{!records.length}}" class="flow-empty">这一天暂无安排，可通过“训练资料与安排”右侧的“计划与日程”管理训练计划。</view>
+    <view wx:if="{{!records.length}}" class="flow-empty">这一天暂无安排，可到“制定”页面的“计划与日程”安排训练。</view>
     <view wx:for="{{groups}}" wx:for-item="group" wx:key="name" class="training-group">
       <view class="training-group-header"><text class="training-group-title">{{group.number}}. {{group.name}}</text><text class="training-group-count">{{group.complete}} / {{group.rows.length}}</text></view>
       <view wx:for="{{group.rows}}" wx:key="rowId" class="training-task">
@@ -13,13 +24,6 @@
       </view>
     </view>
   </view><text class="flow-small">圆圈表示本次要求已完成，部分完成记录实际量</text>
-  <view class="flow-row flow-section"><text class="flow-heading">训练资料与安排</text><text class="flow-link" bindtap="openSchedule">计划与日程 ›</text></view>
-  <view class="flow-grid"><view class="flow-card" bindtap="capture"><text class="flow-heading">▣ 现场录视频</text><text class="flow-small">连续录制，自动存草稿</text></view><view class="flow-card" bindtap="uploadScheme"><text class="flow-heading">▤ 上传方案单</text><text class="flow-small">{{schemeBusy ? '正在保存方案单…' : '拍摄或选择文件'}}</text></view></view>
-  <view wx:if="{{drafts.length}}" class="flow-card flow-draft" bindtap="openDrafts"><text class="flow-heading">待整理 · {{drafts.length}} 张动作草稿</text><text class="flow-muted">补名称、个人要点，核对训练要求</text><text class="flow-link">继续整理 ›</text></view>
   </view>
   </scroll-view>
-</view>
-<view wx:if="{{schemePicker}}" class="scheme-picker" catchtouchmove="stopTouch">
-  <view class="scheme-picker-mask" bindtap="closeSchemePicker"></view>
-  <view class="scheme-picker-panel"><text class="scheme-picker-title">上传方案单</text><view class="scheme-picker-options"><button bindtap="photographScheme"><view class="scheme-icon scheme-camera"><view class="scheme-camera-lens"></view></view><text>拍摄</text></button><button bindtap="chooseSchemeFile"><view class="scheme-icon scheme-folder"></view><text>选择文件</text></button></view><button class="scheme-picker-cancel" bindtap="closeSchemePicker">取消</button></view>
 </view>

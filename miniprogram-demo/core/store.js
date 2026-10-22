@@ -3,7 +3,7 @@
  *
  * 整个小程序只有一个 SpineApp 实例（业务逻辑和网页原型完全相同）。
  * - 业务逻辑通过 state.screen 表达“要去哪一页”；这里把它翻译成小程序导航：
- *     底部 5 个 tab 页 → wx.switchTab
+ *     底部 4 个 tab 页 → wx.switchTab
  *     目标页已经在页面栈里 → wx.navigateBack 回到它
  *     其他 → wx.navigateTo（页面栈满了就 redirectTo）
  * - 用户点系统返回键时，页面 onShow 会调用 enter() 同步 state.screen，不触发导航。
@@ -12,8 +12,9 @@
 const SpineApp = require('./spine-app');
 
 const STORAGE_KEY = 'spine-state-v1';
-const TABS = ['train', 'growth', 'community', 'me'];
-const routeOf = (screen) => 'pages/' + (screen === 'today' ? 'train' : screen) + '/index';
+const TABS = ['planning', 'train', 'community', 'me'];
+const canonicalScreen = (screen) => screen === 'today' ? 'planning' : screen === 'growth' ? 'train' : screen;
+const routeOf = (screen) => 'pages/' + canonicalScreen(screen) + '/index';
 
 let app = null;
 let scheduled = false;
@@ -40,7 +41,7 @@ function currentPage() {
 
 function navigate(screen) {
   const url = '/' + routeOf(screen);
-  if (screen === 'today' || TABS.indexOf(screen) !== -1) {
+  if (TABS.indexOf(canonicalScreen(screen)) !== -1) {
     app.state.onboarded = true;
     wx.switchTab({ url });
     return;

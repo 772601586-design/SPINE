@@ -50,8 +50,10 @@ const updated = t.session(plan.id, t.today(), false);
 assert.equal(updated.rows.find(row => row.cardId === unknown.id).confirmed, true);
 assert.deepEqual(clone(updated.rows.find(row => row.cardId === lunge.cardId).values), [30,30]);
 let definition;
+const braceModule = { exports: {} };
+vm.runInNewContext(fs.readFileSync(path.join(root, 'core/brace-records.js'), 'utf8'), { module: braceModule, wx, setInterval() { return 1; }, clearInterval() {} });
 vm.runInNewContext(fs.readFileSync(path.join(root, 'pages/train/index.js'), 'utf8'), { wx, Page: value => { definition = value; },
-  require: name => name.endsWith('/training') ? t : name.endsWith('/store') ? { enter() {} } : {} });
+  require: name => name.endsWith('/training') ? t : name.endsWith('/brace-records') ? braceModule.exports : name.endsWith('/store') ? { enter() {} } : {} });
 const page = { ...definition, data: clone(definition.data), setData(values) { Object.assign(this.data, clone(values)); } };
 page.onShow();
 assert.equal(page.data.groups[0].name, '认知能力学习');

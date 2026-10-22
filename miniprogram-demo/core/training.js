@@ -37,6 +37,7 @@ function due(plan, date, state) {
   if (plan.onlyDate && date !== plan.onlyDate) return false;
   if (plan.schedule === 'weekdays') return plan.weekdays.includes(weekday(date));
   if (plan.schedule === 'alternate') {
+    if (plan.calendarInterval) return days(plan.start, date) % 2 === 0;
     const last = state.sessions.filter(item => item.planId === plan.id && item.date < date && status(item) === 'completed').map(item => item.date).sort().pop();
     return !last || days(date, last) >= 2;
   }
@@ -103,7 +104,7 @@ function saveSchemeActions(documentId, rows) {
       if (!row.id || seen.has(row.id)) throw Error('动作条目重复，请重新核对。');
       seen.add(row.id);
       if (!name || name.length > 160 || !Number.isInteger(sets) || sets < 1 || sets > 50 || !Number.isInteger(amount) || amount < 1 || amount > 3600 || !['timer', 'count', 'breath'].includes(row.mode)) throw Error('请补齐每个动作的名称、组数、每组完成量和类型。');
-      const previous = state.cards.find(card => card.sourceSchemeDocument === documentId && card.sourceSchemeRow === row.id);
+      const previous = state.cards.find(card => card.sourceSchemeDocument === documentId && (card.sourceSchemeRow === row.id || card.name.replace(/\s/g, '') === name.replace(/\s/g, '')));
       const card = Object.assign({}, previous || {}, { id: previous ? previous.id : id('card'), name, sets, amount, mode: row.mode,
         notes: String(row.notes || '').slice(0, 2000), groupName: String(row.groupName || '').trim().slice(0, 80), frequencyText: String(row.frequency || ''), confirmed: true,
         revision: previous ? previous.revision + 1 : 1, source: '方案单（本人核对）', sourceDocumentIds: [documentId],
@@ -115,7 +116,7 @@ function saveSchemeActions(documentId, rows) {
 }
 function savePlan(values) {
   return mutate(state => {
-    const plan = Object.assign({}, values); const existing = state.plans.find(item => item.id === plan.id);
+    const existing = state.plans.find(item => item.id === values.id); const plan = Object.assign({}, existing || {}, values);
     plan.name = String(plan.name || '').trim();
     if (!plan.name || !validDate(plan.start) || !['daily', 'weekdays', 'alternate', 'period'].includes(plan.schedule)) throw Error('请填写计划名称、有效开始日期和日程。');
     if (!Array.isArray(plan.cardIds) || !plan.cardIds.length || new Set(plan.cardIds).size !== plan.cardIds.length) throw Error('请选择不重复的已核对动作。');
@@ -198,7 +199,7 @@ function importAttachmentPlan() {
 }
 function scheduleLabel(plan) {
   if (plan.schedule === 'weekdays') return '每周' + plan.weekdays.map(day => ['一', '二', '三', '四', '五', '六', '日'][day]).join('、');
-  if (plan.schedule === 'alternate') return '完成后隔天安排，未完成顺延';
+  if (plan.schedule === 'alternate') return plan.calendarInterval ? '隔天（按开始日期安排）' : '完成后隔天安排，未完成顺延';
   if (plan.schedule === 'period') return '每 ' + plan.cycleDays + ' 天 ' + plan.cycleTimes + ' 次';
   return '每天';
 }

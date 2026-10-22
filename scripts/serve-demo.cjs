@@ -7,6 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { readDocumentRequest, recognizeDocument } = require('./demo-ocr.cjs');
+const { readSchemeRequest, recognizeSchemeFile } = require('./scheme-file-recognition.cjs');
 
 const REPOSITORY_ROOT = path.resolve(__dirname, '..');
 const DEMO_ROOT = path.join(REPOSITORY_ROOT, 'miniprogram-demo');
@@ -176,6 +177,26 @@ function createDemoServer() {
           return json(request, response, error.statusCode || 503, {
             error: error.statusCode ? error.message : '本机 OCR 暂不可用，请手动补充并核对原件。',
             code: error.statusCode ? error.code : 'OCR_UNAVAILABLE',
+          });
+        }
+      }
+      if (pathname === '/api/recognize-scheme') {
+        if (request.method !== 'POST') {
+          return json(request, response, 405, { error: '请使用 POST 提交方案文件。' }, { Allow: 'POST' });
+        }
+        if ((request.headers.origin && request.headers.origin !== `http://${request.headers.host}`)
+          || request.headers['sec-fetch-site'] === 'cross-site') {
+          request.resume();
+          return json(request, response, 403, { error: '请在当前本地 Demo 中选择方案进行识别。', code: 'INVALID_ORIGIN' });
+        }
+        try {
+          const body = await readSchemeRequest(request);
+          const result = await recognizeSchemeFile(body);
+          return json(request, response, 200, result);
+        } catch (error) {
+          return json(request, response, error.statusCode || 503, {
+            error: error.statusCode ? error.message : '本机文件识别暂不可用，请重试。',
+            code: error.statusCode ? error.code : 'RECOGNITION_UNAVAILABLE',
           });
         }
       }

@@ -40,7 +40,7 @@ Page({
       const actions = documents.extract(text, 'training').actions;
       if (!actions.length) throw Error('未提取到明确动作，请核对方案文字，或点击“添加动作”逐项填写。');
       const rows = actions.map(action => Object.assign({ groupName: '', sourceDoseText: '' }, action, { id: t.id('scheme-row') }));
-      const saved = documents.save(Object.assign({}, this.data.document, { text, status: 'recognized', planDraftRows: rows }));
+      const saved = documents.save(Object.assign({}, this.data.document, { text, status: 'recognized', error: '', planDraftRows: rows }));
       this.setData({ document: saved, rows, reviewing: true });
     } catch (error) { this.setData({ error: error.message, reviewing: true }); }
     finally { this.setData({ busy: false }); }

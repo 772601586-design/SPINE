@@ -1,0 +1,67 @@
+<view class="planning-page">
+  <view class="planning-heading">
+    <text class="planning-title">训练资料与安排</text>
+    <text class="planning-link schedule-link" bindtap="openSchedule" hover-class="tap">计划与日程 ›</text>
+  </view>
+
+  <view wx:if="{{error}}" class="flow-error">{{error}}</view>
+  <view wx:if="{{showSchedules}}" class="schedule-panel">
+    <view class="planning-heading"><text class="schedule-panel-title">计划与日程</text><text class="planning-link" bindtap="createPlan">新增计划 ＋</text></view>
+    <scroll-view class="schedule-items" scroll-y="{{true}}">
+      <view wx:for="{{plans}}" wx:key="id" class="schedule-item" data-id="{{item.id}}" bindtap="openPlan" hover-class="tap">
+        <view class="schedule-item-main"><text class="schedule-name">{{item.name}}</text><text class="schedule-meta">{{item.scheduleSummary}} · {{item.actionCount}} 项 · {{item.active ? '执行中' : '已暂停'}}</text></view><text class="material-chevron">›</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <view class="material-grid">
+    <view class="material-area">
+      <view class="material-entry" bindtap="capture" hover-class="material-entry-pressed" aria-role="button" aria-label="现场录制，拍摄动作视频">
+        <view class="entry-icon-wrap"><view class="camera-icon"><view class="camera-lens"></view></view></view>
+        <text class="material-title">现场录制</text>
+        <text class="material-hint">拍摄动作视频</text>
+      </view>
+    </view>
+
+    <view class="material-area">
+      <view class="material-entry {{busy ? 'material-entry-disabled' : ''}}" bindtap="chooseSchemeFile" hover-class="material-entry-pressed" aria-role="button" aria-label="训练文件，上传康复师方案" aria-disabled="{{busy}}">
+        <view class="entry-icon-wrap"><view class="folder-icon"><view class="folder-front"></view></view></view>
+        <text class="material-title">训练文件</text>
+        <text class="material-hint">上传康复师方案</text>
+      </view>
+      <scroll-view wx:if="{{files.length}}" scroll-y="{{true}}" class="material-items file-items" show-scrollbar="{{true}}">
+        <view wx:for="{{files}}" wx:key="id" class="file-item">
+          <view class="file-content" data-id="{{item.id}}" bindtap="openFile" hover-class="tap">
+            <view class="file-heading"><view class="document-icon"><view></view><view></view></view><text class="file-kind">{{item.kind || '文件'}}</text></view>
+            <text class="material-name file-name">{{item.originalName || '训练方案'}}</text>
+            <text class="file-status {{item.error ? 'file-status-error' : ''}}">{{item.statusLabel || '已保存'}}</text>
+          </view>
+          <text wx:if="{{item.error}}" class="file-error">{{item.error}}</text>
+          <text class="planning-link file-review" data-id="{{item.id}}" bindtap="editFile" hover-class="tap">核对文字与动作 ›</text>
+          <button wx:if="{{item.error}}" class="retry-button" data-id="{{item.id}}" catchtap="retryImport" disabled="{{busy}}" hover-class="tap">重新识别</button>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <view wx:if="{{busy}}" class="import-progress"><view class="progress-dot"></view><text>{{processingLabel || '正在整理训练动作…'}}</text></view>
+  <text class="import-hint">上传方案后，动作自动整理到下方；每天的训练按康复师安排显示在“训练”中。</text>
+
+  <view class="action-section">
+    <view class="planning-heading action-heading"><view class="action-title-row"><text class="planning-title">动作卡</text><text wx:if="{{totalCards}}" class="action-count">{{totalCards}} 项</text></view><text class="planning-link" bindtap="createCard" hover-class="tap">添加动作 ＋</text></view>
+
+    <view wx:if="{{cardGroups.length}}">
+      <view wx:for="{{cardGroups}}" wx:for-item="group" wx:key="name" class="action-group">
+        <view class="group-heading"><view class="group-marker"></view><text>{{group.name || '训练动作'}}</text><text class="group-count">{{group.rows.length}} 项</text></view>
+        <view wx:for="{{group.rows}}" wx:for-item="card" wx:key="id" class="action-card" data-id="{{card.id}}" bindtap="openCard" hover-class="action-card-pressed">
+          <view class="action-card-heading"><text class="action-name">{{card.name || '待命名动作'}}</text><text class="action-chevron">›</text></view>
+          <view wx:if="{{card.groupName || card.statusLabel}}" class="action-labels"><text wx:if="{{card.groupName}}" class="action-group-label">{{card.groupName}}</text><text wx:if="{{card.statusLabel}}" class="action-status {{card.ready ? 'action-status-ready' : ''}}">{{card.statusLabel}}</text></view>
+          <view class="action-detail"><text class="detail-label">训练量</text><text class="detail-value {{!card.dose ? 'detail-placeholder' : ''}}">{{card.dose || '训练量待补充'}}</text></view>
+          <view class="action-detail action-notes"><text class="detail-label">动作要点</text><text class="detail-value {{!card.notes ? 'detail-placeholder' : ''}}">{{card.notes || '要点待补充'}}</text></view>
+          <view class="action-card-footer"><view class="action-badges"><text wx:if="{{card.sourceLabel}}" class="source-badge">{{card.sourceLabel}}</text><text class="schedule-badge">{{card.scheduleLabel || '尚未安排训练'}}</text></view><text wx:if="{{card.video}}" class="action-video-label">含动作视频</text></view>
+        </view>
+      </view>
+    </view>
+    <view wx:else class="actions-empty"><view class="empty-card-icon"><view></view><view></view><view></view></view><text class="empty-title">从一份训练方案开始</text><text class="empty-description">上传文件后，动作名称、训练量与要点会整理成动作卡。</text><text class="planning-link empty-create" bindtap="createCard" hover-class="tap">手动添加动作 ›</text></view>
+  </view>
+</view>

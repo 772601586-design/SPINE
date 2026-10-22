@@ -9,7 +9,7 @@
   <block wx:if="{{tab === 'learn'}}">
     <view class="organize-card organize-video-card">
       <view class="organize-section-heading"><view class="organize-section-name"><text class="organize-step">01</text><text class="organize-heading">现场视频</text></view><text class="organize-caption">先保存，再慢慢整理</text></view>
-      <picker wx:if="{{videoOptions.length > 1}}" range="{{videoOptions}}" range-key="name" value="{{videoIndex}}" bindchange="selectVideo" class="organize-video-picker"><view class="organize-video-picker-line"><text class="organize-video-label">{{videoLabel}}</text><text class="organize-link">切换录段⌄</text></view></picker>
+      <picker wx:if="{{videoOptions.length > 1}}" range="{{videoOptions}}" range-key="name" value="{{videoIndex}}" bindchange="selectVideo" class="organize-video-picker"><view class="organize-video-picker-line"><text class="organize-video-label">{{videoLabel}}</text><text class="organize-link">{{sourceSchemeDocument ? '关联视频⌄' : '切换录段⌄'}}</text></view></picker>
       <video wx:if="{{video}}" src="{{video}}" controls class="organize-video" />
       <view wx:else class="organize-video-empty" bindtap="capture"><view class="organize-video-icon"><view></view></view><text class="organize-empty-title">留住现场示范和指导</text><text class="organize-empty-subtitle">已有录制可以稍后补充，也可以先整理资料</text></view>
       <view class="organize-video-footer"><text class="organize-caption">把现场示范与方案中的动作对应</text><button class="organize-button organize-button-small organize-button-soft" bindtap="capture">{{video ? '继续录视频' : '补充现场视频'}}<text class="organize-button-plus">＋</text></button></view>

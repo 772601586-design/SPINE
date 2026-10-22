@@ -10,6 +10,7 @@ const examples = [
 {id:'list',name:'晴晴',time:'1 天前',category:'支具',topic:'复查准备',title:'我的复查准备清单',body:'整理了一下这次复查要带的资料，也记录了自己的问题清单，希望能帮到大家。',hugs:21,comments:56}
 ];
 Page({
+ onShow(){if(this.getTabBar)wx.nextTick(()=>{const bar=this.getTabBar();if(bar)bar.setData({selected:2});});},
  data:{screen:'home',tab:'交流',filter:'全部',searchTab:'全部',query:'',tabs:['交流','知识'],filters:['全部','支具','训练','心情'],categories:['全部','认识侧弯','支具生活','训练记录','复查准备','情绪关系'],searchTabs:['全部','知识','经历'],composeTabs:['记心情','问问题','分享经历'],composeType:'记心情',moods:['轻松','低落','难熬','担心','有进步'],mood:'担心',body:'',visibility:'仅自己可见',reply:'',selected:{},saved:false,shownArticles:articles,shownPosts:examples},
  onLoad(){this.local=wx.getStorageSync(KEY)||{};for(const k of ['posts','hugs','saved'])this.local[k]=this.local[k]||[];this.local.replies=this.local.replies||{};this.refresh();},
  persist(){try{wx.setStorageSync(KEY,this.local);return true;}catch(e){wx.showToast({title:'保存失败，请稍后重试',icon:'none'});return false;}},

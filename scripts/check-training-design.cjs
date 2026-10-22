@@ -69,7 +69,8 @@ t.saveValues(periodRun.id, card.id, [40, 40, 40, 40]);
 assert.equal(t.due(period, '2026-10-20', t.load()), false);
 assert.equal(t.due(period, '2026-10-26', t.load()), true);
 const config = JSON.parse(fs.readFileSync(path.join(root, 'app.json'), 'utf8'));
-assert.deepEqual(config.tabBar.list.map(item => item.text), ['训练', '成长', '社群', '我的']);
+assert.deepEqual(config.tabBar.list.map(item => item.text), ['制定', '训练', '社群', '我的']);
+assert.deepEqual(config.tabBar.list.map(item => item.pagePath), ['pages/planning/index', 'pages/train/index', 'pages/community/index', 'pages/me/index']);
 assert.ok(!config.tabBar.list.some(item => item.pagePath === 'pages/today/index'));
 for (const route of config.pages) {
   for (const extension of ['js', 'json', 'wxml']) assert.ok(fs.existsSync(path.join(root, `${route}.${extension}`)), `${route}.${extension}`);
@@ -77,6 +78,8 @@ for (const route of config.pages) {
   JSON.parse(fs.readFileSync(path.join(root, `${route}.json`), 'utf8'));
 }
 // Exercise page event handlers against the same persisted records.
+const braceHost = { wx: host.wx, Date: Clock, module: { exports: {} }, setInterval: () => 1, clearInterval() {} };
+vm.runInNewContext(fs.readFileSync(path.join(root, 'core/brace-records.js'), 'utf8'), braceHost);
 function page(route) {
   let definition;
   const wx = { showToast() {}, chooseMedia(options) {
@@ -85,16 +88,18 @@ function page(route) {
     options.success({ tempFiles: [{ tempFilePath: '/tmp/video.mp4' }] }); options.complete();
   }, navigateTo(options) { assert.ok(config.pages.includes(options.url.split('?')[0].slice(1))); },
     redirectTo(options) { this.navigateTo(options); }, switchTab(options) { assert.ok(config.tabBar.list.some(tab => '/' + tab.pagePath === options.url)); } };
-  const dependencies = { '../../core/training': t, '../../core/store': { enter() {} }, '../../core/voice': { stop() {}, speak() {} }, '../../core/scheme-upload': { choose: async () => null } };
+  const dependencies = { '../../core/training': t, '../../core/store': { enter() {} }, '../../core/brace-records': braceHost.module.exports, '../../core/voice': { stop() {}, speak() {} }, '../../core/scheme-upload': { choose: async () => null },
+    '../../core/documents': { list: () => [] }, '../../core/document-recognition': {}, '../../core/scheme-import': { reconcileVideos() {} } };
   vm.runInNewContext(fs.readFileSync(path.join(root, `pages/${route}/index.js`), 'utf8'), {
     require: name => { assert.ok(dependencies[name], name); return dependencies[name]; }, Page: value => { definition = value; }, wx, Date: Clock,
     setInterval: () => 1, clearInterval() {},
   });
   return Object.assign(definition, { data: json(definition.data), setData(values) { Object.assign(this.data, json(values)); } });
 }
-const trainingPage = page('train'); trainingPage.onShow();
-assert.ok(trainingPage.data.cards.length);
-trainingPage.capture(); trainingPage.createCard(); trainingPage.createPlan(); trainingPage.backfill();
+const planningPage = page('planning'); planningPage.onShow();
+assert.ok(planningPage.data.cards.length);
+planningPage.capture(); planningPage.createCard(); planningPage.createPlan();
+const trainingPage = page('train'); trainingPage.onShow(); trainingPage.backfill(); trainingPage.onHide();
 const manual = page('execution'); manual.onLoad({ session: run.id, card: card.id });
 manual.input({ currentTarget: { dataset: { index: 0 } }, detail: { value: '15' } }); manual.save();
 assert.equal(t.load().sessions.find(item => item.id === run.id).rows[0].values[0], 15);
@@ -102,7 +107,7 @@ const follow = page('follow'); follow.onLoad({ session: run.id, card: card.id })
 follow.setData({ index: 0, actual: '30' }); follow.confirm();
 assert.equal(t.load().sessions.find(item => item.id === run.id).rows[0].values[0], 30);
 follow.onHide(); follow.onUnload();
-// The old welcome/ready flow must enter the new native training tab.
+// The old welcome/ready flow must enter the first native planning tab.
 const legacyCache = new Map(), queue = [], navigation = [];
 const legacyWx = Object.assign({}, host.wx, {
   removeStorageSync: key => { delete storage[key]; }, nextTick: callback => queue.push(callback), showToast() {},
@@ -122,10 +127,16 @@ function legacyModule(relative) {
 const legacyStore = legacyModule('core/store.js');
 legacyStore.app.go('today');
 while (queue.length) queue.shift()();
-assert.equal(navigation.at(-1), '/pages/train/index');
+assert.equal(navigation.at(-1), '/pages/planning/index');
 const welcome = legacyModule('core/bridge.js').bindPage('welcome', []);
 welcome.onLoad();
-assert.equal(navigation.at(-1), '/pages/train/index');
+assert.equal(navigation.at(-1), '/pages/planning/index');
+legacyStore.app.go('growth');
+while (queue.length) queue.shift()();
+assert.equal(navigation.at(-1), '/pages/train/index', 'legacy growth links open the relocated brace section');
+legacyStore.app.renderVals().saveUpload();
+while (queue.length) queue.shift()();
+assert.equal(navigation.at(-1), '/pages/growth-records/index', 'new growth uploads remain in the profile growth records');
 const pine = legacyStore.app.state.pine;
 legacyStore.app.renderVals().doMakeup();
 while (queue.length) queue.shift()();

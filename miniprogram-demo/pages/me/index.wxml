@@ -1,5 +1,5 @@
 <!-- 我的 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
-<view style="padding: 46.15rpx 38.46rpx 38.46rpx; display: flex; flex-direction: column; gap: 26.92rpx">
+<view style="padding: 46.15rpx 38.46rpx calc(146rpx + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 26.92rpx">
   <view style="display: flex; align-items: center; gap: 26.92rpx">
     <view style="width: 115.38rpx; height: 115.38rpx; border-radius: 1921.15rpx; background: #1F6F66; color: #FFFFFF; font-size: 46.15rpx; font-weight: 700; display: flex; align-items: center; justify-content: center">禾</view>
     <view style="flex: 1">
@@ -8,13 +8,17 @@
     </view>
     <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 69.23rpx; padding: 0 23.08rpx; border: 1.92rpx solid #C9D4D0; border-radius: 1921.15rpx; background: transparent; color: #3E4B47; font-size: 25rpx" bindtap="act" data-fn="{{ nav.stageFromMe }}" hover-class="tap">切换阶段</view>
   </view>
-  <view style="padding: 26.92rpx; border: 0; border-radius: 34.62rpx; background: #1F6F66; color: #FFFFFF; text-align: left; display: flex; flex-direction: column; gap: 11.54rpx" bindtap="act" data-fn="{{ nav.growth }}" hover-class="tap">
+  <view style="padding: 26.92rpx; border: 0; border-radius: 34.62rpx; background: #1F6F66; color: #FFFFFF; text-align: left; display: flex; flex-direction: column; gap: 11.54rpx" bindtap="openGrowthRecords" hover-class="tap">
     <view style="display: flex; justify-content: space-between; width: 100%; font-size: 25rpx; color: #CFE8E2">
       <text>我的档案</text>
-      <text>成长记录 ›</text>
+      <text>复查记录 ›</text>
     </view>
     <text style="font-size: 42.31rpx; font-weight: 700">Rigo B1 · 胸 27° · 腰 20°</text>
     <text style="font-size: 25rpx; color: #CFE8E2">2026.09 复查 · Risser 1 · 初潮后 5 个月</text>
+  </view>
+  <view class="me-growth-card" bindtap="openGrowthRecords" hover-class="tap">
+    <view class="me-growth-heading"><text>成长记录</text><text class="me-growth-link">查看全部 ›</text></view>
+    <text class="me-growth-description">训练历史、复查时间线、身高与曲线变化</text>
   </view>
   <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 15.38rpx">
     <view style="display: flex; justify-content: space-between; align-items: baseline">

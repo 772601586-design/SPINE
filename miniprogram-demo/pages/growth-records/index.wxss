@@ -1,0 +1,6 @@
+.growth-records-page { padding-bottom: calc(38rpx + env(safe-area-inset-bottom)); }
+.growth-records-header { padding: 46.15rpx 38.46rpx 0; }
+.growth-records-title { display: block; font-size: 50rpx; font-weight: 700; }
+.growth-records-description { display: block; font-size: 25rpx; color: #5B6663; margin-top: 7.69rpx; }
+.growth-records-history { padding-bottom: 0; }
+.growth-records-history .flow-section:first-child { margin-top: 0; }

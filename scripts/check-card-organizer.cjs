@@ -5,8 +5,10 @@ const assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '../miniprogram-demo');
 const clone = value => JSON.parse(JSON.stringify(value));
 const storage = {}, cache = new Map();
+const navigation = [];
 const wx = { getStorageSync: key => storage[key] ? clone(storage[key]) : '', setStorageSync: (key, value) => { storage[key] = clone(value); },
-  showToast() {}, navigateTo() {}, navigateBack() {}, switchTab() {}, env: { USER_DATA_PATH: '/files' },
+  showToast() {}, navigateTo(options) { navigation.push({ type: 'navigateTo', url: options.url }); },
+  navigateBack() { navigation.push({ type: 'navigateBack' }); }, switchTab(options) { navigation.push({ type: 'switchTab', url: options.url }); }, env: { USER_DATA_PATH: '/files' },
   getFileSystemManager: () => ({ copyFile: options => options.success({}) }) };
 let recognize = () => Promise.resolve({ text: '' });
 function moduleAt(file) {
@@ -22,7 +24,7 @@ function page(name) {
   vm.runInNewContext(fs.readFileSync(path.join(root, 'pages', name, 'index.js'), 'utf8'), {
     Page: value => { definition = value; }, wx, Date, Promise,
     require: request => request.endsWith('/document-recognition') ? { recognize: value => recognize(value) }
-      : request.endsWith('/exercise-taxonomy') ? moduleAt('core/exercise-taxonomy.js') : request.endsWith('/documents') ? docs : t,
+      : request.endsWith('/exercise-taxonomy') ? moduleAt('core/exercise-taxonomy.js') : request.endsWith('/scheme-import') ? moduleAt('core/scheme-import.js') : request.endsWith('/documents') ? docs : t,
   });
   return Object.assign(definition, { data: clone(definition.data), setData(patch) { Object.assign(this.data, clone(patch)); } });
 }
@@ -79,6 +81,69 @@ function page(name) {
   finish({ text: '稍后返回的OCR内容' }); await pending;
   assert.equal(docs.load().find(item => item.id === inFlight.id).text, '手动校对原文', 'in-flight OCR cannot replace a manual correction');
 
+  const importer = moduleAt('core/scheme-import.js');
+  const importedDocument = docs.save({ type: 'training', originalName: '视频关联回归.txt', path: '/imported.txt', status: 'recognized',
+    recordingBatchId: 'manual-video-association', text: '1. 导入抬腿训练 每天 3组 每组12次\n2. 导入侧桥支撑 每天 2组 每组20秒' });
+  const parsedImportedActions = [
+    { name: '导入抬腿训练', groupName: '康复师核心训练组', sets: '3', amount: '12', mode: 'count', notes: '原件中的动作要点', frequency: '每天', sourceText: '导入抬腿训练 每天 3组 每组12次' },
+    { name: '导入侧桥支撑', groupName: '康复师稳定训练组', sets: '2', amount: '20', mode: 'timer', notes: '原件中的支撑要点', frequency: '每天', sourceText: '导入侧桥支撑 每天 2组 每组20秒' },
+  ];
+  const imported = importer.importDocument(importedDocument, parsedImportedActions);
+  const action = imported.cards[0], secondAction = imported.cards[1];
+  const recordingA = t.saveCard({ name: '现场讲解甲', mode: '', sets: '', amount: '', video: '/manual-association-a.mp4', recordingBatchId: 'recordings-a' }, false);
+  const recordingB = t.saveCard({ name: '现场讲解乙', mode: '', sets: '', amount: '', video: '/manual-association-b.mp4', recordingBatchId: 'recordings-b' }, false);
+  const importedPage = page('card'); importedPage.onLoad({ id: action.id });
+  importedPage.input({ currentTarget: { dataset: { field: 'notes' } }, detail: { value: '尚未点保存的个人动作要点' } });
+  const pageIdentity = ['id', 'name', 'groupName', 'sets', 'amount', 'mode', 'sourceSchemeDocument', 'sourceSchemeRow'];
+  const identityBefore = Object.fromEntries(pageIdentity.map(field => [field, importedPage.data[field]]));
+  const persistedFields = ['id', 'name', 'groupName', 'sets', 'amount', 'mode', 'confirmed', 'sourceSchemeDocument', 'sourceSchemeRow'];
+  const storedIdentityBefore = Object.fromEntries(persistedFields.map(field => [field, action[field]]));
+  const chooseRecording = (target, recordingId) => {
+    const index = target.data.videoOptions.findIndex(item => item.id === recordingId);
+    assert.ok(index >= 0, 'the recording must be available in the actual page picker');
+    target.selectVideo({ detail: { value: String(index) } });
+  };
+  chooseRecording(importedPage, recordingA.id);
+  assert.deepEqual(Object.fromEntries(pageIdentity.map(field => [field, importedPage.data[field]])), identityBefore,
+    'associating a recording keeps the imported action open with its name, grouping and dose');
+  assert.equal(importedPage.data.notes, '尚未点保存的个人动作要点', 'changing only the video preserves unsaved notes');
+  let storedAction = t.load().cards.find(item => item.id === action.id);
+  assert.equal(storedAction.video, recordingA.video, 'the video association persists without a separate form save');
+  assert.equal(storedAction.sourceVideoCardId, recordingA.id);
+  assert.deepEqual(Object.fromEntries(persistedFields.map(field => [field, storedAction[field]])), storedIdentityBefore,
+    'manual video association cannot change the imported requirements or confirmation state');
+  assert.equal(storedAction.notes, '原件中的动作要点', 'unsaved form notes are retained locally rather than silently overwriting saved notes');
+  assert.equal(t.load().cards.find(item => item.id === recordingA.id).linkedToActionId, action.id);
+
+  const secondImportedPage = page('card'); secondImportedPage.onLoad({ id: secondAction.id });
+  chooseRecording(secondImportedPage, recordingA.id);
+  assert.match(secondImportedPage.data.error, /已对应其他动作/);
+  assert.equal(secondImportedPage.data.id, secondAction.id);
+  assert.equal(t.load().cards.find(item => item.id === secondAction.id).video, '', 'an occupied recording cannot be stolen by another action');
+  assert.equal(t.load().cards.find(item => item.id === recordingA.id).linkedToActionId, action.id);
+  assert.equal(t.load().cards.find(item => item.id === action.id).video, recordingA.video);
+
+  chooseRecording(importedPage, recordingB.id);
+  assert.equal(importedPage.data.notes, '尚未点保存的个人动作要点');
+  assert.equal(t.load().cards.find(item => item.id === action.id).video, recordingB.video);
+  assert.equal(t.load().cards.find(item => item.id === recordingA.id).linkedToActionId, undefined, 'replacing a recording releases the old association');
+  assert.equal(t.load().cards.find(item => item.id === recordingB.id).linkedToActionId, action.id);
+  chooseRecording(importedPage, '');
+  storedAction = t.load().cards.find(item => item.id === action.id);
+  assert.equal(storedAction.video, ''); assert.equal(storedAction.sourceVideoCardId, '');
+  assert.equal(storedAction.videoAssociationManual, true);
+  assert.equal(importedPage.data.notes, '尚未点保存的个人动作要点');
+  assert.equal(t.load().cards.find(item => item.id === recordingB.id).linkedToActionId, undefined);
+  t.saveCard(Object.assign({}, t.load().cards.find(item => item.id === recordingB.id), { name: action.name }), false);
+  importer.reconcileVideos();
+  assert.equal(t.load().cards.find(item => item.id === action.id).video, '', 'explicit unlink survives automatic reconciliation even with a uniquely named matching video');
+  const repeatedImport = importer.importDocument(importedDocument, parsedImportedActions);
+  assert.equal(repeatedImport.cards[0].id, action.id, 'the same imported action retains its identity on re-import');
+  importer.reconcileVideos();
+  assert.equal(t.load().cards.find(item => item.id === action.id).video, '', 're-import also preserves a manual unlink');
+  importedPage.saveDraft();
+  assert.equal(t.load().cards.find(item => item.id === action.id).notes, '尚未点保存的个人动作要点', 'the retained notes can still be explicitly saved');
+
   const capture = page('capture'); capture.onLoad({});
   const mediaChoices = [];
   wx.chooseMedia = options => { mediaChoices.push(options); };
@@ -122,5 +187,19 @@ function page(name) {
   assert.equal(clips.length, 2); assert.notEqual(clips[0].video, clips[1].video);
   assert.equal(clips[0].mode, ''); assert.equal(capture.data.drafts.length, 2);
   assert.equal(docs.load().find(item => item.id === first.id).text.includes('3组 4组'), true);
-  console.log('PASS: empty requirements stay empty; conflicting sources stay unresolved; video/action identities survive reordered text; queued/in-flight OCR preserves manual edits; continuous recordings keep separate drafts.');
+  const planningCapture = page('capture'); planningCapture.onLoad({ returnTo: 'planning' });
+  assert.equal(planningCapture.data.returnTo, 'planning');
+  let navigationBefore = navigation.length;
+  planningCapture.finish();
+  assert.deepEqual(navigation.slice(navigationBefore), [{ type: 'switchTab', url: '/pages/planning/index' }], 'finishing from planning returns to the planning tab');
+  planningCapture.setData({ detailsCard: firstVideoId, detailsOpen: false });
+  navigationBefore = navigation.length;
+  planningCapture.finish();
+  assert.equal(navigation.length, navigationBefore, 'an unfinished recording keeps the details form open instead of navigating away');
+  assert.equal(planningCapture.data.detailsOpen, true);
+  assert.match(planningCapture.data.detailsError, /先保存/);
+  planningCapture.setData({ detailsCard: '', selecting: true });
+  planningCapture.finish();
+  assert.equal(navigation.length, navigationBefore, 'native camera selection must finish before returning to planning');
+  console.log('PASS: draft requirements and OCR edits stay intact; imported video association keeps action/dose/unsaved notes, prevents stealing and preserves manual unlink; continuous recordings stay separate and return to planning.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

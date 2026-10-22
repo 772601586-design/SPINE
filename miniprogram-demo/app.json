@@ -3,8 +3,10 @@
     "pages/welcome/index",
     "pages/scheme/index",
     "pages/today/index",
+    "pages/planning/index",
     "pages/train/index",
     "pages/growth/index",
+    "pages/growth-records/index",
     "pages/community/index",
     "pages/me/index",
     "pages/stage/index",
@@ -31,20 +33,21 @@
     "backgroundTextStyle": "dark"
   },
   "tabBar": {
+    "custom": true,
     "color": "#5B6663",
     "selectedColor": "#1F6F66",
     "backgroundColor": "#FFFFFF",
     "borderStyle": "white",
     "list": [
       {
-        "pagePath": "pages/train/index",
-        "text": "训练",
+        "pagePath": "pages/planning/index",
+        "text": "制定",
         "iconPath": "assets/tab/grid-v2.png",
         "selectedIconPath": "assets/tab/grid-on-v2.png"
       },
       {
-        "pagePath": "pages/growth/index",
-        "text": "成长",
+        "pagePath": "pages/train/index",
+        "text": "训练",
         "iconPath": "assets/tab/chart-v2.png",
         "selectedIconPath": "assets/tab/chart-on-v2.png"
       },

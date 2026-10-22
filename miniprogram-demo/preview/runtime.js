@@ -17,6 +17,7 @@
   const current = () => stack[stack.length - 1];
   const rpx = value => String(value).replace(/(-?\d+(?:\.\d+)?)rpx\b/g, (_, n) => `calc(${n} * var(--rpx))`);
   const tabIconPaths = {
+    'pages/planning/index': '<rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 7h8M8 12h8M8 17h5"/>',
     'pages/train/index': '<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>',
     'pages/growth/index': '<path d="M4 3v17h17M7 15l4-5 4 3 5-7"/>',
     'pages/community/index': '<circle cx="9" cy="7" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3M16 4a3 3 0 0 1 0 6M18 13a5 5 0 0 1 3 5v3"/>',
@@ -279,7 +280,7 @@
     } catch (error) { report(error); }
   }
   function back(delta = 1) {
-    if (stack.length < 2) { navigate('/pages/train/index','tab'); return; }
+    if (stack.length < 2) { navigate('/pages/planning/index','tab'); return; }
     ++navigating;
     while (delta-- > 0 && stack.length > 1) leave(stack.pop(), true);
     const page = current(); page.onShow?.(); render(); content.scrollTop = page.scroll || 0;
@@ -338,10 +339,42 @@
         options.success?.(result);
       } catch (error) { options.fail?.({ message: error.name === 'TimeoutError' ? '识别用时较长，请重试或手动校对。' : error.message }); }
     },
+    async recognizeSchemeFile(options) {
+      try {
+        const blob = mediaFiles.get(options.path)?.blob || temporaryFiles.get(options.path);
+        if (!blob) throw Error('方案原件无法读取，请重新选择文件。');
+        if (blob.size > 20 * 1024 * 1024) throw Error('方案文件需小于 20 MB，请压缩或分成多个文件。');
+        const dataUrl = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(blob); });
+        const fileBase64 = String(dataUrl).slice(String(dataUrl).indexOf(',') + 1);
+        const response = await fetch('/api/recognize-scheme', { method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fileBase64, name: options.name, extension: options.extension }), signal: AbortSignal.timeout(180000) });
+        const result = await response.json();
+        if (!response.ok) throw Error(result.error || '方案识别未完成，请重试。');
+        options.success?.(result);
+      } catch (error) { options.fail?.({ message: error.name === 'TimeoutError' ? '方案识别用时较长，请重试。' : error.message }); }
+    },
+    chooseMessageFile(options) {
+      const input = document.createElement('input'); input.type = 'file';
+      if (Array.isArray(options.extension)) input.accept = options.extension.map(extension => '.' + String(extension).replace(/^\./, '')).join(',');
+      input.onchange = () => {
+        const file = input.files[0];
+        if (!file) { options.fail?.({ errMsg: 'chooseMessageFile:fail cancel' }); input.remove(); return; }
+        const path = URL.createObjectURL(file); temporaryFiles.set(path, file);
+        options.success?.({ tempFiles: [{ path, name: file.name, size: file.size, type: file.type }] }); input.remove();
+      };
+      input.addEventListener('cancel', () => { options.fail?.({ errMsg: 'chooseMessageFile:fail cancel' }); input.remove(); });
+      input.hidden = true; document.body.append(input); input.click();
+    },
     chooseMedia,
     previewImage:o=>{ const dialog=document.createElement('dialog'),img=document.createElement('img'),close=document.createElement('button');img.src=mediaFiles.get(o.current)?.url||o.current;img.style.maxWidth='80vw';close.textContent='关闭';close.onclick=()=>{dialog.close();dialog.remove();};dialog.append(img,close);document.body.append(dialog);dialog.showModal(); },
     env:{USER_DATA_PATH:'/__demo_files__'},
-    getFileSystemManager:()=>({copyFile(options) {
+    getFileSystemManager:()=>({readFile(options) {
+      const blob=temporaryFiles.get(options.filePath)||mediaFiles.get(options.filePath)?.blob;
+      if (!blob) { options.fail?.({errMsg:'原件无法读取'}); return; }
+      const reader=new FileReader();reader.onerror=()=>options.fail?.({errMsg:'原件无法读取'});
+      reader.onload=()=>options.success?.({data:options.encoding==='base64'?String(reader.result).split(',')[1]:reader.result});
+      if (options.encoding==='base64') reader.readAsDataURL(blob); else if (options.encoding) reader.readAsText(blob,options.encoding); else reader.readAsArrayBuffer(blob);
+    },copyFile(options) {
       const blob=temporaryFiles.get(options.srcPath)||mediaFiles.get(options.srcPath)?.blob;
       if (!blob||!database) { options.fail?.({errMsg:'无法保存媒体文件'}); return; }
       const tx=database.transaction('files','readwrite');tx.objectStore('files').put(blob,options.destPath);
@@ -363,7 +396,7 @@
     try {
       const response=await fetch('/api/demo');if(!response.ok)throw Error('页面源文件加载失败');bundle=await response.json();
       await openFiles();version=(await (await fetch('/api/version')).json()).version;
-      navigate(location.hash.slice(1)||'/pages/train/index','reset');
+      navigate(location.hash.slice(1)||'/pages/planning/index','reset');
       setInterval(async()=>{try{const next=await(await fetch('/api/version')).json();if(next.version!==version){notify('源文件已更新，正在刷新');setTimeout(()=>location.reload(),250);}}catch{}},1500);
     } catch(error){report(error);}
   }

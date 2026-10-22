@@ -4,7 +4,7 @@ Page({
   data: { card: '', returnCard: '', drafts: [], busy: false, selecting: false, detailsOpen: false, detailsCard: '', actionName: '', actionNotes: '', detailsError: '', error: '', practice: false, recordingBatchId: '', createdCount: 0 },
   onLoad(query) {
     const card = t.load().cards.find(item => item.id === query.card);
-    this.setData({ card: query.card || '', returnCard: query.card || '', practice: query.practice === '1',
+    this.setData({ card: query.card || '', returnCard: query.card || '', returnTo: query.returnTo || '', practice: query.practice === '1',
       recordingBatchId: card ? card.recordingBatchId || 'local-current' : query.batch || t.id('visit') });
     this.reload();
     this.setData({ regionOptions: taxonomy.regions, muscleOptions: taxonomy.muscles, selectedRegions: [], selectedMuscles: [] });
@@ -76,6 +76,7 @@ Page({
   finish() {
     if (this.data.busy || this.data.selecting) return;
     if (this.data.detailsCard) { this.setData({ detailsOpen: true, detailsError: '请先保存本段动作名称和关键要点。' }); return; }
+    if (this.data.returnTo === 'planning') { wx.switchTab({ url: '/pages/planning/index' }); return; }
     if (this.data.returnCard && this.data.createdCount <= 1) { wx.navigateBack(); return; }
     if (this.data.drafts.length) wx.navigateTo({ url: '/pages/card/index?id=' + this.data.drafts[this.data.drafts.length - 1].id });
     else wx.switchTab({ url: '/pages/train/index' });

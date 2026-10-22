@@ -46,10 +46,11 @@ function bindPage(screen, keys, extra) {
     onLoad() {
       // 首次使用的入口：已经建过档的用户直接进首页
       if (screen === 'welcome' && store.app.state.onboarded) {
-        wx.switchTab({ url: '/pages/train/index' });
+        wx.switchTab({ url: '/pages/planning/index' });
       }
     },
     onShow() {
+      if (screen === 'me' && this.getTabBar) wx.nextTick(() => { const bar = this.getTabBar(); if (bar) bar.setData({ selected: 3 }); });
       store.enter(screen);
       this.refresh();
     },

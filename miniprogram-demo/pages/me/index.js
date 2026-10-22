@@ -3,6 +3,7 @@ const store = require('../../core/store');
 
 // 我的：本页用到的视图字段（由构建脚本从 WXML 统计）
 Page(bindPage('me', ["complete", "completeText", "completeW", "nav", "pine", "remindOn", "stageLabel", "swBg", "swLeft", "toggleRemind"], {
+  openGrowthRecords() { wx.navigateTo({ url: '/pages/growth-records/index' }); },
   resetDemo() {
     wx.showModal({
       title: '重置示例数据',

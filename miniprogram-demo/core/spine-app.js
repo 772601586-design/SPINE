@@ -35,7 +35,7 @@ class SpineApp extends DCLogic {
     super(props);
     const home = (props.startAt ?? '首次使用') === '直接进首页';
     this.state = {
-      screen: home ? 'today' : 'welcome', back: 'today', stageReturn: 'basics',
+      screen: home ? 'planning' : 'welcome', back: 'planning', stageReturn: 'basics',
       gender: 'f', stage: 'brace', menarche: 'yes', matReport: true, matRx: true, matNone: false,
       done: [1, 2, 3, 4], standDone: false, swim: 1,
       pine: 36, trainRewarded: false, justRewarded: false, quizRewarded: false, drawRewarded: false, uploadRewarded: false, makeupUsed: false,
@@ -132,13 +132,13 @@ class SpineApp extends DCLogic {
     const drafts = this.state.drafts.concat([d]);
     const cnt = this.state.recCount + 1;
     if (more) { this.setState({ drafts: drafts, recCount: cnt, recState: 'ready', recName: '' }); return; }
-    this.go('train', { drafts: drafts, recCount: 0, recState: 'ready', recName: '', toast: '已保存 ' + cnt + ' 段，处方单到了再一起整理' });
+    this.go('planning', { drafts: drafts, recCount: 0, recState: 'ready', recName: '', toast: '已保存 ' + cnt + ' 段，处方单到了再一起整理' });
   }
   finishMatch() {
     const picked = this.state.drafts.map((d) => d.cands[d.pick]).filter((x) => x !== 0);
     const rest = this.state.drafts.filter((d) => d.cands[d.pick] === 0);
     const videos = this.state.videos.concat(picked.filter((x) => this.state.videos.indexOf(x) === -1));
-    this.go('train', { videos: videos, drafts: rest, toast: '已把 ' + picked.length + ' 段视频配到卡片上' });
+    this.go('planning', { videos: videos, drafts: rest, toast: '已把 ' + picked.length + ' 段视频配到卡片上' });
   }
 
   renderVals() {
@@ -147,17 +147,19 @@ class SpineApp extends DCLogic {
     const sel = (on) => ({ aria: on ? 'true' : 'false', border: on ? '2px solid #1F6F66' : '1px solid #C9D4D0', bg: on ? '#DDEDE9' : 'transparent', fg: on ? '#1F4F49' : '#3E4B47', fw: on ? '700' : '400' });
     const tab = (on) => ({ aria: on ? 'true' : 'false', bg: on ? '#FFFFFF' : 'transparent', fg: on ? '#1F2A27' : '#3E4B47', fw: on ? '700' : '400' });
     const scr = S.screen;
-    const names = ['welcome', 'stage', 'basics', 'ready', 'today', 'follow', 'done', 'train', 'record', 'import', 'match', 'card', 'growth', 'upload', 'community', 'me', 'brace', 'rewards'];
+    const names = ['welcome', 'stage', 'basics', 'ready', 'today', 'planning', 'follow', 'done', 'train', 'record', 'import', 'match', 'card', 'growth', 'growth-records', 'upload', 'community', 'me', 'brace', 'rewards'];
     const s = {};
     names.forEach((n) => { s[n] = scr === n; });
-    const tabs = ['today', 'train', 'growth', 'community', 'me'];
+    const tabs = ['planning', 'train', 'community', 'me'];
     const navc = {}; const navw = {};
     tabs.forEach((t) => { navc[t] = scr === t ? '#1F6F66' : '#5B6663'; navw[t] = scr === t ? '700' : '400'; });
 
     const nav = {
       today: () => this.go('today'),
+      planning: () => this.go('planning'),
       train: () => this.go('train'),
       growth: () => this.go('growth'),
+      growthRecords: () => this.open('growth-records'),
       community: () => this.go('community'),
       me: () => this.go('me'),
       talk: () => this.go('community', { commTab: 'talk' }),
@@ -335,7 +337,7 @@ class SpineApp extends DCLogic {
       s: s, st: st, nav: nav, navc: navc, navw: navw,
       showNav: tabs.indexOf(scr) !== -1,
       hasToast: !!S.toast, toast: S.toast,
-      goBack: () => this.go(S.back || 'today'),
+      goBack: () => this.go(S.back || 'planning'),
       genders: genders, isCustomGender: S.gender === 'c',
       stages: stages, stageLabel: stageLabel,
       stageStep: S.stageReturn === 'me' ? '切换阶段' : '2 / 4',
@@ -383,7 +385,7 @@ class SpineApp extends DCLogic {
       rxView: !S.rxEdit, rxEditing: S.rxEdit, rxEditText: rE.text, rxEditLabel: rE.label, rxEditBg: rE.bg, rxEditFg: rE.fg,
       toggleRxEdit: () => this.setState({ rxEdit: !S.rxEdit }),
       importBtn: S.drafts.length ? '下一步：配上现场录的视频' : '确认导入，更新卡片',
-      importNext: () => (S.drafts.length ? this.go('match', { rxV2: true }) : this.go('train', { rxV2: true, toast: '处方已更新：臀桥改为 120 个' })),
+      importNext: () => (S.drafts.length ? this.go('match', { rxV2: true }) : this.go('planning', { rxV2: true, toast: '处方已更新：臀桥改为 120 个' })),
       draftRows: draftRows, finishMatch: () => this.finishMatch(),
       card: card, cardTabs: cardTabs, ct: ct,
       cardView: !S.cardEdit, cardEditing: S.cardEdit, cardEditText: cE.text, cardEditLabel: cE.label, cardEditBg: cE.bg, cardEditFg: cE.fg,
@@ -393,7 +395,7 @@ class SpineApp extends DCLogic {
       visits: visits,
       upFields: upFields, upView: !S.uploadEdit, upEditing: S.uploadEdit, upEditText: uE.text, upEditLabel: uE.label, upEditBg: uE.bg, upEditFg: uE.fg,
       toggleUpEdit: () => this.setState({ uploadEdit: !S.uploadEdit }),
-      saveUpload: () => this.go('growth', { uploadSaved: true, uploadEdit: false, uploadRewarded: true, pine: S.uploadRewarded ? S.pine : S.pine + 5, toast: S.uploadRewarded ? '已保存到成长记录' : '已保存到成长记录 · +5 松果' }),
+      saveUpload: () => this.go('growth-records', { uploadSaved: true, uploadEdit: false, uploadRewarded: true, pine: S.uploadRewarded ? S.pine : S.pine + 5, toast: S.uploadRewarded ? '已保存到成长记录' : '已保存到成长记录 · +5 松果' }),
       commTabs: commTabs, cm: cm, guides: guides,
       pat: () => this.setState({ patted: true, toast: '已经拍了拍阿乐' }), patBg: S.patted ? '#8A9A95' : '#1F6F66', patText: S.patted ? '已拍拍' : '拍拍她',
       quizOpts: quizOpts, quizRight: S.quizPick === '四弯型', quizWrong: !!S.quizPick && S.quizPick !== '四弯型',

@@ -1,8 +1,10 @@
 const t = require('../../core/training');
 const docs = require('../../core/documents');
 const recognition = require('../../core/document-recognition');
+const importer = require('../../core/scheme-import');
 const blank = () => ({ id: '', name: '', groupName: '', notes: '', sets: '', amount: '', mode: '', checked: false, confirmed: false,
-  video: '', practice: '', source: '', sourceText: '', sourceDoseText: '', sourceCandidateId: '', sourceDocumentIds: [], frequencyText: '', warnings: [] });
+  video: '', practice: '', source: '', sourceText: '', sourceDoseText: '', sourceCandidateId: '', sourceDocumentIds: [], frequencyText: '', warnings: [],
+  sourceSchemeDocument: '', sourceSchemeRow: '', sourceVideoCardId: '' });
 Page({
   data: Object.assign(blank(), { tab: 'learn', saved: false, manualExpanded: false, contextExpanded: false, error: '', unit: '', history: [],
     recordingBatchId: '', videoOptions: [], videoIndex: 0, videoLabel: '选择现场录段', videoCount: 0,
@@ -35,11 +37,11 @@ Page({
   onUnload() { this._closed = true; },
   reloadMaterials() {
     try {
-      const state = t.load(), videos = state.cards.filter(card => card.video);
+      const state = t.load(), videos = state.cards.filter(card => card.video && (!card.sourceSchemeDocument || card.id === this.data.id));
       const videoOptions = [{ id: '', name: '稍后选择视频' }].concat(videos);
-      const index = videoOptions.findIndex(card => card.id === this.data.id);
+      const index = videoOptions.findIndex(card => card.id === (this.data.sourceVideoCardId || this.data.id));
       const relevant = docs.load().filter(doc => doc.recordingBatchId === this.data.recordingBatchId
-        || (!doc.recordingBatchId && this.data.recordingBatchId === 'local-current') || (this.data.sourceDocumentIds || []).includes(doc.id));
+        || (!doc.recordingBatchId && this.data.recordingBatchId === 'local-current') || (this.data.sourceDocumentIds || []).includes(doc.id) || doc.id === this.data.sourceSchemeDocument);
       const documents = relevant.map(doc => Object.assign({}, doc, { typeLabel: doc.type === 'medical' ? '病例单' : '训练方案单',
         statusLabel: doc.id === this._recognizingId ? '正在识别…' : doc.status === 'recognized' ? '文字已整理 · 待核对' : doc.status === 'failed' ? '需要补充' : '原件已保存',
         recognizing: doc.id === this._recognizingId, shortText: (doc.text || '').slice(0, 80) }));
@@ -89,8 +91,19 @@ Page({
     Object.keys(blank()).forEach(key => { edit[key] = data[key]; }); this._edits[data.id || 'new'] = edit;
   },
   selectVideo(e) {
-    this.cacheEdits(); const chosen = this.data.videoOptions[Number(e.detail.value)];
-    if (chosen) this.loadCard(t.load().cards.find(card => card.id === chosen.id));
+    const chosen = this.data.videoOptions[Number(e.detail.value)];
+    if (!chosen) return;
+    if (this.data.sourceSchemeDocument) {
+      if (chosen.id === this.data.id && !this.data.sourceVideoCardId) return;
+      try {
+        const card = importer.linkVideo(this.data.id, chosen.id === this.data.id ? this.data.sourceVideoCardId : chosen.id);
+        this.setData({ video: card.video || '', sourceVideoCardId: card.sourceVideoCardId || '', error: '' });
+        this.reloadMaterials();
+        wx.showToast({ title: chosen.id ? '已关联动作视频' : '已取消视频关联', icon: 'none' });
+      } catch (error) { this.setData({ error: error.message }); }
+      return;
+    }
+    this.cacheEdits(); this.loadCard(t.load().cards.find(card => card.id === chosen.id));
   },
   uploadDocument(e) {
     if (this.data.recognizing) return;
@@ -191,7 +204,8 @@ Page({
       const card = t.saveCard({ id: this.data.id || undefined, name: this.data.name.trim() || '待整理的现场动作', groupName: this.data.groupName.trim(), notes: this.data.notes,
         sets: this.data.sets, amount: this.data.amount, mode: this.data.mode, video: this.data.video, practice: this.data.practice,
         source: this.data.source || '现场指导（手动填写）', recordingBatchId: this.data.recordingBatchId, sourceText: this.data.sourceText, sourceDoseText: this.data.sourceDoseText,
-        sourceCandidateId: this.data.sourceCandidateId, sourceDocumentIds: this.data.sourceDocumentIds, frequencyText: this.data.frequencyText, warnings: this.data.warnings }, confirm);
+        sourceCandidateId: this.data.sourceCandidateId, sourceDocumentIds: this.data.sourceDocumentIds, frequencyText: this.data.frequencyText, warnings: this.data.warnings,
+        sourceSchemeDocument: this.data.sourceSchemeDocument, sourceSchemeRow: this.data.sourceSchemeRow, sourceVideoCardId: this.data.sourceVideoCardId }, confirm);
       this.setData({ id: card.id, confirmed: card.confirmed, checked: card.confirmed, saved: true, error: '' });
       delete this._edits[card.id]; this.reloadMaterials();
       if (!quiet) wx.showToast({ title: confirm ? '已保存并核对' : '草稿已保存', icon: 'success' }); return card;
