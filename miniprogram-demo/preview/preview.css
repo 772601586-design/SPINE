@@ -68,7 +68,9 @@ button:focus-visible, a:focus-visible { outline: 3px solid #78a89a; outline-offs
 .preview-capsule-circle::after { content: ""; position: absolute; width: 5px; height: 5px; border-radius: 50%; background: currentColor; inset: 0; margin: auto; }
 #app-content { min-height: 0; flex: 1; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; outline: none; }
 #app-content::-webkit-scrollbar { display: none; }
+.preview-modal-input{box-sizing:border-box;width:100%;padding:12px;border:1px solid #cbd9be;border-radius:10px;background:#f6f8f0;color:#3c5b36;font:inherit}
 .miniapp { --rpx: calc(100cqw / 750); color: #1f2a27; font-size: 14px; line-height: 1.5; font-family: inherit; }
+#app-content .welcome-page { min-height: 100%; }
 .miniapp div, .miniapp span { -webkit-tap-highlight-color: transparent; }
 .miniapp button { border: 0; display: block; width: 100%; position: relative; overflow: hidden; margin-left: auto; margin-right: auto; padding: 0 14px; border-radius: 5px; font-size: 18px; text-align: center; text-decoration: none; line-height: 2.55555556; background: #f8f8f8; color: #000; -webkit-tap-highlight-color: transparent; }
 .miniapp .flow-mini { width: auto; flex-shrink: 0; }

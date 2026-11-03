@@ -34,10 +34,14 @@
     img.src = '/' + (selected ? tab.selectedIconPath : tab.iconPath); img.alt = '';
     return img;
   }
-  const css = source => rpx(source.replace(/\/\*[\s\S]*?\*\//g, '')).replace(/(^|})([^{}]+){/g, (_, prefix, selectors) => prefix + selectors.split(',').map(selector => {
+  const css = source => {
+    const animations = [];
+    const scoped = rpx(source.replace(/\/\*[\s\S]*?\*\//g, '')).replace(/@(?:-webkit-)?keyframes\s+[\w-]+\s*\{(?:[^{}]|\{[^{}]*\})*\}/g, rule => { animations.push(rule); return ''; });
+    return scoped.replace(/(^|})([^{}]+){/g, (_, prefix, selectors) => prefix + selectors.split(',').map(selector => {
     const converted = selector.trim().replace(/(^|[\s>+~])(page|view|text)(?![\w-])/g, (_, lead, tag) => lead + ({ page: '.miniapp', view: '.wx-view', text: '.wx-text' })[tag]);
     return converted.startsWith('.miniapp') ? converted : '.miniapp ' + converted;
-  }).join(',') + '{');
+    }).join(',') + '{') + '\n' + animations.join('\n');
+  };
   function report(error) {
     console.error(error);
     $('runtime-error').hidden = false;
@@ -140,7 +144,7 @@
     const tag = node.tagName.toLowerCase();
     if (tag === 'wxs') return;
     if (tag === 'block') { children(node.childNodes, scope, parent, key, page); return; }
-    const el = document.createElement(({ view: 'div', text: 'span', image: 'img', picker: 'div' })[tag] || tag);
+    const el = document.createElement(({ view: 'div', text: 'span', image: 'img', picker: 'div', 'rich-text': 'div' })[tag] || tag);
     el.className = 'wx-' + tag;
     el.dataset.previewKey = key;
     const dataset = {};
@@ -173,13 +177,31 @@
       el.oninput = event => dispatch(page, interpolate(node.getAttribute('bindinput'), scope), dataset, event, 'input');
       el.onchange = event => dispatch(page, interpolate(node.getAttribute('bindchange'), scope), dataset, event, 'change');
     }
-    if (tag !== 'image' && tag !== 'input') children(node.childNodes, scope, el, key, page);
+    if (tag === 'image') el.onerror = event => dispatch(page, interpolate(node.getAttribute('binderror'), scope), dataset, event, 'error', {errMsg:'image load failed'});
+    if (tag === 'rich-text') {
+      // Backend renders Markdown with raw HTML disabled and a strict sanitizer.
+      // Defense in depth for the browser preview; native WeChat applies its own rich-text allowlist.
+      const fragment = document.createElement('template');
+      fragment.innerHTML = String(interpolate(node.getAttribute('nodes'), scope) || '');
+      for (const item of fragment.content.querySelectorAll('*')) {
+        if (!['P','BR','H1','H2','H3','H4','H5','H6','STRONG','EM','S','BLOCKQUOTE','UL','OL','LI','PRE','CODE','HR','A','IMG','TABLE','THEAD','TBODY','TR','TH','TD'].includes(item.tagName)) { item.remove(); continue; }
+        for (const attr of Array.from(item.attributes)) {
+          if (!['href','src','alt','title','start'].includes(attr.name) || (['href','src'].includes(attr.name) && !/^https:\/\//i.test(attr.value))) item.removeAttribute(attr.name);
+        }
+      }
+      el.append(fragment.content);
+    } else if (tag !== 'image' && tag !== 'input') children(node.childNodes, scope, el, key, page);
     if (tag === 'picker') {
       const mode = node.getAttribute('mode'), picker = document.createElement(mode === 'date' ? 'input' : 'select');
       picker.className = 'preview-picker';
       picker.dataset.previewKey = key + '.picker';
       picker.setAttribute('aria-label', el.textContent.trim() || '选择');
-      if (mode === 'date') { picker.type = 'date'; picker.value = interpolate(node.getAttribute('value'), scope) || ''; }
+      if (mode === 'date') {
+        picker.type = node.getAttribute('fields') === 'month' ? 'month' : 'date';
+        picker.min = interpolate(node.getAttribute('start'), scope) || '';
+        picker.max = interpolate(node.getAttribute('end'), scope) || '';
+        picker.value = interpolate(node.getAttribute('value'), scope) || '';
+      }
       else {
         const range = interpolate(node.getAttribute('range'), scope) || [], field = node.getAttribute('range-key');
         range.forEach((item, index) => { const option = document.createElement('option'); option.value = index; option.textContent = field ? item[field] : item; picker.append(option); });
@@ -208,7 +230,7 @@
       const formValue = next.value;
       Array.from(old.attributes).forEach(attr => { if (!next.hasAttribute(attr.name)) old.removeAttribute(attr.name); });
       Array.from(next.attributes).forEach(attr => { if (old.getAttribute(attr.name) !== attr.value) old.setAttribute(attr.name, attr.value); });
-      for (const event of ['onclick','onkeydown','oninput','onchange']) old[event] = next[event];
+      for (const event of ['onclick','onkeydown','oninput','onchange','onerror']) old[event] = next[event];
       if (['INPUT','TEXTAREA'].includes(next.nodeName) && old.value !== next.value) old.value = next.value;
       patchChildren(old, next.childNodes);
       if (next.nodeName === 'SELECT') old.value = formValue;
@@ -228,6 +250,7 @@
       if (replacement) { replacement.focus({ preventScroll: true }); try { replacement.setSelectionRange(focused.start, focused.end); } catch {} }
     }
     const info = bundle.pages[page.route].json || {};
+    $('native-nav').style.display = info.navigationStyle === 'custom' ? 'none' : '';
     $('native-nav').style.backgroundColor = info.navigationBarBackgroundColor || bundle.config.window.navigationBarBackgroundColor;
     $('nav-title').textContent = info.navigationBarTitleText || '小树';
     $('nav-back').hidden = stack.length < 2;
@@ -306,25 +329,52 @@
     input.onchange = () => {
       const file = input.files[0]; if (!file) return;
       const path = URL.createObjectURL(file); temporaryFiles.set(path,file);
-      options.success?.({ tempFiles:[{ tempFilePath:path,size:file.size,fileType:file.type.startsWith('video')?'video':'image' }] });
-      input.remove();
+      const result = { tempFiles:[{ tempFilePath:path,name:file.name,size:file.size,fileType:file.type.startsWith('video')?'video':'image' }] };
+      try { options.success?.(result); } finally { options.complete?.(result); input.remove(); }
     };
-    input.addEventListener('cancel', () => { options.fail?.({errMsg:'chooseMedia:fail cancel'}); input.remove(); });
+    input.addEventListener('cancel', () => { const result={errMsg:'chooseMedia:fail cancel'};try { options.fail?.(result); } finally { options.complete?.(result); input.remove(); } });
     input.hidden = true; document.body.append(input); input.click();
   }
   const wx = {
+    async request(options) {
+      try {
+        const method = options.method || 'GET';
+        const response = await fetch(options.url, { method, headers: options.header,
+          body: ['GET','HEAD'].includes(method) || options.data === undefined ? undefined : JSON.stringify(options.data),
+          signal: AbortSignal.timeout(options.timeout || 12000) });
+        options.success?.({ statusCode: response.status, data: await response.json() });
+      } catch (error) { options.fail?.({ errMsg: error.message }); }
+      finally { options.complete?.({}); }
+    },
     getStorageSync:key=>copy(JSON.parse(localStorage.getItem(PREFIX+key)||'null')),
     setStorageSync:(key,data)=>localStorage.setItem(PREFIX+key,JSON.stringify(data)),
     removeStorageSync:key=>localStorage.removeItem(PREFIX+key),
     nextTick:fn=>queueMicrotask(fn),
     navigateTo:o=>navigate(o.url), redirectTo:o=>navigate(o.url,'replace'), switchTab:o=>navigate(o.url,'tab'), reLaunch:o=>navigate(o.url,'reset'),
     navigateBack:(o={})=>back(o.delta||1), showToast:o=>notify(o.title),
+    showActionSheet(options) {
+      const dialog = document.createElement('dialog');
+      const finish = index => {
+        dialog.close(); dialog.remove();
+        if (index < 0) options.fail?.({errMsg:'showActionSheet:fail cancel'});
+        else options.success?.({tapIndex:index});
+      };
+      (options.itemList || []).forEach((label,index) => {
+        const button = document.createElement('button'); button.textContent = label;
+        button.onclick = () => finish(index); dialog.append(button);
+      });
+      const cancel = document.createElement('button'); cancel.textContent = '取消'; cancel.onclick = () => finish(-1);
+      dialog.oncancel = event => { event.preventDefault(); finish(-1); };
+      dialog.append(cancel); document.body.append(dialog); dialog.showModal();
+    },
     showModal(options) {
       const dialog = document.createElement('dialog'), heading = document.createElement('h2'), body = document.createElement('p'), cancel = document.createElement('button'), confirm = document.createElement('button');
       heading.textContent = options.title || '提示'; body.textContent = options.content || ''; cancel.textContent = options.cancelText || '取消'; confirm.textContent = options.confirmText || '确定';
-      const finish = result => { options.success?.({confirm:result,cancel:!result}); dialog.close(); dialog.remove(); };
+      let field;
+      if (options.editable) { field=document.createElement('input');field.className='preview-modal-input';field.value=options.content||'';field.placeholder=options.placeholderText||'';body.replaceChildren(field); }
+      const finish = confirmed => { const result={confirm:confirmed,cancel:!confirmed,content:field?.value};dialog.close();dialog.remove();options.success?.(result);options.complete?.(result); };
       cancel.onclick = () => finish(false); confirm.onclick = () => finish(true); dialog.oncancel = event => { event.preventDefault(); finish(false); };
-      dialog.append(heading,body,cancel,confirm); document.body.append(dialog); dialog.showModal();
+      dialog.append(heading,body,cancel,confirm); document.body.append(dialog); dialog.showModal();if(field)field.focus();
     },
     setClipboardData: async o=>{ try { await navigator.clipboard.writeText(o.data); notify('汇总已复制'); o.success?.({}); } catch { notify('复制失败，可直接选择汇总文字复制'); o.fail?.({}); } },
     async recognizeDocument(options) {
@@ -374,6 +424,11 @@
       const reader=new FileReader();reader.onerror=()=>options.fail?.({errMsg:'原件无法读取'});
       reader.onload=()=>options.success?.({data:options.encoding==='base64'?String(reader.result).split(',')[1]:reader.result});
       if (options.encoding==='base64') reader.readAsDataURL(blob); else if (options.encoding) reader.readAsText(blob,options.encoding); else reader.readAsArrayBuffer(blob);
+    },unlink(options) {
+      if (!database) { options.fail?.({errMsg:'媒体存储不可用'}); return; }
+      const tx=database.transaction('files','readwrite');tx.objectStore('files').delete(options.filePath);
+      tx.oncomplete=()=>{const saved=mediaFiles.get(options.filePath);if(saved)URL.revokeObjectURL(saved.url);mediaFiles.delete(options.filePath);options.success?.({});};
+      tx.onerror=()=>options.fail?.({errMsg:'媒体删除失败'});
     },copyFile(options) {
       const blob=temporaryFiles.get(options.srcPath)||mediaFiles.get(options.srcPath)?.blob;
       if (!blob||!database) { options.fail?.({errMsg:'无法保存媒体文件'}); return; }
@@ -401,6 +456,6 @@
     } catch(error){report(error);}
   }
   window.addEventListener('beforeunload',()=>stack.forEach(page=>leave(page,true)));
-  window.addEventListener('hashchange',()=>{const route=location.hash.slice(1);if(route&&normal(route.split('?')[0])!==current()?.route)navigate(route,'tab');});
+  window.addEventListener('hashchange',()=>{const route=location.hash.slice(1);if(!route)return;const target=new URL(route,location.origin);if(normal(target.pathname)!==current()?.route||target.searchParams.toString()!==new URLSearchParams(current()?.options||{}).toString())navigate(route,'tab');});
   boot();
 })();

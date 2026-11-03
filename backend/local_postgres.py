@@ -20,7 +20,9 @@ from psycopg import sql
 
 ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(ROOT / "backend/.env", override=False)
-BIN = ROOT / ".tools/postgresql/pgsql/bin"
+BIN = Path(os.getenv("POSTGRES_BIN") or ROOT / ".tools/postgresql/pgsql/bin")
+if os.getenv("POSTGRES_EXTRA_PATH"):
+    os.environ["PATH"] = os.environ["POSTGRES_EXTRA_PATH"] + os.pathsep + os.environ.get("PATH", "")
 DATA = ROOT / ".tools/postgresql-data"
 
 
@@ -66,6 +68,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("action", choices=["start", "stop", "status"])
     args = parser.parse_args()
+    (ROOT / ".tools").mkdir(exist_ok=True)
     if not (BIN / "pg_ctl.exe").exists():
         raise SystemExit("Missing .tools/postgresql/pgsql/bin/pg_ctl.exe; obtain PostgreSQL Windows binaries or use an existing server.")
     if args.action == "stop":

@@ -70,6 +70,30 @@
       <button wx:if="{{nextReview}}" class="button button-plain" bindtap="clearNextReview">清除复查日期</button>
     </view>
 
+    <view class="card">
+      <view class="row" bindtap="toggleDevelopment">
+        <text class="card-title tight">发育信息（选填）</text>
+        <text class="arrow">{{developmentOpen ? '收起' : '展开'}}</text>
+      </view>
+      <text class="muted">用于复诊时回答医生，可跳过、可随时删除；保存到个人档案，不复制到本次就诊。</text>
+      <block wx:if="{{developmentOpen}}">
+        <view class="divider"></view>
+        <view wx:if="{{developmentError}}" class="error">{{developmentError}}</view>
+        <view><view wx:for="{{developmentOptions}}" wx:key="value" class="pill {{menarche === item.value ? 'pill-active' : ''}}" data-value="{{item.value}}" bindtap="chooseMenarche">{{item.label}}</view></view>
+        <block wx:if="{{menarche === 'started'}}">
+          <text class="label">大约年月（可留空）</text>
+          <picker mode="date" fields="month" value="{{menarcheMonth}}" start="1900-01" end="{{todayMonth}}" bindchange="onMenarcheMonth">
+            <view class="field picker-field"><text class="{{menarcheMonth ? '' : 'placeholder'}}">{{menarcheMonth || '选择大约年月'}}</text><text class="arrow">›</text></view>
+          </picker>
+          <text wx:if="{{menarcheMonth}}" class="link" bindtap="clearMenarcheMonth">清除年月</text>
+        </block>
+        <view class="row gap">
+          <button class="button compact" loading="{{savingDevelopment}}" disabled="{{savingDevelopment}}" bindtap="saveDevelopment">保存发育信息</button>
+          <button wx:if="{{menarche}}" class="button button-plain compact" disabled="{{savingDevelopment}}" bindtap="clearDevelopment">清空</button>
+        </view>
+      </block>
+    </view>
+
     <button class="button" loading="{{saving}}" disabled="{{saving}}" bindtap="save">{{mode === 'create' ? '保存这次就诊' : '保存修改'}}</button>
 
     <block wx:if="{{mode === 'edit'}}">

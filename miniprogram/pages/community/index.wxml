@@ -1,4 +1,5 @@
 <view class="page">
+  <button class="button button-plain" bindtap="openKnowledge">Scolio 知识库 · 从你关心的问题开始</button>
   <view class="heading"><text class="eyebrow">一起走，慢慢来</text><text class="title">同行社群</text><text class="subtitle">分享生活经验。公开分享请避免姓名、联系方式和私人医疗资料。</text></view>
   <button class="button button-plain" bindtap="openLearning">支具生活指南 · 认知学习 · 每周绘画</button>
   <view class="groups"><text wx:for="{{groups}}" wx:key="key" class="group {{group === item.key ? 'active' : ''}}" data-group="{{item.key}}" bindtap="selectGroup">{{item.label}}</text></view>

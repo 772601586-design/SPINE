@@ -34,6 +34,26 @@
       </view>
     </block>
   </view>
+  <view style="padding: 26.92rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 15.38rpx">
+    <view style="display: flex; justify-content: space-between; align-items: baseline">
+      <text style="font-size: 26.92rpx; font-weight: 700">初潮时间（如适用）</text>
+      <text style="font-size: 23.08rpx; color: #5B6663">选填</text>
+    </view>
+    <text style="font-size: 23.08rpx; color: #5B6663">用于复诊时回答医生；默认不选，不影响保存或档案完整度。</text>
+    <view style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11.54rpx">
+      <block wx:for="{{ visitMenarcheOptions }}" wx:for-item="o" wx:key="_k">
+        <view style="display: flex; align-items: center; justify-content: center; min-height: 76.92rpx; border-radius: 19.23rpx; border: {{ o.border }}; background: {{ o.bg }}; color: {{ o.fg }}; font-size: 25rpx; font-weight: {{ o.fw }}" bindtap="act" data-fn="{{ o.pick }}" hover-class="tap">{{ o.label }}</view>
+      </block>
+    </view>
+    <block wx:if="{{ visitMenarcheStarted }}">
+      <picker mode="date" fields="month" value="{{ visitMenarcheMonth }}" start="1900-01" end="2026-10" bindchange="act" data-fn="{{ setVisitMenarcheMonth }}">
+        <view style="min-height: 76.92rpx; border-radius: 15.38rpx; border: 1.92rpx solid #C9D4D0; padding: 0 19.23rpx; display: flex; align-items: center; justify-content: space-between">
+          <text>{{ visitMenarcheMonth || '选择大约年月（可留空）' }}</text><text>›</text>
+        </view>
+      </picker>
+    </block>
+    <text class="link" bindtap="act" data-fn="{{ clearVisitMenarche }}">清空这项</text>
+  </view>
   <view style="display: flex; gap: 15.38rpx; align-items: flex-start; padding: 23.08rpx; border-radius: 23.08rpx; background: #EDF0EE; font-size: 23.08rpx; color: #3E4B47; line-height: 1.6">
     <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNicgaGVpZ2h0PScxNicgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyMzRTRCNDcnIHN0cm9rZS13aWR0aD0nMicgc3Ryb2tlLWxpbmVjYXA9J3JvdW5kJyBzdHJva2UtbGluZWpvaW49J3JvdW5kJyBzdHlsZT0nbWFyZ2luLXRvcDogMnB4OyBmbGV4LXNocmluazogMCc+PGNpcmNsZSBjeD0nMTInIGN5PScxMicgcj0nOSc+PC9jaXJjbGU+PHBhdGggZD0nTTEyIDh2NU0xMiAxNmguMDEnPjwvcGF0aD48L3N2Zz4=" style="width: 30.77rpx; height: 30.77rpx; flex-shrink: 0; margin-top: 3.85rpx; flex-shrink: 0" />
     <text>App 只帮你整理和对比，不做诊断。原图会一起保存，度数以原报告为准。</text>

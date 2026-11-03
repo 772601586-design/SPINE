@@ -3,6 +3,7 @@ import type { LifePost } from '../../services/life';
 import { requireOnboarded } from '../../services/session';
 
 Page({
+  openKnowledge() { wx.navigateTo({ url: '/pages/knowledge/index' }); },
   data: { loading: true, busy: false, error: '', group: 'companions', mine: false, body: '', reason: '', reportId: 0,
     posts: [] as LifePost[], groups: [{ key: 'companions', label: '同行伙伴' }, { key: 'brace', label: '支具生活' }, { key: 'deco', label: 'Deco' }] },
   onShow() { void this.reload(); },

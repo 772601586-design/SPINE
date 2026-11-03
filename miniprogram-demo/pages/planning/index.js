@@ -1,14 +1,15 @@
 const t = require('../../core/training');
 const legacy = require('../../core/store');
 const documents = require('../../core/documents');
-const recognition = require('../../core/document-recognition');
+const processing = require('../../core/scheme-processing');
+const library = require('../../core/material-library');
 const schemeUpload = require('../../core/scheme-upload');
 const importer = require('../../core/scheme-import');
 Page({
   data: { plans: [], cards: [], drafts: [], videos: [], files: [], cardGroups: [], totalCards: 0, showSchedules: false,
     error: '', busy: false, schemeBusy: false, schemePicker: false, processingLabel: '' },
   onShow() {
-    this._closed = false;
+    this._closed = false; this._visible = true;
     if (this.getTabBar) wx.nextTick(() => { const bar = this.getTabBar(); if (bar) bar.setData({ selected: 0 }); });
     legacy.enter('planning');
     try {
@@ -19,7 +20,8 @@ Page({
       this.importPendingFiles();
     } catch (error) { this.update({ error: error.message }); }
   },
-  onUnload() { this._closed = true; },
+  onHide() { this._visible = false; },
+  onUnload() { this._visible = false; this._closed = true; },
   update(values) { if (!this._closed) this.setData(values); },
   reload() {
     const state = t.load(), sources = documents.list('training'), sourceMap = {};
@@ -29,10 +31,10 @@ Page({
       const action = state.cards.find(item => item.id === card.linkedToActionId) || card;
       videos.push({ id: action.id, name: action.name, video: card.video }); seenVideos.add(card.video);
     } });
-    const files = sources.slice().reverse().map(doc => {
+    const files = sources.filter(doc => !library.isHidden('files', doc.id)).slice().reverse().map(doc => {
       const actions = state.cards.filter(card => card.sourceSchemeDocument === (doc.duplicateOf || doc.id));
       const processing = this._processingDocumentId === doc.id;
-      return Object.assign({}, doc, { actionCount: actions.length, originalName: doc.originalName || '训练方案单',
+      return Object.assign({}, doc, { actionCount: actions.length, displayName: library.title('files', doc.id, doc.originalName || '训练方案单'), originalName: doc.originalName || '训练方案单',
         statusLabel: processing ? '正在识别并整理…' : doc.error ? '识别未完成' : doc.duplicateOf ? '相同方案已整理' : actions.length ? '已生成 ' + actions.length + ' 个动作' : doc.text ? '文字已提取' : '已保存，等待识别' });
     });
     const cards = state.cards.filter(card => !card.linkedToActionId), cardGroups = [];
@@ -52,9 +54,11 @@ Page({
     this.update({ plans, cards, drafts: cards.filter(card => !card.confirmed), videos, files, cardGroups, totalCards: cards.length });
   },
   async importPendingFiles() {
-    if (this.data.busy || this._closed) return;
-    const pending = documents.list('training').filter(doc => !doc.autoImportVersion && !doc.error && doc.status !== 'failed');
-    for (const doc of pending) { if (this._closed || this.data.busy) break; await this.processDocument(doc); }
+    if (this.data.busy || this._closed || this._visible === false) return;
+    try {
+      const pending = documents.list('training').filter(doc => !library.isHidden('files', doc.id) && !doc.autoImportVersion && !doc.error && doc.status !== 'failed');
+      for (const doc of pending) { if (this._closed || this._visible === false || this.data.busy) break; await this.processDocument(doc); }
+    } catch (error) { this.update({ error: error.message || '待整理文件读取失败，请稍后重试' }); }
   },
   async processDocument(document) {
     if (this.data.busy) return null;
@@ -62,45 +66,23 @@ Page({
     this.update({ busy: true, schemeBusy: true, processingLabel: '正在读取文件并生成动作卡…', error: '' });
     this.reload();
     try {
-      const result = document.text ? { text: document.text, engine: document.engine || 'saved-text' }
-        : await recognition.recognizeFile(Object.assign({}, document, { name: document.originalName }));
-      const latest = documents.load().find(item => item.id === document.id);
-      if (!latest) throw Error('文件已移除，请重新上传。');
-      const text = latest.text && latest.text !== document.text ? latest.text : String(result.text || '').trim();
-      if (!text) throw Error('文件中没有识别到动作文字，请查看原件后重试。');
-      const saved = documents.save(Object.assign({}, latest, { text, engine: result.engine || '', status: 'recognized', error: '' }));
-      const canonicalText = value => String(value || '').replace(/\r\n?/g, '\n').trim();
-      const duplicate = documents.list('training').find(doc => doc.id !== saved.id && !doc.duplicateOf && doc.autoImportVersion
-        && doc.originalName === saved.originalName && (doc.trainingStartDate || '') === (saved.trainingStartDate || '')
-        && canonicalText(doc.text) === canonicalText(saved.text));
-      const imported = importer.importDocument(duplicate || saved);
-      if (!imported.importedCount) throw Error('未提取到明确动作，可核对文件文字后重新整理。');
-      const planDraftRows = imported.cards.map(card => ({ id: card.sourceSchemeRow, name: card.name, groupName: card.groupName,
-        sets: card.sets || '', amount: card.amount || '', mode: card.mode, notes: card.notes, frequency: card.frequencyText,
-        sourceText: card.sourceText, sourceDoseText: card.sourceDoseText, warnings: card.warnings || [] }));
-      documents.save(Object.assign({}, saved, { autoImportVersion: 1, duplicateOf: duplicate ? duplicate.id : '', planDraftRows, importedCardCount: imported.importedCount,
-        scheduledCount: imported.scheduledCount, pendingCount: imported.pendingCount, importedAt: new Date().toISOString() }));
-      importer.reconcileVideos();
-      if (!this._closed) wx.showToast({ title: '已整理 ' + imported.importedCount + ' 个动作', icon: 'none' });
-      return imported;
+      const result = await processing.process(document);
+      if (!this._closed && this._visible !== false) wx.showToast({ title: '已整理 ' + result.importedCount + ' 个动作', icon: 'none' });
+      return result;
     } catch (error) {
-      const latest = documents.load().find(item => item.id === document.id);
-      if (latest) { try { documents.save(Object.assign({}, latest, { status: 'failed', error: error.message || '文件识别未完成' })); } catch (_) {} }
-      this.update({ error: error.message || '文件识别未完成，可在文件列表重试。' });
+      this.update({ error: error.message || '文件识别未完成，可在文件页重试。' });
       return null;
     } finally {
       this._processingDocumentId = '';
       this.update({ busy: false, schemeBusy: false, processingLabel: '' });
-      this.reload();
+      if (!this._closed) this.reload();
     }
   },
   capture() {
-    if (this._capturing || this.data.busy) return;
-    this._capturing = true;
-    wx.chooseMedia({ count: 1, mediaType: ['video'], sourceType: ['camera'], maxDuration: 300,
-      success: result => { const file = result.tempFiles[0]; if (file) wx.navigateTo({ url: '/pages/capture/index?video=' + encodeURIComponent(file.tempFilePath) + '&returnTo=planning' }); },
-      fail: error => { if (!/cancel/.test(error.errMsg || '')) this.update({ error: '视频拍摄未完成，请重试。' }); },
-      complete: () => { this._capturing = false; } });
+    if (!this.data.busy) wx.navigateTo({ url: '/pages/capture/index?returnTo=planning' });
+  },
+  openTrainingFiles() {
+    wx.navigateTo({ url: '/pages/training-files/index' });
   },
   createCard() { wx.navigateTo({ url: '/pages/card/index?new=1&manual=1' }); },
   uploadScheme() { return this.chooseSchemeFile(); },

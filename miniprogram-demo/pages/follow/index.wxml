@@ -1,52 +1,41 @@
-<view class="flow-page">
-  <text class="flow-title">按个人要求跟练</text>
-  <view wx:if="{{error}}" class="flow-error">{{error}}</view>
-  <view wx:if="{{selected}}" class="follow-action-progress">
-    <text class="follow-position">本次计划 · 第 {{actionNumber}} / {{actionTotal}} 项</text>
-    <text class="follow-progress-count">已跟练 {{completedActions}} 项</text>
-  </view>
-  <view wx:if="{{selected}}" class="flow-card">
-    <text wx:if="{{selected.groupName}}" class="follow-group-label">{{selected.groupName}}</text>
-    <text class="flow-heading {{currentDone ? 'follow-action-done' : ''}}">{{selected.name}}</text>
-    <text wx:if="{{selected.totalOnly}}" class="flow-muted">单次练习 · {{selected.dose}}</text>
-    <text wx:else class="flow-muted">第 {{index + 1}} 组 / {{selected.sets}} 组 · {{selected.dose}}</text>
-    <view wx:if="{{selected.groups.length}}" class="flow-tabs">
-      <text wx:for="{{selected.groups}}" wx:key="*this" data-index="{{item}}" bindtap="selectGroup" class="{{index === item ? 'flow-selected' : ''}}">第 {{item + 1}} 组</text>
+<view class="follow-page">
+  <view class="follow-nav" style="padding-top: {{navTop}}px">
+    <view class="follow-nav-bar" style="height: {{navHeight}}px">
+      <button class="follow-exit" bindtap="requestExit" aria-label="退出训练"><view class="follow-back-icon"></view><text>退出</text></button>
+      <text class="follow-nav-title">跟练</text>
     </view>
-    <text class="flow-body">{{selected.notes}}</text>
-    <video wx:if="{{selected.video}}" src="{{selected.video}}" controls class="flow-video" />
-    <view class="flow-ring">{{value}}<text>{{selected.unit}}</text></view>
-    <text class="flow-muted">进度 {{progress}}% · {{finished ? '节奏已结束' : running ? '跟练中' : '等待 / 已暂停'}}</text>
-    <input wx:if="{{selected.mode !== 'timer'}}" class="flow-input" type="number" value="{{seconds}}" bindinput="inputSeconds" placeholder="每次节奏秒数，以现场指导为准" />
-    <button class="flow-button" bindtap="{{running ? 'pause' : 'start'}}">{{running ? '暂停节奏' : '开始 / 继续'}}</button>
-    <button class="flow-button flow-secondary" bindtap="toggleVoice">数字语音播报：{{voiceOn ? '开' : '关'}}</button>
-    <text class="flow-label">{{selected.totalOnly ? '实际完成量' : '本组实际完成量'}} / {{selected.unit}}</text>
-    <input class="flow-input" type="number" value="{{actual}}" bindinput="inputActual" placeholder="请按真实完成量填写" />
-    <button class="flow-button" bindtap="confirm">保存{{selected.totalOnly ? '实际完成量' : '本组实际完成量'}}</button>
-    <button class="flow-button flow-secondary" bindtap="manual">查看 / 修改全部组记录</button>
-    <button class="flow-button flow-secondary" bindtap="next">下一个动作</button>
-    <text class="flow-small">跟练结束会划线标记，实际完成量仍需确认；跟练与手动修改共用一份记录。</text>
   </view>
-  <view wx:if="{{actionGroups.length}}" class="follow-checklist">
-    <view class="flow-row follow-checklist-heading">
-      <text class="flow-heading">当日训练清单</text>
-      <text class="follow-total">{{actionTotal}} 项</text>
-    </view>
-    <text class="flow-small">按组别查看动作，点击可切换跟练</text>
-    <view wx:for="{{actionGroups}}" wx:key="name" wx:for-item="group" class="follow-checklist-group">
-      <text class="follow-group-name">{{group.name}}</text>
-      <view wx:for="{{group.rows}}" wx:key="cardId" wx:for-item="action" class="follow-checklist-action {{action.current ? 'follow-current-action' : ''}}" data-card-id="{{action.cardId}}" bindtap="selectAction">
-        <view class="follow-action-marker {{action.done ? 'follow-action-marker-done' : ''}}">{{action.done ? '✓' : action.number}}</view>
-        <view class="follow-action-content">
-          <text class="follow-action-name {{action.done ? 'follow-action-done' : ''}}">{{action.name}}</text>
-          <text class="follow-action-dose {{action.done ? 'follow-action-done' : ''}}">{{action.dose}}</text>
-          <view wx:if="{{action.sets.length}}" class="follow-set-list">
-            <text wx:for="{{action.sets}}" wx:key="number" wx:for-item="set" class="follow-set {{set.done ? 'follow-set-done' : ''}} {{set.current ? 'follow-set-current' : ''}}">{{set.label}}{{set.done ? ' ✓' : ''}}</text>
-          </view>
-          <text class="follow-action-state">{{action.stateText}}</text>
-        </view>
-        <text wx:if="{{action.current}}" class="follow-current-label">当前</text>
+  <view class="follow-content">
+    <view wx:if="{{error}}" class="flow-error">{{error}}</view>
+    <view wx:if="{{selected && !celebrating}}" class="follow-training-card">
+      <text wx:if="{{selected.groupName}}" class="follow-group-label">{{selected.groupName}}</text>
+      <text class="follow-exercise-name">{{selected.name}}</text>
+      <text wx:if="{{selected.totalOnly}}" class="follow-dose">单次练习 · {{selected.dose}}</text>
+      <text wx:else class="follow-dose">第 {{index + 1}} 组 / {{selected.sets}} 组 · {{selected.dose}}</text>
+      <view wx:if="{{selected.groups.length}}" class="follow-groups">
+        <button wx:for="{{selected.groups}}" wx:for-index="groupIndex" wx:key="*this" data-index="{{item}}" bindtap="selectGroup" class="follow-group {{index === item ? 'follow-group-active' : ''}}" aria-pressed="{{index === item}}">第 {{item + 1}} 组</button>
       </view>
+      <text wx:if="{{selected.notes}}" class="follow-notes">{{selected.notes}}</text>
+      <video wx:if="{{selected.video}}" src="{{selected.video}}" controls class="flow-video" />
+      <view class="follow-ring"><text class="follow-number">{{value}}</text><text class="follow-unit">{{selected.unit}}</text></view>
+      <text class="follow-status">进度 {{progress}}% · {{finished ? '本组节奏结束' : running ? '跟练中' : hasStarted ? '已暂停' : '未开始'}}</text>
+      <view wx:if="{{selected.mode !== 'timer'}}" class="follow-cadence"><text>每次节奏</text><input type="number" value="{{seconds}}" bindinput="inputSeconds" aria-label="每次节奏秒数" /><text>秒</text></view>
+      <button class="follow-primary follow-playback" bindtap="togglePlayback">{{running ? '暂停' : hasStarted && !finished ? '继续' : '开始'}}</button>
+      <block wx:if="{{trainingStarted}}">
+        <button class="follow-voice" bindtap="toggleVoice" aria-pressed="{{voiceOn}}">数字语音播报：{{voiceOn ? '开' : '关'}}</button>
+        <button class="follow-primary follow-complete" bindtap="completeExercise" loading="{{saving}}" disabled="{{saving}}">完成</button>
+      </block>
+    </view>
+    <view wx:elif="{{celebrating}}" class="follow-completion" aria-role="alert">
+      <view class="completion-art">
+        <view wx:for="{{confetti}}" wx:key="angle" class="completion-confetti" style="--x: {{item.x}}rpx; --y: {{item.y}}rpx; --angle: {{item.angle}}deg; background: {{item.color}}"></view>
+        <view class="completion-halo"></view>
+        <image class="completion-mascot" src="/assets/brand/xiaozhi-mascot-v1.png" mode="aspectFit" aria-label="小枝为你庆祝"/>
+        <view class="completion-mark"><view class="completion-check"></view></view>
+      </view>
+      <text class="completion-title">恭喜你完成了这项训练</text>
+      <text class="completion-name">{{selected.name}}</text>
+      <button class="follow-primary completion-return" bindtap="returnToTraining">返回训练</button>
     </view>
   </view>
 </view>

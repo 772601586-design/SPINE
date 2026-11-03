@@ -1,0 +1,25 @@
+<view class="personal-info-page">
+  <view class="info-card">
+    <view class="avatar-row">
+      <button class="avatar-button" bindtap="chooseAvatar" disabled="{{avatarBusy || saving}}" aria-label="更换头像">
+        <image wx:if="{{avatar && !avatarFailed}}" src="{{avatar}}" mode="aspectFill" binderror="avatarError" />
+        <text wx:else>{{initial}}</text>
+      </button>
+      <view class="avatar-copy"><text class="info-label">头像</text><text class="info-hint">选择你喜欢的照片</text></view>
+      <button class="change-avatar" bindtap="chooseAvatar" disabled="{{avatarBusy || saving}}">{{avatarBusy ? '处理中…' : '更换 ›'}}</button>
+    </view>
+    <button wx:if="{{avatar}}" class="remove-avatar" bindtap="removeAvatar" disabled="{{avatarBusy || saving}}">移除头像</button>
+    <view class="info-row"><text class="info-label">昵称</text><input class="nickname-input" value="{{nickname}}" maxlength="30" placeholder="怎么称呼你" bindinput="inputNickname" /></view>
+    <picker mode="selector" range="{{stages}}" range-key="title" value="{{stageIndex}}" bindchange="changeStage">
+      <view class="info-row stage-row"><text class="info-label">阶段</text><text class="info-value">{{stages[stageIndex].label}}<text class="chevron">›</text></text></view>
+    </picker>
+  </view>
+  <text class="section-label">登录信息</text>
+  <view class="info-card login-card">
+    <view class="info-row"><text class="info-label">当前模式</text><text class="info-value">本机演示</text></view>
+    <view class="info-row"><text class="info-label">账号状态</text><text class="info-value">未连接账号</text></view>
+  </view>
+  <text class="info-note">个人信息保存在本机。</text>
+  <view wx:if="{{error}}" class="info-error" role="alert">{{error}}</view>
+  <button class="save-info" bindtap="save" loading="{{saving}}" disabled="{{saving || avatarBusy}}">保存信息</button>
+</view>

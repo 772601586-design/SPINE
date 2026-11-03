@@ -1,37 +1,40 @@
-<view class="flow-page">
-  <text class="flow-title">现场录制</text>
-  <text class="flow-muted">拍完一段，填写动作名称和关键要点，再拍下一个动作。</text>
-  <view wx:if="{{error}}" class="flow-error">{{error}}</view>
-  <view class="flow-card">
-    <button class="flow-button" disabled="{{busy || selecting}}" loading="{{busy}}" bindtap="record">{{createdCount ? '继续录制下一段' : '录制本段视频'}}</button>
-    <text class="flow-small">视频自动保存到本机，填写动作信息后可继续拍摄。</text>
+<view class="capture-page">
+  <view class="capture-intro"><text class="capture-eyebrow">把现场指导，慢慢整理好</text><text class="capture-title">{{practice ? '练习对照' : '我的录制'}}</text><text class="capture-subtitle">{{practice ? '为当前动作留下一段自己的练习视频。' : '先留下视频，动作名称与要点可以稍后补充。'}}</text></view>
+  <view wx:if="{{!practice || !createdCount}}" class="capture-add-card">
+    <button class="capture-add capture-add-main" disabled="{{busy || selecting || pendingSave}}" bindtap="record"><view class="capture-camera"><view></view></view><text>开始拍摄</text><text class="capture-add-hint">一段视频，一个动作</text></button>
+    <button class="capture-add" disabled="{{busy || selecting || pendingSave}}" bindtap="fromAlbum"><view class="capture-album"><view></view></view><text>从相册添加</text><text class="capture-add-hint">整理已有的训练视频</text></button>
   </view>
-  <view class="flow-row"><text class="flow-heading">已保存草稿</text><text class="flow-pill">{{drafts.length}} 段</text></view>
-  <view wx:for="{{drafts}}" wx:key="id" class="flow-card">
-    <text class="flow-heading">{{item.name}}</text>
-    <video wx:if="{{item.video}}" src="{{item.video}}" controls class="flow-video" />
-    <text class="flow-link" data-id="{{item.id}}" bindtap="open">整理这张动作卡 ›</text>
+  <text class="capture-local-hint">视频保存于本机 · 可先存草稿，稍后继续整理</text>
+  <view wx:if="{{busy || selecting}}" class="capture-notice">{{selecting ? '正在添加视频…' : '正在保存，请稍候…'}}</view>
+  <view wx:if="{{error}}" class="capture-error"><text>{{error}}</text><button wx:if="{{pendingSave}}" class="capture-retry" disabled="{{busy}}" loading="{{busy}}" bindtap="retrySave">重试保存</button></view>
+  <view wx:if="{{!practice}}">
+    <view class="capture-library-heading"><text>视频素材</text><text class="capture-count">{{totalCount}} 段</text></view>
+    <input class="capture-search" value="{{search}}" bindinput="searchInput" placeholder="搜索动作名称、关键要点" maxlength="160" />
+    <view class="capture-filters"><button wx:for="{{filters}}" wx:key="id" class="capture-filter {{filter === item.id ? 'capture-filter-active' : ''}}" data-id="{{item.id}}" bindtap="changeFilter">{{item.name}}</button></view>
+    <view wx:if="{{!recordings.length}}" class="capture-empty"><text>{{search ? '没有找到相符的视频' : filter === 'hidden' ? '还没有移除的素材' : filter === 'linked' ? '还没有关联动作的视频' : filter === 'draft' ? '暂时没有待补充的录段' : '从一段现场指导开始'}}</text><text>{{search ? '试试其他名称或动作要点' : filter === 'hidden' ? '移除的素材可以在这里恢复' : '录下或添加视频后，就可以在这里整理'}}</text></view>
+    <view wx:for="{{recordings}}" wx:key="id" class="capture-record">
+      <view class="capture-record-top"><view class="capture-record-mark"><view class="capture-play-mark"></view></view><view class="capture-record-heading"><text class="capture-record-title">{{item.title}}</text><view class="capture-state {{item.associated ? 'capture-state-linked' : ''}}">{{item.status}}</view></view><button class="capture-more" aria-label="更多素材操作" data-id="{{item.id}}" bindtap="more">···</button></view>
+      <text wx:if="{{item.notes}}" class="capture-notes">{{item.notes}}</text><text wx:else class="capture-notes capture-placeholder">还没记下动作要点，可以稍后补充</text>
+      <text wx:if="{{item.actionName}}" class="capture-association">关联：{{item.actionName}}</text>
+      <video wx:if="{{previewId === item.id}}" src="{{item.video}}" controls class="capture-video" />
+      <view class="capture-record-actions"><button data-id="{{item.id}}" bindtap="preview">{{previewId === item.id ? '收起视频' : '预览视频'}}</button><button wx:if="{{!item.hidden}}" data-id="{{item.id}}" bindtap="editDetails">补充信息</button><button wx:if="{{!item.hidden}}" class="capture-organize" data-id="{{item.id}}" bindtap="open">{{item.associated ? '查看动作卡' : '整理动作卡'}} ›</button></view>
+    </view>
   </view>
-  <button class="flow-button" disabled="{{busy || selecting}}" bindtap="finish">完成并整理</button>
+  <view wx:if="{{practice && createdCount}}" class="capture-notice">练习视频已保存，可以返回动作卡查看对照。</view>
+  <button class="capture-finish" disabled="{{busy || selecting || pendingSave}}" bindtap="finish">{{returnTo === 'planning' ? '返回制定' : returnCard ? '完成并返回' : '完成并整理'}}</button>
 </view>
 <view wx:if="{{detailsOpen}}" class="capture-source-layer" catchtouchmove="stopTouch">
   <view class="capture-source-mask"></view>
-  <view class="capture-source-panel">
-    <text class="capture-source-title">本段动作信息</text>
-    <text class="capture-details-label">动作名称</text>
-    <input class="flow-input" maxlength="160" value="{{actionName}}" bindinput="inputName" placeholder="例如：坐姿呼吸练习" />
-    <text class="capture-details-label">动作关键要点</text>
-    <textarea class="flow-input capture-details-notes" maxlength="2000" value="{{actionNotes}}" bindinput="inputNotes" placeholder="记录康复师强调的姿势、方向和注意要点" />
-    <text class="capture-details-label">动作部位（可多选）</text>
-    <checkbox-group class="capture-taxonomy" bindchange="selectRegions">
-      <label wx:for="{{regionOptions}}" wx:key="code"><checkbox value="{{item.code}}" checked="{{item.checked}}" color="#1f6f66" />{{item.name}}</label>
-    </checkbox-group>
-    <text class="capture-details-label">相关肌肉（可多选）</text>
-    <checkbox-group class="capture-taxonomy" bindchange="selectMuscles">
-      <label wx:for="{{muscleOptions}}" wx:key="code"><checkbox value="{{item.code}}" checked="{{item.checked}}" color="#1f6f66" />{{item.name}}</label>
-    </checkbox-group>
-    <text wx:if="{{detailsError}}" class="flow-error">{{detailsError}}</text>
-    <button class="flow-button" disabled="{{busy || selecting}}" loading="{{busy}}" bindtap="saveAndNext">保存并拍下一个动作</button>
-    <button class="capture-source-cancel" disabled="{{busy || selecting}}" bindtap="saveDetails">保存本段，暂不继续</button>
-  </view>
+  <scroll-view scroll-y class="capture-source-panel">
+    <view class="capture-details-content">
+      <text class="capture-source-title">整理本段动作</text><text class="capture-details-hint">视频已保存。不方便填写时，可以先存草稿。</text>
+      <text class="capture-details-label">动作名称</text><input class="capture-input" maxlength="160" value="{{actionName}}" bindinput="inputName" placeholder="例如：坐姿呼吸练习" />
+      <text class="capture-details-label">动作关键要点</text><textarea class="capture-input capture-details-notes" maxlength="2000" value="{{actionNotes}}" bindinput="inputNotes" placeholder="记下康复师强调的姿势、方向和注意要点" />
+      <button class="capture-taxonomy-toggle" bindtap="toggleTaxonomy">部位与肌肉（选填）<text>{{taxonomyOpen ? '收起 −' : '展开 +'}}</text></button>
+      <view wx:if="{{taxonomyOpen}}"><text class="capture-details-label">动作部位 · 可多选</text><checkbox-group class="capture-taxonomy" bindchange="selectRegions"><label wx:for="{{regionOptions}}" wx:key="code"><checkbox value="{{item.code}}" checked="{{item.checked}}" color="#396c54" />{{item.name}}</label></checkbox-group><text class="capture-details-label">相关肌肉 · 可多选</text><checkbox-group class="capture-taxonomy" bindchange="selectMuscles"><label wx:for="{{muscleOptions}}" wx:key="code"><checkbox value="{{item.code}}" checked="{{item.checked}}" color="#396c54" />{{item.name}}</label></checkbox-group></view>
+      <text wx:if="{{detailsError}}" class="capture-error">{{detailsError}}</text>
+      <button class="capture-save" disabled="{{busy || selecting}}" loading="{{busy}}" bindtap="saveDetails">保存动作信息</button><button wx:if="{{!practice}}" class="capture-next" disabled="{{busy || selecting}}" bindtap="saveAndNext">保存并拍下一段</button><button class="capture-draft" disabled="{{busy || selecting}}" bindtap="saveDraft">先存草稿，稍后补充</button>
+    </view>
+  </scroll-view>
 </view>
+

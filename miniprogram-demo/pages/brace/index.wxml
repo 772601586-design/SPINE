@@ -1,11 +1,12 @@
-<view class="flow-page"><text class="flow-title">我的支具</text><view class="flow-card">
+<view class="flow-page"><text class="flow-title">我的支具</text><view wx:if="{{braceEnabled}}" class="flow-card">
 <view class="flow-row"><text class="flow-heading">支具</text><text class="flow-pill">{{braceWearing ? '正在佩戴' : '未在佩戴'}}</text></view>
 <view class="flow-row" style="margin:28rpx 0"><view><text class="flow-muted">今日佩戴</text><view class="flow-heading">{{braceToday}}</view></view><view><text class="flow-muted">累计佩戴</text><view class="flow-heading">{{braceDays}} 天</view></view></view>
 <text class="flow-muted">累计时长 {{braceTotal}}</text>
 <button class="flow-button" style="margin-top:24rpx" bindtap="toggleBraceRecord">{{braceWearing ? '脱下支具，保存记录' : '戴上支具，开始记录'}}</button>
 <text class="flow-small">按实际戴上、脱下时间记录，同一天多次佩戴合并统计。</text>
-<text wx:if="{{braceError}}" class="flow-error">{{braceError}}</text>
 <view class="flow-section"><text class="flow-heading">佩戴时长记录</text></view>
 <text wx:if="{{!braceHistory.length}}" class="flow-muted">暂无佩戴记录，戴上支具后开始记录。</text>
 <view wx:for="{{braceHistory}}" wx:key="date" class="flow-row" style="padding:18rpx 0"><text>{{item.date}}</text><text>{{item.duration}}</text></view>
-</view></view>
+</view><view wx:else class="flow-empty">支具功能已关闭，可在“我的”中重新开启。</view><view wx:if="{{braceError}}" class="flow-error">{{braceError}}</view></view>
+
+<view style="padding:24rpx"><button bindtap="openKnowledge">支具不适与日常佩戴科普</button></view>

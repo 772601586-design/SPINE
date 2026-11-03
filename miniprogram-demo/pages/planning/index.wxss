@@ -80,3 +80,10 @@
 .schedule-item-main{flex:1;min-width:0}
 .schedule-name{display:block;font-size:25rpx;line-height:1.6;color:#30453a;word-break:break-all}
 .schedule-meta{display:block;font-size:22rpx;line-height:1.7;color:#7b8981;margin-top:5rpx;word-break:break-all}
+.planning-welcome{position:relative;overflow:hidden;display:flex;align-items:center;min-height:154rpx;padding:22rpx 24rpx;box-sizing:border-box;margin-bottom:28rpx;border:1rpx solid #D9E4D3;border-radius:26rpx;background:#E6F0E6}
+.planning-welcome-copy{position:relative;z-index:2;max-width:70%}
+.planning-welcome-label{display:block;color:#6D8664;font-size:22rpx;letter-spacing:2rpx;margin-bottom:7rpx}
+.planning-welcome-title{display:block;color:#2F5D46;font-size:29rpx;font-weight:600;line-height:1.5}
+.planning-welcome-sun{position:absolute;width:152rpx;height:152rpx;right:4rpx;top:16rpx;border-radius:50%;background:#F5F2DC}
+.planning-welcome-mascot{position:absolute;right:4rpx;bottom:0;width:170rpx;height:158rpx;z-index:1}
+.material-library-summary{display:flex;justify-content:space-between;align-items:center;gap:10rpx;flex-wrap:wrap;padding:16rpx 0 22rpx;border-top:1rpx solid #E7EDDF;color:#829778;font-size:20rpx;line-height:1.6}

@@ -1,52 +1,42 @@
-<!-- 松果与勋章 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
-<view style="padding: 30.77rpx 38.46rpx 53.85rpx; display: flex; flex-direction: column; gap: 26.92rpx">
-  <view style="display: flex; align-items: center; gap: 15.38rpx">
-    <text style="font-size: 28.85rpx; color: #5B6663">松果与勋章</text>
+<view class="rewards-page">
+  <view class="rewards-heading"><text class="rewards-eyebrow">一点点，收集坚持</text><view class="rewards-title-row"><text class="rewards-title">松果与勋章</text><text class="rewards-demo-label">开发演示</text></view></view>
+  <view class="forest-wallet">
+    <view class="wallet-orbit wallet-orbit-one"></view><view class="wallet-orbit wallet-orbit-two"></view>
+    <view class="wallet-copy">
+      <view class="wallet-label"><image src="{{brand.pinecone}}" aria-hidden="true"/><text>我的松果</text></view>
+      <view class="wallet-balance"><text>{{pine}}</text><text class="wallet-unit">颗</text></view>
+      <text class="wallet-today">今天已收集 {{gotToday}} 颗</text>
+    </view>
+    <image class="wallet-mascot" src="/assets/brand/xiaozhi-mascot-v1.png" mode="aspectFit" aria-label="小枝抱着松果"/>
+    <view class="wallet-caption"><view class="wallet-dot"></view><text>每一颗，都是一份小小的坚持</text></view>
   </view>
-  <view style="padding: 34.62rpx; border-radius: 38.46rpx; background: #F6DCC8; color: #6B3416; display: flex; align-items: center; gap: 26.92rpx">
-    <image src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPSc0OCcgaGVpZ2h0PSc0OCcgdmlld0JveD0nMCAwIDI0IDI0JyBmaWxsPSdub25lJyBzdHJva2U9JyM2QjM0MTYnIHN0cm9rZS13aWR0aD0nMS42JyBzdHJva2UtbGluZWNhcD0ncm91bmQnIHN0cm9rZS1saW5lam9pbj0ncm91bmQnPjxwYXRoIGQ9J00xMiAzYzQgMyA2IDYgNiAxMGE2IDYgMCAwIDEtMTIgMGMwLTQgMi03IDYtMTB6Jz48L3BhdGg+PHBhdGggZD0nTTkgMTJoNk05LjUgMTUuNWg1TTEwIDloNCc+PC9wYXRoPjwvc3ZnPg==" style="width: 92.31rpx; height: 92.31rpx; flex-shrink: 0" />
-    <view>
-      <view style="font-size: 61.54rpx; font-weight: 700; line-height: 1.1">{{ pine }} 颗松果</view>
-      <view style="font-size: 25rpx">今天已得 {{ gotToday }} 颗</view>
+
+  <view class="reward-section-heading"><text>今天的松果</text><text class="section-caption">慢慢积累就很好</text></view>
+  <view class="reward-card reward-tasks">
+    <view wx:for="{{tasks}}" wx:for-item="task" wx:key="_k" class="reward-task">
+      <view class="reward-task-main"><text class="reward-task-title">{{task.name}}</text><text class="reward-task-detail">{{task.detail}}</text></view>
+      <view class="reward-points"><image src="{{brand.pinecone}}" aria-hidden="true"/><text>{{task.pts}}</text></view>
+      <text class="reward-task-state {{task.isDone ? 'task-earned' : task.state === '复查后' ? 'task-later' : 'task-pending'}}">{{task.state}}</text>
+    </view>
+    <text class="rewards-note">支具和训练分开记录，一项没做到不影响另一项。</text>
+  </view>
+
+  <view class="reward-section-heading medal-heading"><text>我的勋章</text><text class="section-caption">只看坚持，不看度数</text></view>
+  <view class="medal-grid">
+    <view wx:for="{{medals}}" wx:for-item="medal" wx:key="_k" class="medal-card {{medal.earned ? 'medal-earned' : 'medal-growing'}}">
+      <view class="medal-emblem">
+        <view class="medal-ribbon"></view>
+        <view class="medal-face"><image src="{{medal.icon}}" mode="aspectFit" aria-hidden="true"/></view>
+        <view wx:if="{{medal.earned}}" class="medal-seal">✓</view>
+      </view>
+      <text class="medal-name">{{medal.name}}</text>
+      <text class="medal-state">{{medal.earned ? '已获得' : medal.badge}}</text>
     </view>
   </view>
-  <view style="padding: 7.69rpx 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column">
-    <view style="font-size: 28.85rpx; font-weight: 700; padding: 19.23rpx 0 11.54rpx">今天的松果</view>
-    <block wx:for="{{ tasks }}" wx:for-item="t" wx:for-index="tIndex" wx:key="_k">
-      <view style="display: flex; align-items: center; gap: 19.23rpx; min-height: 103.85rpx; border-top: 1.92rpx solid #EEF2F0">
-        <view style="flex: 1; min-width: 0">
-          <view style="font-size: 26.92rpx">{{ t.name }}</view>
-          <view style="font-size: 23.08rpx; color: #5B6663">{{ t.detail }}</view>
-        </view>
-        <text style="font-size: 26.92rpx; font-weight: 700; color: #6B3416">{{ t.pts }}</text>
-        <text style="min-width: 107.69rpx; text-align: center; padding: 7.69rpx 15.38rpx; border-radius: 1921.15rpx; border: {{ t.border }}; background: {{ t.bg }}; color: {{ t.fg }}; font-size: 23.08rpx; font-weight: 700; box-sizing: border-box">{{ t.state }}</text>
-      </view>
-    </block>
-    <view style="font-size: 23.08rpx; color: #5B6663; padding: 11.54rpx 0 19.23rpx">支具和训练分开记录、分开得松果，一项没做到不影响另一项</view>
-  </view>
-  <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
-    <view style="display: flex; justify-content: space-between; align-items: baseline">
-      <text style="font-size: 28.85rpx; font-weight: 700">补记真实训练</text>
-      <text style="font-size: 23.08rpx; color: #5B6663">每周 1 次 · {{ makeupLeft }}</text>
-    </view>
-    <view style="display: flex; align-items: center; gap: 19.23rpx; padding: 19.23rpx 23.08rpx; border-radius: 23.08rpx; background: #F8FAF9">
-      <view style="flex: 1">
-        <view style="font-size: 26.92rpx; font-weight: 700">选择实际训练日期，填写真实完成量</view>
-        <view style="font-size: 23.08rpx; color: #5B6663">生病、考试、复查调支具，都可以补</view>
-      </view>
-      <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 73.08rpx; padding: 0 23.08rpx; border: 0; border-radius: 1921.15rpx; background: {{ makeupBg }}; color: #FFFFFF; font-size: 25rpx; font-weight: 700" bindtap="act" data-fn="{{ doMakeup }}" hover-class="tap">{{ makeupText }}</view>
-    </view>
-  </view>
-  <view style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 7.69rpx">
-    <view style="margin: 0; font-size: 32.69rpx; font-weight: 700">勋章</view>
-    <text style="font-size: 23.08rpx; color: #5B6663">只看坚持，不看度数</text>
-  </view>
-  <view style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 19.23rpx">
-    <block wx:for="{{ medals }}" wx:for-item="m" wx:for-index="mIndex" wx:key="_k">
-      <view style="padding: 23.08rpx 11.54rpx; border-radius: 30.77rpx; background: #FFFFFF; display: flex; flex-direction: column; align-items: center; gap: 11.54rpx; text-align: center">
-        <view style="width: 100rpx; height: 100rpx; border-radius: 1921.15rpx; box-sizing: border-box; border: {{ m.border }}; background: {{ m.bg }}; color: {{ m.fg }}; display: flex; align-items: center; justify-content: center; font-size: 23.08rpx; font-weight: 700">{{ m.badge }}</view>
-        <text style="font-size: 25rpx; font-weight: 700; line-height: 1.3">{{ m.name }}</text>
-      </view>
-    </block>
+
+  <view class="reward-card backfill-card">
+    <view class="backfill-icon"><image src="{{brand.calendar}}" aria-hidden="true"/></view>
+    <view class="backfill-copy"><text class="reward-task-title">补记真实训练</text><text class="reward-task-detail">选择实际日期，记下完成量</text></view>
+    <button class="backfill-button" bindtap="act" data-fn="{{doMakeup}}">去补记 ›</button>
   </view>
 </view>

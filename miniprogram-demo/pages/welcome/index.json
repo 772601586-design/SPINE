@@ -1,7 +1,7 @@
 {
   "navigationBarTitleText": "欢迎",
-  "navigationBarBackgroundColor": "#F3F5F2",
+  "navigationBarBackgroundColor": "#F6F2E9",
   "navigationBarTextStyle": "black",
-  "backgroundColor": "#F3F5F2",
+  "backgroundColor": "#F6F2E9",
   "usingComponents": {}
 }

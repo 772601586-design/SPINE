@@ -1,10 +1,30 @@
 <view class="growth-records-page">
   <view class="growth-records-header">
     <text class="growth-records-title">成长记录</text>
-    <text class="growth-records-description">每一次复查，都会在这里留下痕迹</text>
+    <text class="growth-records-description">按日期回看训练与复查</text>
   </view>
   <view class="flow-page growth-records-history">
-<view class="flow-row flow-section"><text class="flow-heading">训练历史</text><text class="flow-link" bindtap="trainingSummary">周期汇总 ›</text></view><view wx:if="{{!trainingHistory.length}}" class="flow-card flow-empty">还没有实际训练记录。</view><view wx:for="{{trainingHistory}}" wx:key="id" class="flow-card" data-id="{{item.id}}" bindtap="openTrainingRecord"><view class="flow-row"><text class="flow-heading">{{item.date}}</text><text class="flow-pill">{{item.status}}</text></view><text class="flow-muted">{{item.name}} · {{item.count}} 个动作 · 查看各组实际量 ›</text></view><view wx:if="{{summaryText}}" class="flow-card"><text class="flow-heading">训练周期汇总</text><text style="white-space:pre-wrap;display:block;margin:20rpx 0">{{summaryText}}</text><button class="flow-button" bindtap="copyTrainingSummary">复制汇总</button></view></view>
+    <view class="flow-row calendar-section-heading"><text class="flow-heading">训练日历</text><text class="flow-link" bindtap="trainingSummary">周期汇总 ›</text></view>
+    <view class="training-calendar">
+      <view class="calendar-toolbar">
+        <button class="calendar-arrow calendar-prev" bindtap="previousMonth" aria-label="上个月">‹</button>
+        <picker class="calendar-month-picker" mode="date" fields="month" value="{{calendarMonth}}" bindchange="chooseMonth"><view class="calendar-month-title">{{calendarTitle}}<text class="calendar-month-caret">⌄</text></view></picker>
+        <button class="calendar-arrow calendar-next" bindtap="nextMonth" aria-label="下个月">›</button>
+      </view>
+      <view class="calendar-weekdays"><text wx:for="{{weekdays}}" wx:key="*this">{{item}}</text></view>
+      <view class="calendar-grid">
+        <view wx:for="{{calendarDays}}" wx:for-item="day" wx:key="key" class="calendar-cell">
+          <button wx:if="{{day.date}}" class="calendar-day calendar-day-{{day.state}} {{day.selected ? 'calendar-day-selected' : ''}}" data-date="{{day.date}}" bindtap="openTrainingDay" aria-label="{{day.label}}" aria-pressed="{{day.selected}}">
+            <text>{{day.day}}</text><view wx:if="{{day.today}}" class="calendar-today-dot"></view>
+          </button>
+        </view>
+      </view>
+      <view class="calendar-month-summary"><text>全部完成 <text class="calendar-completed-count">{{monthCompletedDays}}</text> 天</text><text>未全部完成 <text class="calendar-incomplete-count">{{monthIncompleteDays}}</text> 天</text><button class="calendar-today" bindtap="resetMonth">回到今天</button></view>
+      <view class="calendar-legend"><view><text class="legend-dot legend-completed"></text><text>全部完成</text></view><view><text class="legend-dot legend-incomplete"></text><text>未全部完成</text></view><view><text class="legend-dot legend-empty"></text><text>无记录</text></view></view>
+      <text class="calendar-hint">点选日期，查看当日各组实际完成量</text>
+    </view>
+    <view wx:if="{{summaryText}}" class="flow-card"><text class="flow-heading">训练周期汇总</text><text style="white-space:pre-wrap;display:block;margin:20rpx 0">{{summaryText}}</text><button class="flow-button" bindtap="copyTrainingSummary">复制汇总</button></view>
+  </view>
   <view style="padding: 26.92rpx 38.46rpx 0; display: flex; flex-direction: column; gap: 26.92rpx">
 <view style="padding: 30.77rpx 26.92rpx 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 26.92rpx">
     <view style="display: flex; justify-content: space-between; align-items: baseline">

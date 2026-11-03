@@ -1,0 +1,31 @@
+<view class="files-page">
+  <view class="files-heading"><text class="files-title">训练文件</text><text class="files-subtitle">把康复师的方案，整理成自己的动作卡</text></view>
+  <view class="files-upload-card">
+    <view class="files-upload-actions">
+      <button class="upload-tile" bindtap="photograph" disabled="{{busy || selecting}}"><view class="upload-camera"><view></view></view><text>拍照上传</text></button>
+      <button class="upload-tile" bindtap="chooseAlbum" disabled="{{busy || selecting}}"><view class="upload-album"><view></view></view><text>相册图片</text></button>
+      <button class="upload-tile" bindtap="chooseFile" disabled="{{busy || selecting}}"><view class="upload-folder"><view></view></view><text>微信文件</text></button>
+    </view>
+    <text class="files-format">JPG、PNG、PDF、Word、TXT · 单个不超过 20 MB</text>
+  </view>
+  <view wx:if="{{busy || selecting}}" class="files-progress"><view class="files-progress-dot"></view><text>{{selecting && !busy ? '正在选择或保存原件…' : '正在识别并整理，原件已保留…'}}</text></view>
+  <view wx:if="{{error}}" class="files-error">{{error}}</view>
+  <view class="files-list-heading"><text>我的文件</text><text class="files-count">{{visibleCount}} 份 · {{pendingCount}} 份待整理</text></view>
+  <view class="files-search"><text class="files-search-icon"></text><input value="{{query}}" bindinput="inputSearch" placeholder="搜索文件名称"/><text wx:if="{{query}}" class="files-search-clear" bindtap="clearSearch">×</text></view>
+  <view class="files-filters"><view wx:for="{{filters}}" wx:key="id" class="files-filter {{filter === item.id ? 'files-filter-active' : ''}}" data-filter="{{item.id}}" bindtap="pickFilter">{{item.label}}<text wx:if="{{item.id === 'removed' && hiddenCount}}"> {{hiddenCount}}</text></view></view>
+  <view wx:if="{{!files.length}}" class="files-empty"><view class="files-empty-document"><view></view><view></view><view></view></view><text>{{query ? '没有找到匹配的文件' : filter === 'removed' ? '这里还没有移除的文件' : filter === 'pending' ? '暂时没有待整理文件' : filter === 'ready' ? '整理好的方案会出现在这里' : '从一份训练方案开始'}}</text><text class="files-empty-note">{{query ? '试试其他名称，或切换分类' : '原件保存在本机，识别失败也可以稍后校对'}}</text></view>
+  <view wx:for="{{files}}" wx:for-item="file" wx:key="id" class="file-card">
+    <view class="file-card-heading">
+      <image wx:if="{{file.kind === 'image' && !file.imageBroken}}" class="file-thumbnail" src="{{file.path}}" mode="aspectFill" data-id="{{file.id}}" bindtap="preview" binderror="imageError"/>
+      <view wx:else class="file-type-icon" data-id="{{file.id}}" bindtap="preview"><view></view><view></view><text>{{file.typeLabel}}</text></view>
+      <view class="file-info"><text class="file-name">{{file.displayName}}</text><text class="file-meta">{{file.typeLabel}}<text wx:if="{{file.sizeLabel}}"> · {{file.sizeLabel}}</text><text wx:if="{{file.dateLabel}}"> · {{file.dateLabel}}</text></text><text class="file-status file-status-{{file.statusKey}}">{{file.statusLabel}}<text wx:if="{{file.actionCount}}"> · {{file.actionCount}} 个动作</text></text></view>
+    </view>
+    <text wx:if="{{file.error}}" class="file-error">{{file.error}}</text>
+    <text wx:if="{{file.duplicateLabel}}" class="file-duplicate">{{file.duplicateLabel}}</text>
+    <view class="file-actions"><button class="file-action" bindtap="preview" data-id="{{file.id}}">查看原件</button><button class="file-action" bindtap="review" data-id="{{file.id}}" disabled="{{file.processing}}">校对原文</button><button wx:if="{{!file.hidden && file.statusKey !== 'ready'}}" class="file-action file-action-primary" bindtap="retry" data-id="{{file.id}}" disabled="{{busy || selecting}}">{{file.statusKey === 'failed' ? '重试整理' : '识别整理'}}</button><button class="file-action" bindtap="rename" data-id="{{file.id}}">改名</button></view>
+    <view wx:if="{{file.actionCount && !file.hidden}}" class="file-action-list-heading" bindtap="toggleActions" data-id="{{file.id}}"><text>查看 {{file.actionCount}} 个关联动作</text><text>{{expandedFile === file.id ? '收起⌃' : '展开⌄'}}</text></view>
+    <view wx:if="{{expandedFile === file.id && !file.hidden}}" class="file-linked-actions"><view wx:for="{{file.actions}}" wx:for-item="action" wx:key="id" class="file-linked-action" bindtap="openAction" data-card="{{action.id}}"><view><text class="file-linked-name">{{action.name}}</text><text class="file-meta">{{action.dose}} · {{action.status}}</text></view><text>›</text></view></view>
+    <view class="file-bottom"><text>{{file.hidden ? '关联动作与历史记录已保留' : '原件保存在本机'}}</text><button wx:if="{{file.hidden}}" class="file-restore" bindtap="restore" data-id="{{file.id}}">恢复到列表</button><button wx:else class="file-remove" bindtap="remove" data-id="{{file.id}}" disabled="{{file.processing}}">移除</button></view>
+  </view>
+  <button class="files-back-planning" bindtap="openPlanning">回到制定，查看动作卡</button>
+</view>

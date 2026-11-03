@@ -7,8 +7,11 @@
     "pages/train/index",
     "pages/growth/index",
     "pages/growth-records/index",
+    "pages/training-day/index",
     "pages/community/index",
     "pages/me/index",
+    "pages/my-posts/index",
+    "pages/personal-info/index",
     "pages/stage/index",
     "pages/basics/index",
     "pages/ready/index",
@@ -23,13 +26,15 @@
     "pages/rewards/index",
     "pages/plan/index",
     "pages/capture/index",
-    "pages/execution/index"
+    "pages/training-files/index",
+    "pages/execution/index",
+    "pages/knowledge/index"
   ],
   "window": {
-    "navigationBarBackgroundColor": "#F3F5F2",
+    "navigationBarBackgroundColor": "#F6F2E9",
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "Spine",
-    "backgroundColor": "#F3F5F2",
+    "backgroundColor": "#F6F2E9",
     "backgroundTextStyle": "dark"
   },
   "tabBar": {

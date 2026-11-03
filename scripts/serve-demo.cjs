@@ -82,6 +82,19 @@ function listFiles(root, prefix = '') {
   return files;
 }
 
+function readPageSource(relative, extension, ancestors = []) {
+  if (ancestors.includes(relative)) throw new Error('Circular page include: ' + relative);
+  const source = readText(relative, extension === '.wxss');
+  const expand = (_, target) => {
+    const resolved = path.posix.normalize(path.posix.join(path.posix.dirname(relative), target));
+    if (!resolved.endsWith(extension)) throw new Error('Invalid page include: ' + target);
+    return readPageSource(resolved, extension, ancestors.concat(relative));
+  };
+  return extension === '.wxml'
+    ? source.replace(/<include\s+src=["']([^"']+)["']\s*\/>/g, expand)
+    : source.replace(/@import\s+["']([^"']+)["']\s*;/g, expand);
+}
+
 function buildDemoBundle() {
   const config = readJson('app.json');
   const registeredPages = [...(config.pages || [])];
@@ -92,8 +105,8 @@ function buildDemoBundle() {
   for (const page of registeredPages) {
     pages[page] = {
       js: readText(`${page}.js`),
-      wxml: readText(`${page}.wxml`),
-      wxss: readText(`${page}.wxss`, true),
+      wxml: readPageSource(`${page}.wxml`, '.wxml'),
+      wxss: readPageSource(`${page}.wxss`, '.wxss'),
       json: readJson(`${page}.json`, true),
     };
   }

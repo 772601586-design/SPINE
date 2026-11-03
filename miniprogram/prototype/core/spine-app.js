@@ -36,7 +36,7 @@ class SpineApp extends DCLogic {
     const home = (props.startAt ?? '首次使用') === '直接进首页';
     this.state = {
       screen: home ? 'today' : 'welcome', back: 'today', stageReturn: 'basics',
-      gender: 'f', stage: 'brace', menarche: 'yes', matReport: true, matRx: true, matNone: false,
+      stage: 'brace', visitMenarcheStatus: '', visitMenarcheMonth: '', matReport: true, matRx: true, matNone: false,
       done: [1, 2, 3, 4], standDone: false, swim: 1,
       pine: 36, trainRewarded: false, justRewarded: false, quizRewarded: false, drawRewarded: false, uploadRewarded: false, makeupUsed: false,
       followId: 5, followSingle: false, playing: true,
@@ -191,20 +191,36 @@ class SpineApp extends DCLogic {
       braceRings: S.stage === 'new' || S.stage === 'brace', off: S.stage === 'off', adult: S.stage === 'adult'
     };
 
-    const genders = [{ id: 'f', label: '女' }, { id: 'm', label: '男' }, { id: 'c', label: '自定义' }].map((g) => Object.assign({ label: g.label, pick: () => this.setState({ gender: g.id }) }, sel(S.gender === g.id)));
-    const menOpts = [{ id: 'no', label: '还没有' }, { id: 'yes', label: '已经来了' }, { id: 'na', label: '不想填' }].map((o) => Object.assign({ label: o.label, pick: () => this.setState({ menarche: o.id }) }, sel(S.menarche === o.id)));
+    const visitMenarcheOptions = [
+      { id: 'not_yet', label: '还没有' }, { id: 'started', label: '已经来了' },
+      { id: 'not_applicable', label: '不适用' }, { id: 'prefer_not', label: '不想填' }
+    ].map((o) => Object.assign({ label: o.label, pick: () => this.setState({
+      visitMenarcheStatus: o.id,
+      visitMenarcheMonth: o.id === 'started' ? S.visitMenarcheMonth : ''
+    }) }, sel(S.visitMenarcheStatus === o.id)));
     const matDefs = [
       { key: 'matReport', title: '诊断 / 影像报告', sub: '打印的报告拍照就行' },
       { key: 'matRx', title: '运动处方单', sub: '自动整理成训练卡片，现场录的视频也能配上' },
       { key: 'matNone', title: '还没有，先用起来', sub: '我们会告诉你检查时该带什么、问什么' }
     ];
+    const hasMaterials = !!(S.matReport || S.matRx);
     const mats = matDefs.map((m) => {
-      const on = S[m.key];
-      return { title: m.title, sub: m.sub, aria: on ? 'true' : 'false', mark: on ? '已选' : '', border: on ? '2px solid #1F6F66' : '1px solid #C9D4D0', bg: on ? '#F5FAF8' : 'transparent',
-        toggle: () => { const o = {}; o[m.key] = !on; this.setState(o); } };
+      const on = !!S[m.key];
+      // “还没有”与两类已有资料互斥；已选项始终可以取消，便于旧状态恢复。
+      const disabled = !on && (m.key === 'matNone' ? hasMaterials : !!S.matNone);
+      return {
+        title: m.title, sub: m.sub, aria: on ? 'true' : 'false', disabledAria: disabled ? 'true' : 'false',
+        mark: disabled ? '不可选' : (on ? '已选' : ''),
+        border: disabled ? '1px solid #D7DDDA' : (on ? '2px solid #1F6F66' : '1px solid #C9D4D0'),
+        bg: disabled ? '#F3F5F2' : (on ? '#F5FAF8' : 'transparent'),
+        fg: disabled ? '#9AA5A1' : '#1F2A27', subFg: disabled ? '#A7B0AD' : '#5B6663',
+        markFg: disabled ? '#9AA5A1' : '#1F6F66', hoverClass: disabled ? 'none' : 'tap',
+        toggle: () => {
+          if (disabled) return;
+          const o = {}; o[m.key] = !on; this.setState(o);
+        }
+      };
     });
-    const showMenarche = S.gender !== 'm';
-
     const ids = this.deckIds();
     const deck = ids.map((id, i) => {
       const c = C[id]; const d = S.done.indexOf(id) !== -1;
@@ -336,14 +352,12 @@ class SpineApp extends DCLogic {
       showNav: tabs.indexOf(scr) !== -1,
       hasToast: !!S.toast, toast: S.toast,
       goBack: () => this.go(S.back || 'today'),
-      genders: genders, isCustomGender: S.gender === 'c',
       stages: stages, stageLabel: stageLabel,
       stageStep: S.stageReturn === 'me' ? '切换阶段' : '2 / 4',
       stageBtn: S.stageReturn === 'me' ? '保存' : '下一步',
       stageBack: () => this.go(S.stageReturn === 'me' ? 'me' : 'welcome'),
       stageNext: () => (S.stageReturn === 'me' ? this.go('me', { toast: '已切换到：' + stageLabel }) : this.go('basics')),
-      basicsTitle: showMenarche ? '再填 2 项就够了' : '再填 1 项就够了',
-      showMenarche: showMenarche, menOpts: menOpts, mats: mats,
+      basicsTitle: '再填 1 项就够了', mats: mats,
       readyReport: S.matReport ? '拍照上传 · 1 份' : '之后再传',
       readyRx: S.matRx ? '识别出 12 个动作' : '之后再导入',
       readyTitle: st.check ? '先了解，再检查' : (st.adult ? '从办公间隙开始' : '今天就可以开始'),
@@ -392,6 +406,13 @@ class SpineApp extends DCLogic {
       nextVisitText: S.remindOn ? '10 月 20 日 周二 · 已开启提前一周提醒' : '可选填写 · 不填也不会打扰你',
       visits: visits,
       upFields: upFields, upView: !S.uploadEdit, upEditing: S.uploadEdit, upEditText: uE.text, upEditLabel: uE.label, upEditBg: uE.bg, upEditFg: uE.fg,
+      visitMenarcheOptions: visitMenarcheOptions,
+      visitMenarcheStarted: S.visitMenarcheStatus === 'started',
+      visitMenarcheMonth: S.visitMenarcheMonth,
+      setVisitMenarcheMonth: (e) => this.setState({ visitMenarcheMonth: e.detail.value }),
+      clearVisitMenarche: () => this.setState({ visitMenarcheStatus: '', visitMenarcheMonth: '' }),
+      hasMenarcheSummary: S.visitMenarcheStatus === 'started' && !!S.visitMenarcheMonth,
+      menarcheSummary: S.visitMenarcheMonth ? S.visitMenarcheMonth.replace('-', ' 年 ') + ' 月' : '',
       toggleUpEdit: () => this.setState({ uploadEdit: !S.uploadEdit }),
       saveUpload: () => this.go('growth', { uploadSaved: true, uploadEdit: false, uploadRewarded: true, pine: S.uploadRewarded ? S.pine : S.pine + 5, toast: S.uploadRewarded ? '已保存到成长记录' : '已保存到成长记录 · +5 松果' }),
       commTabs: commTabs, cm: cm, guides: guides,

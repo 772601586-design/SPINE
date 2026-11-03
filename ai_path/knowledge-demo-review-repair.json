@@ -1,0 +1,56 @@
+{
+ "generated_at": "2026-11-03T13:24:26.157203+00:00",
+ "before": {
+  "published_articles": 16,
+  "approved_versions": 16,
+  "verified_sources": 14,
+  "verified_evidence": 33
+ },
+ "after": {
+  "published_articles": 0,
+  "withdrawn_articles": 16,
+  "approved_versions": 0,
+  "submitted_versions": 84,
+  "verified_sources": 0,
+  "verified_evidence": 0,
+  "reviews_total": 16
+ },
+ "withdrawn_articles": [
+  "TOPIC-BRACE-01",
+  "TOPIC-BRACE-02",
+  "TOPIC-BRACE-03",
+  "TOPIC-DAILY-01",
+  "TOPIC-DAILY-02",
+  "TOPIC-DAILY-03",
+  "TOPIC-IMG-01",
+  "TOPIC-IMG-02",
+  "TOPIC-MIND-01",
+  "TOPIC-MIND-02",
+  "TOPIC-MIND-03",
+  "TOPIC-NEWDX-01",
+  "TOPIC-NEWDX-02",
+  "TOPIC-NEWDX-03",
+  "TOPIC-SCHROTH-01",
+  "TOPIC-SCHROTH-02"
+ ],
+ "versions_back_to_submitted": [
+  "TOPIC-NEWDX-01",
+  "TOPIC-NEWDX-02",
+  "TOPIC-NEWDX-03",
+  "TOPIC-IMG-01",
+  "TOPIC-IMG-02",
+  "TOPIC-BRACE-01",
+  "TOPIC-BRACE-02",
+  "TOPIC-BRACE-03",
+  "TOPIC-SCHROTH-01",
+  "TOPIC-SCHROTH-02",
+  "TOPIC-DAILY-01",
+  "TOPIC-DAILY-02",
+  "TOPIC-DAILY-03",
+  "TOPIC-MIND-01",
+  "TOPIC-MIND-02",
+  "TOPIC-MIND-03"
+ ],
+ "disabled_account": "kb-demo-reviewer",
+ "reason": "演示环境审核记录无效：未做真实医学事实核对，撤销公开状态，待正式医学审核后重新发布。"
+}

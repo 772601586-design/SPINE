@@ -19,7 +19,11 @@ from django.db import models
 
 from core.models import Attachment
 
-# 出生年月只到月：YYYY-MM。不用某月的 1 日去冒充"只知道年月"。
+# 月份只到月：YYYY-MM。不用某月的 1 日去冒充"只知道年月"。
+MONTH_VALIDATOR = RegexValidator(
+    regex=r"^\d{4}-(0[1-9]|1[0-2])$",
+    message="年月格式应为 YYYY-MM。",
+)
 BIRTH_MONTH_VALIDATOR = RegexValidator(
     regex=r"^\d{4}-(0[1-9]|1[0-2])$",
     message="出生年月格式应为 YYYY-MM。",
@@ -47,14 +51,10 @@ class Profile(models.Model):
         MAINTENANCE = "maintenance", "已脱支具，以运动为主"
         ADULT = "adult", "成年后自我管理"
 
-    class Gender(models.TextChoices):
-        FEMALE = "female", "女"
-        MALE = "male", "男"
-        CUSTOM = "custom", "自定义"
-
     class MenarcheStatus(models.TextChoices):
         NOT_YET = "not_yet", "还没有"
         STARTED = "started", "已经来了"
+        NOT_APPLICABLE = "not_applicable", "不适用"
         PREFER_NOT = "prefer_not", "不想填"
 
     class OnboardingStatus(models.TextChoices):
@@ -77,9 +77,8 @@ class Profile(models.Model):
     )
     birth_month = models.CharField(max_length=7, blank=True, default="", validators=[BIRTH_MONTH_VALIDATOR])
     treatment_stage = models.CharField(max_length=16, choices=TreatmentStage.choices, blank=True, default="")
-    gender = models.CharField(max_length=16, choices=Gender.choices, blank=True, default="")
-    gender_custom = models.CharField(max_length=50, blank=True, default="")
     menarche_status = models.CharField(max_length=16, choices=MenarcheStatus.choices, blank=True, default="")
+    menarche_month = models.CharField(max_length=7, blank=True, default="", validators=[MONTH_VALIDATOR])
     # 建档只强制昵称；诊断状态留空表示"还没填"，不替用户猜。
     diagnosis_status = models.CharField(
         max_length=24, choices=DiagnosisStatus.choices, blank=True, null=True
@@ -100,6 +99,13 @@ class Profile(models.Model):
     class Meta:
         verbose_name = "Profile"
         verbose_name_plural = "Profiles"
+
+    def save(self, *args, **kwargs):
+        if self.menarche_status != self.MenarcheStatus.STARTED:
+            self.menarche_month = ""
+            if kwargs.get("update_fields") is not None:
+                kwargs["update_fields"] = set(kwargs["update_fields"]) | {"menarche_month"}
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Profile<{self.user_id}>"

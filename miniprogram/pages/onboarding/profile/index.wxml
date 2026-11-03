@@ -31,9 +31,6 @@
       <text class="card-title">出生年月（可跳过）</text>
       <picker mode="date" fields="month" value="{{birthMonth}}" start="1900-01" end="{{todayMonth}}" bindchange="onBirthMonth"><view class="field picker-field"><text>{{birthMonth || '选择出生年月'}}</text><text class="arrow">›</text></view></picker>
       <text wx:if="{{birthMonth}}" class="link" bindtap="clearBirthMonth">暂不填写</text>
-      <text class="label">性别（可跳过）</text>
-      <view wx:for="{{genders}}" wx:key="value" class="pill {{gender === item.value ? 'pill-active' : ''}}" data-value="{{item.value}}" bindtap="chooseGender">{{item.label}}</view>
-      <view wx:if="{{gender === 'custom'}}" class="field"><input value="{{genderCustom}}" maxlength="50" placeholder="填写你的称呼" bindinput="onGenderCustom" /></view>
     </view>
       <button class="button" bindtap="nextStep">下一步 · 选择阶段</button>
       <text class="small center">这些资料仅本人可见，可以随时修改。</text>
@@ -47,8 +44,6 @@
     </block>
 
     <block wx:elif="{{stage === 'basics'}}">
-    <view wx:if="{{gender === 'female' || gender === 'custom'}}" class="card"><text class="card-title">初潮情况（可跳过）</text><text class="muted">如适用且愿意记录，可以在这里填写。</text><view><view wx:for="{{menarcheOptions}}" wx:key="value" class="pill {{menarche === item.value ? 'pill-active' : ''}}" data-value="{{item.value}}" bindtap="chooseMenarche">{{item.label}}</view></view></view>
-
     <view class="card">
       <view class="row" bindtap="toggleExtra">
         <text class="card-title tight">补充信息（可跳过）</text>

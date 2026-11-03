@@ -7,6 +7,7 @@ import { shanghaiDate, durationText, doseText } from '../../services/presentatio
 import { treatmentStage } from '../../config/profile-options';
 
 Page({
+  openKnowledge() { wx.navigateTo({ url: '/pages/knowledge/index?mode=list&topic=schroth&title=Schroth训练原理' }); },
   data: {
     loading: true, braceError: '', planError: '', profileError: '', nickname: '', dateLine: '', greeting: '',
     encouragement: treatmentStage(''),

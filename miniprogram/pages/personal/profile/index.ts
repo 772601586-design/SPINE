@@ -1,7 +1,7 @@
 import {
   DIAGNOSIS_LABELS, DIAGNOSIS_OPTIONS, MANAGEMENT_OPTIONS, currentMonth, labelOf, labelsOf, todayDate,
   type Option,
-  GENDER_OPTIONS, MENARCHE_OPTIONS, treatmentStage,
+  MENARCHE_OPTIONS, treatmentStage,
 } from '../../../config/profile-options';
 import type { BodyMeasurement, Profile } from '../../../models/types';
 import { api } from '../../../services/api';
@@ -41,8 +41,8 @@ Page({
     revision: 0,
     nickname: '',
     birthMonth: '',
-    gender: '', genderCustom: '', menarche: '', treatmentLabel: '',
-    genders: GENDER_OPTIONS, menarcheOptions: MENARCHE_OPTIONS,
+    menarche: '', menarcheMonth: '', treatmentLabel: '',
+    menarcheOptions: MENARCHE_OPTIONS,
     diagnosisIndex: 0,
     diagnosisLabels: DIAGNOSIS_LABELS,
     methods: MANAGEMENT_OPTIONS.map(item => ({ ...item, checked: false })) as MethodOption[],
@@ -90,7 +90,7 @@ Page({
       needsXray: profile.onboarding_status !== 'complete',
       nickname: profile.nickname,
       birthMonth: profile.birth_month || '',
-      gender: profile.gender, genderCustom: profile.gender_custom, menarche: profile.menarche_status,
+      menarche: profile.menarche_status, menarcheMonth: profile.menarche_month,
       treatmentLabel: treatmentStage(profile.treatment_stage).label,
       diagnosisIndex: index,
       diagnosisText: labelOf(DIAGNOSIS_OPTIONS, profile.diagnosis_status),
@@ -115,14 +115,13 @@ Page({
 
   onNickname(event: { detail: { value: string } }) { this.setData({ nickname: event.detail.value }); },
   onBirthMonth(event: { detail: { value: string } }) { this.setData({ birthMonth: event.detail.value }); },
-  chooseGender(event: { currentTarget: { dataset: { value: string } } }) {
-    const gender = event.currentTarget.dataset.value;
-    this.setData({ gender, genderCustom: gender === 'custom' ? this.data.genderCustom : '' });
-  },
-  onGenderCustom(event: { detail: { value: string } }) { this.setData({ genderCustom: event.detail.value }); },
   chooseMenarche(event: { currentTarget: { dataset: { value: string } } }) {
-    this.setData({ menarche: event.currentTarget.dataset.value });
+    const menarche = event.currentTarget.dataset.value;
+    this.setData({ menarche, menarcheMonth: menarche === 'started' ? this.data.menarcheMonth : '' });
   },
+  onMenarcheMonth(event: { detail: { value: string } }) { this.setData({ menarcheMonth: event.detail.value }); },
+  clearMenarcheMonth() { this.setData({ menarcheMonth: '' }); },
+  clearMenarche() { this.setData({ menarche: '', menarcheMonth: '' }); },
   openTreatment() { wx.navigateTo({ url: '/pages/treatment-stage/index' }); },
   onDiagnosis(event: { detail: { value: string } }) {
     const index = Number(event.detail.value);
@@ -145,7 +144,8 @@ Page({
     const payload: Record<string, unknown> = {
       nickname,
       birth_month: this.data.birthMonth,
-      gender: this.data.gender, gender_custom: this.data.genderCustom.trim(), menarche_status: this.data.menarche,
+      menarche_status: this.data.menarche,
+      menarche_month: this.data.menarche === 'started' ? this.data.menarcheMonth : '',
       diagnosis_status: DIAGNOSIS_OPTIONS[this.data.diagnosisIndex]?.value ?? '',
       management_methods: this.data.methods.filter(item => item.checked).map(item => item.value),
       notes: this.data.notes.trim(),

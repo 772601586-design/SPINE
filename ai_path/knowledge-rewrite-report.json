@@ -1,0 +1,801 @@
+﻿{
+    "generated_at":  "2026-11-03",
+    "editor_account":  "knowledge-import",
+    "scope":  "legacy_needs_rewrite 56 篇 v6 结构重写",
+    "before_status":  "legacy_needs_rewrite",
+    "after_status":  "expanded_targeted",
+    "articles":  56,
+    "body_length_before_total":  57369,
+    "body_length_after_total":  42219,
+    "still_draft":  true,
+    "claims_annotated":  0,
+    "rows":  {
+                 "value":  [
+                               {
+                                   "id":  "01-02",
+                                   "title":  "脊柱侧弯和普通姿势不良有什么区别？",
+                                   "revision":  2,
+                                   "body_length_before":  1134,
+                                   "body_length_after":  798,
+                                   "keywords":  [
+                                                    "姿势不良",
+                                                    "结构性侧弯",
+                                                    "椎体旋转",
+                                                    "体格检查"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "01-03",
+                                   "title":  "脊柱侧弯有哪些常见表现？",
+                                   "revision":  2,
+                                   "body_length_before":  1138,
+                                   "body_length_after":  790,
+                                   "keywords":  [
+                                                    "外观不对称",
+                                                    "前屈试验",
+                                                    "躯干旋转",
+                                                    "影像测量"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "01-04",
+                                   "title":  "脊柱侧弯是怎么形成的？",
+                                   "revision":  2,
+                                   "body_length_before":  1142,
+                                   "body_length_after":  759,
+                                   "keywords":  [
+                                                    "特发性侧弯",
+                                                    "病因",
+                                                    "先天性椎体异常",
+                                                    "坐姿"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "01-05",
+                                   "title":  "脊柱侧弯会遗传吗？",
+                                   "revision":  2,
+                                   "body_length_before":  1104,
+                                   "body_length_after":  732,
+                                   "keywords":  [
+                                                    "家族聚集",
+                                                    "特发性侧弯",
+                                                    "遗传",
+                                                    "随访"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "01-06",
+                                   "title":  "第一次发现侧弯应该去哪个科室？",
+                                   "revision":  2,
+                                   "body_length_before":  1139,
+                                   "body_length_after":  734,
+                                   "keywords":  [
+                                                    "就诊科室",
+                                                    "脊柱外科",
+                                                    "首诊",
+                                                    "影像检查"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "01-07",
+                                   "title":  "第一次就诊需要做什么检查？",
+                                   "revision":  2,
+                                   "body_length_before":  610,
+                                   "body_length_after":  734,
+                                   "keywords":  [
+                                                    "初诊",
+                                                    "体格检查",
+                                                    "站立位影像",
+                                                    "前屈试验"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "01-08",
+                                   "title":  "侧弯会影响身高吗？",
+                                   "revision":  2,
+                                   "body_length_before":  1118,
+                                   "body_length_after":  721,
+                                   "keywords":  [
+                                                    "身高",
+                                                    "躯干外观",
+                                                    "随访影像",
+                                                    "生长发育"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "01-09",
+                                   "title":  "侧弯会影响心肺功能吗？",
+                                   "revision":  2,
+                                   "body_length_before":  1134,
+                                   "body_length_after":  716,
+                                   "keywords":  [
+                                                    "心肺功能",
+                                                    "胸段畸形",
+                                                    "呼吸",
+                                                    "随访"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "01-10",
+                                   "title":  "刚确诊后最需要了解什么？",
+                                   "revision":  2,
+                                   "body_length_before":  1136,
+                                   "body_length_after":  728,
+                                   "keywords":  [
+                                                    "首次建档",
+                                                    "Cobb角",
+                                                    "骨成熟度",
+                                                    "进展风险"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "02-03",
+                                   "title":  "为什么不同医生测出的角度不一样？",
+                                   "revision":  2,
+                                   "body_length_before":  1111,
+                                   "body_length_after":  737,
+                                   "keywords":  [
+                                                    "Cobb角",
+                                                    "测量差异",
+                                                    "端椎",
+                                                    "复查比较"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "02-04",
+                                   "title":  "胸弯、腰弯和双主弯怎么区分？",
+                                   "revision":  2,
+                                   "body_length_before":  1115,
+                                   "body_length_after":  717,
+                                   "keywords":  [
+                                                    "胸弯",
+                                                    "腰弯",
+                                                    "双主弯",
+                                                    "主弯与代偿弯"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "02-06",
+                                   "title":  "什么是Sanders骨成熟度分期？",
+                                   "revision":  2,
+                                   "body_length_before":  1112,
+                                   "body_length_after":  720,
+                                   "keywords":  [
+                                                    "Sanders分期",
+                                                    "骨成熟度",
+                                                    "生长高峰",
+                                                    "进展风险"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "02-07",
+                                   "title":  "为什么医生要关注生长速度？",
+                                   "revision":  2,
+                                   "body_length_before":  1107,
+                                   "body_length_after":  721,
+                                   "keywords":  [
+                                                    "生长速度",
+                                                    "快速生长期",
+                                                    "随访强度",
+                                                    "进展风险"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "02-08",
+                                   "title":  "什么情况下需要MRI检查？",
+                                   "revision":  2,
+                                   "body_length_before":  590,
+                                   "body_length_after":  744,
+                                   "keywords":  [
+                                                    "MRI",
+                                                    "神经体征",
+                                                    "非典型曲线",
+                                                    "进一步评估"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "02-09",
+                                   "title":  "X光检查需要注意什么？",
+                                   "revision":  2,
+                                   "body_length_before":  1104,
+                                   "body_length_after":  676,
+                                   "keywords":  [
+                                                    "X光",
+                                                    "辐射剂量",
+                                                    "影像必要性",
+                                                    "原始影像"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "02-10",
+                                   "title":  "复查结果应该如何与上一次比较？",
+                                   "revision":  2,
+                                   "body_length_before":  1119,
+                                   "body_length_after":  715,
+                                   "keywords":  [
+                                                    "复查比较",
+                                                    "骨成熟度",
+                                                    "症状变化",
+                                                    "治疗执行"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "03-03",
+                                   "title":  "支具有哪些类型？",
+                                   "revision":  2,
+                                   "body_length_before":  1238,
+                                   "body_length_after":  855,
+                                   "keywords":  [
+                                                    "支具类型",
+                                                    "胸腰骶矫形器",
+                                                    "夜间支具",
+                                                    "佩戴方案"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "03-06",
+                                   "title":  "支具不合适有哪些表现？",
+                                   "revision":  2,
+                                   "body_length_before":  1243,
+                                   "body_length_after":  806,
+                                   "keywords":  [
+                                                    "支具适配",
+                                                    "皮肤破损",
+                                                    "局部压迫",
+                                                    "重新评估"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "03-08",
+                                   "title":  "为什么不同侧弯患者训练动作不同？",
+                                   "revision":  2,
+                                   "body_length_before":  1275,
+                                   "body_length_after":  787,
+                                   "keywords":  [
+                                                    "个性化训练",
+                                                    "弯型",
+                                                    "旋转方向",
+                                                    "PSSE"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "03-09",
+                                   "title":  "支具与康复训练可以怎样配合？",
+                                   "revision":  2,
+                                   "body_length_before":  1265,
+                                   "body_length_after":  779,
+                                   "keywords":  [
+                                                    "支具与训练",
+                                                    "PSSE",
+                                                    "联合方案",
+                                                    "复评"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "04-01",
+                                   "title":  "侧弯患者可以跑步吗？",
+                                   "revision":  2,
+                                   "body_length_before":  1145,
+                                   "body_length_after":  783,
+                                   "keywords":  [
+                                                    "跑步",
+                                                    "体育活动",
+                                                    "运动限制",
+                                                    "PSSE"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "04-04",
+                                   "title":  "力量训练是否安全？",
+                                   "revision":  2,
+                                   "body_length_before":  1123,
+                                   "body_length_after":  737,
+                                   "keywords":  [
+                                                    "力量训练",
+                                                    "负荷",
+                                                    "技术动作",
+                                                    "个体风险"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "04-05",
+                                   "title":  "睡觉姿势会影响侧弯吗？",
+                                   "revision":  2,
+                                   "body_length_before":  1111,
+                                   "body_length_after":  723,
+                                   "keywords":  [
+                                                    "睡姿",
+                                                    "床垫",
+                                                    "舒适度",
+                                                    "夜间支具"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "04-06",
+                                   "title":  "坐姿和书包应该注意什么？",
+                                   "revision":  2,
+                                   "body_length_before":  1131,
+                                   "body_length_after":  762,
+                                   "keywords":  [
+                                                    "坐姿",
+                                                    "书包",
+                                                    "负重",
+                                                    "日常舒适"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "04-07",
+                                   "title":  "戴支具怎么选择衣服？",
+                                   "revision":  2,
+                                   "body_length_before":  1122,
+                                   "body_length_after":  723,
+                                   "keywords":  [
+                                                    "支具穿衣",
+                                                    "摩擦",
+                                                    "透气",
+                                                    "支具适配"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "04-08",
+                                   "title":  "长时间学习后背部疲劳怎么办？",
+                                   "revision":  2,
+                                   "body_length_before":  1121,
+                                   "body_length_after":  719,
+                                   "keywords":  [
+                                                    "背部疲劳",
+                                                    "久坐",
+                                                    "活动间隔",
+                                                    "疼痛"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "04-09",
+                                   "title":  "饮食和骨骼健康有什么关系？",
+                                   "revision":  2,
+                                   "body_length_before":  1119,
+                                   "body_length_after":  702,
+                                   "keywords":  [
+                                                    "营养",
+                                                    "骨骼健康",
+                                                    "补充剂",
+                                                    "均衡饮食"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "04-10",
+                                   "title":  "哪些症状需要尽快就医？",
+                                   "revision":  2,
+                                   "body_length_before":  559,
+                                   "body_length_after":  724,
+                                   "keywords":  [
+                                                    "警示症状",
+                                                    "神经症状",
+                                                    "急诊",
+                                                    "就医时机"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "05-01",
+                                   "title":  "确诊后很焦虑怎么办？",
+                                   "revision":  2,
+                                   "body_length_before":  1126,
+                                   "body_length_after":  762,
+                                   "keywords":  [
+                                                    "焦虑",
+                                                    "心理支持",
+                                                    "治疗计划",
+                                                    "生活质量"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "05-02",
+                                   "title":  "不想让同学知道自己戴支具怎么办？",
+                                   "revision":  2,
+                                   "body_length_before":  1131,
+                                   "body_length_after":  769,
+                                   "keywords":  [
+                                                    "支具与社交",
+                                                    "隐私边界",
+                                                    "学校支持",
+                                                    "身体形象"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "05-03",
+                                   "title":  "如何面对高低肩和身体外观变化？",
+                                   "revision":  2,
+                                   "body_length_before":  1119,
+                                   "body_length_after":  755,
+                                   "keywords":  [
+                                                    "外观变化",
+                                                    "自我形象",
+                                                    "生活质量",
+                                                    "心理支持"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "05-04",
+                                   "title":  "支具影响穿衣和社交怎么办？",
+                                   "revision":  2,
+                                   "body_length_before":  1121,
+                                   "body_length_after":  761,
+                                   "keywords":  [
+                                                    "穿衣",
+                                                    "社交",
+                                                    "依从性",
+                                                    "学校沟通"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "05-05",
+                                   "title":  "治疗太久没有动力怎么办？",
+                                   "revision":  2,
+                                   "body_length_before":  1121,
+                                   "body_length_after":  727,
+                                   "keywords":  [
+                                                    "治疗动力",
+                                                    "执行困难",
+                                                    "提醒方式",
+                                                    "康复沟通"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "05-06",
+                                   "title":  "如何向父母表达治疗中的感受？",
+                                   "revision":  2,
+                                   "body_length_before":  1113,
+                                   "body_length_after":  758,
+                                   "keywords":  [
+                                                    "家庭沟通",
+                                                    "表达感受",
+                                                    "治疗协作",
+                                                    "学校生活"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "05-07",
+                                   "title":  "家长怎样支持孩子而不是增加压力？",
+                                   "revision":  2,
+                                   "body_length_before":  1114,
+                                   "body_length_after":  757,
+                                   "keywords":  [
+                                                    "家长支持",
+                                                    "支持性沟通",
+                                                    "治疗目标",
+                                                    "青少年参与"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "05-08",
+                                   "title":  "怎样和康复师沟通训练困难？",
+                                   "revision":  2,
+                                   "body_length_before":  1117,
+                                   "body_length_after":  760,
+                                   "keywords":  [
+                                                    "康复师沟通",
+                                                    "训练记录",
+                                                    "动作难度",
+                                                    "复评"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "05-09",
+                                   "title":  "为什么不同患者的治疗经历差别很大？",
+                                   "revision":  2,
+                                   "body_length_before":  1112,
+                                   "body_length_after":  740,
+                                   "keywords":  [
+                                                    "个体差异",
+                                                    "治疗经历",
+                                                    "经验帖",
+                                                    "方案照搬"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "05-10",
+                                   "title":  "如何分享自己的治疗故事？",
+                                   "revision":  2,
+                                   "body_length_before":  1129,
+                                   "body_length_after":  729,
+                                   "keywords":  [
+                                                    "治疗故事",
+                                                    "隐私保护",
+                                                    "患者支持",
+                                                    "经验分享"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "06-01",
+                                   "title":  "怎样判断治疗是否有效？",
+                                   "revision":  2,
+                                   "body_length_before":  577,
+                                   "body_length_after":  708,
+                                   "keywords":  [
+                                                    "治疗效果",
+                                                    "连续影像",
+                                                    "骨成熟度",
+                                                    "生活质量"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "06-02",
+                                   "title":  "为什么角度没有明显变化也可能有治疗价值？",
+                                   "revision":  2,
+                                   "body_length_before":  1081,
+                                   "body_length_after":  731,
+                                   "keywords":  [
+                                                    "控制进展",
+                                                    "治疗目标",
+                                                    "自然病程",
+                                                    "长期管理"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "06-03",
+                                   "title":  "多久复查一次比较合适？",
+                                   "revision":  2,
+                                   "body_length_before":  1082,
+                                   "body_length_after":  747,
+                                   "keywords":  [
+                                                    "复查间隔",
+                                                    "随访计划",
+                                                    "影像评估",
+                                                    "生长速度"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "06-04",
+                                   "title":  "什么时候可以考虑停止支具治疗？",
+                                   "revision":  2,
+                                   "body_length_before":  601,
+                                   "body_length_after":  792,
+                                   "keywords":  [
+                                                    "停止支具",
+                                                    "骨成熟度",
+                                                    "减量方案",
+                                                    "随访"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "06-05",
+                                   "title":  "停止支具后还需要训练吗？",
+                                   "revision":  2,
+                                   "body_length_before":  1065,
+                                   "body_length_after":  714,
+                                   "keywords":  [
+                                                    "停止支具",
+                                                    "PSSE",
+                                                    "后续训练",
+                                                    "随访安排"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "06-06",
+                                   "title":  "骨骼成熟后侧弯还会进展吗？",
+                                   "revision":  2,
+                                   "body_length_before":  1067,
+                                   "body_length_after":  693,
+                                   "keywords":  [
+                                                    "骨成熟",
+                                                    "进展风险",
+                                                    "曲线特征",
+                                                    "成年随访"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "06-07",
+                                   "title":  "成年后是否还需要随访？",
+                                   "revision":  2,
+                                   "body_length_before":  1068,
+                                   "body_length_after":  709,
+                                   "keywords":  [
+                                                    "成年随访",
+                                                    "残余弯曲",
+                                                    "既往治疗",
+                                                    "影像留存"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "06-08",
+                                   "title":  "如何保存历次影像与诊断记录？",
+                                   "revision":  2,
+                                   "body_length_before":  1066,
+                                   "body_length_after":  690,
+                                   "keywords":  [
+                                                    "影像留存",
+                                                    "原始报告",
+                                                    "时间序列",
+                                                    "自填记录"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "06-09",
+                                   "title":  "怎样整理长期训练与支具佩戴记录？",
+                                   "revision":  2,
+                                   "body_length_before":  1077,
+                                   "body_length_after":  710,
+                                   "keywords":  [
+                                                    "依从性",
+                                                    "执行记录",
+                                                    "训练版本",
+                                                    "佩戴时长"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "06-10",
+                                   "title":  "如何准备下一次医生复诊？",
+                                   "revision":  2,
+                                   "body_length_before":  1079,
+                                   "body_length_after":  694,
+                                   "keywords":  [
+                                                    "复诊准备",
+                                                    "问题清单",
+                                                    "治疗执行",
+                                                    "随访资料"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "V5-01",
+                                   "title":  "初次就诊：怎样理解筛查与确诊",
+                                   "revision":  2,
+                                   "body_length_before":  831,
+                                   "body_length_after":  887,
+                                   "keywords":  [
+                                                    "筛查",
+                                                    "确诊",
+                                                    "前屈试验",
+                                                    "Cobb角"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "V5-02",
+                                   "title":  "Cobb角：如何理解角度与复查变化",
+                                   "revision":  2,
+                                   "body_length_before":  762,
+                                   "body_length_after":  815,
+                                   "keywords":  [
+                                                    "Cobb角",
+                                                    "端椎",
+                                                    "测量误差",
+                                                    "复查比较"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "V5-03",
+                                   "title":  "骨成熟度与进展风险：Risser和Sanders分别是什么",
+                                   "revision":  2,
+                                   "body_length_before":  732,
+                                   "body_length_after":  856,
+                                   "keywords":  [
+                                                    "Risser征",
+                                                    "Sanders分期",
+                                                    "骨成熟度",
+                                                    "进展风险"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "V5-04",
+                                   "title":  "观察、支具与手术：治疗路径如何选择",
+                                   "revision":  2,
+                                   "body_length_before":  863,
+                                   "body_length_after":  990,
+                                   "keywords":  [
+                                                    "治疗路径",
+                                                    "观察",
+                                                    "支具",
+                                                    "手术评估"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "V5-05",
+                                   "title":  "支具佩戴：时长、依从性与不适处理",
+                                   "revision":  2,
+                                   "body_length_before":  698,
+                                   "body_length_after":  785,
+                                   "keywords":  [
+                                                    "佩戴时长",
+                                                    "依从性",
+                                                    "支具不适",
+                                                    "处方版本"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "V5-06",
+                                   "title":  "PSSE、Schroth与普通锻炼有什么区别",
+                                   "revision":  2,
+                                   "body_length_before":  720,
+                                   "body_length_after":  776,
+                                   "keywords":  [
+                                                    "PSSE",
+                                                    "Schroth",
+                                                    "三维自我矫正",
+                                                    "证据不确定性"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "V5-07",
+                                   "title":  "运动、疼痛与危险信号：哪些情况需要就医",
+                                   "revision":  2,
+                                   "body_length_before":  686,
+                                   "body_length_after":  778,
+                                   "keywords":  [
+                                                    "运动安全",
+                                                    "疼痛",
+                                                    "危险信号",
+                                                    "急诊"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               },
+                               {
+                                   "id":  "V5-08",
+                                   "title":  "如何记录治疗过程并准备复诊",
+                                   "revision":  2,
+                                   "body_length_before":  746,
+                                   "body_length_after":  784,
+                                   "keywords":  [
+                                                    "治疗记录",
+                                                    "复诊准备",
+                                                    "版本管理",
+                                                    "隐私"
+                                                ],
+                                   "editorial_revision_status":  "expanded_targeted"
+                               }
+                           ],
+                 "Count":  56
+             }
+}

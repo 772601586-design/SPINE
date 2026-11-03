@@ -1,0 +1,22 @@
+<view class="training-day-page">
+  <view wx:if="{{error}}" class="flow-error">{{error}}</view>
+  <block wx:if="{{day}}">
+    <view class="day-heading"><view><text class="day-date">{{day.title}}</text><text class="day-weekday">{{day.weekday}}</text></view><text class="day-state day-state-{{day.state}}">{{day.statusText}}</text></view>
+    <text wx:if="{{day.recordCount}}" class="day-summary">{{day.recordCount}} 份训练记录 · 已完成 {{day.completedActions}} / {{day.actionCount}} 个动作</text>
+    <view wx:if="{{!day.recordCount}}" class="day-empty">这一天还没有建立训练记录。</view>
+    <view wx:for="{{day.sessions}}" wx:for-item="session" wx:key="id" class="day-session">
+      <view class="session-heading"><text class="session-name">{{session.name}}</text><text class="session-state {{session.status === 'completed' ? 'text-completed' : 'text-incomplete'}}">{{session.statusText}}</text></view>
+      <view wx:for="{{session.actions}}" wx:for-item="action" wx:key="key" class="day-action">
+        <view class="action-heading"><text class="action-name">{{action.name}}</text><text wx:if="{{action.done}}" class="action-done">✓</text></view>
+        <text wx:if="{{action.groupName}}" class="action-group">{{action.groupName}}</text>
+        <text class="action-requirement">当时要求：{{action.dose}}</text>
+        <view wx:for="{{action.sets}}" wx:for-item="set" wx:key="number" class="day-set">
+          <text class="set-name">{{set.label}}</text><text class="set-expected">{{set.expected}}</text><text class="set-actual {{set.done ? 'text-completed' : set.extra && set.recorded ? 'text-extra' : set.recorded ? 'text-incomplete' : 'text-unrecorded'}}">{{set.actual}}</text>
+        </view>
+        <text wx:if="{{!action.sets.length}}" class="action-requirement">训练量待核对</text>
+        <text wx:if="{{action.feeling}}" class="action-feeling">感受：{{action.feeling}}</text>
+      </view>
+      <button class="edit-day-record" data-id="{{session.id}}" bindtap="openRecord">查看 / 修改记录 ›</button>
+    </view>
+  </block>
+</view>

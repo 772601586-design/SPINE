@@ -104,7 +104,9 @@ class SummaryView(APIView):
         review = None
         if pref.review_enabled and pref.review_date:
             review = {"date": pref.review_date, "days": (pref.review_date - now).days,
-                      "checklist": ["整理历次报告与影像", "核对个人训练和佩戴记录", "记下希望与医生讨论的问题"]}
+                      "checklist": ["整理历次报告与影像", "核对个人训练和佩戴记录",
+                                    "长高了多少、初潮时间（如适用）——医生可能会问",
+                                    "记下希望与医生讨论的问题"]}
         data = {"date": now, "review": review, "swim_today": now.weekday() in pref.swim_weekdays,
                 "swim_week_count": swim.count(), "training_count": training.count(), "brace_record_days": len(wear_dates),
                 "record_days": (now - first.visit_date).days + 1 if first else None,

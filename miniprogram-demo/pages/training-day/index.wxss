@@ -1,0 +1,30 @@
+page{background:#F6F2E9;color:#2C3A32}
+.training-day-page{padding:34rpx 30rpx calc(50rpx + env(safe-area-inset-bottom))}
+.day-heading{display:flex;align-items:center;justify-content:space-between;gap:20rpx}
+.day-date{display:block;font-size:36rpx;font-weight:700;line-height:1.5}
+.day-weekday{display:block;font-size:24rpx;color:#83907C;margin-top:6rpx}
+.day-state{flex-shrink:0;padding:10rpx 18rpx;border-radius:24rpx;font-size:23rpx}
+.day-state-completed{background:#E6F0E6;color:#376847}
+.day-state-incomplete{background:#F7E6C7;color:#996D35}
+.day-state-empty{background:#EDEEE6;color:#83907C}
+.day-summary{display:block;font-size:25rpx;color:#74836D;margin:24rpx 0}
+.day-empty{margin-top:36rpx;text-align:center;padding:60rpx 30rpx;background:#fff;border-radius:28rpx;color:#89917E;font-size:27rpx}
+.day-session{margin-top:28rpx;background:#fff;border-radius:28rpx;padding:26rpx}
+.session-heading{display:flex;justify-content:space-between;align-items:flex-start;gap:18rpx;padding-bottom:22rpx;border-bottom:1rpx solid #EDF0E6}
+.session-name{flex:1;font-size:30rpx;font-weight:650;line-height:1.5;overflow-wrap:anywhere}
+.session-state{flex-shrink:0;font-size:23rpx;line-height:1.8}
+.day-action{padding:26rpx 0;border-bottom:1rpx solid #EDF0E6}
+.action-heading{display:flex;align-items:flex-start;gap:16rpx}
+.action-name{flex:1;font-size:28rpx;font-weight:600;line-height:1.6}
+.action-done{color:#6D9773;font-size:28rpx}
+.action-group{display:block;font-size:22rpx;color:#87967C;margin-top:5rpx}
+.action-requirement{display:block;font-size:23rpx;color:#86907E;line-height:1.6;margin:12rpx 0}
+.day-set{display:flex;align-items:center;gap:12rpx;min-height:60rpx;font-size:25rpx}
+.set-name{min-width:110rpx;color:#5D7058}
+.set-expected{flex:1;font-size:22rpx;color:#97A08B}
+.set-actual{font-size:27rpx;font-weight:500;text-align:right}
+.text-completed{color:#4B7C56}.text-incomplete{color:#B1854E}.text-unrecorded{color:#9AA38F;font-weight:400}
+.text-extra{color:#5D7058}
+.action-feeling{display:block;white-space:pre-wrap;font-size:24rpx;line-height:1.7;color:#7B886F;padding:18rpx;background:#F5F7EF;border-radius:16rpx;margin-top:18rpx}
+.day-session .edit-day-record{width:100%;margin:18rpx 0 0;padding:4rpx 0;background:transparent;color:#55784E;font-size:25rpx;font-weight:500;line-height:2}
+.edit-day-record::after{border:0}

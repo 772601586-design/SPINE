@@ -9,14 +9,32 @@ function ready(row) {
 Page({
   data: {
     session: '', card: '', selected: null, index: 0, value: 0, running: false,
-    finished: false, seconds: '3', error: '', actual: '', progress: 0, voiceOn: true,
+    finished: false, hasStarted: false, trainingStarted: false, seconds: '3', error: '', progress: 0, voiceOn: true,
+    celebrating: false, saving: false, navTop: 0, navHeight: 44,
+    confetti: Array.from({ length: 12 }, (_, i) => ({ x: Math.round(Math.cos(i * Math.PI / 6) * 130), y: Math.round(Math.sin(i * Math.PI / 6) * 110), angle: i * 45, color: ['#79b9a8', '#e9bf76', '#bad6cd'][i % 3] })),
     actionGroups: [], actionNumber: 0, actionTotal: 0, completedActions: 0, currentDone: false,
   },
   onLoad(query) {
+    this.configureNavigation();
     this.setData({ session: query.session || '', card: query.card || '' });
     this.reload();
   },
+  configureNavigation() {
+    try {
+      const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync ? wx.getSystemInfoSync() : {};
+      const top = info.statusBarHeight || 0;
+      const menu = wx.getMenuButtonBoundingClientRect && wx.getMenuButtonBoundingClientRect();
+      this.setData({ navTop: top, navHeight: menu && menu.height > 0 ? Math.max(44, (menu.top - top) * 2 + menu.height) : 44 });
+    } catch (_) { /* 默认导航高度可用于浏览器预览 */ }
+  },
+  setExitGuard(enabled) {
+    try {
+      if (enabled && wx.enableAlertBeforeUnload) wx.enableAlertBeforeUnload({ message: '确认要离开吗？', fail() {} });
+      else if (!enabled && wx.disableAlertBeforeUnload) wx.disableAlertBeforeUnload({ fail() {} });
+    } catch (_) { /* 自定义退出按钮始终使用确认框 */ }
+  },
   onShow() {
+    this.setExitGuard(!this.data.celebrating);
     let record = t.load().sessions.find(item => item.id === this.data.session);
     if (!record) return;
     if (record.rows.some(row => row.confirmed === false) && typeof t.session === 'function') {
@@ -69,55 +87,45 @@ Page({
       this.setData({ selected: null, error: '当前动作要求待核对，请先补齐并确认组数、次数或时间。' });
       this.syncChecklist(record); return;
     }
-    const index = row.values.slice(0, row.sets).findIndex(value => value === null || value < row.amount);
+    const index = row.values.slice(0, row.sets).findIndex((value, i) => (value === null || value < row.amount) && !(row.guidedSets || [])[i]);
     this.setData({
       selected: Object.assign({}, row, {
         unit: t.unit(row.mode), dose: t.dose(row),
         groups: Array.from({ length: row.totalOnly ? 0 : row.sets }, (_, setIndex) => setIndex),
       }),
-      index: index < 0 ? row.sets - 1 : index, actual: '',
+      index: index < 0 ? row.sets - 1 : index, hasStarted: false, trainingStarted: false, running: false,
       value: row.mode === 'timer' ? row.amount : 0, progress: 0, finished: false, error: '',
     });
     this.elapsed = 0;
     this.syncChecklist(record);
   },
-  inputSeconds(e) { this.pause(); this.elapsed = 0; this.setData({ seconds: e.detail.value, value: 0, progress: 0 }); },
+  inputSeconds(e) { this.pause(); this.elapsed = 0; this.setData({ seconds: e.detail.value, value: 0, progress: 0, finished: false, hasStarted: false }); },
   toggleVoice() { this.setData({ voiceOn: !this.data.voiceOn }); if (!this.data.voiceOn) voice.stop(); },
   selectGroup(e) {
     this.pause();
     const index = Number(e.currentTarget.dataset.index);
     if (!Number.isInteger(index) || !this.data.selected || index < 0 || index >= this.data.selected.sets) return;
     this.elapsed = 0;
-    this.setData({ index, value: this.data.selected.mode === 'timer' ? this.data.selected.amount : 0, progress: 0, finished: false, actual: '' });
+    this.setData({ index, value: this.data.selected.mode === 'timer' ? this.data.selected.amount : 0, progress: 0, finished: false, hasStarted: false });
     this.syncChecklist();
   },
-  selectAction(e) {
-    const cardId = e.currentTarget.dataset.cardId;
-    const record = t.load().sessions.find(item => item.id === this.data.session);
-    const row = record && record.rows.find(item => item.cardId === cardId);
-    if (!row) return;
-    if (!ready(row)) { this.pause(); wx.navigateTo({ url: '/pages/card/index?id=' + row.cardId }); return; }
-    if (cardId === this.data.card) return;
-    this.pause();
-    this.setData({ card: cardId });
-    this.reload();
-  },
-  inputActual(e) { this.setData({ actual: e.detail.value }); },
+  togglePlayback() { if (this.data.running) this.pause(); else this.start(); },
   start() {
     const row = this.data.selected;
-    if (!row || this.data.running) return;
+    if (!row || this.data.running || this.data.celebrating || this.data.saving || this._exitPending) return;
     if (!ready(row)) { this.setData({ error: '请先核对并确认当前动作要求。' }); return; }
     const step = Number(this.data.seconds);
     if (row.mode !== 'timer' && (!Number.isFinite(step) || step < 1 || step > 60)) {
       this.setData({ error: '每次节奏请设置 1～60 秒。' }); return;
     }
-    if (this.data.finished) { this.elapsed = 0; this.setData({ finished: false }); }
+    if (this.data.finished) { this.elapsed = 0; this.setData({ finished: false, progress: 0, value: row.mode === 'timer' ? row.amount : 0 }); }
     this.started = Date.now();
     if (this.data.voiceOn) voice.speak('begin');
-    this.setData({ running: true, error: '' });
+    this.setData({ running: true, hasStarted: true, trainingStarted: true, error: '' });
     this.timer = setInterval(() => this.tick(), 200);
   },
   tick() {
+    if (!this.data.running || !this.data.selected) return;
     const row = this.data.selected;
     const elapsed = (this.elapsed + Date.now() - this.started) / 1000;
     const duration = row.mode === 'timer' ? row.amount : row.amount * Number(this.data.seconds);
@@ -132,10 +140,10 @@ Page({
         try {
           const record = t.saveGuidedSet(this.data.session, this.data.card, this.data.index);
           this.syncChecklist(record);
-        } catch (error) { this.setData({ error: error.message }); }
+        } catch (error) { this.setData({ error: error.message || '记录保存失败，请重试' }); return; }
       }
       if (this.data.voiceOn) voice.speak('done');
-      wx.showToast({ title: '节奏结束，请确认实际完成量', icon: 'none' });
+      wx.showToast({ title: '本组节奏结束', icon: 'none' });
     }
   },
   pause() {
@@ -144,28 +152,49 @@ Page({
     voice.stop();
     this.setData({ running: false });
   },
-  confirm() {
+  completeExercise() {
+    if (!this.data.selected || !this.data.trainingStarted || this.data.saving || this.data.celebrating || this._exitPending) return;
     this.pause();
+    this.setData({ saving: true, error: '' });
     try {
-      if (!this.data.actual.trim()) throw Error('请填写实际完成量，未完成可去手动记录。');
-      t.saveSet(this.data.session, this.data.card, this.data.index, Number(this.data.actual));
-      this.reload();
-      wx.showToast({ title: '实际量已保存', icon: 'success' });
-    } catch (error) { this.setData({ error: error.message }); }
+      const record = t.load().sessions.find(item => item.id === this.data.session);
+      const row = record && record.rows.find(item => item.cardId === this.data.card);
+      if (!ready(row)) throw Error('当前动作要求已变化，请返回训练页重新确认。');
+      // “完成”是用户确认整项动作已按计划完成；额外手动记录的组保留。
+      const values = Array.from({ length: Math.max(row.sets, row.values.length) }, (_, i) => i < row.sets ? row.amount : row.values[i]);
+      const saved = t.saveValues(this.data.session, this.data.card, values);
+      this.syncChecklist(saved);
+      this.setData({ saving: false, celebrating: true });
+      this.setExitGuard(false);
+    } catch (error) {
+      this.setData({ saving: false, error: error.message || '保存失败，请重试' });
+    }
   },
-  manual() {
+  requestExit() {
+    if (this._exitPending || this.data.saving) return;
+    if (this.data.celebrating) return this.leave();
     this.pause();
-    wx.redirectTo({ url: '/pages/execution/index?session=' + this.data.session + '&card=' + this.data.card });
+    this._exitPending = true;
+    wx.showModal({
+      title: '确认要离开吗？', content: '', confirmText: '确认离开', cancelText: '继续训练',
+      success: result => { this._exitPending = false; if (result.confirm && !this._unloaded) this.leave(); },
+      fail: () => { this._exitPending = false; }
+    });
   },
-  next() {
+  leave() {
     this.pause();
-    const record = t.load().sessions.find(item => item.id === this.data.session);
-    if (!record) { this.reload(); return; }
-    const index = record.rows.findIndex(row => row.cardId === this.data.card);
-    const next = record.rows.slice(index + 1).find(ready);
-    if (next) { this.setData({ card: next.cardId }); this.reload(); }
-    else this.manual();
+    this.setExitGuard(false);
+    const failed = () => {
+      if (!this._unloaded) { this.setData({ error: '暂时无法返回，请再试一次' }); this.setExitGuard(!this.data.celebrating); }
+    };
+    if (typeof getCurrentPages === 'function' && getCurrentPages().length > 1) wx.navigateBack({ fail: failed });
+    else wx.switchTab({ url: '/pages/train/index', fail: failed });
+  },
+  returnToTraining() {
+    this.pause();
+    this.setExitGuard(false);
+    wx.switchTab({ url: '/pages/train/index', fail: () => { if (!this._unloaded) this.setData({ error: '暂时无法返回，请再试一次' }); } });
   },
   onHide() { this.pause(); },
-  onUnload() { this.pause(); },
+  onUnload() { this.pause(); this._unloaded = true; this.setExitGuard(false); },
 });

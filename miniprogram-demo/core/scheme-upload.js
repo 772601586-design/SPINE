@@ -10,16 +10,20 @@ function saveFile(file) {
     const path = wx.env.USER_DATA_PATH + '/' + t.id('scheme') + '.' + extension;
     wx.getFileSystemManager().copyFile({ srcPath: file.tempFilePath || file.path, destPath: path,
       success: () => {
-        try { resolve(documents.save({ type: 'training', path, originalName, extension, kind, recordingBatchId: t.id('scheme-batch'), status: 'pending' })); }
-        catch (error) { reject(error); }
+        try { resolve(documents.save({ type: 'training', path, originalName, extension, kind, size: Number(file.size) || 0, recordingBatchId: t.id('scheme-batch'), status: 'pending' })); }
+        catch (error) {
+          // This fresh copy has no document reference if the metadata write failed.
+          try { const fs = wx.getFileSystemManager(); if (fs.unlink) fs.unlink({ filePath: path, fail() {} }); } catch (_) {}
+          reject(Error('方案单信息保存失败，请重新选择文件。'));
+        }
       }, fail: () => reject(Error('方案单保存失败，请重新选择。')) });
   });
 }
 function choose(source) {
   return new Promise((resolve, reject) => {
     const fail = error => /cancel/.test(error.errMsg || '') ? resolve(null) : reject(Error('未能打开相机或文件选择器，请重试。'));
-    if (source === 'camera') {
-      wx.chooseMedia({ count: 1, mediaType: ['image'], sourceType: ['camera'], sizeType: ['compressed'],
+    if (source === 'camera' || source === 'album') {
+      wx.chooseMedia({ count: 1, mediaType: ['image'], sourceType: [source], sizeType: ['compressed'],
         success: result => result.tempFiles[0] ? saveFile(result.tempFiles[0]).then(resolve, reject) : resolve(null), fail });
     } else {
       wx.chooseMessageFile({ count: 1, type: 'file', extension: ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx', 'txt'],

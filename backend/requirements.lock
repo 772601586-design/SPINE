@@ -16,3 +16,9 @@ rpds-py==2026.9.1
 sqlparse==0.6.0
 tzdata==2026.5
 uritemplate==4.2.0
+
+# Knowledge Markdown renderer and its transitive dependencies
+bleach==6.2.0
+markdown-it-py==3.0.0
+mdurl==0.1.2
+webencodings==0.6.1

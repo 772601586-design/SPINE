@@ -1,0 +1,56 @@
+page{background:#F6F2E9;color:#2C3A32}
+.rewards-page{padding:32rpx 30rpx calc(48rpx + env(safe-area-inset-bottom))}
+.rewards-heading{display:flex;flex-direction:column;gap:8rpx;margin:4rpx 6rpx 28rpx}
+.rewards-eyebrow{font-size:23rpx;color:#7b8c76;letter-spacing:2rpx}
+.rewards-title{font-size:44rpx;font-weight:700;letter-spacing:1rpx}
+.rewards-title-row{display:flex;align-items:center;justify-content:space-between;gap:20rpx}
+.rewards-demo-label{font-size:20rpx;font-weight:400;letter-spacing:0;color:#8D987E;border:1rpx solid #DDE3D3;padding:5rpx 12rpx;border-radius:20rpx;white-space:nowrap}
+.forest-wallet{position:relative;overflow:hidden;min-height:330rpx;box-sizing:border-box;padding:32rpx 30rpx 70rpx;background:#E6F0E6;border:2rpx solid #d5e3d2;border-radius:34rpx}
+.wallet-copy{position:relative;z-index:2;max-width:55%}
+.wallet-label{display:flex;align-items:center;gap:10rpx;color:#526D54;font-size:26rpx}
+.wallet-label image{width:38rpx;height:38rpx}
+.wallet-balance{display:flex;align-items:baseline;gap:12rpx;line-height:1.1;margin:16rpx 0 12rpx;color:#2F5D46}
+.wallet-balance>text:first-child{font-size:76rpx;font-weight:700;letter-spacing:-2rpx}
+.wallet-unit{font-size:26rpx;font-weight:500}
+.wallet-today{display:inline-block;font-size:23rpx;color:#60795D;padding:7rpx 14rpx;border-radius:30rpx;background:#ffffff90}
+.wallet-mascot{position:absolute;right:0;bottom:44rpx;width:310rpx;height:282rpx;z-index:1}
+.wallet-orbit{position:absolute;border-radius:50%;background:#F8F5DE}
+.wallet-orbit-one{right:28rpx;top:20rpx;width:246rpx;height:246rpx}
+.wallet-orbit-two{right:-50rpx;bottom:-62rpx;width:220rpx;height:220rpx;background:#C8DAC0;opacity:.6}
+.wallet-caption{position:absolute;left:30rpx;bottom:22rpx;z-index:2;display:flex;align-items:center;gap:10rpx;color:#78866C;font-size:21rpx}
+.wallet-dot{width:8rpx;height:8rpx;border-radius:50%;background:#9CB78E}
+.reward-section-heading{display:flex;align-items:center;justify-content:space-between;gap:20rpx;margin:34rpx 6rpx 18rpx;font-size:31rpx;font-weight:650}
+.section-caption{font-size:21rpx;color:#85907E;font-weight:400}
+.reward-card{border-radius:28rpx;background:#fff;border:1rpx solid #E9EADF}
+.reward-tasks{padding:4rpx 24rpx 0}
+.reward-task{display:flex;align-items:center;gap:14rpx;min-height:115rpx;padding:14rpx 0;box-sizing:border-box;border-bottom:1rpx solid #EDF0E6}
+.reward-task-main{flex:1;min-width:0}
+.reward-task-title{display:block;font-size:26rpx;color:#344B3A;font-weight:500}
+.reward-task-detail{display:block;font-size:21rpx;line-height:1.6;color:#89917F;margin-top:6rpx}
+.reward-points{display:flex;align-items:center;gap:2rpx;color:#926B43;font-size:23rpx;font-weight:600;flex-shrink:0}
+.reward-points image{width:34rpx;height:34rpx}
+.reward-task-state{flex-shrink:0;min-width:90rpx;box-sizing:border-box;border-radius:20rpx;text-align:center;padding:7rpx 10rpx;font-size:20rpx;font-weight:500}
+.task-earned{color:#fff;background:#6D9773}
+.task-pending{color:#9A7545;background:#FBF2DC}
+.task-later{color:#8A947E;background:#F1F3EC}
+.rewards-note{display:block;color:#91977F;font-size:20rpx;line-height:1.7;padding:18rpx 0 22rpx}
+.medal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16rpx}
+.medal-card{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:0;border-radius:26rpx;padding:24rpx 10rpx 20rpx;background:#fff;border:1rpx solid #E9EADF}
+.medal-emblem{position:relative;width:126rpx;height:128rpx;display:flex;align-items:center;justify-content:center;margin-bottom:16rpx}
+.medal-ribbon{position:absolute;left:28rpx;bottom:0;width:70rpx;height:58rpx;border-radius:6rpx;background:linear-gradient(90deg,#D5AC6D 0%,#F0D9A9 45%,#D5AC6D 100%);transform:rotate(-7deg)}
+.medal-face{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:108rpx;height:108rpx;border:5rpx solid #E2C58E;border-radius:36%;background:linear-gradient(145deg,#fffdf4,#F4E7C9);box-shadow:0 5rpx 9rpx #99774816;transform:rotate(-7deg)}
+.medal-face image{width:77rpx;height:77rpx;transform:rotate(7deg)}
+.medal-seal{position:absolute;z-index:2;bottom:7rpx;right:5rpx;width:29rpx;height:29rpx;line-height:29rpx;border:3rpx solid #fff;border-radius:50%;background:#6D9773;color:#fff;font-size:19rpx;font-weight:700}
+.medal-name{font-size:23rpx;font-weight:600;line-height:1.5;color:#44563F;min-height:68rpx;display:flex;align-items:center;justify-content:center}
+.medal-state{margin-top:6rpx;font-size:21rpx;color:#819273}
+.medal-earned .medal-state{color:#A1814E}
+.medal-growing{background:#FAFBF7}
+.medal-growing .medal-face{border-color:#DCE5D6;background:linear-gradient(145deg,#fff,#EDF2E7);box-shadow:none}
+.medal-growing .medal-face image{opacity:.65}
+.medal-growing .medal-ribbon{background:#D5DECB}
+.backfill-card{margin-top:30rpx;display:flex;align-items:center;gap:16rpx;padding:24rpx 22rpx}
+.backfill-icon{display:flex;align-items:center;justify-content:center;flex:0 0 66rpx;height:66rpx;background:#F0F4E9;border-radius:20rpx}
+.backfill-icon image{width:52rpx;height:52rpx}
+.backfill-copy{flex:1;min-width:0}
+.backfill-card .backfill-button{flex-shrink:0;width:auto;min-width:0;padding:8rpx 0 8rpx 10rpx;margin:0;background:transparent;color:#52754F;font-size:23rpx;font-weight:500;line-height:2}
+.backfill-button::after{border:0}

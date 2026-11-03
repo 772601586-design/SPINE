@@ -89,7 +89,8 @@ function page(route) {
   }, navigateTo(options) { assert.ok(config.pages.includes(options.url.split('?')[0].slice(1))); },
     redirectTo(options) { this.navigateTo(options); }, switchTab(options) { assert.ok(config.tabBar.list.some(tab => '/' + tab.pagePath === options.url)); } };
   const dependencies = { '../../core/training': t, '../../core/store': { enter() {} }, '../../core/brace-records': braceHost.module.exports, '../../core/voice': { stop() {}, speak() {} }, '../../core/scheme-upload': { choose: async () => null },
-    '../../core/documents': { list: () => [] }, '../../core/document-recognition': {}, '../../core/scheme-import': { reconcileVideos() {} } };
+    '../../core/documents': { list: () => [] }, '../../core/document-recognition': {}, '../../core/scheme-import': { reconcileVideos() {} },
+    '../../core/scheme-processing': { process: async () => ({}) }, '../../core/material-library': { isHidden: () => false, title: (_kind, _id, fallback) => fallback } };
   vm.runInNewContext(fs.readFileSync(path.join(root, `pages/${route}/index.js`), 'utf8'), {
     require: name => { assert.ok(dependencies[name], name); return dependencies[name]; }, Page: value => { definition = value; }, wx, Date: Clock,
     setInterval: () => 1, clearInterval() {},
@@ -104,8 +105,9 @@ const manual = page('execution'); manual.onLoad({ session: run.id, card: card.id
 manual.input({ currentTarget: { dataset: { index: 0 } }, detail: { value: '15' } }); manual.save();
 assert.equal(t.load().sessions.find(item => item.id === run.id).rows[0].values[0], 15);
 const follow = page('follow'); follow.onLoad({ session: run.id, card: card.id });
-follow.setData({ index: 0, actual: '30' }); follow.confirm();
-assert.equal(t.load().sessions.find(item => item.id === run.id).rows[0].values[0], 30);
+follow.start(); follow.completeExercise();
+assert.deepEqual(json(t.load().sessions.find(item => item.id === run.id).rows[0].values), [30, 30, 30, 5], 'Finish confirms the current exercise prescription and retains extra manual sets');
+assert.equal(follow.data.celebrating, true);
 follow.onHide(); follow.onUnload();
 // The old welcome/ready flow must enter the first native planning tab.
 const legacyCache = new Map(), queue = [], navigation = [];

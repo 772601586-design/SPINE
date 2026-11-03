@@ -24,6 +24,8 @@ function page(name) {
   vm.runInNewContext(fs.readFileSync(path.join(root, 'pages', name, 'index.js'), 'utf8'), {
     Page: value => { definition = value; }, wx, Date, Promise,
     require: request => request.endsWith('/document-recognition') ? { recognize: value => recognize(value) }
+      : request.endsWith('/store') ? { enter() {} }
+      : request.endsWith('/material-library') ? moduleAt('core/material-library.js')
       : request.endsWith('/exercise-taxonomy') ? moduleAt('core/exercise-taxonomy.js') : request.endsWith('/scheme-import') ? moduleAt('core/scheme-import.js') : request.endsWith('/documents') ? docs : t,
   });
   return Object.assign(definition, { data: clone(definition.data), setData(patch) { Object.assign(this.data, clone(patch)); } });

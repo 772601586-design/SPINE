@@ -27,6 +27,10 @@ def int_env(name, default):
 
 SECRET_KEY = required("DJANGO_SECRET_KEY")
 DEBUG = os.getenv("DJANGO_DEBUG", "false").lower() == "true"
+# 预览模式：把"草稿"也放进公开读取接口，供小程序在内容尚未完成医学审核时
+# 展示带"未经医学审核"标记的科普稿。默认关闭；只在演示/内测环境开启。
+# 锁：必须同时是 DEBUG 进程，验收/生产环境（DJANGO_DEBUG=false）永远无法开启预览。
+KNOWLEDGE_PREVIEW_DRAFTS = DEBUG and os.getenv("KNOWLEDGE_PREVIEW_DRAFTS", "").strip().lower() == "true"
 ALLOWED_HOSTS = csv_env("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1")
 INSTALLED_APPS = [
     # 后台只服务内容运营（动作/科普/审核队列），不承载用户私人数据；
@@ -35,7 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.auth", "django.contrib.contenttypes",
     "django.contrib.sessions", "django.contrib.messages",
     "django.contrib.staticfiles", "rest_framework", "corsheaders",
-    "drf_spectacular", "rest_framework.authtoken", "core", "braces", "profiles", "medical", "exercises", "training", "life",
+    "drf_spectacular", "rest_framework.authtoken", "core", "braces", "profiles", "medical", "exercises", "training", "life", "knowledge",
 ]
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",

@@ -38,6 +38,7 @@ router.register("training/cards", PersonalActionCardViewSet, basename="training-
 router.register("training/attempts", TrainingAttemptViewSet, basename="training-attempt")
 
 urlpatterns = [
+    path("api/v1/knowledge/", include("knowledge.urls")),
     path("api/v1/life/ocr/", OCRView.as_view()),
     path("api/v1/life/prescriptions/", PrescriptionView.as_view()),
     path("api/v1/life/preferences/", PreferencesView.as_view()),

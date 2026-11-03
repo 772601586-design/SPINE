@@ -8,6 +8,7 @@ function timeText(value: string): string { return new Date(Date.parse(value) + 8
 function nowId(): string { const hex = Array.from({ length: 32 }, () => Math.floor(Math.random() * 16).toString(16)).join(''); return `${hex.slice(0,8)}-${hex.slice(8,12)}-4${hex.slice(13,16)}-${((parseInt(hex[16],16)&3)|8).toString(16)}${hex.slice(17,20)}-${hex.slice(20)}`; }
 
 Page({
+  openKnowledge() { wx.navigateTo({ url: '/pages/knowledge/index?mode=list&topic=brace&title=支具治疗' }); },
   data: { loading: true, busy: false, error: '', braceOptions: [] as Brace[], selectedIndex: 0, selectedId: 0,
     selectedName: '', canStart: false, active: null as WearSession | null, activeBraceName: '', activeStarted: '', elapsedText: '', activeIsDifferent: false,
     todayText: '', hasToday: false, recentFeelings: [] as Array<Record<string, unknown>>, startRequestId: '', targetHours: '', targetError: '' },

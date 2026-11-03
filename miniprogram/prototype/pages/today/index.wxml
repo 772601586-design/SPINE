@@ -145,7 +145,7 @@
         <text style="font-size: 28.85rpx; font-weight: 700">复查准备 · 10 月 20 日 周二</text>
         <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 69.23rpx; border: 0; background: transparent; color: #1F6F66; font-size: 23.08rpx" bindtap="act" data-fn="{{ nav.me }}" hover-class="tap">提醒设置 ›</view>
       </view>
-      <view style="font-size: 25rpx; color: #2E3B37; line-height: 1.8">□ 带上支具<text>{{'\n'}}</text>□ 最近一次的练习视频<text>{{'\n'}}</text>□ 想问医生的问题（已记下 1 条）</view>
+      <view style="font-size: 25rpx; color: #2E3B37; line-height: 1.8">□ 带上支具<text>{{'\n'}}</text>□ 最近一次的练习视频<text>{{'\n'}}</text>□ 长高了多少、初潮时间（如适用）——医生可能会问<text>{{'\n'}}</text>□ 想问医生的问题（已记下 1 条）</view>
       <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 84.62rpx; border: 2.88rpx solid #1F6F66; border-radius: 23.08rpx; background: transparent; color: #1F6F66; font-size: 26.92rpx; font-weight: 700" bindtap="act" data-fn="{{ makeSummary }}" hover-class="tap">生成复查前摘要</view>
     </view>
   </block>

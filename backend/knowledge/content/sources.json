@@ -1,0 +1,156 @@
+{
+  "SOSORT2016": {
+    "title": "2016 SOSORT guidelines: orthopaedic and rehabilitation treatment of idiopathic scoliosis during growth",
+    "organization": "SOSORT (International Scientific Society on Scoliosis Orthopaedic and Rehabilitation Treatment)",
+    "authors": "Negrini S, Donzelli S, Aulisa AG, Czaprowski D, Schreiber S, de Mauroy JC, Diers H, Grivas TB, Knott P, Kotwicki T, Lebel A, Marti C, Maruyama T, O'Brien J, Price N, Parent E, Rigo M, Romano M, Stikeleather L, Wynne J, Zaina F",
+    "year": 2018,
+    "url": "https://doi.org/10.1186/s13013-017-0145-8",
+    "doi": "10.1186/s13013-017-0145-8",
+    "pmid": "29435499",
+    "evidence_type": "clinical_practice_guideline",
+    "population": "生长发育期特发性脊柱侧弯儿童与青少年"
+  },
+  "BRAIST2013": {
+    "title": "Effects of bracing in adolescents with idiopathic scoliosis",
+    "organization": "The New England Journal of Medicine (BrAIST 多中心随机对照试验)",
+    "authors": "Weinstein SL, Dolan LA, Wright JG, Dobbs MB",
+    "year": 2013,
+    "url": "https://doi.org/10.1056/NEJMoa1307337",
+    "doi": "10.1056/NEJMoa1307337",
+    "pmid": "24047455",
+    "evidence_type": "randomized_controlled_trial",
+    "population": "骨骼未成熟、Cobb 角 20°—40° 的青少年特发性脊柱侧弯患者"
+  },
+  "KURU2016": {
+    "title": "The efficacy of three-dimensional Schroth exercises in adolescent idiopathic scoliosis: a randomised controlled clinical trial",
+    "organization": "Clinical Rehabilitation",
+    "authors": "Kuru T, Yeldan I, Dereli EE, Ozdincler AR, Dikici F, Colak I",
+    "year": 2016,
+    "url": "https://doi.org/10.1177/0269215515575745",
+    "doi": "10.1177/0269215515575745",
+    "pmid": "25780260",
+    "evidence_type": "randomized_controlled_trial",
+    "population": "青少年特发性脊柱侧弯患者，门诊与家庭两种 Schroth 训练方式对照"
+  },
+  "COCHRANE2024": {
+    "title": "Therapeutic exercises for idiopathic scoliosis in adolescents",
+    "organization": "Cochrane Database of Systematic Reviews",
+    "authors": "Romano M, Minozzi S, Bettany-Saltikov J, Zaina F, Chockalingam N, Kotwicki T, Maier-Hennes A, Arienti C, Negrini S",
+    "year": 2024,
+    "url": "https://doi.org/10.1002/14651858.CD007837.pub3",
+    "doi": "10.1002/14651858.CD007837.pub3",
+    "pmid": "38415871",
+    "evidence_type": "systematic_review",
+    "population": "青少年特发性脊柱侧弯，13 项随机对照试验、583 名受试者"
+  },
+  "COBBVAR1990": {
+    "title": "Measurement of scoliosis and kyphosis radiographs. Intraobserver and interobserver variation",
+    "organization": "The Journal of Bone and Joint Surgery (American Volume)",
+    "authors": "Carman DL, Browne RH, Birch JG",
+    "year": 1990,
+    "url": "https://doi.org/10.2106/00004623-199072030-00003",
+    "doi": "10.2106/00004623-199072030-00003",
+    "pmid": "2312528",
+    "evidence_type": "measurement_reliability_study",
+    "population": "脊柱侧弯与后凸 X 线片的测量者间与测量者内变异"
+  },
+  "EOSDOSE2019": {
+    "title": "Scoliosis imaging: An analysis of radiation risk in the CT scan projection radiograph and a comparison with projection radiography and EOS",
+    "organization": "Radiography (London)",
+    "authors": "Alrehily F, Hogg P, Twiste M, Johansen S, Tootell A",
+    "year": 2019,
+    "url": "https://doi.org/10.1016/j.radi.2019.02.005",
+    "doi": "10.1016/j.radi.2019.02.005",
+    "pmid": "31301794",
+    "evidence_type": "dosimetry_phantom_study",
+    "population": "10 岁儿童体模，比较侧弯常用影像方式的器官剂量"
+  },
+  "BODYIMAGE2016": {
+    "title": "Body Image and Quality-of-Life in Untreated Versus Brace-Treated Females With Adolescent Idiopathic Scoliosis",
+    "organization": "Spine (Phila Pa 1976)",
+    "authors": "Schwieger T, Campo S, Weinstein SL, Dolan LA, Ashida S, Steuber KR",
+    "year": 2016,
+    "url": "https://doi.org/10.1097/BRS.0000000000001210",
+    "doi": "10.1097/BRS.0000000000001210",
+    "pmid": "26555827",
+    "evidence_type": "secondary_analysis_of_randomized_trial",
+    "population": "BrAIST 中的女性青少年特发性脊柱侧弯患者，随访 2 年"
+  },
+  "PSYCH2018": {
+    "title": "Psychosocial Difficulties in Adolescent Idiopathic Scoliosis: Body Image, Eating Behaviors, and Mood Disorders",
+    "organization": "World Neurosurgery",
+    "authors": "Gallant JN, Morgan CD, Stoklosa JB, Gannon SR, Shannon CN, Bonfield CM",
+    "year": 2018,
+    "url": "https://doi.org/10.1016/j.wneu.2018.05.104",
+    "doi": "10.1016/j.wneu.2018.05.104",
+    "pmid": "29803063",
+    "evidence_type": "narrative_review",
+    "population": "青少年特发性脊柱侧弯患者的身体形象、进食行为与情绪问题文献综述"
+  },
+  "AAOSAIS2024": {
+    "title": "Idiopathic Scoliosis in Children and Adolescents",
+    "organization": "American Academy of Orthopaedic Surgeons (OrthoInfo)；由 POSNA 成员审阅",
+    "authors": "Lubicky JP (contributed/updated); Murphy-Zane MS (peer review)",
+    "year": 2024,
+    "url": "https://www.orthoinfo.org/diseases--conditions/idiopathic-scoliosis-in-children-and-adolescents/",
+    "doi": "",
+    "pmid": "",
+    "evidence_type": "patient_education_page",
+    "population": "儿童与青少年特发性脊柱侧弯患者及家长"
+  },
+  "AAOSNONSURG2024": {
+    "title": "Nonsurgical Treatment Options for Scoliosis",
+    "organization": "American Academy of Orthopaedic Surgeons (OrthoInfo)；由 POSNA 成员审阅",
+    "authors": "Garg S (contributed/updated); Murphy-Zane MS (peer review)",
+    "year": 2024,
+    "url": "https://www.orthoinfo.org/treatment/nonsurgical-treatment-options-for-scoliosis/",
+    "doi": "",
+    "pmid": "",
+    "evidence_type": "patient_education_page",
+    "population": "儿童与青少年特发性脊柱侧弯患者及家长"
+  },
+  "AAOSINTRO2024": {
+    "title": "Introduction to Scoliosis",
+    "organization": "American Academy of Orthopaedic Surgeons (OrthoInfo)；由 POSNA 成员审阅",
+    "authors": "AAOS / POSNA",
+    "year": 2024,
+    "url": "https://www.orthoinfo.org/diseases--conditions/introduction-to-scoliosis/",
+    "doi": "",
+    "pmid": "",
+    "evidence_type": "patient_education_page",
+    "population": "刚被诊断为侧弯的儿童、青少年与家长"
+  },
+  "NIAMS2023": {
+    "title": "Scoliosis in Children and Teens",
+    "organization": "National Institute of Arthritis and Musculoskeletal and Skin Diseases (NIAMS), NIH",
+    "authors": "NIAMS",
+    "year": 2023,
+    "url": "https://www.niams.nih.gov/health-topics/scoliosis",
+    "doi": "",
+    "pmid": "",
+    "evidence_type": "government_health_information",
+    "population": "儿童与青少年侧弯患者及家长"
+  },
+  "NIAMSTX2023": {
+    "title": "Scoliosis in Children and Teens: Diagnosis, Treatment, and Steps to Take",
+    "organization": "National Institute of Arthritis and Musculoskeletal and Skin Diseases (NIAMS), NIH",
+    "authors": "NIAMS",
+    "year": 2023,
+    "url": "https://www.niams.nih.gov/health-topics/scoliosis/diagnosis-treatment-and-steps-to-take",
+    "doi": "",
+    "pmid": "",
+    "evidence_type": "government_health_information",
+    "population": "儿童与青少年侧弯患者及家长"
+  },
+  "NHSUK2023": {
+    "title": "Scoliosis",
+    "organization": "National Health Service (NHS), United Kingdom",
+    "authors": "NHS",
+    "year": 2023,
+    "url": "https://www.nhs.uk/conditions/scoliosis/",
+    "doi": "",
+    "pmid": "",
+    "evidence_type": "government_health_information",
+    "population": "各年龄段侧弯患者及家属"
+  }
+}

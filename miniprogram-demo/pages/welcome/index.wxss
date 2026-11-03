@@ -1,0 +1,157 @@
+.welcome-page {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 28rpx;
+  min-height: 100vh;
+  padding: 42rpx 38rpx calc(24rpx + env(safe-area-inset-bottom));
+}
+
+.welcome-header, .welcome-brand, .welcome-brand-mark,
+.welcome-card-heading, .welcome-month {
+  display: flex;
+  align-items: center;
+}
+
+.welcome-header, .welcome-card-heading, .welcome-month {
+  justify-content: space-between;
+}
+
+.welcome-brand { gap: 14rpx; }
+.welcome-brand-mark {
+  justify-content: center;
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: 18rpx;
+  background: #2F5D46;
+}
+.welcome-brand-icon { width: 39rpx; height: 39rpx; }
+.welcome-brand-name { font-size: 34rpx; font-weight: 700; }
+.welcome-step, .welcome-card-note { font-size: 24rpx; color: #58685E; }
+
+.welcome-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  min-height: 288rpx;
+  overflow: hidden;
+  padding: 32rpx 40% 32rpx 32rpx;
+  border-radius: 36rpx;
+  background: #E6F0E6;
+}
+.welcome-sun, .welcome-hill, .welcome-mascot { position: absolute; }
+.welcome-sun {
+  top: 13rpx;
+  right: 12rpx;
+  width: 228rpx;
+  height: 228rpx;
+  border-radius: 50%;
+  background: #F7E4C6;
+}
+.welcome-hill {
+  right: -42rpx;
+  bottom: -49rpx;
+  width: 360rpx;
+  height: 132rpx;
+  border-radius: 50%;
+  background: #D2E3D3;
+}
+.welcome-mascot {
+  right: 14rpx;
+  bottom: 4rpx;
+  width: 39%;
+  height: 250rpx;
+}
+.welcome-greeting {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 18rpx;
+}
+.welcome-bubble {
+  padding: 8rpx 17rpx;
+  border-radius: 22rpx 22rpx 22rpx 6rpx;
+  background: #FFFDF5;
+  color: #2F5D46;
+  font-size: 23rpx;
+  font-weight: 600;
+}
+.welcome-title {
+  color: #244638;
+  font-size: 43rpx;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.welcome-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  padding: 26rpx;
+  border-radius: 28rpx;
+  background: #FFFFFF;
+}
+.welcome-card-title { font-size: 29rpx; font-weight: 700; }
+.welcome-card-heading .welcome-clear {
+  width: auto;
+  min-height: 48rpx;
+  margin: -8rpx -10rpx -8rpx 0;
+  padding: 0 10rpx;
+  border: 0;
+  background: transparent;
+  color: #2F5D46;
+  font-size: 24rpx;
+  line-height: 48rpx;
+}
+.welcome-month {
+  min-height: 82rpx;
+  padding: 0 24rpx;
+  border: 1rpx solid #D6DED7;
+  border-radius: 18rpx;
+  background: #F6F8F4;
+  font-size: 28rpx;
+}
+.welcome-month-value { color: #2C3A32; }
+.welcome-month-placeholder { color: #5B6D62; }
+.welcome-chevron {
+  width: 11rpx;
+  height: 11rpx;
+  margin-right: 3rpx;
+  border-right: 2rpx solid #46715A;
+  border-bottom: 2rpx solid #46715A;
+  transform: rotate(45deg) translateY(-3rpx);
+}
+
+.welcome-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+  margin-top: auto;
+}
+.welcome-actions button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+  padding: 0 20rpx;
+  line-height: 1.35;
+}
+.welcome-actions button::after, .welcome-clear::after { border: 0; }
+.welcome-actions .welcome-next {
+  min-height: 92rpx;
+  border-radius: 25rpx;
+  background: #2F5D46;
+  color: #FFFFFF;
+  font-size: 30rpx;
+  font-weight: 700;
+}
+.welcome-actions .welcome-login {
+  min-height: 76rpx;
+  background: transparent;
+  color: #3E5548;
+  font-size: 26rpx;
+}

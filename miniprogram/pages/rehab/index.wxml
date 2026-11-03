@@ -23,3 +23,5 @@
     <view class="card gentle-note" bindtap="openGrowth" hover-class="tap"><text class="card-title">看看一路走来的变化</text><text class="muted">身高、复查和就诊资料，都留在成长记录里。 ›</text></view>
   </block>
 </view>
+
+<view style="padding:24rpx"><button bindtap="openKnowledge">了解 Schroth 训练原理</button></view>

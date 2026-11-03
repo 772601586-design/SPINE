@@ -40,6 +40,7 @@ function shape(visit: Visit): Record<string, unknown> {
 }
 
 Page({
+  openKnowledge() { wx.navigateTo({ url: '/pages/knowledge/index?mode=list&topic=imaging&title=影像检查' }); },
   data: {
     loading: true,
     error: '',

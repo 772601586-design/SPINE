@@ -31,6 +31,28 @@ function page(name) {
     setData(values) { Object.assign(this.data, clone(values)); } });
 }
 function flush() { while (queue.length) queue.shift()(); }
+const welcome = page('welcome');
+activePage = welcome;
+welcome.onLoad();
+welcome.onShow();
+assert.equal(welcome.data.birthMonth, '', 'the picker starts without a saved month');
+assert.equal(storage['spine-state-v1'], undefined);
+const chooseMonth = value => { welcome.onBirthMonth({ detail: { value } }); flush(); };
+chooseMonth('2013-12');
+assert.equal(welcome.data.birthMonthLabel, '2013 年 12 月');
+assert.equal(storage['spine-state-v1'].birthMonth, '2013-12');
+for (const value of ['1899-12', '2013-13', '2013-2', '9999-01']) chooseMonth(value);
+assert.equal(welcome.data.birthMonth, '2013-12', 'invalid dates leave the previous selection intact');
+welcome.onShow();
+assert.equal(welcome.data.birthMonth, '2013-12', 'returning to the welcome page restores the selection');
+welcome.clearBirthMonth();
+flush();
+assert.equal(welcome.data.birthMonth, '');
+assert.equal(storage['spine-state-v1'].birthMonth, '');
+welcome.act({ currentTarget: { dataset: { fn: welcome.data.nav.stageFromStart } } });
+flush();
+assert.equal(navigation.at(-1), '/pages/stage/index', 'birth month is optional');
+
 const t = moduleAt('core/training.js'), brace = moduleAt('core/brace-records.js');
 const original = t.load(), session = t.session(original.plans[0].id, t.today(), false);
 t.saveValues(session.id, session.rows[0].cardId, [5, 5, 5]);
@@ -46,6 +68,10 @@ assert.equal(train.data.braceToday, '1小时0分钟'); assert.ok(train.data.reco
 train.onHide();
 const me = page('me'); activePage = me; me.onShow(); flush(); assert.equal(me.tabState.selected, 3);
 me.openGrowthRecords(); assert.equal(navigation.at(-1), '/pages/growth-records/index');
+me.openMyPosts(); assert.equal(navigation.at(-1), '/pages/my-posts/index');
+me.openPersonalInfo(); assert.equal(navigation.at(-1), '/pages/personal-info/index');
+const myPosts = page('my-posts'); activePage = myPosts; myPosts.onLoad(); myPosts.onShow(); flush();
+assert.equal(myPosts.data.screen, 'manage'); assert.equal(myPosts.tabState.selected, undefined, 'post management is a separate page, not a tab change');
 const community = page('community'); activePage = community; community.onShow(); flush(); assert.equal(community.tabState.selected, 2);
 const records = page('growth-records'); activePage = records; records.onShow();
 assert.equal(records.data.trainingHistory.length, 1); assert.equal(records.data.trainingHistory[0].id, session.id);
@@ -55,4 +81,4 @@ records.openTrainingRecord({ currentTarget: { dataset: { id: session.id } } });
 assert.equal(navigation.at(-1), '/pages/execution/index?session=' + session.id);
 assert.equal(JSON.stringify(t.load().sessions), sessionsBefore, 'moving views preserves every actual training value');
 assert.equal(JSON.stringify(storage[brace.KEY]), braceBefore, 'moving brace controls preserves wear records');
-console.log('PASS: material controls move to planning, brace + daily list share training, profile opens growth records, training summaries/details remain usable, and existing records stay intact.');
+console.log('PASS: optional birth-month selection, training and material navigation, growth records, and preservation of existing records.');

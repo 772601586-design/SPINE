@@ -1,7 +1,13 @@
 /* 全局样式：页面样式大多写在各页 WXML 的 style 里（由交互原型转换而来） */
 page {
-  background: #F3F5F2;
-  color: #1F2A27;
+  --brand-forest: #2F5D46;
+  --brand-pine: #6D9773;
+  --brand-moss: #E6F0E6;
+  --brand-paper: #F6F2E9;
+  --brand-brown: #B88A52;
+  --brand-sun: #FEC868;
+  background: #F6F2E9;
+  color: #2C3A32;
   font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
   font-size: 28rpx;
   line-height: 1.5;

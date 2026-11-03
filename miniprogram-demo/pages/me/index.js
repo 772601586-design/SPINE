@@ -1,9 +1,13 @@
 const { bindPage } = require('../../core/bridge');
 const store = require('../../core/store');
+const brace = require('../../core/brace-records');
+const art = require('../../core/brand-art');
 
-// 我的：本页用到的视图字段（由构建脚本从 WXML 统计）
-Page(bindPage('me', ["complete", "completeText", "completeW", "nav", "pine", "remindOn", "stageLabel", "swBg", "swLeft", "toggleRemind"], {
+const definition = bindPage('me', ["nav", "pine", "remindOn", "swBg", "swLeft", "toggleRemind"], {
+  openPersonalInfo() { wx.navigateTo({ url: '/pages/personal-info/index' }); },
+  avatarError() { this.setData({ profileAvatarFailed: true }); },
   openGrowthRecords() { wx.navigateTo({ url: '/pages/growth-records/index' }); },
+  openMyPosts() { wx.navigateTo({ url: '/pages/my-posts/index' }); },
   resetDemo() {
     wx.showModal({
       title: '重置示例数据',
@@ -12,4 +16,11 @@ Page(bindPage('me', ["complete", "completeText", "completeW", "nav", "pine", "re
       success: (r) => { if (r.confirm) store.reset(); }
     });
   }
-}));
+});
+const refresh = definition.refresh;
+definition.refresh = function () {
+  refresh.call(this);
+  const state = store.app.state, nickname = state.profileNickname || '小禾';
+  this.setData({ brandPinecone: art.pinecone, profileNickname: nickname, profileAvatar: state.profileAvatar || '', profileInitial: Array.from(nickname)[0], profileAvatarFailed: false });
+};
+Page(brace.attach(definition, { live: false }));

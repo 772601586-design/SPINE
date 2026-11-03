@@ -16,7 +16,8 @@
       <text>成长记录 ›</text>
     </view>
     <text style="font-size: 42.31rpx; font-weight: 700">Rigo B1 · 胸 27° · 腰 20°</text>
-    <text style="font-size: 25rpx; color: #CFE8E2">2026.09 复查 · Risser 1 · 初潮后 5 个月</text>
+    <text style="font-size: 25rpx; color: #CFE8E2">2026.09 复查 · Risser 1</text>
+    <text wx:if="{{ hasMenarcheSummary }}" style="font-size: 25rpx; color: #CFE8E2">初潮：约 {{ menarcheSummary }}</text>
   </view>
   <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 15.38rpx">
     <view style="display: flex; justify-content: space-between; align-items: baseline">

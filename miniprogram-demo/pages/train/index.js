@@ -2,6 +2,7 @@ const t = require('../../core/training');
 const legacy = require('../../core/store');
 const brace = require('../../core/brace-records');
 const definition = {
+  openKnowledge() { wx.navigateTo({ url: '/pages/knowledge/index?mode=list&topic=schroth&title=Schroth训练原理' }); },
   data: { date: t.today(), days: [], records: [], groups: [], error: '', currentPlans: [], complete: 0, total: 0 },
   onShow() { if (this.getTabBar) wx.nextTick(() => { const bar = this.getTabBar(); if (bar) bar.setData({ selected: 1 }); }); legacy.enter('train'); this.setData({ date: t.today() }); try { t.importAttachmentPlan(); } catch (error) { this.setData({ error: error.message }); return; } this.reload(); },
   reload() {

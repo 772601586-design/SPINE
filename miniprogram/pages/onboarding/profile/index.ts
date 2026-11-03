@@ -1,6 +1,6 @@
 import {
   DIAGNOSIS_LABELS, DIAGNOSIS_OPTIONS, MANAGEMENT_OPTIONS, currentMonth, todayDate, type Option,
-  GENDER_OPTIONS, MENARCHE_OPTIONS, TREATMENT_STAGES, treatmentStage,
+  TREATMENT_STAGES, treatmentStage,
 } from '../../../config/profile-options';
 import { api } from '../../../services/api';
 import { ApiError } from '../../../services/request';
@@ -37,8 +37,7 @@ Page({
     todayDate: todayDate(),
     nickname: '',
     birthMonth: '',
-    gender: '', genderCustom: '', menarche: '', treatment: '',
-    genders: GENDER_OPTIONS, menarcheOptions: MENARCHE_OPTIONS, treatments: TREATMENT_STAGES,
+    treatment: '', treatments: TREATMENT_STAGES,
     encouragement: treatmentStage(''), revision: 0,
     diagnosisIndex: 0,
     diagnosisLabels: DIAGNOSIS_LABELS,
@@ -75,7 +74,6 @@ Page({
         const key = `spine.onboarding.visit:${identity.id}`;
         this.setData({ loading: false, ready: true, stage: 'xray', nickname: profile.nickname,
           birthMonth: profile.birth_month, notes: profile.notes,
-          gender: profile.gender, genderCustom: profile.gender_custom, menarche: profile.menarche_status,
           treatment: profile.treatment_stage, encouragement: treatmentStage(profile.treatment_stage), revision: profile.revision,
           stepIndex: 2,
           visitId: String(wx.getStorageSync(key) || '') });
@@ -91,14 +89,6 @@ Page({
   onBirthMonth(event: { detail: { value: string } }) { this.setData({ birthMonth: event.detail.value }); },
   onDiagnosis(event: { detail: { value: string } }) { this.setData({ diagnosisIndex: Number(event.detail.value) }); },
   onNotes(event: { detail: { value: string } }) { this.setData({ notes: event.detail.value }); },
-  chooseGender(event: { currentTarget: { dataset: { value: string } } }) {
-    const gender = event.currentTarget.dataset.value;
-    this.setData({ gender, genderCustom: gender === 'custom' ? this.data.genderCustom : '' });
-  },
-  onGenderCustom(event: { detail: { value: string } }) { this.setData({ genderCustom: event.detail.value }); },
-  chooseMenarche(event: { currentTarget: { dataset: { value: string } } }) {
-    this.setData({ menarche: event.currentTarget.dataset.value });
-  },
   chooseTreatment(event: { currentTarget: { dataset: { value: string } } }) {
     const treatment = event.currentTarget.dataset.value;
     this.setData({ treatment, encouragement: treatmentStage(treatment) });
@@ -153,9 +143,7 @@ Page({
     const nickname = this.data.nickname.trim();
     if (!nickname) throw new Error('请先填写昵称。');
     if (nickname.length > 50) throw new Error('昵称最多 50 个字。');
-    const payload: Record<string, unknown> = { nickname,
-      treatment_stage: this.data.treatment, gender: this.data.gender,
-      gender_custom: this.data.genderCustom.trim(), menarche_status: this.data.menarche };
+    const payload: Record<string, unknown> = { nickname, treatment_stage: this.data.treatment };
     if (this.data.revision) payload.expected_revision = this.data.revision;
     if (this.data.birthMonth) payload.birth_month = this.data.birthMonth;
     const diagnosis = DIAGNOSIS_OPTIONS[this.data.diagnosisIndex]?.value;

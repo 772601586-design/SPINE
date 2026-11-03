@@ -17,13 +17,9 @@ export const TREATMENT_STAGES = [
     title: '准备好了，慢慢开始', encouragement: '先记录你想留下的资料，再逐步整理适合自己的练习和复查安排。' },
 ];
 
-export const GENDER_OPTIONS: Option[] = [
-  { value: 'female', label: '女' }, { value: 'male', label: '男' },
-  { value: 'custom', label: '自定义' }, { value: '', label: '暂不填写' },
-];
 export const MENARCHE_OPTIONS: Option[] = [
   { value: 'not_yet', label: '还没有' }, { value: 'started', label: '已经来了' },
-  { value: 'prefer_not', label: '不想填' }, { value: '', label: '暂不填写' },
+  { value: 'not_applicable', label: '不适用' }, { value: 'prefer_not', label: '不想填' },
 ];
 
 export function treatmentStage(value: string) {

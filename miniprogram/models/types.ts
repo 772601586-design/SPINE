@@ -64,7 +64,9 @@ export interface Attachment {
 export interface Profile {
   id: string; nickname: string; avatar: Attachment | null;
   birth_month: string; diagnosis_status: string | null;
-  treatment_stage: string; gender: string; gender_custom: string; menarche_status: string;
+  treatment_stage: string;
+  menarche_status: '' | 'not_yet' | 'started' | 'not_applicable' | 'prefer_not';
+  menarche_month: string;
   first_diagnosed_date: string | null;
   management_methods: string[]; notes: string;
   onboarding_status: 'draft' | 'complete' | 'needs_update';

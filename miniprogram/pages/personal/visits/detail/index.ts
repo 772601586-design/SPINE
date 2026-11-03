@@ -1,4 +1,4 @@
-import { currentMonth, todayDate, type Option } from '../../../../config/profile-options';
+import { MENARCHE_OPTIONS, currentMonth, todayDate, type Option } from '../../../../config/profile-options';
 import type { DatePrecision, VisitDetail } from '../../../../models/types';
 import { api } from '../../../../services/api';
 import { ApiError, request } from '../../../../services/request';
@@ -91,6 +91,14 @@ Page({
     revision: 0,
     ocrText: '', recognizing: false,
 
+    developmentOpen: false,
+    developmentOptions: MENARCHE_OPTIONS,
+    menarche: '',
+    menarcheMonth: '',
+    profileRevision: 0,
+    savingDevelopment: false,
+    developmentError: '',
+
     categoryLabels: CATEGORY_OPTIONS.map(item => item.label),
     categoryIndex: 0,
     uploading: false,
@@ -110,6 +118,7 @@ Page({
 
   async onLoad(query: Record<string, string>) {
     if (!await requireOnboarded()) { this.setData({ loading: false }); return; }
+    await this.loadDevelopment();
     const id = query && query.id ? String(query.id) : '';
     if (!id) {
       this.setData({ loading: false, mode: 'create', navTitle: '新增就诊', precision: 'day', precisionHint: '' });
@@ -117,6 +126,20 @@ Page({
     }
     this.setData({ id, mode: 'edit', navTitle: '就诊详情' });
     await this.load(id);
+  },
+
+  async loadDevelopment() {
+    try {
+      const profile = await api.profile();
+      this.setData({
+        menarche: profile.menarche_status,
+        menarcheMonth: profile.menarche_month,
+        profileRevision: profile.revision,
+        developmentError: '',
+      });
+    } catch (error) {
+      this.setData({ developmentError: messageFor(error) });
+    }
   },
 
   async load(id: string) {
@@ -191,6 +214,35 @@ Page({
   onDiagnosis(event: { detail: { value: string } }) { this.setData({ diagnosisExcerpt: event.detail.value }); },
   onAdvice(event: { detail: { value: string } }) { this.setData({ adviceExcerpt: event.detail.value }); },
   onNotes(event: { detail: { value: string } }) { this.setData({ notes: event.detail.value }); },
+  toggleDevelopment() { this.setData({ developmentOpen: !this.data.developmentOpen, developmentError: '' }); },
+  chooseMenarche(event: { currentTarget: { dataset: { value: string } } }) {
+    const menarche = event.currentTarget.dataset.value;
+    this.setData({ menarche, menarcheMonth: menarche === 'started' ? this.data.menarcheMonth : '' });
+  },
+  onMenarcheMonth(event: { detail: { value: string } }) { this.setData({ menarcheMonth: event.detail.value }); },
+  clearMenarcheMonth() { this.setData({ menarcheMonth: '' }); },
+  clearDevelopment() { this.setData({ menarche: '', menarcheMonth: '' }); },
+  async saveDevelopment() {
+    if (this.data.savingDevelopment) return;
+    this.setData({ savingDevelopment: true, developmentError: '' });
+    try {
+      const profile = await api.saveProfile({
+        menarche_status: this.data.menarche,
+        menarche_month: this.data.menarche === 'started' ? this.data.menarcheMonth : '',
+        expected_revision: this.data.profileRevision,
+      });
+      this.setData({
+        menarche: profile.menarche_status,
+        menarcheMonth: profile.menarche_month,
+        profileRevision: profile.revision,
+      });
+      wx.showToast({ title: '发育信息已保存', icon: 'success' });
+    } catch (error) {
+      this.setData({ developmentError: messageFor(error) });
+    } finally {
+      this.setData({ savingDevelopment: false });
+    }
+  },
   onOCRText(event: { detail: { value: string } }) { this.setData({ ocrText: event.detail.value }); },
   chooseReportOCR() {
     if (this.data.recognizing || this.data.saving) return;

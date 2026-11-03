@@ -1,0 +1,60 @@
+<view class="kb">
+  <view wx:if="{{mode !== 'article'}}">
+    <view class="kb-eyebrow">SCOLIO · 一起理解侧弯</view>
+    <view class="kb-title">{{mode === 'home' ? '脊柱侧弯知识库' : heading}}</view>
+    <view class="kb-lead" wx:if="{{mode === 'home'}}">从你关心的问题开始，慢慢了解每一步。</view>
+    <view class="kb-search"><input value="{{query}}" maxlength="100" placeholder="搜索 Cobb 角、支具、康复训练……" bindinput="inputQuery" bindconfirm="search" confirm-type="search"/><button bindtap="search">搜索</button></view>
+    <view class="kb-toplinks"><text bindtap="home">知识库首页</text><text bindtap="favorites">我的收藏</text></view>
+  </view>
+  <view wx:if="{{error}}" class="kb-state" role="alert"><view>{{error}}</view><button bindtap="retry">重新加载</button></view>
+  <view wx:if="{{loading}}" class="kb-state" aria-live="polite">正在加载知识内容…</view>
+  <block wx:if="{{mode === 'home' && !error}}">
+    <view class="kb-section-title">你现在关心什么</view>
+    <view class="kb-categories"><view wx:for="{{categories}}" wx:key="id" class="kb-category" bindtap="category" data-id="{{item.id}}" data-name="{{item.name}}"><view class="kb-category-name">{{item.name}}</view><view class="kb-muted">{{item.description}}</view></view></view>
+    <view class="kb-section-title">精选专题<text class="kb-subtitle">按主题读下去</text></view>
+    <view class="kb-shelf"><view wx:for="{{topics}}" wx:key="id" class="kb-book" style="border-left-color:{{item.color}}" data-id="{{item.id}}" data-name="{{item.name}}" bindtap="topic"><view class="kb-book-no">0{{index + 1}}</view><view class="kb-book-title">{{item.name}}</view><text class="kb-book-foot">专题阅读 ›</text></view></view>
+    <view class="kb-section-title">推荐阅读</view>
+    <view wx:for="{{recommended}}" wx:key="id" class="kb-row" bindtap="article" data-id="{{item.id}}"><view class="kb-row-title">{{item.title}}</view><view class="kb-muted">{{item.summary}}</view><view class="kb-status">{{item.reviewed ? '医学审核通过' : '科普整理 · 未经医学审核'}} · 第 {{item.version}} 版</view></view>
+    <view wx:if="{{!loading && !recommended.length}}" class="kb-state">内容正在编辑与医学审核中，审核通过后会陆续发布。</view>
+    <view class="kb-section-title">常见问题</view>
+    <view wx:for="{{questions}}" wx:key="id" class="kb-question" bindtap="question" data-id="{{item.id}}" data-text="{{item.text}}">{{item.text}} <text>›</text></view>
+    <view wx:if="{{!loading && !questions.length}}" class="kb-muted">已审核的问答将在这里展示。</view>
+  </block>
+  <block wx:if="{{mode === 'list' && !error}}">
+    <block wx:if="{{questions.length}}"><view class="kb-section-title">相关问题</view><view wx:for="{{questions}}" wx:key="id" class="kb-question" bindtap="question" data-id="{{item.id}}" data-text="{{item.text}}">{{item.text}} ›</view></block>
+    <view class="kb-muted">共 {{count}} 篇内容</view>
+    <view wx:for="{{results}}" wx:key="id" class="kb-row" bindtap="article" data-id="{{item.id}}"><view class="kb-row-title">{{item.title}}</view><view class="kb-muted">{{item.summary}}</view><view class="kb-status">{{item.reviewed ? '医学审核通过' : '科普整理 · 未经医学审核'}} · 第 {{item.version}} 版</view></view>
+    <view wx:if="{{!loading && !results.length}}" class="kb-state"><view>暂时没有已发布的相关内容</view><view class="kb-muted">试试“支具”“Cobb角”或“Schroth”。</view></view>
+    <view wx:if="{{!results.length && suggestions.length}}"><view class="kb-section-title">也可以看看</view><view wx:for="{{suggestions}}" wx:key="*this" class="kb-question" bindtap="suggestion" data-text="{{item}}">{{item}}</view></view>
+    <button wx:if="{{next}}" class="kb-more" bindtap="more" loading="{{loading}}" disabled="{{loading}}">加载更多</button>
+  </block>
+  <block wx:if="{{mode === 'article' && article}}">
+    <view class="kb-toplinks"><text bindtap="home">知识库首页</text></view>
+    <view class="kb-chips"><text wx:for="{{article.categories}}" wx:key="id" data-id="{{item.id}}" data-name="{{item.name}}" bindtap="category">{{item.name}}</text></view>
+    <view class="kb-title">{{article.title}}</view>
+    <view class="kb-meta">{{article.reviewed ? '医学审核通过' : '科普整理 · 未经医学审核'}} · 第 {{article.version}} 版 · {{article.dateLabel}} 更新</view>
+    <view class="kb-summary">{{article.summary}}</view>
+    <view class="kb-muted">适用人群：{{article.audience}}</view>
+    <view class="kb-muted">内容类型：{{article.content_type === 'patient_education' ? '患者健康教育' : '专业知识教育'}} · 风险级别：{{article.risk_level === 'high' ? '高' : article.risk_level === 'low' ? '低' : '中'}}</view>
+    <view wx:if="{{article.keywordLabel}}" class="kb-muted">关键词：{{article.keywordLabel}}</view>
+    <view wx:if="{{article.needs_review}}" class="kb-notice">此内容已进入定期复核或来源链接检查队列。</view>
+    <view class="kb-notice">{{article.disclaimer}}</view>
+    <view class="kb-body"><rich-text nodes="{{article.body_html}}" user-select="true"></rich-text></view>
+    <view class="kb-section-title">医学结论与证据</view>
+    <view wx:for="{{article.claims}}" wx:for-item="claim" wx:key="id" class="kb-evidence"><view class="kb-row-title">{{claim.text}}</view><view class="kb-muted">正文位置：{{claim.article_location}}</view><view wx:for="{{claim.evidence}}" wx:for-item="evidence" wx:key="id" class="kb-source"><view>{{evidence.source_snapshot.title || evidence.source}}</view><view>定位：{{evidence.locator}}</view><view>核验：{{evidence.verification_status === 'verified' ? '已核对' : '未完成逐条核对'}}</view><view>{{evidence.note}}</view></view></view>
+    <view class="kb-section-title">原始参考来源</view>
+    <view wx:for="{{article.sources}}" wx:key="id" class="kb-source"><view class="kb-row-title">{{item.title}}</view><view>{{item.organization}} {{item.authors}}</view><view>{{item.year || '年份待核对'}} · {{item.evidence_type}} · {{item.verification_status === 'verified' ? '已核对' : item.verification_status === 'located' ? '已定位' : item.verification_status === 'invalid' ? '失效或撤回' : '未核对'}}</view><view wx:if="{{item.doi}}">DOI：{{item.doi}}</view><view wx:if="{{item.pmid}}">PMID：{{item.pmid}}</view><button bindtap="copySource" data-url="{{item.url}}">复制原文链接</button></view>
+    <view class="kb-section-title">医学审核记录</view>
+    <view wx:for="{{article.reviews}}" wx:key="created_at" class="kb-source"><view>{{item.reviewer}} · {{item.decision === 'approved' ? '审核通过' : '要求修改'}}</view><view>{{item.created_at}}</view><view>{{item.note}}</view></view>
+    <view class="kb-actions"><button bindtap="bookmark" disabled="{{busy}}">{{article.bookmarked ? '取消收藏' : '收藏'}}</button><button open-type="share">分享</button><button bindtap="toggleFeedback">反馈错误</button></view>
+    <view wx:if="{{showFeedback}}" class="kb-feedback"><textarea value="{{feedback}}" maxlength="2000" bindinput="inputFeedback" placeholder="请描述内容错误或引用问题，不要填写姓名、病历等个人医疗信息。"/><button bindtap="sendFeedback" disabled="{{busy || !feedback}}">提交反馈</button></view>
+    <view class="kb-section-title">继续阅读</view>
+    <view wx:for="{{article.topics}}" wx:key="id" class="kb-question" bindtap="topic" data-id="{{item.id}}" data-name="{{item.name}}">{{item.name}}专题 ›</view>
+    <view wx:for="{{article.questions}}" wx:key="id" class="kb-question" bindtap="question" data-id="{{item.id}}" data-text="{{item.text}}">{{item.text}} ›</view>
+    <view wx:for="{{article.related}}" wx:key="id" class="kb-row" bindtap="article" data-id="{{item.id}}"><view class="kb-row-title">{{item.title}}</view><view class="kb-muted">{{item.summary}}</view></view>
+    <view class="kb-section-title">关联社群讨论</view><view class="kb-muted">个人经验不能替代医学证据。公开讨论请保护个人隐私。</view>
+    <view wx:for="{{article.discussions}}" wx:key="id" class="kb-source"><view class="kb-status">个人经验</view><view>{{item.body}}</view></view>
+    <view wx:if="{{!article.discussions.length}}" class="kb-muted">暂时没有已审核的关联讨论。</view><button class="kb-more" bindtap="community">前往社群</button>
+  </block>
+  <view class="kb-footer">Scolio · 健康教育，陪伴理解与成长</view>
+</view>

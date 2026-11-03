@@ -35,12 +35,6 @@
 
       <text class="label">当前阶段</text>
       <view class="row" bindtap="openTreatment"><text>{{treatmentLabel}}</text><text class="link">切换 ›</text></view>
-      <text class="label">性别（可选）</text>
-      <view><view wx:for="{{genders}}" wx:key="value" class="pill {{gender === item.value ? 'pill-active' : ''}}" data-value="{{item.value}}" bindtap="chooseGender">{{item.label}}</view></view>
-      <view wx:if="{{gender === 'custom'}}" class="field"><input value="{{genderCustom}}" maxlength="50" placeholder="填写你的称呼" bindinput="onGenderCustom" /></view>
-      <block wx:if="{{gender === 'female' || gender === 'custom'}}"><text class="label">初潮情况（如适用，可选）</text>
-      <view><view wx:for="{{menarcheOptions}}" wx:key="value" class="pill {{menarche === item.value ? 'pill-active' : ''}}" data-value="{{item.value}}" bindtap="chooseMenarche">{{item.label}}</view></view></block>
-
       <text class="label">诊断状态</text>
       <picker mode="selector" range="{{diagnosisLabels}}" value="{{diagnosisIndex}}" bindchange="onDiagnosis">
         <view class="field picker-field"><text>{{diagnosisLabels[diagnosisIndex]}}</text><text class="arrow">›</text></view>
@@ -55,10 +49,25 @@
       <text class="label">备注</text>
       <view class="field"><textarea class="textarea" value="{{notes}}" maxlength="500" bindinput="onNotes" /></view>
 
-      <button class="button" loading="{{saving}}" disabled="{{saving}}" bindtap="save">保存基础资料</button>
-      <button wx:if="{{conflict}}" class="button button-plain" bindtap="reload">重新加载最新档案</button>
       <text class="small">平台不替你做诊断，这里填的是你自己的记录。</text>
     </view>
+
+    <view class="card">
+      <text class="card-title">发育信息（选填，如适用）</text>
+      <text class="muted">用于复诊时回答医生，可随时删除。不参与建档、计划或任何计算。</text>
+      <view><view wx:for="{{menarcheOptions}}" wx:key="value" class="pill {{menarche === item.value ? 'pill-active' : ''}}" data-value="{{item.value}}" bindtap="chooseMenarche">{{item.label}}</view></view>
+      <block wx:if="{{menarche === 'started'}}">
+        <text class="label">大约年月（可留空）</text>
+        <picker mode="date" fields="month" value="{{menarcheMonth}}" start="1900-01" end="{{todayMonth}}" bindchange="onMenarcheMonth">
+          <view class="field picker-field"><text class="{{menarcheMonth ? '' : 'placeholder'}}">{{menarcheMonth || '选择大约年月'}}</text><text class="arrow">›</text></view>
+        </picker>
+        <text wx:if="{{menarcheMonth}}" class="link" bindtap="clearMenarcheMonth">清除年月</text>
+      </block>
+      <button wx:if="{{menarche}}" class="button button-plain" bindtap="clearMenarche">删除发育信息</button>
+    </view>
+
+    <button class="button" loading="{{saving}}" disabled="{{saving}}" bindtap="save">保存档案</button>
+    <button wx:if="{{conflict}}" class="button button-plain" bindtap="reload">重新加载最新档案</button>
 
     <view class="card">
       <view class="row" bindtap="toggleMeasureForm">

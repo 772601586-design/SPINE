@@ -35,15 +35,18 @@ function parseError(statusCode: number, payload: unknown): ApiError {
 }
 
 /** 成功响应解包 {data, meta?}；meta 暂不参与业务，保留在返回值外侧以免丢失分页信息。 */
-function unwrap<T>(payload: unknown): T {
+function unwrap<T>(payload: unknown, preservePagination = false): T {
   if (payload && typeof payload === 'object' && !Array.isArray(payload)) {
     const record = payload as Record<string, unknown>;
+    if (preservePagination && Array.isArray(record.data) && record.meta && typeof record.meta === 'object') {
+      return { ...record.meta, results: record.data } as T;
+    }
     if ('data' in record && !('error' in record)) return record.data as T;
   }
   return payload as T;
 }
 
-export function request<T>(method: WxRequestOptions['method'], path: string, data?: Record<string, unknown>, options: { timeout?: number } = {}): Promise<T> {
+export function request<T>(method: WxRequestOptions['method'], path: string, data?: Record<string, unknown>, options: { timeout?: number; preservePagination?: boolean } = {}): Promise<T> {
   if (!API_BASE_URL) return Promise.reject(new Error('尚未配置此运行环境的 API 地址。'));
   const parsed = /^https?:\/\//.test(API_BASE_URL);
   if (!parsed || (RUNTIME_TARGET !== 'developerTool' && !API_BASE_URL.startsWith('https://'))) {
@@ -61,7 +64,7 @@ export function request<T>(method: WxRequestOptions['method'], path: string, dat
       header,
       timeout: options.timeout ?? 12000,
       success(response) {
-        if (response.statusCode >= 200 && response.statusCode < 300) { resolve(unwrap<T>(response.data)); return; }
+        if (response.statusCode >= 200 && response.statusCode < 300) { resolve(unwrap<T>(response.data, options.preservePagination)); return; }
         if (response.statusCode === 401) unauthorized?.();
         reject(parseError(response.statusCode, response.data));
       },

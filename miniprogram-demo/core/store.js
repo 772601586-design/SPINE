@@ -91,9 +91,25 @@ module.exports = {
     if (TABS.indexOf(screen) !== -1 && !app.state.onboarded) { app.state.onboarded = true; save(); }
   },
   vm() { if (!app) load(); return app.renderVals(); },
+  /** 个人信息单次持久化成功后更新内存，失败时交给页面提示并保留草稿。 */
+  savePersonalInfo(values) {
+    if (!app) load();
+    const nickname = String(values.nickname || '').trim();
+    if (!nickname) throw new Error('请填写昵称');
+    if (Array.from(nickname).length > 30) throw new Error('昵称最多 30 个字');
+    if (!require('./treatment-stages').some(item => item.id === values.stage)) throw new Error('请选择有效阶段');
+    const stagePatch = values.stage === app.state.stage ? {} : {
+      stage: values.stage, done: (values.stage === 'brace' || values.stage === 'off') ? [1, 2, 3, 4] : [], trainRewarded: false
+    };
+    const next = Object.assign({}, app.state, stagePatch, {
+      profileNickname: nickname, profileAvatar: String(values.avatar || ''), toast: ''
+    });
+    wx.setStorageSync(STORAGE_KEY, next);
+    app.state = next;
+  },
   /** 清空本地数据，从首次使用重新开始 */
   reset() {
-    try { wx.removeStorageSync(STORAGE_KEY); wx.removeStorageSync(require('./training').KEY); wx.removeStorageSync(require('./documents').KEY); wx.removeStorageSync(require('./brace-records').KEY); } catch (e) { /* ignore */ }
+    try { wx.removeStorageSync(STORAGE_KEY); wx.removeStorageSync(require('./training').KEY); wx.removeStorageSync(require('./documents').KEY); wx.removeStorageSync(require('./brace-records').KEY); wx.removeStorageSync(require('./material-library').KEY); } catch (e) { /* ignore */ }
     app = null;
     load();
     wx.reLaunch({ url: '/' + routeOf('welcome') });

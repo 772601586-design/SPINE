@@ -37,3 +37,5 @@
   </view>
   <button class="button button-plain" loading="{{loading}}" bindtap="reload">刷新</button>
 </view>
+
+<view style="padding:24rpx"><button bindtap="openKnowledge">支具不适与日常佩戴科普</button></view>

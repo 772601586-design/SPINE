@@ -30,3 +30,5 @@
     <text class="small center">资料以「用户录入」为准，平台不做识别或诊断。</text>
   </block>
 </view>
+
+<view style="padding:24rpx"><button bindtap="openKnowledge">看懂影像检查与复查报告</button></view>

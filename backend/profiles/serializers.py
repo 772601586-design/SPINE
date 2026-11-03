@@ -12,7 +12,7 @@ from rest_framework import serializers
 from core.attachment_views import serialize_attachment
 from core.errors import ErrorCode, SpineError
 from core.models import Attachment
-from profiles.models import BIRTH_MONTH_VALIDATOR, BodyMeasurement, ManagementMethod, Profile
+from profiles.models import BIRTH_MONTH_VALIDATOR, MONTH_VALIDATOR, BodyMeasurement, ManagementMethod, Profile
 
 # 容忍客户端时钟偏差与时区边界：超过一天才算"未来"。
 FUTURE_TOLERANCE = timedelta(days=1)
@@ -67,7 +67,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = (
             "id", "nickname", "avatar", "birth_month", "diagnosis_status",
-            "treatment_stage", "gender", "gender_custom", "menarche_status",
+            "treatment_stage", "menarche_status", "menarche_month",
             "first_diagnosed_date", "management_methods", "notes",
             "onboarding_status", "completed_at", "completed_revision",
             "revision", "created_at", "updated_at", "expected_revision",
@@ -77,6 +77,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "nickname": {"max_length": 50, "allow_blank": False, "trim_whitespace": True},
             "birth_month": {"validators": [BIRTH_MONTH_VALIDATOR]},
+            "menarche_month": {"validators": [MONTH_VALIDATOR]},
             "notes": {"allow_blank": True, "max_length": 2000},
         }
 
@@ -85,9 +86,20 @@ class ProfileSerializer(serializers.ModelSerializer):
         return value or None
 
     def validate(self, attrs):
-        gender = attrs.get("gender", getattr(self.instance, "gender", ""))
-        if gender != Profile.Gender.CUSTOM:
-            attrs["gender_custom"] = ""
+        # 旧客户端不能静默继续上传已停止收集的个人信息。
+        legacy_errors = {}
+        if "gender" in self.initial_data:
+            legacy_errors["gender"] = "已不再收集性别，请升级客户端并移除此字段。"
+        if "gender_custom" in self.initial_data:
+            legacy_errors["gender_custom"] = "已不再收集性别，请升级客户端并移除此字段。"
+        if legacy_errors:
+            raise serializers.ValidationError(legacy_errors)
+
+        menarche_status = attrs.get(
+            "menarche_status", getattr(self.instance, "menarche_status", "")
+        )
+        if menarche_status != Profile.MenarcheStatus.STARTED:
+            attrs["menarche_month"] = ""
         return attrs
 
     def validate_management_methods(self, value):
@@ -116,6 +128,14 @@ class ProfileSerializer(serializers.ModelSerializer):
             today = timezone.localdate()
             if (year, month) > (today.year, today.month):
                 raise serializers.ValidationError("出生年月不能在未来。")
+        return value
+
+    def validate_menarche_month(self, value):
+        if value:
+            year, month = (int(part) for part in value.split("-"))
+            today = timezone.localdate()
+            if (year, month) > (today.year, today.month):
+                raise serializers.ValidationError("初潮年月不能在未来。")
         return value
 
 

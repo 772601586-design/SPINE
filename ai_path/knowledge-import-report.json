@@ -1,0 +1,1130 @@
+{
+  "job": "c142c7c6-88e9-44a8-949f-bf3c61cea7f3",
+  "database": "PostgreSQL",
+  "checksum": "732bcb96ba4aed0d8bf8f05cc9be676369656f21807644d2c3f0f0f9b49d7789",
+  "status": "committed",
+  "count": 68,
+  "errors": [],
+  "preview": [
+    {
+      "id": "01-01",
+      "title": "高低肩就一定是脊柱侧弯吗？",
+      "category": "刚发现侧弯",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "01-02",
+      "title": "脊柱侧弯和普通姿势不良有什么区别？",
+      "category": "刚发现侧弯",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "01-03",
+      "title": "脊柱侧弯有哪些常见表现？",
+      "category": "刚发现侧弯",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "01-04",
+      "title": "脊柱侧弯是怎么形成的？",
+      "category": "刚发现侧弯",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "01-05",
+      "title": "脊柱侧弯会遗传吗？",
+      "category": "刚发现侧弯",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "01-06",
+      "title": "第一次发现侧弯应该去哪个科室？",
+      "category": "刚发现侧弯",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "01-07",
+      "title": "第一次就诊需要做什么检查？",
+      "category": "刚发现侧弯",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "01-08",
+      "title": "侧弯会影响身高吗？",
+      "category": "刚发现侧弯",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "01-09",
+      "title": "侧弯会影响心肺功能吗？",
+      "category": "刚发现侧弯",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "01-10",
+      "title": "刚确诊后最需要了解什么？",
+      "category": "刚发现侧弯",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "02-01",
+      "title": "Cobb角是什么，怎么测量？",
+      "category": "看懂检查结果",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "02-02",
+      "title": "10度、20度、40度分别意味着什么？",
+      "category": "看懂检查结果",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "02-03",
+      "title": "为什么不同医生测出的角度不一样？",
+      "category": "看懂检查结果",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "02-04",
+      "title": "胸弯、腰弯和双主弯怎么区分？",
+      "category": "看懂检查结果",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "02-05",
+      "title": "什么是Risser征？",
+      "category": "看懂检查结果",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "02-06",
+      "title": "什么是Sanders骨成熟度分期？",
+      "category": "看懂检查结果",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "02-07",
+      "title": "为什么医生要关注生长速度？",
+      "category": "看懂检查结果",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "02-08",
+      "title": "什么情况下需要MRI检查？",
+      "category": "看懂检查结果",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "02-09",
+      "title": "X光检查需要注意什么？",
+      "category": "看懂检查结果",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "02-10",
+      "title": "复查结果应该如何与上一次比较？",
+      "category": "看懂检查结果",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "03-01",
+      "title": "什么情况下只需要观察？",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "03-02",
+      "title": "哪些情况下可能建议戴支具？",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "03-03",
+      "title": "支具有哪些类型？",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "03-04",
+      "title": "每天应该戴多长时间？",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "03-05",
+      "title": "戴支具时出现疼痛怎么办？",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "03-06",
+      "title": "支具不合适有哪些表现？",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "03-07",
+      "title": "什么是PSSE和Schroth训练？",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "03-08",
+      "title": "为什么不同侧弯患者训练动作不同？",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "03-09",
+      "title": "支具与康复训练可以怎样配合？",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "03-10",
+      "title": "什么情况下需要进行手术评估？",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "04-01",
+      "title": "侧弯患者可以跑步吗？",
+      "category": "每天怎么生活",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "04-02",
+      "title": "游泳能够矫正脊柱侧弯吗？",
+      "category": "每天怎么生活",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "04-03",
+      "title": "可以参加学校体育课吗？",
+      "category": "每天怎么生活",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "04-04",
+      "title": "力量训练是否安全？",
+      "category": "每天怎么生活",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "04-05",
+      "title": "睡觉姿势会影响侧弯吗？",
+      "category": "每天怎么生活",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "04-06",
+      "title": "坐姿和书包应该注意什么？",
+      "category": "每天怎么生活",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "04-07",
+      "title": "戴支具怎么选择衣服？",
+      "category": "每天怎么生活",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "04-08",
+      "title": "长时间学习后背部疲劳怎么办？",
+      "category": "每天怎么生活",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "04-09",
+      "title": "饮食和骨骼健康有什么关系？",
+      "category": "每天怎么生活",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "04-10",
+      "title": "哪些症状需要尽快就医？",
+      "category": "每天怎么生活",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "05-01",
+      "title": "确诊后很焦虑怎么办？",
+      "category": "情绪与成长",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "05-02",
+      "title": "不想让同学知道自己戴支具怎么办？",
+      "category": "情绪与成长",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "05-03",
+      "title": "如何面对高低肩和身体外观变化？",
+      "category": "情绪与成长",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "05-04",
+      "title": "支具影响穿衣和社交怎么办？",
+      "category": "情绪与成长",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "05-05",
+      "title": "治疗太久没有动力怎么办？",
+      "category": "情绪与成长",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "05-06",
+      "title": "如何向父母表达治疗中的感受？",
+      "category": "情绪与成长",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "05-07",
+      "title": "家长怎样支持孩子而不是增加压力？",
+      "category": "情绪与成长",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "05-08",
+      "title": "怎样和康复师沟通训练困难？",
+      "category": "情绪与成长",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "05-09",
+      "title": "为什么不同患者的治疗经历差别很大？",
+      "category": "情绪与成长",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "05-10",
+      "title": "如何分享自己的治疗故事？",
+      "category": "情绪与成长",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "06-01",
+      "title": "怎样判断治疗是否有效？",
+      "category": "长期康复与随访",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "06-02",
+      "title": "为什么角度没有明显变化也可能有治疗价值？",
+      "category": "长期康复与随访",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "06-03",
+      "title": "多久复查一次比较合适？",
+      "category": "长期康复与随访",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "06-04",
+      "title": "什么时候可以考虑停止支具治疗？",
+      "category": "长期康复与随访",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "06-05",
+      "title": "停止支具后还需要训练吗？",
+      "category": "长期康复与随访",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "06-06",
+      "title": "骨骼成熟后侧弯还会进展吗？",
+      "category": "长期康复与随访",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "06-07",
+      "title": "成年后是否还需要随访？",
+      "category": "长期康复与随访",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "06-08",
+      "title": "如何保存历次影像与诊断记录？",
+      "category": "长期康复与随访",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "06-09",
+      "title": "怎样整理长期训练与支具佩戴记录？",
+      "category": "长期康复与随访",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "06-10",
+      "title": "如何准备下一次医生复诊？",
+      "category": "长期康复与随访",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "V5-01",
+      "title": "初次就诊：怎样理解筛查与确诊",
+      "category": "刚发现侧弯",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "V5-02",
+      "title": "Cobb角：如何理解角度与复查变化",
+      "category": "看懂检查结果",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "V5-03",
+      "title": "骨成熟度与进展风险：Risser和Sanders分别是什么",
+      "category": "看懂检查结果",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "V5-04",
+      "title": "观察、支具与手术：治疗路径如何选择",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "V5-05",
+      "title": "支具佩戴：时长、依从性与不适处理",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "V5-06",
+      "title": "PSSE、Schroth与普通锻炼有什么区别",
+      "category": "正在接受治疗",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "V5-07",
+      "title": "运动、疼痛与危险信号：哪些情况需要就医",
+      "category": "每天怎么生活",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    },
+    {
+      "id": "V5-08",
+      "title": "如何记录治疗过程并准备复诊",
+      "category": "长期康复与随访",
+      "import_status": "draft",
+      "original_review_status": "pending"
+    }
+  ],
+  "manifest": [
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/医学事实核验任务.csv",
+      "bytes": 7507,
+      "sha256": "d07a69d18a12b210ae03400c82eb37e1f9afc6c8f0e4e9eaa6a01fe14ae1b837"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/文章_证据追踪表.csv",
+      "bytes": 30280,
+      "sha256": "6638ba1579049a6cdcd504df112edb591112816058920a2c89f65897b87ff3d2"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/自动质量检查_v4.json",
+      "bytes": 273,
+      "sha256": "8b1214bace20a831b56a4d71bb8b12e9a1ad94ff89e3a79fb2db8c20e57718d2"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/知识库_信息架构与接口规范.md",
+      "bytes": 1519,
+      "sha256": "6818dc1d0d7f65a54aa6254adc4daf5dd994ddf844bde861e68b71338aa77239"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/README_v3_质量说明.md",
+      "bytes": 1177,
+      "sha256": "0c7463e28e3c6d68ab0f28cfb025bbaf4ad17454915b771961503fdfb29e2b0f"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/内容质量_审核与发布SOP.md",
+      "bytes": 1383,
+      "sha256": "45a5c7dba291c1036f6b4ed56f925cb1614decb6b2aeb93763ab7eb6e955fedf"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/医学审核清单.md",
+      "bytes": 725,
+      "sha256": "9e562d414469d759e046256dc6938fa959981c49857d7b4a9bfb57db007d0716"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/sources.json",
+      "bytes": 2576,
+      "sha256": "61728597a8675e88d95fb49afba88323942a889565fea6adf15a700b4b6927cb"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/articles.csv",
+      "bytes": 28860,
+      "sha256": "79115c5730779028943c4f1dee86b870820d2245344d69ca9ad757d4a3663a40"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/README_v4_修订说明.md",
+      "bytes": 851,
+      "sha256": "d8727aa78d993e2d5ec175e182f2ca35d4c94b0b88494ed2d2e5155ca46aeed3"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/自动质量检查.json",
+      "bytes": 360,
+      "sha256": "fe5268cb936c915ee10ed716d4380c6973b03554e63db29fe84b105ea30e59e1"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/内容质量验收标准.md",
+      "bytes": 937,
+      "sha256": "f04f9bdb4aa6c6809904a678b896eca81e333e046b8d79f176b703577d355dc4"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/README_v5_先读.md",
+      "bytes": 1142,
+      "sha256": "adeaa3fc15b17c8ec0dc0fe2c3cf8e955180499149012ca5794a7d275d5a6d86"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/V5_医学结论核验队列.csv",
+      "bytes": 16663,
+      "sha256": "a5e4771ad9d5018d6a860d83fb3efadc6dad40d1685f4862c9676ac9d8a2b21e"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/v6_结构校验.json",
+      "bytes": 125,
+      "sha256": "cc63e3a9d8ad742433bd7b1437790c6c542c3a048d1d0cf3fef610a226d8bc38"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/优先文章_逐条核验任务.csv",
+      "bytes": 5224,
+      "sha256": "2e5678620df60f03a8b5fa93265e18dce7cc4c61aa143c01a1555dcfbd81e81c"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/README_发布前必读.md",
+      "bytes": 1331,
+      "sha256": "41e924a8a158f33c01b240b28df0bf4a6976b70d817b60e10bf11c83ec6d0a8c"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/证据定位与待核验.csv",
+      "bytes": 6604,
+      "sha256": "cd08bf9574a61c92fe374b5bdc63cd58105aa37b3b8aafec873928ba0a1831aa"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/README_v6_请先阅读.md",
+      "bytes": 1243,
+      "sha256": "9a79ccf4c98bb0a14a3f6992ae7b38543df35fb939f8b733a1d9ccc39f93891f"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/articles.json",
+      "bytes": 269235,
+      "sha256": "31fd143fbb19549940a8d9ddbc36d4537230271a0fcd736ad1dea0f293528144"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/V5_发布前验收规则.md",
+      "bytes": 926,
+      "sha256": "451dd03a9c24d4cb2a665ab0ae0c08685072be91dd1898a1ec72dda6bddc4804"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/02_看懂检查结果/02-05_什么是Risser征？.md",
+      "bytes": 1154,
+      "sha256": "419b16a599ee13eb68119eb89386c2dad44a21e9f14fc4c3d1f9253ef66ef2a2"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/02_看懂检查结果/02-08_什么情况下需要MRI检查？.md",
+      "bytes": 1317,
+      "sha256": "b75b891f406e93deec78cd28d67330311d4200a764541070bf6b933c718720fc"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/02_看懂检查结果/02-07_为什么医生要关注生长速度？.md",
+      "bytes": 2570,
+      "sha256": "4b0266d258eef5b84429a9d2f305d901fa0b486340dba0c9dcf6b330f0f86670"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/02_看懂检查结果/02-10_复查结果应该如何与上一次比较？.md",
+      "bytes": 2594,
+      "sha256": "da376446524744647d3651754243e997e0254f35d77f507055f38ea01b5ee3b8"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/02_看懂检查结果/02-01_Cobb角是什么，怎么测量？.md",
+      "bytes": 1245,
+      "sha256": "a202700e09ce076e7a5303240392cd8edf46fca40d5ebdbe590cd821b1589821"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/02_看懂检查结果/02-06_什么是Sanders骨成熟度分期？.md",
+      "bytes": 2515,
+      "sha256": "c77739695b5aed99af446e34622099f40d4c24c1ffbe8a048c6ebdc0f8addfa1"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/02_看懂检查结果/02-03_为什么不同医生测出的角度不一样？.md",
+      "bytes": 2546,
+      "sha256": "8134b1a59504e219df33dc56193e343211617ca0acbbb4b9a72a4efcf48efb5c"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/02_看懂检查结果/02-02_10度、20度、40度分别意味着什么？.md",
+      "bytes": 1355,
+      "sha256": "ba4aad3dca2bfe5deeb68a7d6042cdd8d8ea9874128ed2484464fc09cd9cc83d"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/02_看懂检查结果/02-09_X光检查需要注意什么？.md",
+      "bytes": 2533,
+      "sha256": "efa7d6b7dbe3f991bbec7d9afd2dc9677a59ef501bc4fc837dd9b706d9287de1"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/02_看懂检查结果/02-04_胸弯、腰弯和双主弯怎么区分？.md",
+      "bytes": 2594,
+      "sha256": "e5de788603be727721d9c1521ae4b3066cd0e1be64e4afe2cade7ca8ea3bab24"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/03_正在接受治疗/03-04_每天应该戴多长时间？.md",
+      "bytes": 1343,
+      "sha256": "ba3f37a88dd6a43fed6625ccb51b47455bc8b8c25da7cbf66326d1989c21dfbd"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/03_正在接受治疗/03-05_戴支具时出现疼痛怎么办？.md",
+      "bytes": 1253,
+      "sha256": "6534c755b7ce50bc6add27e9e78616c2cb87de8e3f808d21060efd14b76c1b64"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/03_正在接受治疗/03-01_什么情况下只需要观察？.md",
+      "bytes": 1121,
+      "sha256": "bde0f9d130242af7e680d9ca98471fe81c3ab42ee97059b6bdd8d45210709777"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/03_正在接受治疗/03-10_什么情况下需要进行手术评估？.md",
+      "bytes": 1242,
+      "sha256": "e80003c6996a8c630b06d01611293c59ea78806e08ffce9382c70c3eda6eaf39"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/03_正在接受治疗/03-07_什么是PSSE和Schroth训练？.md",
+      "bytes": 1297,
+      "sha256": "6f54c2103344499a754e933e026fd431ba27693b4dfb01609f49a32975dfafc6"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/03_正在接受治疗/03-08_为什么不同侧弯患者训练动作不同？.md",
+      "bytes": 2836,
+      "sha256": "79924acb5195bf24d1bbd41dba5a0a3474c668405430d879e010b61b70cce319"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/03_正在接受治疗/03-06_支具不合适有哪些表现？.md",
+      "bytes": 2772,
+      "sha256": "24f894b82e99fb2116beeaeed0f785f58dfbeaeacd217a765bb226a6ed6a724a"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/03_正在接受治疗/03-03_支具有哪些类型？.md",
+      "bytes": 2757,
+      "sha256": "423301f6bda9a5c61f4f1a6017dc41291cdddea84749441c318f8f94e7ce9552"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/03_正在接受治疗/03-02_哪些情况下可能建议戴支具？.md",
+      "bytes": 1349,
+      "sha256": "9cfcb3ef5cd26a73373f6375ba9a7e1249f0954982774493be70f68f45b81297"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/03_正在接受治疗/03-09_支具与康复训练可以怎样配合？.md",
+      "bytes": 2786,
+      "sha256": "85bb32b134f1f858714acb6dcc843cabaee36a61d88aef20f889e575e19c9cf3"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/05_情绪与成长/05-01_确诊后很焦虑怎么办？.md",
+      "bytes": 2635,
+      "sha256": "a557cff5e1f3df5e66181f39bd2f002f4a13e1997c50bcdd8a50791db22469ca"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/05_情绪与成长/05-09_为什么不同患者的治疗经历差别很大？.md",
+      "bytes": 2593,
+      "sha256": "96e89e26c2fa450bf2f860efc584081b0cac68bee9269ad6d41612515bfea999"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/05_情绪与成长/05-06_如何向父母表达治疗中的感受？.md",
+      "bytes": 2596,
+      "sha256": "8f5adeadd6ac58daf1193e58c510603c415a60801a73933d45ad2ab5615d2119"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/05_情绪与成长/05-04_支具影响穿衣和社交怎么办？.md",
+      "bytes": 2620,
+      "sha256": "26405b13f53636e2a898fc329ce14cb8bc82552872db1e1b1e9d2f131362e533"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/05_情绪与成长/05-08_怎样和康复师沟通训练困难？.md",
+      "bytes": 2596,
+      "sha256": "bd017183c333771af311f498e71cd5bc32c7bb7fcd87ee1c111f4c85152f7e0f"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/05_情绪与成长/05-03_如何面对高低肩和身体外观变化？.md",
+      "bytes": 2614,
+      "sha256": "c5b11c9f5a1f67104e3d26bb3a16fd4a795cab647a5b326b15f5f9d797d036dd"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/05_情绪与成长/05-10_如何分享自己的治疗故事？.md",
+      "bytes": 2644,
+      "sha256": "4069af6879958d4e4cec0d8a8f0886e22db4cfdff59f92a4681139abfed8f2fd"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/05_情绪与成长/05-07_家长怎样支持孩子而不是增加压力？.md",
+      "bytes": 2599,
+      "sha256": "4f475aae6adb4f69eb067b6e46ee4809de256cb452e93776566fa2cf3342ff85"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/05_情绪与成长/05-05_治疗太久没有动力怎么办？.md",
+      "bytes": 2620,
+      "sha256": "4ec174f0f7cde8ab6422c197ced5ec1c211ef89972b58fc3bdce9533ce094127"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/05_情绪与成长/05-02_不想让同学知道自己戴支具怎么办？.md",
+      "bytes": 2650,
+      "sha256": "7e4c11ccc4db1d1ce95f812d6f7eda388016ec1ab37211994001fd7a75e221c0"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/04_每天怎么生活/04-03_可以参加学校体育课吗？.md",
+      "bytes": 1206,
+      "sha256": "eaf098752901c592f5c52c320a8250b2c0cc0dee4505b5dcfe11b7cea19deaaa"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/04_每天怎么生活/04-07_戴支具怎么选择衣服？.md",
+      "bytes": 2609,
+      "sha256": "40a2a24f8b5267a66451bb7f9fe8daa7ec334f29546226de10d50dcf857d7cf1"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/04_每天怎么生活/04-05_睡觉姿势会影响侧弯吗？.md",
+      "bytes": 2590,
+      "sha256": "141dd75f7f113d63dda7297a5fef9dd2314fcd8c7e3c6b6373e0b4dcafbdeb70"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/04_每天怎么生活/04-08_长时间学习后背部疲劳怎么办？.md",
+      "bytes": 2620,
+      "sha256": "e720300f0c3738ab3d4d627886bfafc851e9f3be8f5ae0863a4eeb748c4f499a"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/04_每天怎么生活/04-02_游泳能够矫正脊柱侧弯吗？.md",
+      "bytes": 1210,
+      "sha256": "eb501f3d127c8b7f87273f908364ec5431c79809a618da1bcee8d0979204867e"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/04_每天怎么生活/04-06_坐姿和书包应该注意什么？.md",
+      "bytes": 2636,
+      "sha256": "b32b54614255ea6735be2fb55d6ba0a69581b66dc9c1af7e0dad6c220bcd28fc"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/04_每天怎么生活/04-04_力量训练是否安全？.md",
+      "bytes": 2612,
+      "sha256": "aae80543c0a144cac8d8ff9e3603cf13704d39fdb54aee1482d8450d9b3e7bdb"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/04_每天怎么生活/04-10_哪些症状需要尽快就医？.md",
+      "bytes": 1256,
+      "sha256": "7e6b37828d313c09a40316e9b15b55192bc5e68be1987fe4aa02493742b24463"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/04_每天怎么生活/04-01_侧弯患者可以跑步吗？.md",
+      "bytes": 2678,
+      "sha256": "0b0e6c9bc572414db6326f193d014af5c6a528608cc4c17d9bca7bae31bd0ddf"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/04_每天怎么生活/04-09_饮食和骨骼健康有什么关系？.md",
+      "bytes": 2600,
+      "sha256": "68911c1497b73b878f584cba173eb996a3d2580533e8530dc12601f37d6f45e5"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/V5_新增深度专题/V5-08_如何记录治疗过程并准备复诊.md",
+      "bytes": 1561,
+      "sha256": "e16c302301dc1c05c187b3ffeb8dcb8c169e6d46169db42cf71f977f22e67e98"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/V5_新增深度专题/V5-02_Cobb角：如何理解角度与复查变化.md",
+      "bytes": 1586,
+      "sha256": "595565963b623878a2feda2a3421a49dbb558a38a5e7bab037b3c8553550f7ef"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/V5_新增深度专题/V5-03_骨成熟度与进展风险：Risser和Sanders分别是什么.md",
+      "bytes": 1517,
+      "sha256": "d747aaa894150408d267ebcf5a4810759ed7e602abe49941ea9d775c04013852"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/V5_新增深度专题/V5-07_运动、疼痛与危险信号：哪些情况需要就医.md",
+      "bytes": 1403,
+      "sha256": "f4d11e6b057988b17c6c41ea9db999b73358299c0f419c9887a99be9655923dd"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/V5_新增深度专题/V5-04_观察、支具与手术：治疗路径如何选择.md",
+      "bytes": 1666,
+      "sha256": "e5805b37d3369b338de993c90b24826e4f0fc17347df61e0c99bbf7a0af47db0"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/V5_新增深度专题/V5-05_支具佩戴：时长、依从性与不适处理.md",
+      "bytes": 1513,
+      "sha256": "4ef9997dabbb1797234dc3d6fa07cdf43857b1d6d8e4727e2f9d81b6fb0c4a1b"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/V5_新增深度专题/V5-01_初次就诊：怎样理解筛查与确诊.md",
+      "bytes": 1797,
+      "sha256": "514206f5432d09938fc0fb0ec128644082cb1986243c24599e9f60659b959555"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/V5_新增深度专题/V5-06_PSSE、Schroth与普通锻炼有什么区别.md",
+      "bytes": 1505,
+      "sha256": "c3bd71b4b7ad1d7310556d436633278b55915a12b6a0ae0550b9ca0fd08115fd"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/06_长期康复与随访/06-09_怎样整理长期训练与支具佩戴记录？.md",
+      "bytes": 2574,
+      "sha256": "8867449fd4aa7f38ac9723c9690f7a9379f868a7a26496f194fa403d16b07af2"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/06_长期康复与随访/06-03_多久复查一次比较合适？.md",
+      "bytes": 2577,
+      "sha256": "d522f0062167f68211c3bcb1f971b4b2282ef881eb58370b8c5b6bdc2020b912"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/06_长期康复与随访/06-01_怎样判断治疗是否有效？.md",
+      "bytes": 1260,
+      "sha256": "3c4ad09079902acebfeba6ac26260bfb9fae2549e5ea212c285e1e396de85ea0"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/06_长期康复与随访/06-05_停止支具后还需要训练吗？.md",
+      "bytes": 2526,
+      "sha256": "1522d27050e77f014eaacad9d48c753b7b486848c08e387f57f29309c9538238"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/06_长期康复与随访/06-08_如何保存历次影像与诊断记录？.md",
+      "bytes": 2541,
+      "sha256": "afdc72d7374c6c7a24196efdfaac1c5610f939b7f6de3eab92742741ffdf45be"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/06_长期康复与随访/06-06_骨骼成熟后侧弯还会进展吗？.md",
+      "bytes": 2544,
+      "sha256": "4d2ea781432df8d89acf798188dcdbce978d00cdb2508d9ceed2d77e6ee7a182"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/06_长期康复与随访/06-10_如何准备下一次医生复诊？.md",
+      "bytes": 2580,
+      "sha256": "4040a90b130f4f45e58f99f23e6b2f5c256e39ce2d59f489a63f66d7b45c7ad2"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/06_长期康复与随访/06-07_成年后是否还需要随访？.md",
+      "bytes": 2547,
+      "sha256": "a3929aabd851001d43ff78fccc710aa08080933c376ee3e4561a05bd68320577"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/06_长期康复与随访/06-04_什么时候可以考虑停止支具治疗？.md",
+      "bytes": 1276,
+      "sha256": "98fdde3c89acf4962d60fc81d6a4119242c80d5dc366ed73dc9f454c7035a72f"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/06_长期康复与随访/06-02_为什么角度没有明显变化也可能有治疗价值？.md",
+      "bytes": 2586,
+      "sha256": "4e072ac0bca882a8b9b532ce680016e9c57a49563acfdfbf44b28e9ec8548cc6"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/专题深度解读_12篇/04_观察、支具、手术如何区分.md",
+      "bytes": 2081,
+      "sha256": "dcdd9d7093fdab251165312aabe9018dfc699ce3f8090b28820b8af4d2ab6b76"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/专题深度解读_12篇/01_从高低肩到确诊：就诊流程.md",
+      "bytes": 2199,
+      "sha256": "6cacfdd56b59b0ad95ed624b67617460d23b7643672806e700eb10f7515ebb9f"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/专题深度解读_12篇/10_游泳、体育课和运动限制.md",
+      "bytes": 1977,
+      "sha256": "738d409a782bd98046dd2255d44b42c7ce77dae7b450bca0cee6b0103354f22b"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/专题深度解读_12篇/03_骨成熟度为什么影响治疗选择.md",
+      "bytes": 1993,
+      "sha256": "3a872923aac287a9b5ff026be171e641211abad848f6d072b5ca00cc413201e8"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/专题深度解读_12篇/09_支具与运动如何配合.md",
+      "bytes": 1976,
+      "sha256": "ec0edf995aa33948cda514f3e5ad29f452dc9a9e54e0d73fd5adda60108de236"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/专题深度解读_12篇/02_Cobb角、端椎和测量误差.md",
+      "bytes": 1996,
+      "sha256": "4c9f9cefad43ec5953ce3154ccab2c4443c2e1e9cfa67b10e86432f70f90b185"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/专题深度解读_12篇/05_支具的作用与目标.md",
+      "bytes": 1994,
+      "sha256": "4b0c55130ebf03704597abdd9b5f8e7c9a5c09a660404c81363334fd2e6a2b78"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/专题深度解读_12篇/08_如何理解运动治疗的研究证据.md",
+      "bytes": 2081,
+      "sha256": "c3933328a18e74b779f0d518fd3863c57fee351e58e5515649e6819740fb736f"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/专题深度解读_12篇/11_如何判断治疗是否有效.md",
+      "bytes": 1975,
+      "sha256": "dbab3dda7b0ee524d5437db0bc5bcc76414449fbb56afc4abefaf34b17427bee"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/专题深度解读_12篇/06_支具不适与皮肤问题的处理边界.md",
+      "bytes": 1970,
+      "sha256": "32691422c776649dcdfa4806e506d07a4f6b4f418a00589387a26f0389304fac"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/专题深度解读_12篇/07_PSSE 与普通锻炼有什么区别.md",
+      "bytes": 2057,
+      "sha256": "baab52b374867a34092ba6501c2252d274f924ef272b771d659e2ef1eec3dbec"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/专题深度解读_12篇/12_怎样读懂临床指南与系统综述.md",
+      "bytes": 2083,
+      "sha256": "8a6b875909fc35f2b1cf7ce3bc7299553ef5c4bf68385fd6456afdd411370f86"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/01_刚发现侧弯/01-06_第一次发现侧弯应该去哪个科室？.md",
+      "bytes": 2686,
+      "sha256": "c519077d35a3b4077f2bac42d9bafa4c305638dd7a36a337a25f50032eb8d829"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/01_刚发现侧弯/01-02_脊柱侧弯和普通姿势不良有什么区别？.md",
+      "bytes": 2671,
+      "sha256": "576a5b4e483a9f7197b0eb64073aacbabcda0e150451196554f53ac2c9aef28c"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/01_刚发现侧弯/01-03_脊柱侧弯有哪些常见表现？.md",
+      "bytes": 2683,
+      "sha256": "f5d1555a3efb72ec3a68eaae3203474fe0f6df7d611de3512a2013793e633056"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/01_刚发现侧弯/01-09_侧弯会影响心肺功能吗？.md",
+      "bytes": 2671,
+      "sha256": "3bf8a9bd941f2b8883586e24f89d38ff2098497a9f7277b96aae0d4ef74cdd2f"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/01_刚发现侧弯/01-07_第一次就诊需要做什么检查？.md",
+      "bytes": 1345,
+      "sha256": "d4982bfeb5182f18d18519ea4fd9220c977353e90b145a69426d881499cbc5eb"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/01_刚发现侧弯/01-10_刚确诊后最需要了解什么？.md",
+      "bytes": 2667,
+      "sha256": "6468037a8b77e8431f8e49a4f3c2a19baa13baf335d756fca2bb260120cf4a05"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/01_刚发现侧弯/01-08_侧弯会影响身高吗？.md",
+      "bytes": 2623,
+      "sha256": "fedea003d39f0a8883d008725e374968e1a132413377ec2ae542a3c0eb440dec"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/01_刚发现侧弯/01-05_脊柱侧弯会遗传吗？.md",
+      "bytes": 2581,
+      "sha256": "d87a6adac0c4ce7bd3bfcaaa2a9bf37a4b644491fabe363df76e7da1f650ee37"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/01_刚发现侧弯/01-01_高低肩就一定是脊柱侧弯吗？.md",
+      "bytes": 1271,
+      "sha256": "4172680af3f0553a1fb801baf2add72f2e7444bd73781666238de2d42c841049"
+    },
+    {
+      "path": "Scolio_知识库_v6_内容深化与证据核对版/01_刚发现侧弯/01-04_脊柱侧弯是怎么形成的？.md",
+      "bytes": 2687,
+      "sha256": "60384b3e93e34980f4fe5cfb9b89e7710a8a884885dd133f1eaa70e39f602cc1"
+    }
+  ],
+  "warnings": [
+    {
+      "id": "01-01",
+      "row": 1,
+      "warning": "来源 ID NIAMS 与并列 URL 不一致；两者均保留，待人工核对。"
+    },
+    {
+      "id": "01-01",
+      "row": 1,
+      "warning": "来源 ID SRS_AIS 与并列 URL 不一致；两者均保留，待人工核对。"
+    },
+    {
+      "id": "02-01",
+      "row": 11,
+      "warning": "来源 ID NIAMS 与并列 URL 不一致；两者均保留，待人工核对。"
+    },
+    {
+      "id": "02-02",
+      "row": 12,
+      "warning": "来源 ID SRS_TREAT 与并列 URL 不一致；两者均保留，待人工核对。"
+    },
+    {
+      "id": "02-05",
+      "row": 15,
+      "warning": "来源 ID NIAMS 与并列 URL 不一致；两者均保留，待人工核对。"
+    },
+    {
+      "id": "03-01",
+      "row": 21,
+      "warning": "来源 ID SRS_TREAT 与并列 URL 不一致；两者均保留，待人工核对。"
+    },
+    {
+      "id": "03-02",
+      "row": 22,
+      "warning": "来源 ID SRS_TREAT 与并列 URL 不一致；两者均保留，待人工核对。"
+    },
+    {
+      "id": "03-04",
+      "row": 24,
+      "warning": "来源 ID SRS_TREAT 与并列 URL 不一致；两者均保留，待人工核对。"
+    },
+    {
+      "id": "03-05",
+      "row": 25,
+      "warning": "来源 ID SRS_TREAT 与并列 URL 不一致；两者均保留，待人工核对。"
+    },
+    {
+      "id": "03-10",
+      "row": 30,
+      "warning": "来源 ID SRS_TREAT 与并列 URL 不一致；两者均保留，待人工核对。"
+    }
+  ],
+  "source_count": 9,
+  "created_sources": [
+    "NIAMS",
+    "BRAIST",
+    "SOSORT",
+    "SRS_AIS",
+    "COCHRANE",
+    "PSSE2024",
+    "SRS_MAIN",
+    "SRS_TREAT",
+    "NIAMS_MAIN",
+    "url-e1c3b8b09ce76cefb5587567"
+  ],
+  "created_questions": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68
+  ],
+  "imported": 68,
+  "publicly_published": 0
+}

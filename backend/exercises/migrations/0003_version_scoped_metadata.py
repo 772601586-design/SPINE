@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
             field=models.BooleanField(default=False),
         ),
         migrations.RunSQL(
-            sql='UPDATE exercises_exerciseversion v SET category = e.category, requires_individual_setup = e.requires_individual_setup FROM exercises_exercise e WHERE e.id = v.exercise_id',
+            sql='UPDATE exercises_exerciseversion AS v SET category = e.category, requires_individual_setup = e.requires_individual_setup FROM exercises_exercise AS e WHERE e.id = v.exercise_id',
             reverse_sql=migrations.RunSQL.noop,
         ),
         migrations.RemoveField(

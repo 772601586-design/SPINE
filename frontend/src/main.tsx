@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, NavLink, Navigate, Route, Routes, Link } from 'react-router-dom';
 import { ConnectionStatus } from './ConnectionStatus';
+import { KnowledgeAdmin } from './KnowledgeAdmin';
 import './styles.css';
 
 type Entry = { title: string; description: string; marker: string };
@@ -44,8 +45,9 @@ function App() {
         <nav aria-label="工作空间导航">
           <NavLink to="/professional">专业工作台<span>→</span></NavLink>
           <NavLink to="/review">审核后台<span>→</span></NavLink>
+          <NavLink to="/review/knowledge">知识库管理<span>→</span></NavLink>
         </nav>
-        <div className="sidebar-footer">基础工程 · v0.1<br />尚未登录</div>
+        <div className="sidebar-footer">Scolio<br />内容与服务工作台</div>
       </aside>
       <div className="main-area">
         <div className="topbar"><span>康复与运动养护</span><span className="preview-label">开发预览</span></div>
@@ -54,6 +56,7 @@ function App() {
             <Route path="/" element={<Navigate to="/professional" replace />} />
             <Route path="/professional" element={<Workspace kind="professional" />} />
             <Route path="/review" element={<Workspace kind="review" />} />
+            <Route path="/review/knowledge" element={<KnowledgeAdmin />} />
             <Route path="*" element={<section className="page-heading"><h1>页面不存在</h1><Link to="/professional">返回专业工作台</Link></section>} />
           </Routes>
         </main>

@@ -1,35 +1,17 @@
 <!-- 我的 · 由 tools/build.py 从交互原型生成；改界面请改这里或重新生成 -->
 <view style="padding: 46.15rpx 38.46rpx calc(146rpx + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 26.92rpx">
-  <view style="display: flex; align-items: center; gap: 26.92rpx">
-    <view style="width: 115.38rpx; height: 115.38rpx; border-radius: 1921.15rpx; background: #1F6F66; color: #FFFFFF; font-size: 46.15rpx; font-weight: 700; display: flex; align-items: center; justify-content: center">禾</view>
-    <view style="flex: 1">
-      <view style="font-size: 42.31rpx; font-weight: 700">小禾</view>
-      <view style="font-size: 25rpx; color: #5B6663">12 岁 · {{ stageLabel }}</view>
-    </view>
-    <view style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; min-height: 69.23rpx; padding: 0 23.08rpx; border: 1.92rpx solid #C9D4D0; border-radius: 1921.15rpx; background: transparent; color: #3E4B47; font-size: 25rpx" bindtap="act" data-fn="{{ nav.stageFromMe }}" hover-class="tap">切换阶段</view>
+  <view class="me-profile-header">
+    <button class="me-avatar" bindtap="openPersonalInfo" aria-label="编辑头像">
+      <image wx:if="{{profileAvatar && !profileAvatarFailed}}" src="{{profileAvatar}}" mode="aspectFill" binderror="avatarError" />
+      <text wx:else>{{profileInitial}}</text>
+      <text class="me-avatar-edit">编辑</text>
+    </button>
+    <text class="me-nickname">{{profileNickname}}</text>
+    <button class="me-personal-info" bindtap="openPersonalInfo">个人信息 ›</button>
   </view>
-  <view style="padding: 26.92rpx; border: 0; border-radius: 34.62rpx; background: #1F6F66; color: #FFFFFF; text-align: left; display: flex; flex-direction: column; gap: 11.54rpx" bindtap="openGrowthRecords" hover-class="tap">
-    <view style="display: flex; justify-content: space-between; width: 100%; font-size: 25rpx; color: #CFE8E2">
-      <text>我的档案</text>
-      <text>复查记录 ›</text>
-    </view>
-    <text style="font-size: 42.31rpx; font-weight: 700">Rigo B1 · 胸 27° · 腰 20°</text>
-    <text style="font-size: 25rpx; color: #CFE8E2">2026.09 复查 · Risser 1 · 初潮后 5 个月</text>
-  </view>
-  <view class="me-growth-card" bindtap="openGrowthRecords" hover-class="tap">
-    <view class="me-growth-heading"><text>成长记录</text><text class="me-growth-link">查看全部 ›</text></view>
-    <text class="me-growth-description">训练历史、复查时间线、身高与曲线变化</text>
-  </view>
-  <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 15.38rpx">
-    <view style="display: flex; justify-content: space-between; align-items: baseline">
-      <text style="font-size: 28.85rpx; font-weight: 700">档案完整度</text>
-      <text style="font-size: 25rpx; color: #5B6663">{{ complete }}%</text>
-    </view>
-    <view style="height: 15.38rpx; border-radius: 1921.15rpx; background: #DCE5E1; overflow: hidden">
-      <view style="width: {{ completeW }}; height: 100%; background: #1F6F66">
-      </view>
-    </view>
-    <view style="font-size: 25rpx; color: #3E4B47; line-height: 1.6">{{ completeText }}</view>
+  <view class="me-records-card" bindtap="openGrowthRecords" hover-class="tap" aria-role="button" aria-label="查看档案与成长记录">
+    <view><text class="me-records-title">档案与成长记录</text><text class="me-records-description">复查资料 · 训练历史</text></view>
+    <text class="me-records-chevron">›</text>
   </view>
   <view style="padding: 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column; gap: 19.23rpx">
     <view style="display: flex; justify-content: space-between; align-items: center">
@@ -66,12 +48,17 @@
     </view>
   </view>
   <view style="padding: 7.69rpx 26.92rpx; border-radius: 34.62rpx; background: #FFFFFF; display: flex; flex-direction: column">
-    <view style="display: flex; justify-content: space-between; align-items: center; min-height: 92.31rpx; border: 0; background: transparent; padding: 0; font-size: 26.92rpx; color: #1F2A27" bindtap="act" data-fn="{{ nav.brace }}" hover-class="tap">
-      <text>我的支具与传感器</text>
-      <text style="color: #8A9A95">›</text>
+    <view class="me-brace-setting">
+      <view><text>我的支具与传感器</text><text class="me-brace-description">在训练页显示支具功能</text></view>
+      <button class="me-brace-switch {{braceEnabled ? 'me-brace-switch-on' : ''}}" bindtap="toggleBraceFeature" hover-class="none" aria-role="switch" aria-label="显示支具功能" aria-checked="{{braceEnabled}}"><view class="me-brace-switch-thumb"></view></button>
+    </view>
+    <view wx:if="{{braceError}}" class="flow-error">{{braceError}}</view>
+    <view class="me-posts-entry" style="display: flex; justify-content: space-between; align-items: center; min-height: 92.31rpx; border-top: 1.92rpx solid #EEF2F0; font-size: 26.92rpx" bindtap="openMyPosts" hover-class="tap" aria-role="button" aria-label="我的帖子，编辑、删除与谁可见">
+      <text>我的帖子</text>
+      <text style="color: #5B6663; font-size: 23.08rpx">编辑 · 删除 · 谁可见 ›</text>
     </view>
     <view style="display: flex; justify-content: space-between; align-items: center; min-height: 92.31rpx; border: 0; border-top: 1.92rpx solid #EEF2F0; background: transparent; padding: 0; font-size: 26.92rpx; color: #1F2A27" bindtap="act" data-fn="{{ nav.rewards }}" hover-class="tap">
-      <text>松果与勋章</text>
+      <view class="me-reward-label"><image src="{{brandPinecone}}" aria-hidden="true"/><text>松果与勋章</text></view>
       <text style="color: #8A9A95">{{ pine }} 颗 ›</text>
     </view>
     <view style="display: flex; justify-content: space-between; align-items: center; min-height: 92.31rpx; border-top: 1.92rpx solid #EEF2F0; font-size: 26.92rpx">

@@ -110,7 +110,7 @@ class ProfileTests(APITestCase):
     def test_stage_is_optional_and_old_profile_defaults_are_empty(self):
         self.client.patch(reverse("me-profile"), {"nickname": "小林"}, format="json")
         body = payload(self.client.get(reverse("me-profile")))
-        for field in ("treatment_stage", "gender", "gender_custom", "menarche_status"):
+        for field in ("treatment_stage", "menarche_status", "menarche_month"):
             self.assertEqual(body[field], "")
 
     def test_stage_roundtrip_and_clear_do_not_change_other_profile_data(self):
@@ -143,20 +143,64 @@ class ProfileTests(APITestCase):
         self.assertEqual(stale.status_code, 409)
         self.assertEqual(Profile.objects.get(user=self.user).treatment_stage, "new")
 
-    def test_custom_gender_validates_and_clears_when_changed(self):
-        missing = self.client.patch(reverse("me-profile"), {
-            "nickname": "小林", "gender": "custom", "gender_custom": "  ",
+    def test_legacy_gender_fields_are_rejected_explicitly(self):
+        response = self.client.patch(reverse("me-profile"), {
+            "nickname": "小林", "gender": "female", "gender_custom": "旧客户端值",
         }, format="json")
-        self.assertEqual(missing.status_code, 200, missing.content)
-        self.assertEqual(payload(missing)["gender_custom"], "")
-        saved = self.client.patch(reverse("me-profile"), {
-            "nickname": "小林", "gender": "custom", "gender_custom": "自定义称呼", "menarche_status": "prefer_not",
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("gender", failure(response)["field_errors"])
+        self.assertIn("gender_custom", failure(response)["field_errors"])
+
+    def test_menarche_not_applicable_can_be_saved(self):
+        response = self.client.patch(reverse("me-profile"), {
+            "nickname": "小林", "menarche_status": "not_applicable",
         }, format="json")
-        self.assertEqual(saved.status_code, 200, saved.content)
-        self.assertEqual(payload(saved)["gender_custom"], "自定义称呼")
-        changed = self.client.patch(reverse("me-profile"), {"gender": ""}, format="json")
-        self.assertEqual(payload(changed)["gender_custom"], "")
+        self.assertEqual(response.status_code, 200, response.content)
+        self.assertEqual(payload(response)["menarche_status"], "not_applicable")
+        self.assertEqual(payload(response)["menarche_month"], "")
+
+    def test_only_started_menarche_keeps_month(self):
+        started = self.client.patch(reverse("me-profile"), {
+            "nickname": "小林", "menarche_status": "started", "menarche_month": "2024-06",
+        }, format="json")
+        self.assertEqual(started.status_code, 200, started.content)
+        self.assertEqual(payload(started)["menarche_month"], "2024-06")
+
+        changed = self.client.patch(reverse("me-profile"), {
+            "menarche_status": "prefer_not", "menarche_month": "2024-07",
+        }, format="json")
+        self.assertEqual(changed.status_code, 200, changed.content)
         self.assertEqual(payload(changed)["menarche_status"], "prefer_not")
+        self.assertEqual(payload(changed)["menarche_month"], "")
+
+        month_only = self.client.patch(reverse("me-profile"), {
+            "menarche_month": "2024-08",
+        }, format="json")
+        self.assertEqual(month_only.status_code, 200, month_only.content)
+        self.assertEqual(payload(month_only)["menarche_month"], "")
+
+    def test_menarche_month_uses_month_format_and_rejects_future(self):
+        bad_format = self.client.patch(reverse("me-profile"), {
+            "nickname": "小林", "menarche_status": "started", "menarche_month": "2024-13",
+        }, format="json")
+        self.assertEqual(bad_format.status_code, 400)
+        future = self.client.patch(reverse("me-profile"), {
+            "nickname": "小林", "menarche_status": "started", "menarche_month": "2099-01",
+        }, format="json")
+        self.assertEqual(future.status_code, 400)
+
+    def test_menarche_fields_are_isolated_per_user(self):
+        self.client.patch(reverse("me-profile"), {
+            "nickname": "小林", "menarche_status": "started", "menarche_month": "2024-06",
+        }, format="json")
+        self.assertEqual(self.other_client.get(reverse("me-profile")).status_code, 404)
+        other = self.other_client.patch(reverse("me-profile"), {
+            "nickname": "小周", "menarche_status": "not_applicable",
+        }, format="json")
+        self.assertEqual(other.status_code, 200, other.content)
+        owner = payload(self.client.get(reverse("me-profile")))
+        self.assertEqual(owner["menarche_status"], "started")
+        self.assertEqual(owner["menarche_month"], "2024-06")
 
     def test_stage_change_preserves_training_plan_and_parameters(self):
         from training.models import PersonalActionCard, TrainingPlan
@@ -174,8 +218,10 @@ class ProfileTests(APITestCase):
         response = self.client.patch(reverse("me-profile"), {"nickname": "   "}, format="json")
         self.assertEqual(response.status_code, 400)
 
-    def test_profile_completion_requires_owner_confirmed_ready_xray(self):
-        profile = self.client.patch(reverse("me-profile"), {"nickname": "小林"}, format="json")
+    def test_profile_completion_requires_owner_confirmed_ready_xray_not_menarche(self):
+        profile = self.client.patch(reverse("me-profile"), {
+            "nickname": "小林", "menarche_status": "", "menarche_month": "",
+        }, format="json")
         self.assertEqual(profile.status_code, 200)
         url = reverse("me-profile-complete")
         missing = self.client.post(url, {}, format="json")

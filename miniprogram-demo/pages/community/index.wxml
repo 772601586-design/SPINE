@@ -1,17 +1,39 @@
-<view class="community-page">
+<view class="community-page {{management ? 'management-page' : ''}}">
+ <view wx:if="{{screen === 'manage'}}">
+  <view class="management-intro"><text>管理发布内容与谁可见</text><text class="muted">{{ownPosts.length}} 条</text></view>
+  <view wx:for="{{ownPosts}}" wx:key="id" class="managed-post">
+   <view class="managed-post-content" bindtap="openPost" data-id="{{item.id}}">
+    <view class="managed-post-meta"><text>{{item.time}}</text><text class="audience-label {{item.private ? 'audience-private' : ''}}">{{item.private ? '仅自己可见' : '社群可见'}}</text></view>
+    <view class="managed-post-body">{{item.body || '图片分享'}}</view>
+    <view wx:if="{{item.images.length}}" class="managed-post-images"><image wx:for="{{item.images}}" wx:for-item="photo" wx:key="*this" src="{{photo}}" mode="aspectFill" /></view>
+    <view class="post-topics"><text wx:for="{{item.displayTags}}" wx:for-item="tag" wx:key="*this" class="topic">#{{tag}}</text></view>
+   </view>
+   <view class="management-actions">
+    <button class="manage-edit" bindtap="editPost" data-id="{{item.id}}">编辑</button>
+    <button class="manage-audience" bindtap="changePostVisibility" data-id="{{item.id}}">谁可见</button>
+    <button class="manage-delete" bindtap="deletePost" data-id="{{item.id}}">删除</button>
+   </view>
+  </view>
+  <view wx:if="{{!ownPosts.length}}" class="management-empty"><text class="management-empty-title">还没有发布的帖子</text><text>在社群发布后，可以在这里编辑、删除和设置谁可见。</text></view>
+  <view class="demo-note">本机体验 · 仅管理你在本机发布的内容</view>
+ </view>
  <view wx:if="{{screen === 'home'}}">
   <view class="community-heading">社群<text class="demo-label">本机体验</text></view>
+  <view class="article-card" bindtap="openKnowledge"><view class="article-title">Scolio 知识库</view><view class="summary">从你关心的问题开始 · 六大分类与专题阅读</view></view>
   <view class="search-box" bindtap="search"><text class="search-icon"></text><text>搜索问题与经历</text></view>
   <view class="section-tabs"><view wx:for="{{tabs}}" wx:key="*this" class="section-tab {{tab === item ? 'active' : ''}}" bindtap="pickTab" data-value="{{item}}">{{item}}</view></view>
-  <view wx:if="{{tab === '交流'}}" class="feeling-row"><text class="section-title">今天感觉怎么样？</text><text class="teal" bindtap="compose">记心情 ›</text></view>
-  <view class="filters {{tab === '知识' ? 'knowledge-filters' : ''}}"><view wx:for="{{tab === '交流' ? filters : categories}}" wx:key="*this" class="chip {{filter === item ? 'chosen' : ''}}" bindtap="pickFilter" data-value="{{item}}">{{item}}</view></view>
+  <view wx:if="{{tab === '知识'}}" class="filters knowledge-filters"><view wx:for="{{categories}}" wx:key="*this" class="chip {{filter === item ? 'chosen' : ''}}" bindtap="pickFilter" data-value="{{item}}">{{item}}</view></view>
   <block wx:if="{{tab === '交流'}}">
    <view wx:for="{{shownPosts}}" wx:key="id" class="post-card">
-    <view bindtap="openPost" data-id="{{item.id}}"><view class="author">{{item.name}}<text wx:if="{{item.private}}" class="private-label">仅自己可见</text></view><view class="muted meta">{{item.time}} · 个人分享</view><view class="post-body">{{item.body}}</view><text class="topic"># {{item.topic}}</text></view>
-    <view class="post-actions"><text bindtap="hug" data-id="{{item.id}}" class="{{item.hugged ? 'teal' : ''}}">{{item.hugged ? '已抱抱' : '抱抱'}} {{item.hugs}}</text><text class="divider">|</text><text bindtap="openPost" data-id="{{item.id}}">评论 {{item.comments}}</text></view>
+    <view bindtap="openPost" data-id="{{item.id}}"><view class="author">{{item.name}}<text wx:if="{{item.private}}" class="private-label">仅自己可见</text></view><view class="muted meta">{{item.time}} · 个人经验</view><view class="post-body">{{item.body}}</view><view class="post-topics"><text wx:for="{{item.displayTags}}" wx:for-item="tag" wx:key="*this" class="topic">#{{tag}}</text></view></view>
+    <view class="post-actions">
+     <view class="post-action post-like {{item.hugged ? 'teal' : ''}}" bindtap="hug" data-id="{{item.id}}" aria-role="button" aria-label="{{item.hugged ? '取消点赞' : '点赞'}}" aria-pressed="{{item.hugged}}"><image class="reaction-icon" src="{{item.hugged ? reactionIcons.liked : reactionIcons.heart}}" aria-hidden="true"/><text>{{item.hugged ? '已点赞' : '点赞'}} {{item.hugs}}</text></view>
+     <text class="divider">|</text>
+     <view class="post-action post-comment" bindtap="openPost" data-id="{{item.id}}" aria-role="button" aria-label="评论 {{item.comments}}"><image class="reaction-icon" src="{{reactionIcons.comment}}" aria-hidden="true"/><text>评论 {{item.comments}}</text></view>
+    </view>
    </view>
-   <view wx:if="{{!shownPosts.length}}" class="empty">还没有这类分享，来聊聊你的经历吧。</view>
-   <view class="publish-fab" bindtap="compose"><text class="plus">＋</text><text>发布</text></view>
+   <view wx:if="{{!shownPosts.length}}" class="empty">还没有分享，来聊聊你的经历吧。</view>
+   <view class="publish-fab" bindtap="compose" aria-role="button" aria-label="发布"><view class="publish-plus" aria-hidden="true"></view></view>
   </block>
   <block wx:else><view wx:for="{{shownArticles}}" wx:key="id" class="article-card" bindtap="openArticle" data-id="{{item.id}}"><view class="article-title">{{item.title}}</view><view class="summary">{{item.summary}}</view><view class="muted meta">{{item.category}} · {{item.reads}}阅读</view><text class="chevron">›</text></view><view wx:if="{{!shownArticles.length}}" class="empty">这个分类的内容正在整理中。</view></block>
   <view class="demo-note">示例社群 · 分享与互动仅保存在本机</view>
@@ -19,25 +41,33 @@
  <view wx:elif="{{screen === 'search'}}">
   <view class="search-header"><text class="back" bindtap="back">‹</text><view class="search-box"><text class="search-icon"></text><input value="{{query}}" placeholder="搜索问题与经历" bindinput="inputSearch"/><text bindtap="clearSearch" aria-label="清空搜索">⊗</text></view></view>
   <view class="section-tabs"><view wx:for="{{searchTabs}}" wx:key="*this" class="section-tab {{searchTab === item ? 'active' : ''}}" bindtap="pickSearchTab" data-value="{{item}}">{{item}}</view></view>
-  <block wx:if="{{searchTab !== '经历'}}"><view class="section-title result-heading">相关知识</view><view wx:for="{{shownArticles}}" wx:key="id" class="article-card" bindtap="openArticle" data-id="{{item.id}}"><view class="article-title">{{item.title}}</view><view class="summary">{{item.summary}}</view><view class="muted meta">{{item.category}} · {{item.reads}}阅读</view><text class="chevron">›</text></view><view wx:if="{{!shownArticles.length}}" class="empty">暂时没有相关知识</view></block>
-  <block wx:if="{{searchTab !== '知识'}}"><view class="section-title result-heading">大家的经历</view><view wx:for="{{shownPosts}}" wx:key="id" class="article-card" bindtap="openPost" data-id="{{item.id}}"><view class="article-title">{{item.title}}</view><view class="summary">{{item.body}}</view><view class="muted meta">个人分享 · 抱抱 {{item.hugs}} · 评论 {{item.comments}}</view><text class="chevron">›</text></view><view wx:if="{{!shownPosts.length}}" class="empty">暂时没有相关经历</view></block>
-  <view class="no-answer"><text class="muted">没找到答案？</text><button class="outline-button" bindtap="compose" data-type="问问题">发布问题</button></view>
+  <block wx:if="{{searchTab !== '经历'}}"><view class="section-title result-heading">相关知识</view><button class="outline-button" bindtap="openKnowledge">在知识库中搜索已审核内容</button><view wx:for="{{shownArticles}}" wx:key="id" class="article-card" bindtap="openArticle" data-id="{{item.id}}"><view class="article-title">{{item.title}}</view><view class="summary">{{item.summary}}</view><view class="muted meta">{{item.category}} · {{item.reads}}阅读</view><text class="chevron">›</text></view><view wx:if="{{!shownArticles.length}}" class="empty">暂时没有相关知识</view></block>
+  <block wx:if="{{searchTab !== '知识'}}"><view class="section-title result-heading">大家的经历</view><view wx:for="{{shownPosts}}" wx:key="id" class="article-card" bindtap="openPost" data-id="{{item.id}}"><view class="article-title">{{item.title}}</view><view class="summary">{{item.body}}</view><view class="muted meta">个人经验 · 点赞 {{item.hugs}} · 评论 {{item.comments}}</view><text class="chevron">›</text></view><view wx:if="{{!shownPosts.length}}" class="empty">暂时没有相关经历</view></block>
+  <view class="no-answer"><text class="muted">没找到答案？</text><button class="outline-button" bindtap="compose" data-type="求助">发布问题</button></view>
  </view>
  <view wx:elif="{{screen === 'compose'}}">
-  <view class="page-header"><text class="back" bindtap="back">‹</text><text>发布</text><text class="header-action" bindtap="saveDraft">保存</text></view>
-  <view class="section-tabs"><view wx:for="{{composeTabs}}" wx:key="*this" class="section-tab {{composeType === item ? 'active' : ''}}" bindtap="pickType" data-value="{{item}}">{{item}}</view></view>
-  <view class="section-title result-heading">{{composeType === '记心情' ? '现在的心情' : composeType === '问问题' ? '想问大家什么？' : '分享你的经历'}}</view>
-  <view wx:if="{{composeType === '记心情'}}" class="moods"><view wx:for="{{moods}}" wx:key="*this" class="chip {{mood === item ? 'chosen' : ''}}" bindtap="pickMood" data-value="{{item}}">{{item}}</view></view>
-  <view class="editor"><textarea value="{{body}}" maxlength="500" placeholder="把此刻的想法写下来，慢慢说也没关系。" bindinput="inputBody"/><view class="image-row"><view wx:for="{{images}}" wx:key="*this" class="image-wrap"><image src="{{item}}" mode="aspectFill"/><text bindtap="removeImage" data-index="{{index}}">×</text></view><view wx:if="{{images.length < 3}}" class="add-image" bindtap="addImage">＋ 添加图片</view></view><text class="word-count">{{body.length}}/500</text></view>
-  <view class="setting-row"><text>话题</text><text class="muted">{{composeType === '记心情' ? mood : composeType}}</text></view>
+  <view class="page-header"><text class="back" bindtap="back">‹</text><text>{{editingId ? '编辑帖子' : '发布'}}</text><view></view></view>
+  <view class="compose-topics" aria-role="radiogroup" aria-label="主话题"><view wx:for="{{mainTopics}}" wx:key="*this" class="compose-topic {{mainTopic === item ? 'chosen' : ''}}" bindtap="pickType" data-value="{{item}}" aria-role="radio" aria-checked="{{mainTopic === item}}">#{{item}}</view></view>
+  <view class="editor"><textarea value="{{body}}" maxlength="500" placeholder="写下此刻的想法" bindinput="inputBody"/><view class="image-row"><view wx:for="{{images}}" wx:key="*this" class="image-wrap"><image src="{{item}}" mode="aspectFill"/><text bindtap="removeImage" data-index="{{index}}">×</text></view><view wx:if="{{images.length < 3}}" class="add-image" bindtap="addImage">＋ 添加图片</view></view><text class="word-count">{{body.length}}/500</text></view>
+  <view class="compose-extra-topics">
+   <text class="compose-topic-label">话题</text>
+   <view wx:if="{{tags.length}}" class="post-topics compose-tag-list"><view wx:for="{{tags}}" wx:key="*this" class="topic compose-tag"><text>#{{item}}</text><view class="remove-tag" bindtap="removeTag" data-index="{{index}}" aria-role="button" aria-label="删除话题 {{item}}">×</view></view></view>
+   <view class="compose-tag-entry"><text class="tag-hash">#</text><input value="{{tagInput}}" maxlength="-1" placeholder="添加补充话题" bindinput="inputTag" bindconfirm="addTag" confirm-type="done"/><button class="add-tag" bindtap="addTag">添加</button></view>
+  </view>
   <view class="setting-row" bindtap="visibility"><text>谁可以看</text><text class="muted">{{visibility}} ›</text></view>
-  <view class="muted compose-note">{{composeType === '记心情' ? '只选心情，也可以保存。' : '分享个人体验，让交流多一份理解。'}}</view><button class="primary-button" bindtap="submit">{{visibility === '仅自己可见' ? '保存' : '发布'}}{{composeType === '记心情' ? '心情' : composeType === '问问题' ? '问题' : '经历'}}</button>
+  <view class="compose-actions" wx:if="{{editingId}}"><button class="compose-button compose-cancel" bindtap="back">取消</button><button class="compose-button compose-save-edit" bindtap="submit">保存修改</button></view>
+  <view class="compose-actions" wx:else><button class="compose-button compose-save-draft" bindtap="saveDraft">保存草稿</button><button class="compose-button compose-submit" bindtap="submit">发布</button></view>
   <view class="demo-note">本机演示，内容不会发布到线上社群</view>
  </view>
  <view wx:elif="{{screen === 'post'}}">
   <view class="page-header"><text class="back" bindtap="back">‹</text><text>详情</text><text></text></view>
-  <view class="detail-author author">{{selected.name}}</view><view class="muted meta">个人分享 · {{selected.topic}} · {{selected.time}}</view><view class="detail-title">{{selected.title}}</view><view class="summary detail-copy">{{selected.detail || selected.body}}</view>
-  <image wx:for="{{selected.images}}" wx:key="*this" class="post-image" src="{{item}}" mode="widthFix"/><view class="detail-actions"><text bindtap="hug" class="{{selected.hugged ? 'teal' : ''}}">{{selected.hugged ? '已抱抱' : '抱抱'}} {{selected.hugs}}</text><text>评论 {{selected.comments}}</text><text bindtap="collect" class="{{saved ? 'teal' : ''}}">{{saved ? '已收藏' : '收藏'}}</text></view>
+  <view class="detail-author author">{{selected.name}}<text wx:if="{{selected.private}}" class="private-label">仅自己可见</text></view><view class="muted meta">个人经验 · {{selected.time}}</view><view class="detail-title">{{selected.title}}</view><view class="summary detail-copy">{{selected.detail || selected.body}}</view><view class="post-topics detail-topics"><text wx:for="{{selected.displayTags}}" wx:key="*this" class="topic">#{{item}}</text></view>
+  <image wx:for="{{selected.images}}" wx:key="*this" class="post-image" src="{{item}}" mode="widthFix"/>
+  <view class="detail-actions">
+   <view class="post-action post-like {{selected.hugged ? 'teal' : ''}}" bindtap="hug" aria-role="button" aria-label="{{selected.hugged ? '取消点赞' : '点赞'}}" aria-pressed="{{selected.hugged}}"><image class="reaction-icon" src="{{selected.hugged ? reactionIcons.liked : reactionIcons.heart}}" aria-hidden="true"/><text>{{selected.hugged ? '已点赞' : '点赞'}} {{selected.hugs}}</text></view>
+   <view class="post-action"><image class="reaction-icon" src="{{reactionIcons.comment}}" aria-hidden="true"/><text>评论 {{selected.comments}}</text></view>
+   <text bindtap="collect" class="{{saved ? 'teal' : ''}}">{{saved ? '已收藏' : '收藏'}}</text>
+  </view>
   <view class="section-title result-heading">回复 {{replies.length}}</view><view wx:for="{{replies}}" wx:key="index" class="reply-card"><view class="author">{{item.name}} <text class="muted meta">{{item.time}}</text></view><view class="summary">{{item.body}}</view></view><view wx:if="{{!replies.length}}" class="empty">来留下第一份回应吧。</view>
   <view class="reply-box"><input value="{{reply}}" maxlength="300" placeholder="写下你的回应…" bindinput="inputReply"/><button bindtap="sendReply">发送</button></view>
  </view>
