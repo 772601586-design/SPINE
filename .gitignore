@@ -23,3 +23,7 @@ ios/Flutter/Generated.xcconfig
 ios/Flutter/flutter_export_environment.sh
 *.log
 *.sqlite3
+
+# 本地交付包（可重新生成）
+/知识库专题交付包-*.zip
+/output/delivery-staging/
