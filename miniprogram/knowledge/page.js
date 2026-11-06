@@ -1,11 +1,26 @@
 /* Shared controller for both existing native clients. No medical records are read. */
+function decodeRouteValue(value) {
+  if (typeof value !== 'string') return '';
+  // WeChat passes encoded query values to onLoad. Decode once, keeping malformed
+  // shared links (or an ordinary percent sign) from interrupting page rendering.
+  try { return decodeURIComponent(value); } catch (_) { return value; }
+}
+
 module.exports = function knowledgePage(request) {
   const base = '/api/v1/knowledge/';
   const open = params => wx.navigateTo({ url: '/pages/knowledge/index?' + Object.keys(params).map(k => k + '=' + encodeURIComponent(params[k])).join('&') });
   return {
     data: { mode: 'home', loading: true, busy: false, error: '', query: '', heading: '脊柱侧弯知识库', categories: [], topics: [],
       recommended: [], questions: [], results: [], suggestions: [], next: null, count: 0, article: null, feedback: '', showFeedback: false },
-    onLoad(options) { this.options = options || {}; this.sequence = 0; this.closed = false; this.setData({ mode: this.options.mode || 'home', query: this.options.q || '', heading: this.options.title || '问题与阅读' }); },
+    onLoad(options) {
+      this.options = Object.assign({}, options);
+      for (const key of ['mode', 'id', 'q', 'title', 'category', 'topic', 'question', 'bookmarked']) {
+        if (this.options[key] !== undefined) this.options[key] = decodeRouteValue(this.options[key]);
+      }
+      this.sequence = 0;
+      this.closed = false;
+      this.setData({ mode: this.options.mode || 'home', query: this.options.q || '', heading: this.options.title || '问题与阅读' });
+    },
     onShow() { this.closed = false; this.load(); },
     onHide() { this.sequence++; if (this.data.mode === 'article') this.setData({ article: null }); },
     onUnload() { this.closed = true; this.sequence++; },

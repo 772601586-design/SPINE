@@ -12,8 +12,8 @@ assert.equal(demoConfig.pages[0], 'pages/welcome/index');
 for (const app of [config, demoConfig]) assert.ok(app.pages.includes('pages/knowledge/index'));
 assert.equal(pageSource, fs.readFileSync(path.join(root, 'miniprogram-demo/core/knowledge-page.js'), 'utf8'));
 
-function page(request) {
-  const host = { module: { exports: {} }, wx: { navigateTo(o) { assert.ok(o.url.startsWith('/pages/knowledge/index')); }, showToast() {}, setClipboardData() {} } };
+function page(request, navigate = () => {}) {
+  const host = { module: { exports: {} }, wx: { navigateTo(o) { assert.ok(o.url.startsWith('/pages/knowledge/index')); navigate(o.url); }, showToast() {}, setClipboardData() {} } };
   vm.runInNewContext(pageSource, host);
   const p = host.module.exports(request);
   p.data = JSON.parse(JSON.stringify(p.data));
@@ -21,6 +21,33 @@ function page(request) {
   return p;
 }
 async function main() {
+  // Reproduce native onLoad values, which still contain the route's URI encoding.
+  let destination;
+  const entry = page(async () => ({}), url => { destination = url; });
+  const routeOptions = () => Object.fromEntries(destination.split('?')[1].split('&').map(pair => {
+    const separator = pair.indexOf('=');
+    return [pair.slice(0, separator), pair.slice(separator + 1)];
+  }));
+  for (const [handler, dataset, heading] of [
+    ['category', { id: 'new', name: '刚发现侧弯' }, '刚发现侧弯'],
+    ['topic', { id: 'schroth', name: 'Schroth 训练' }, 'Schroth 训练'],
+    ['question', { id: 'first-week', text: '刚发现侧弯，第一周先做这三件事' }, '刚发现侧弯，第一周先做这三件事'],
+  ]) {
+    entry[handler]({ currentTarget: { dataset } });
+    const target = page(async () => ({})); target.onLoad(routeOptions());
+    assert.equal(target.data.heading, heading, 'Native navigation must show readable Chinese headings');
+  }
+  let searchPath;
+  entry.data.query = '支具 + Cobb角 & 100%'; entry.search();
+  const searchPage = page(async (_method, url) => { searchPath = url; return { results: [], next: null, count: 0 }; });
+  searchPage.onLoad(routeOptions()); await searchPage.load();
+  assert.equal(searchPage.data.heading, '搜索结果');
+  assert.equal(searchPage.data.query, entry.data.query);
+  assert.equal(new URL(searchPath, 'http://localhost').searchParams.get('q'), entry.data.query, 'Search API must receive the original Chinese query without double encoding');
+  searchPage.onLoad({ mode: 'list', title: '已解码的中文', q: '100%' });
+  assert.equal(searchPage.data.heading, '已解码的中文'); assert.equal(searchPage.data.query, '100%');
+  assert.doesNotThrow(() => searchPage.onLoad({ title: '%E5%88', q: '%ZZ' }));
+
   // The actual server uses {data:[...],meta:{...}}; test both client adapters.
   const envelope = { data: [{ id: 'test' }], meta: { count: 2, page: 1, next: 2, suggestions: ['test'] } };
   const host = { module: { exports: {} }, require: () => ({ apiBase: 'http://127.0.0.1:8000' }), wx: {
@@ -66,6 +93,6 @@ async function main() {
     const draft = await fetch(origin + 'articles/01-01/'); assert.equal(draft.status, 404);
     console.log('PASS: live API catalog, all six category/topic routes, serialized pagination and imported-draft access control.');
   }
-  console.log('PASS: existing launch routes, shared client UI, real response envelopes, pagination dedupe, stale requests, withdrawal clearing and safe share links.');
+  console.log('PASS: Chinese route headings/search queries, existing launch routes, shared client UI, real response envelopes, pagination dedupe, stale requests, withdrawal clearing and safe share links.');
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });
